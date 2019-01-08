@@ -13,7 +13,7 @@
     <meta name="author" content="">
 
     <script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
-    <script src="{% static 'unid/vendor/bootstrap/css/bootstrap.css' %}"></script>
+    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 
     <script src="{% static 'unid/vendor/jquery/jquery.min.js' %}"></script>
@@ -21,11 +21,14 @@
     <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <title>uni:d</title>
 
+
     <!--favicon -->
     <link rel="shortcut icon" href="{% static 'unid/icon/unid_favicon.ico' %}">
+    <!-- Bootstrap core CSS -->
+
     <!-- Custom styles for this template -->
     <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
-
+    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
     <!-- 검색아이콘 -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 구글 notosan-font -->
@@ -35,6 +38,10 @@
     <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
     <script src="{% static 'unid/node_modules/jquery/dist/jquery.js' %}"></script>
     <!--<script src="{% static 'unid/node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>-->
+    <!--transaction-toast-->
+    <script src="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.js' %}"></script>
+    <link href="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" rel="stylesheet">
+
 
 </head>
 
@@ -62,29 +69,25 @@
         </div>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">정보공유
-                    </a>
+                <li class="nav-item">
+                    <a class="nav-link" id="nav1" href="http://localhost:8000/unid/">정보공유</a>
                 </li>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <li class="nav-item">
-                    <a class="nav-link" href="http://localhost:8000/unid/contentstran">컨텐츠거래</a>
-                </li>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <li class="nav-item">
-                    <a class="nav-link" href="#">크라우드펀딩</a>
+                    <a class="nav-link" id="nav2"href="http://localhost:8000/unid/contentstran">컨텐츠거래</a>
                 </li>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                    <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
                         <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="http://localhost:8000/unid/login">로그인</a>
                         <a class="dropdown-item" href="http://localhost:8000/unid/signup">회원가입</a>
-                        <a class="dropdown-item" href="#">마이페이지</a>
+                        <a class="dropdown-item" href="http://localhost:8000/unid/mypage">마이페이지</a>
                         <a class="dropdown-item" href="http://localhost:8000/unid/main_upload">게시글작성</a>
                         <a class="dropdown-item" href="http://localhost:8000/unid/contentsupload">컨텐츠등록</a>
+
                     </div>
                 </li>
             </ul>

@@ -28,4 +28,6 @@ urlpatterns = [
     path('moneytrade/', views.moneytrade, name='moneytrade'),
     path('download/', views.download, name='download'),
     path('writereply/', views.writereply, name='writereply'),
+    path('exchange/', exchange),
+    path('purchase/', purchase),
 ]

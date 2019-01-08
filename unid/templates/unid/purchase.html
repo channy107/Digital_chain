@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+
+{% extends 'unid/mywallet.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <link href="{% static 'unid/css/transaction.css' %}" rel="stylesheet">
+</head>
+
+
+
+<!-- Page Content -->
+<div class="container1">
+    <!-- contents InFo -->
+    <div class="rows">
+        <div class="row">
+            <div class="contents-info">
+                    <h5 class="contents-title">
+                        <a href="http://localhost:8000/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
+                        <b> 토큰 구매</b></h5>
+
+                    <h4 class="contents-title2" align="right">
+                        <div id="key">
+                            <img src="{% static 'unid/icon/key.png' %}" border="0" width="25" height="25">
+                            <img src="{% static 'unid/icon/line-graph.png' %}" border="0" width="25" height="25">
+                        </div>
+
+                    </h4>
+                </br>
+                </br>
+
+                <hr size="10" align="center" width=100% noshade="noshade" color="#efefef" />
+
+                </br>
+                </br>
+
+                <p align="left" size ="5"> 구매할 토큰종류 </p>
+                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
+                </br>
+                </br>
+                </br>
+                <div class="exchange-predict">
+                <p align="left" size ="5"> 현재 eth 잔액 </p>
+                <p align="left" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="150" height="150">
+                    <div id="Status_balance">
+                    </div>
+                </p>
+                <hr size="10" align="right" width=80% noshade="noshade" color="#efefef" />
+                </div>
+                <p align="left" size ="5"> 구매 가능 금액 </p>
+                <h4 align="right" size ="5"> 10 nid </h4>
+                </br>
+                </br>
+                <p align="left" size ="5"> 구매 할 금액 </p>
+                <input type="number" id="amount" class="transaction-input" placeholder="금액을 입력해주세요" />
+                <h2 align="right"> nid </h2>
+                </br>
+                </br>
+
+
+
+                <!-- Trigger/Open The Modal -->
+                <p align="center">
+                    <button type="button" class="btn btn-dark" id="myBtn">구매하기</button>
+                </p>
+
+
+
+                    <!--transaction pop-->
+                    <!-- The Modal -->
+                    <div id="myModal" class="modal">
+
+                      <!-- Modal content -->
+                        <div class="modal-content">
+                               <div class="modal-header">
+                                   <h4 class="modal-title">다음내용으로 구매하시겠습니까?</h4>
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                               </div>
+                               <div class="modal-body">
+                                   <p>
+                                        <span>구매 할 금액</span> <div id="exchage-amount"></div>
+                                   </p>
+                                   <p>
+                                        <span>예상수수료</span> <span>0.0043 eth</span>
+                                   </p>
+                                   <p>
+                                        <span>구매 총액</span> <div id="exchange-expect"></div>
+                                   </p>
+                                   <p>
+                                  <div class="form-group">
+                                    <label for="fromPassword">프라이빗 키</label>
+                                    <input type="password" class="form-control" id="fromPassword" placeholder="Password">
+                                  </div>
+
+                                   </p>
+                               </div>
+                               <div class="modal-footer">
+                                   <button type="button" class="btn btn-danger" id="btnSend" data-dismiss="modal" onclick="window.location.href='http://127.0.0.1:8000/unid/mywallet/'">확인</button>
+                               </div>
+                           </div>
+                    </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+        //transaction pop
+
+        // Get the modal
+        var modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+
+
+
+
+</script>
+
+
+<script>
+           var WEB3 = require('web3');
+           var web3 = new WEB3();
+           web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+
+           var _supply = 10000;
+           var _name = "NidCoin";
+           var _symbol = "nid";
+           var _decimals = 0;
+           var NidCoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+
+           var nd = NidCoinContract.at( "0xdb5e616615330b3ebefc41d547d109579900ca70" );
+
+           // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
+           function setAccountsList() {
+               let accounts = web3.eth.accounts;
+               accounts.forEach(account => {
+                   $('.accountsList').append(`
+                       <option value="${account}">
+                           ${account.substr(0,6)}...${account.substr(-4)}
+                       </option>
+                   `);
+               });
+           }
+
+           // 계정별 잔액을 출력
+           function showStatus() {
+
+               let statusAccount = `
+                    <p id="ac" align="left" size ="5"></p>
+               `;
+
+               let statusBalance =`
+                   <h3 id="ba" align="right" size ="5"></h3>
+                `;
+
+               $('#Status_account').empty();
+               $('#Status_account').append(statusAccount);
+
+               $('#Status_balance').empty();
+               $('#Status_balance').append(statusBalance);
+
+               let totalAmount = 0;
+               let accounts = web3.eth.accounts;
+               let account = accounts[0];
+               let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
+               totalAmount += balance;
+               $('#ba').append(`${balance}eth`);
+               $("#ac").append(`${account}`);
+
+
+           }
+
+           $(function() {
+               setAccountsList();
+               showStatus();
+
+
+               // 블록에 변화가 생겼을 때 계정별 잔액 정보를 갱신
+               web3.eth.filter('latest').watch(function() {
+                   showStatus();
+               });
+
+               // 송금 버튼을 클릭했을 때, 송금을 요청
+               $('#btnSend').click(function() {
+                   let accounts = web3.eth.accounts;
+                   let fromAccount = accounts[0];
+                   let toAccount    = $('#toAccounts').val();
+                   let fromPassword = $('#fromPassword').val();
+                   let amount       = $('#amount').val();
+
+                   // 보내는 사람의 계정을 언락
+                   let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
+                   if (isUnlock) {
+                       web3.eth.sendTransaction({
+                           from : fromAccount,
+                           to   : toAccount,
+                           value: web3.toWei(amount, "ether")
+                       }, function(err, res) {
+                           if (!err) {
+                               console.log(`txid is ${res}.`);
+                           } else {
+                               console.error(err);
+                           }
+                       });
+                   }
+               });
+           });
+</script>
+
+
+
+</body>
+
+{% endblock %}
+
+</html>

@@ -33,12 +33,36 @@ def contentsboard(request):
 
 
 def mywallet(request):
-    return render(request, 'unid/mywallet.html', {})
+    walletInfo = walletInFormation.objects.all()
+    walletcount = walletInFormation.objects.count()
+    # html = ''
+    # for info in walletInfo:
+    #     info.transactiondate = timezone.now()
+    #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
+    return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount})
 
 
 def transaction(request):
-    return render(request, 'unid/transaction.html', {})
+    if request.method == 'GET':
+        return render(request, 'unid/transaction.html', {})
+    else:
+        from_account = request.POST['from_account']
+        to_account = request.POST['to_account']
+        account_bal = request.POST['account_bal']
+        tran_id = request.POST['tran_id']
 
+        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal, txid=tran_id)
+        transactionData.transactiondate = timezone.now()
+        transactionData.type = str("transaction")
+        transactionData.save()
+
+    return render(request,'unid/transaction.html', {})
+
+def exchange(request):
+    return  render(request, 'unid/exchange.html', {})
+
+def purchase(request):
+    return  render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
@@ -330,22 +354,58 @@ def contentsupload(request):
 def moneytrade(request):
     rpc_url = "http://localhost:8545"
     w3 = Web3(HTTPProvider(rpc_url))
+
+    nidcoinContract = w3.eth.contract(address = nd, abi = [{"constant": True, "inputs": [], "name": "name",
+                                          "outputs": [{"name": "", "type": "string"}], "payable": False,
+                                          "stateMutability": "view", "type": "function"},
+                                         {"constant": True, "inputs": [], "name": "totalSupply",
+                                          "outputs": [{"name": "", "type": "int256"}], "payable": False,
+                                          "stateMutability": "view", "type": "function"},
+                                         {"constant": True, "inputs": [], "name": "decimals",
+                                          "outputs": [{"name": "", "type": "uint8"}], "payable": False,
+                                          "stateMutability": "view", "type": "function"},
+                                         {"constant": True, "inputs": [{"name": "", "type": "address"}],
+                                          "name": "balanceOf", "outputs": [{"name": "", "type": "int256"}],
+                                          "payable": False, "stateMutability": "view", "type": "function"},
+                                         {"constant": True, "inputs": [], "name": "symbol",
+                                          "outputs": [{"name": "", "type": "string"}], "payable": False,
+                                          "stateMutability": "view", "type": "function"}, {"constant": False,
+                                                                                           "inputs": [{"name": "_to",
+                                                                                                       "type": "address"},
+                                                                                                      {"name": "_value",
+                                                                                                       "type": "int256"}],
+                                                                                           "name": "transfer",
+                                                                                           "outputs": [],
+                                                                                           "payable": False,
+                                                                                           "stateMutability": "nonpayable",
+                                                                                           "type": "function"},
+                                         {"constant": False, "inputs": [{"name": "account", "type": "address"}],
+                                          "name": "getBalance", "outputs": [{"name": "", "type": "int256"}],
+                                          "payable": False, "stateMutability": "nonpayable", "type": "function"}, {
+                                             "inputs": [{"name": "_supply", "type": "int256"},
+                                                        {"name": "_name", "type": "string"},
+                                                        {"name": "_symbol", "type": "string"},
+                                                        {"name": "_decimals", "type": "uint8"}], "payable": False,
+                                             "stateMutability": "nonpayable", "type": "constructor"},
+                                         {"anonymous": False,
+                                          "inputs": [{"indexed": True, "name": "from", "type": "address"},
+                                                     {"indexed": True, "name": "to", "type": "address"},
+                                                     {"indexed": False, "name": "value", "type": "int256"}],
+                                          "name": "EvtTransfer", "type": "event"}])
+
+    nd = Web3.toChecksumAddress("0x3baedc0542c7acf038fff16f1c89977ca611d642")
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
     # price = uploadContents.objects.get(contents_id=request.POST['id'])
     selleraccount = Web3.toChecksumAddress(sellerinfo.account)
     buyeraccount = Web3.toChecksumAddress(request.session['user_account'])
     buyerpwd = request.POST['pwd']
+    price = uploadContents.objects.get(content_id=id).price
     print(buyerpwd)
     print(selleraccount)
     print(buyeraccount)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    w3.eth.sendTransaction({
-        'from': buyeraccount,
-        'to': selleraccount,
-        'value': w3.toWei(5, "ether")
-    })
-
+    nidcoinContract.function.transfer(selleraccount, price, {'from': buyeraccount, 'gas': 2000000})
     res = {'Ans': '결제되었습니다.'}
     return JsonResponse(res)
     # 거래 내역 디비에 담기

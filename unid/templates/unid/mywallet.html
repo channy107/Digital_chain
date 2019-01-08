@@ -5,6 +5,75 @@
 
 <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
 
+<script>    // coin price check
+
+        // 전역 변수 세팅
+        var usd = 0;
+        var alert_array = new Array();
+
+        // 천단위 콤마 함수
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        // 숫자 외 문자열 제거 함수
+        function numberDeleteChar(x) {
+            return x.toString().replace(/[^0-9]+/g, '');
+        }
+
+
+        // 코인원 함수
+        function coinone(){
+            $.get('https://api.coinone.co.kr/ticker?currency=all', function(data) {
+                var coinone_btc = parseFloat(data['btc']['last']);
+                var coinone_eth = parseFloat(data['eth']['last']);
+                var coinone_xrp = parseFloat(data['xrp']['last']);
+                var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
+                $('#coinone_BTC').html('&#8361; ' + numberWithCommas(coinone_btc)); // 거래소 시세 정보 표에 값 세팅
+                $('#coinone_ETH').html('&#8361; ' + numberWithCommas(coinone_eth));
+                $('#coinone_XRP').html('&#8361; ' + numberWithCommas(coinone_xrp));
+                $('#coinone_NID').html(`${numberWithCommas(coinone_nid)} nid`);
+            });
+        }
+
+        // 빗썸 함수 (크로스도메인 문제로 익스에서만 됨)
+        function bithumb(){
+            $.get('https://api.bithumb.com/public/ticker/ALL', function(data) {
+                var bithumb_btc = parseFloat(data['data']['BTC']['closing_price']);
+                var bithumb_eth = parseFloat(data['data']['ETH']['closing_price']);
+                var bithumb_xrp = parseFloat(data['data']['XRP']['closing_price']);
+                var bithumb_nid = parseFloat(data['data']['ETH']['closing_price']) * 0.01;
+                $('#bithumb_BTC').html('&#8361; ' + numberWithCommas(bithumb_btc)); // 거래소 시세 정보 표에 값 세팅
+                $('#bithumb_ETH').html('&#8361; ' + numberWithCommas(bithumb_eth));
+                $('#bithumb_XRP').html('&#8361; ' + numberWithCommas(bithumb_xrp));
+                $('#bithumb_NID').html(`${numberWithCommas(bithumb_nid)} nid`);
+            });
+        }
+
+
+        // 현재 시간 갱신
+        function CurrentTime() {
+            var d = new Date();
+            $("#lastUpdate").html(d.toString());
+        }
+
+        // 갱신 함수
+        function proc() {
+            try {
+                coinone(); // 코인원
+                bithumb(); // 빗썸
+                CurrentTime(); // 갱신 시간
+            } catch(e){
+
+            } finally {
+                setTimeout("proc()", 1000); //1초후 재시작
+            }
+        }
+    </script>
+
+
+
+
+
 <div class="container1">
     <!-- contents InFo -->
     <div class="rows">
@@ -14,18 +83,19 @@
                     <b>  내 지갑 </b>
                 </h5>
 
-                <h4 class="contents-title2" align="right">
-                    <img src="{% static 'unid/icon/key.png' %}" border="0" width="25" height="25">
-                    <img src="{% static 'unid/icon/line-graph.png' %}" border="0" width="25" height="25">
-                </h4>
+                    <h4 class="contents-title2" align="right">
+                        <div>
+                            <img src="{% static 'unid/icon/key.png' %}" onload="proc()" id="key" border="0" width="25" height="25">
+                            <img src="{% static 'unid/icon/line-graph.png' %}" id="chart" border="0" width="25" height="25">
+                        </div>
+
+                    </h4>
+
                 </br>
                 </br>
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef"/>
-                    <div id="Status_account">
-                        <input type="hidden" id="idaccount" value={{ request.session.user_account }} readonly /> 
-                        {% comment %} {% if request.session.user_name %} {% endcomment %}
+                    <div>
                         <p align="center" size ="5" id="idaccount"> {{ request.session.user_name }} 님의 보유자산</p>
-                        {% comment %} {% endif %} {% endcomment %}
                     </div>
                 <p align="center" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="230" height="230">  </p>
                     <div id="Status_balance">
@@ -33,17 +103,17 @@
                 </br>
                 </br>
                 <div class="function-button">
-                        <a href="http://127.0.0.1:8000/unid/transaction/"> <img src="{% static 'unid/icon/credit-card.png' %}" border="0" width="100" height="100"></a>
+                        <a href="http://localhost:8000/unid/transaction/"> <img src="{% static 'unid/icon/credit-card.png' %}" border="0" width="100" height="100"></a>
                     <br>
-                        <span class="icon-name" size="5">전송</span>
+                        <span class="icon-name" size="5">송금</span>
                 </div>
                 <div class="function-button">
-                        <img src="{% static 'unid/icon/exchange.png' %}" border="0" width="100" height="100">
+                        <a href="http://localhost:8000/unid/exchange/"><img src="{% static 'unid/icon/exchange.png' %}" border="0" width="100" height="100"></a>
                     <br>
                         <span class="icon-name" size="5">환전</span>
                 </div>
                 <div class="function-button">
-                        <img src="{% static 'unid/icon/bill.png' %}" border="0" width="100" height="100">
+                        <a href="http://localhost:8000/unid/purchase/"><img src="{% static 'unid/icon/bill.png' %}" border="0" width="100" height="100"></a>
                     <br>
                         <span class="icon-name"  size="5">구매</span>
                 </div>
@@ -61,162 +131,431 @@
                     <span class="icon"><i class="fa fa-search"></i></span>
                  </div>
                  <div class="text-box">
-                    <input type="search" id="search" placeholder="Search..." />
+                    <input type="search" id="search2" placeholder="Search..." />
                  </div>
               </div>
         </div>
-        <!-- history -->
+
+        <!--mypage.html로 이동-->
+         <!--history -->
+        <!--<div class="row">-->
+            <!--<div class="history">-->
+                <!--<div>-->
+                    <!--<span>컨텐츠 거래내역</span>-->
+                    <!--<span>6건</span>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<div class="history-total">-->
+                    <!--<div>-->
+                        <!--<span>total</span> <span>10.4nid</span>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<span>(+3.4)</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+        <!--</div>-->
+
+        <!-- history-detail -->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--</br>-->
+        <!--</br>-->
+         <!--history -->
+
+        <!--mypage.html로 이동-->
+         <!--history -->
+        <!--<div class="row">-->
+            <!--<div class="history">-->
+                <!--<div>-->
+                    <!--<span>보상내역</span>-->
+                    <!--<span>6건</span>-->
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<div class="history-total">-->
+                    <!--<div>-->
+                        <!--<span>total</span> <span>10.4nid</span>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<span>(+3.4)</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+        <!--</div>-->
+
+        <!-- history-detail -->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div class="history-detail">-->
+                <!--2018.11.20   &nbsp&nbsp&nbsp-->
+                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
+                <!--3.4nid-->
+                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--</br>-->
+        <!--</br>-->
+         <!--history -->
+
+
         <div class="row">
             <div class="history">
-                <div>
-                    <span>보상내역</span>
-                    <span>6건</span>
-                </div>
-                <div>
-                    <div class="history-total">
-                    <div>
-                        <span>total</span> <span>10.4nid</span>
-                    </div>
-                    <div>
-                        <span>(+3.4)</span>
-                    </div>
-                    </div>
-                </div>
-
+                    <h6> 송금내역  <span>{{ count }}건</span></h6>
             </div>
         </div>
 
         <!-- history-detail -->
         <div class="row">
             <div class="history-detail">
-                2018.11.20   &nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                3.4nid
-                <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20   &nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                3.4nid
-                <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20   &nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                3.4nid
-                <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20   &nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                3.4nid
-                <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-            </div>
-        </div>
-        </br>
-        </br>
-        <!-- history -->
-        <div class="row">
-            <div class="history">
-                <div>
-                    <span>거래내역</span>
-                    <span>6건</span>
-                </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">승인날짜</th>
+                          <th scope="col">보낸사람</th>
+                          <th scope="col">받은사람</th>
+                          <th scope="col">금액</th>
+                          <th scope="col">트랜젝션아이디</th>
+                        </tr>
+                      </thead>
+                {% for item in list %}
+                      <tbody>
+                        <tr>
+                          <th scope="row">{{item.transactiondate}}</th>
+                          <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{item.fromAccount}}</td>
+                          <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{item.toAccount}}</td>
+                          <td><img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
+                          <td>{{item.txid}}</td>
+                        </tr>
+                      </tbody>
+                 {% endfor %}
+                    </table>
+
+                <!--{% for item in list %}-->
+                <!--{{item.transactiondate}} &nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.fromAccount}} </span>&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.toAccount}} </span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.balance}}nid  </span>-->
+                    <!--<span class="history-name"> {{item.txid}}</span>-->
+                    <!--<p><p>-->
+                <!--{% endfor %}-->
+
             </div>
         </div>
 
-        <!-- history-detail -->
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20 &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> gorapapa </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> kingsori </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">
-                <span> 32nid </span>
-                <span class="history-name" > 0x3i4kl4hi3oief56i4h4oi</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20 &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> gorapapa </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> kingsori </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">
-                <span> 32nid </span>
-                <span class="history-name" > 0x3i4kl4hi3oief56i4h4oi</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20 &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> gorapapa </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> kingsori </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">
-                <span> 32nid </span>
-                <span class="history-name" > 0x3i4kl4hi3oief56i4h4oi</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="history-detail">
-                2018.11.20 &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> gorapapa </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/user.png' %}" border="0" width="18" height="18">
-                <span> kingsori </span> &nbsp&nbsp&nbsp&nbsp
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">
-                <span> 32nid </span>
-                <span class="history-name" > 0x3i4kl4hi3oief56i4h4oi</span>
-            </div>
-        </div>
     </div>
-
 </div>
 
-<script>
-    var WEB3 = require('web3');
-    var web3 = new WEB3();
-    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
 
-    // 왜 지혼자 세션의 16진수 데이터를 10진수로 바꿀까??
-    //console.log({{request.session.user_account }});
-    //var account = {{ request.session.user_account }}
-    //var k = account.toString(16)
-    //console.log(account);
-    //console.log(k);
 
-    $(function showStatus() {
-        // let statusAccount = `
-        // <p id="ac" align="center" size ="5"></p>
-        // `;
-        let statusBalance =`
-            <h4 align="center" size ="5"> nid </h4>
-            <h4 id="ba" align="center" size ="5"></h4>
-        `;
-        // $('#Status_account').empty();
-        // $('#Status_account').append(statusAccount);
-        $('#Status_balance').empty();
-        $('#Status_balance').append(statusBalance);
-        let totalAmount = 0;
-        let account = $('#idaccount').val();
-        let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-        // totalAmount += balance;
-        // $("#ac").append(`${account}의 보유자산`);
-        $('#ba').append(`${balance}eth`);
-        // $('#ba').append(`${account}`);
-    }); 
-</script>
+
+
+
+
+<!--key pop-->
+<div id="keyPop" class="modal">
+
+  <!-- Modal content -->
+    <div class="modal-content">
+           <div class="modal-header">
+               <h4 class="modal-title">개인 키 관리</h4>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+           </div>
+           <div class="modal-body">
+           <p align="left" size ="5"> 내 주소 </p>
+               <div id="Status_account_pop" ></div>
+               </br>
+                    <span>프라이빗 키 </span>
+               </br>
+                    <div class="alert alert-success" role="alert">
+                          "pass0"
+                    </div>
+               </p>
+           </div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.href='http://localhost:8000/unid/mywallet/'">확인</button>
+           </div>
+       </div>
+</div>
+
+<!--key pop-->
+<div id="chartPop" class="modal">
+
+  <!-- Modal content -->
+    <div class="modal-content">
+           <div class="modal-header">
+               <h4 class="modal-title">시세 정보</h4>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+           </div>
+           <div class="modal-body">
+
+                <!-- 거래소 시세 정보 -->
+                <table border=1>
+                    <tr>
+                        <th></th>
+                        <th>코인원</th>
+                        <th>빗썸</th>
+                    </tr>
+                    <tr>
+                        <td>비트코인</td>
+                        <td id="coinone_BTC"></td>
+                        <td id="bithumb_BTC"></td>
+                    </tr>
+                    <tr>
+                        <td>이더리움</td>
+                        <td id="coinone_ETH"></td>
+                        <td id="bithumb_ETH"></td>
+                    </tr>
+                    <tr>
+                        <td>리플</td>
+                        <td id="coinone_XRP"></td>
+                        <td id="bithumb_XRP"></td>
+                    </tr>
+                    <tr>
+                        <td>기준시</td>
+                        <td colspan="4" id="lastUpdate"></td>
+                    </tr>
+                </table>
+               <span>1 eth</span>
+               <div>
+                   <span>코인원기준</span> <span id="coinone_NID"></span>
+               </div>
+               <div>
+                   <span>빗썸기준</span> <span id="bithumb_NID"></span>
+               </div>
+
+
+
+
+           </div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="window.location.href='http://localhost:8000/unid/mywallet/'">확인</button>
+           </div>
+       </div>
+</div>
+
+        <script>// key pop function
+
+
+                // Get the modal
+                var modal_key = document.getElementById('keyPop');
+
+                // Get the button that opens the modal
+                var btn_key = document.getElementById("key");
+
+                // Get the <span> element that closes the modal
+                var span_key = document.getElementsByClassName("close");
+
+
+                // When the user clicks on the button, open the modal
+                btn_key.onclick = function() {
+                    modal_key.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span_key.onclick = function() {
+                    modal_key.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal_key) {
+                        modal_key.style.display = "none";
+                    }
+                }
+        </script>
+
+        <script> // chart pop function
+
+                // Get the modal
+                var modal_chart = document.getElementById('chartPop');
+
+                // Get the button that opens the modal
+                var btn_chart = document.getElementById("chart");
+
+                // Get the <span> element that closes the modal
+                var span_chart = document.getElementsByClassName("close");
+
+                // When the user clicks on the button, open the modal
+                btn_chart.onclick = function() {
+                    modal_chart.style.display = "block";
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                span_chart.onclick = function() {
+                    modal_chart.style.display = "none";
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal_chart) {
+                        modal_chart.style.display = "none";
+                    }
+                }
+        </script>
+
+       <script> // solidity function
+
+           var WEB3 = require('web3');
+           var web3 = new WEB3();
+           web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+
+           var _supply = 10000;
+           var _name = "nidcoin";
+           var _symbol = "nid";
+           var _decimals = 0;
+           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+
+           var nd = nidcoinContract.at( "0x3baedc0542c7acf038fff16f1c89977ca611d642" );
+
+           // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
+           function setAccountsList() {
+               let accounts = web3.eth.accounts;
+               accounts.forEach(account => {
+                   $('.accountsList').append(`
+                       <option value="${account}">
+                           ${account.substr(0,6)}...${account.substr(-4)}
+                       </option>
+                   `);
+               });
+           }
+
+           // 계정별 잔액을 출력
+           function showStatus() {
+
+               <!--let statusAccount = `-->
+                    <!--<p id="acc" align="center" size ="5"></p>-->
+               <!--`;-->
+
+               let statusBalance =`
+                   <h4 id="nd_bal" align="center" size ="5"></h4>
+                   <h4 id="bal" align="center" size ="5"></h4>
+                `;
+
+               let statusAccountPop = `
+                    <p id="pop" align="left" size ="5"></p>
+               `;
+
+
+               <!--$('#Status_account').empty();-->
+               <!--$('#Status_account').append(statusAccount);-->
+
+
+               $('#Status_balance').empty();
+               $('#Status_balance').append(statusBalance);
+
+               $('#Status_account_pop').empty();
+               $('#Status_account_pop').append(statusAccountPop);
+
+               let totalAmount = 0;
+               let accounts = web3.eth.accounts;
+               let account = "{{ request.session.user_account }}";
+               let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
+               let nid_balance = nd.balanceOf(account);
+               <!--totalAmount += balance;-->
+               <!--$("#acc").append(`${account}의 보유자산`);-->
+               $('#bal').append(`${balance}eth`);
+               $('#nd_bal').append(`${nid_balance}nid`);
+               <!--$('#pop').append(`${account}`);-->
+           }
+
+           $(function() {
+               setAccountsList();
+               showStatus();
+
+               // 블록에 변화가 생겼을 때 계정별 잔액 정보를 갱신
+               web3.eth.filter('latest').watch(function() {
+                   showStatus();
+               });
+
+               // 송금 버튼을 클릭했을 때, 송금을 요청
+               $('#btnSend').click(function() {
+                   let fromAccount  = $('#fromAccounts').val();
+                   let toAccount    = $('#toAccounts').val();
+                   let fromPassword = $('#fromPassword').val();
+                   let amount       = $('#amount').val();
+
+                   // 보내는 사람의 계정을 언락
+                   let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
+                   if (isUnlock) {
+                       web3.eth.sendTransaction({
+                           from : fromAccount,
+                           to   : toAccount,
+                           value: web3.toWei(amount, "ether")
+                       }, function(err, res) {
+                           if (!err) {
+                               console.log(`txid is ${res}.`);
+                           } else {
+                               console.error(err);
+                           }
+                       });
+                   }
+               });
+
+           });
+       </script>
 
 {% endblock %}
 
+</body>
+
+</html>

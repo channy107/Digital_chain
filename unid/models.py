@@ -119,3 +119,10 @@ class Comment(models.Model):
     def __str__(self):
         return self.contents
 
+class walletInFormation(models.Model):
+    transactiondate = models.DateTimeField(null=True)
+    fromAccount = models.CharField(max_length=100, blank=True, null=True)
+    toAccount = models.CharField(max_length=100, blank=True, null=True)
+    balance = models.IntegerField(blank=True, null=True)
+    txid = models.CharField(max_length=100, blank=True, null=True)
+    type = models.CharField(max_length=100, blank=True, null=True)
