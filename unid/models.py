@@ -75,49 +75,32 @@ class replysForContents(models.Model):
 
 
 class Post(models.Model):
+    posts_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
     file = models.FileField(max_length=1000, null=True)
     title = models.CharField(max_length=100)
     contents = models.CharField(max_length=1000, help_text="내용을 작성해주세요")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     category = models.CharField(max_length=50)
-    tags = models.CharField(max_length=100, null=True)
-    like_user_set = models.ManyToManyField(myPageInfomation, blank=True, related_name='like_user_set', through='Like')
+    tags = models.CharField(max_length=100)
+    rewards = models.FloatField(default=0)
+    liked_users = models.CharField(max_length=50)
 
-    class Meta:
-        ordering = ['-created_at']
+class Voting(models.Model):
+    votings_id = models.AutoField(primary_key=True)
+    user = models.CharField(max_length=100)
+    posts_id = models.CharField(max_length=1000)
+    voting_count = models.IntegerField(default=0)
 
-    @property
-    def like_count(self):
-        return self.like_user_set.count()
 
-    def __str__(self):
-        return self.contents
-
-class Like(models.Model):
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+class replyForPosts(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    posts_id = models.IntegerField()
+    user = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = (
-            ('user', 'post')
-        )
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    contents = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['-id']
-
-    def __str__(self):
-        return self.contents
+    replytext = models.CharField(max_length=1000, blank=True, null=True)
 
 class walletInFormation(models.Model):
     transactiondate = models.DateTimeField(null=True)

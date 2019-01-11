@@ -86,9 +86,39 @@ def contentstran(request):
 
 
 def main(request):
-    post = Post.objects.all()
-    context = {'post': post}
+    posts=Post.objects.order_by('-posts_id')
+    votes= Voting.objects.all()
+    context = {'posts': posts}
     return render(request, 'unid/main.html', context)
+
+def main_detail(request, id):
+    posts = Post.objects.get(posts_id=id)
+    replys = replyForPosts.objects.filter(posts_id=id).values()
+
+    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys})
+
+def mainreply(request):
+    br = replyForPosts(posts_id=request.POST['id'],
+                           user=request.session['user_email'],
+                           replytext=request.POST['reply']
+                           )
+
+    br.save()
+
+    res = {"Ans": "댓글 작성이 완료되었습니다."}
+    return JsonResponse(res)
+
+def voting(request):
+    vr = Voting(posts_id=request.POST['posts_id'],
+                voting_count=request.POST['voting'],
+                    )
+    vr.save()
+
+    res = {"Ans": "보팅이 완료되었습니다."}
+    return JsonResponse(res)
+
+
+
 
 
 def main_upload(request):

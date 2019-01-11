@@ -85,3 +85,10 @@ p {
 .main-voting {
     margin-right:5px;
 }
+
+button.votings {
+    background-color : white;
+    border: none;
+    cursor : pointer;
+}
+
