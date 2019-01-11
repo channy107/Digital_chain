@@ -33,11 +33,11 @@
         <div class="row">
             <div class="contents-icon-tags1">
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/리포트">
+                    <a href="http://localhost:8000/unid/searchcontents/레포트">
                         <img src="{% static 'unid/icon/report.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/리포트" class="categoryname">
+                        <a href="http://localhost:8000/unid/searchcontents/레포트" class="categoryname">
                             # 레포트
                         </a>
                     </div>
@@ -194,4 +194,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    var kk = "{{ request.session.user_email }}";
+    console.log(kk);
+</script>
 {% endblock %}

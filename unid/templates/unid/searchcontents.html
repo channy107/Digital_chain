@@ -4,6 +4,7 @@
 <head>
     <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
+    <script src="{% static 'unid/js/main.js' %}"></script>
 </head>
 <div class="container">
 <div class="row">
@@ -21,20 +22,20 @@
         </div>
 
         <div class="col-lg-9">
-            <h5>최신글</h5>
+            <h5>인기글</h5>
             <div class="container">
-                <hr>
                 {% for contents in contentslists %}
+                <hr>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
                     <span class="writer">{{ contents.writeremail }}</span>
-                    <span class="writing-time">{{ contents.created }}</span>
+                    <span class="writing-time">{{ contents.created|timesince }}</span>
                     <span class="contents-kind">{{ contents.category }}</span>
                     </div>
                 <div class="row">
 
                     <div class="main-col-md-3">
-                        <a href="#">
+                        <a href="{% url 'contentsdetail' contents.contents_id %}">
                             <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
                         </a>
                     </div>
@@ -42,24 +43,22 @@
 
                     <div class="detail-content">
                         <h3><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.title }}</h3>
-                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p>
-                    </div>
+                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>
-                        <span class="main-voting"><img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18"></span>3.29
+                        <span class="main-voting"><input onclick="heartChange1();" value="1" type="image" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="18" height="18"><span id="heart1">0</span></span>
                         <span class="main-voting">
-                        <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></span>10
+                        <input type="image" value="1" src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20"><span id="dallor1">0</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
 
                     </div>
                 </div>
-                {% endfor %}
                 </div>
 
       <hr>
-
+                {% endfor %}
 
     </div>
 

@@ -107,7 +107,7 @@
             let contentsname = $('#user_files').val();
             console.log(contentsprice);
             $('#popupinfo').empty();
-            $('#popupinfo').append("<li id='popupwriter'>작성자 : </li> <li>" + {{ request.session.user_email }} + "</li>");
+            $('#popupinfo').append("<li id='popupwriter'>작성자 : </li> <li>" + "{{ request.session.user_email }}" + "</li>");
             $('#popupinfo').append("<li id='popuptitle'>제목 : </li> <li>" + contentsname + "</li>");
             $('#popupinfo').append("<li id='popupprice'>가격 : </li> <li>" + contentsprice + "</li>");
         });

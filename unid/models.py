@@ -3,7 +3,8 @@ from django import forms
 from datetime import datetime
 
 class myPageInfomation(models.Model):
-    apiprovider = models.CharField(max_length=50, blank=True, null=True)
+    # apiprovider = models.CharField(max_length=50, blank=True, null=True)
+    user = models.CharField(max_length=50, blank=True, null=True)
     email = models.CharField(primary_key=True, max_length=50, blank=True)
     name = models.CharField(max_length=50, blank=True, null=True)
     userimage = models.CharField(max_length=200, blank=True, null=True)
@@ -38,7 +39,6 @@ class uploadContents(models.Model):
     tags = models.CharField(max_length=50)
     fileinfo = models.CharField(max_length=250)
     totalpages = models.IntegerField()
-    previewpath = models.CharField(max_length=250)
     authorinfo = models.CharField(max_length=1000)
     intro = models.CharField(max_length=1000)
     index = models.CharField(max_length=1000)
@@ -46,7 +46,8 @@ class uploadContents(models.Model):
     reference = models.CharField(max_length=1000, default=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
-    # downloadcount = models.IntegerField()
+    downloadcount = models.IntegerField(null=True)
+    isdelete = models.CharField(max_length=10, null=True)
 
 class contentsInfo(models.Model):
     IDX = models.AutoField(primary_key=True)
@@ -55,13 +56,17 @@ class contentsInfo(models.Model):
     ftpsavefilename = models.CharField(max_length=100)
     contentspath = models.CharField(max_length=200)
     hash = models.CharField(max_length=150, null=True)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
 
 class previewInfo(models.Model):
     IDX = models.AutoField(primary_key=True)
     contents_id = models.IntegerField()
     uploadpreviewname = models.CharField(max_length=100)
-    ftpsavepreviewname = models.CharField(max_length=100)
+    savepreviewname = models.CharField(max_length=100)
     imagepath = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
     
 
 class replysForContents(models.Model):
@@ -74,26 +79,15 @@ class replysForContents(models.Model):
 
 
 
+
 class Post(models.Model):
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    file = models.FileField(max_length=1000, null=True)
-    title = models.CharField(max_length=100)
-    contents = models.CharField(max_length=1000, help_text="내용을 작성해주세요")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    category = models.CharField(max_length=50)
-    tags = models.CharField(max_length=100, null=True)
-    like_user_set = models.ManyToManyField(myPageInfomation, blank=True, related_name='like_user_set', through='Like')
-
-    class Meta:
-        ordering = ['-created_at']
-
-    @property
-    def like_count(self):
-        return self.like_user_set.count()
-
-    def __str__(self):
-        return self.contents
+    title = models.CharField(max_length=100, default='SOME STRING')
+    contents = models.CharField(max_length=1000, default='SOME STRING')
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
+    category = models.CharField(max_length=50, default='SOME STRING')
+    tags = models.CharField(max_length=100, default='SOME STRING')
 
 class Like(models.Model):
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)

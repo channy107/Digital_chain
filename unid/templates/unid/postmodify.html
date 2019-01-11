@@ -282,10 +282,10 @@ xpopup
 
 @media only screen and (min-width: 1170px) {
   .cd-popup-container {
-    margin: 10% auto;
+    margin: 12em auto;
   }
   .cd-popup-container1 {
-    margin: 10% auto;
+    margin: 9em auto;
   }
 
 
@@ -298,16 +298,14 @@ xpopup
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
           {% csrf_token %}
             <div id="user_file_before">
-                <div id="user_file_over">
-                    <input type="file"  id="user_files"  name="user_files" class="user_files"  title="파일찾기" multiple/>
-                </div>
                 <div class="form-group">
                     <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
+                    {% for contents in contentsinfolist %}
+                    <input class="form-control col-sm-10 files1"  style="background-color: #d2d1d1;position:relative;left:0" name="inputfile" id="inputfiles_before" type="text" value="{{ contents }}"readonly/>
+                    {% endfor %}
                     <ul class="str_ul">
                         <li class="tip_str">
-                        .hwp, .ppt, .docx, .xlsx 형식의 파일만 가능합니다.
+                        첨부된 파일은 수정할 수 없습니다.
                         </li>
                     </ul>
                 </div>
@@ -325,7 +323,7 @@ xpopup
                 </div>
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="title" id="input_previewfiles_before" type="text" readonly/>
                     <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
@@ -338,13 +336,13 @@ xpopup
             <div id="user_preview_file_after">
                 <div class="form-group">
                     <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="title" id="input_previewfiles_after" type="text" readonly/>
                     <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="inputtitle" class="col-sm-2" id="contentsName">제목</label>
-                <input class="form-control col-sm-10" id="inputtitle" name="title" type="text">
+                <input class="form-control col-sm-10"  name="title" id="inputtitle" type="text" value="{{ contents.title }}">
                 <ul class="str_ul">
                     <li class="tip_str">
                     자료의 핵심내용을 알수있도록 30자 내외로 작성해주세요!
@@ -355,16 +353,17 @@ xpopup
             <div class="form-group">
                 <label for="inputcategory" class="col-sm-2" >카테고리</label>
                 <select class="form-control col-sm-10" id="inputcategory" name="category">
-                    <option title="Combo 1">레포트</option>
+                    <option title="Combo 1">리포트</option>
                     <option title="Combo 2">강의자료</option>
-                    <option title="Combo 3">강의노트</option>
+                    <option title="Combo 3">수업노트</option>
                     <option title="Combo 4">시험자료</option>
                     <option title="Combo 5">동영상</option>
                     <option title="Combo 6">자소서</option>
                     <option title="Combo 7">이력서</option>
+                    <option title="Combo 8">전문자료</option>
                     <option title="Combo 9">PPT</option>
                     <option title="Combo 10">논문</option>
-                    <option title="Combo 10" selected="selected">선택하세요</option>
+                    <option title="Combo 10" selected="selected">{{ contents.category }}</option>
                 </select>
             </div>
             <div class="form-group">
@@ -375,12 +374,12 @@ xpopup
                     <option title="Combo 3">한글</option>
                     <option title="Combo 4">PPT</option>
                     <option title="Combo 5">Word</option>
-                    <option title="Combo 6" selected="selected">선택하세요</option>
+                    <option title="Combo 6" selected="selected">{{ contents.fileinfo }}</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
-                <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업, #취업, #성공적">
+                <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" value="{{ contents.tags }}" placeholder="예) #대기업, #취업, #성공적">
                 <ul class="str_ul">
                     <li class="tip_str">
                     태그를 입력해주세요. 쉼표로 구분(,) 최대 3개
@@ -389,26 +388,26 @@ xpopup
             </div>
             <div class="form-group">
                 <label for="inputauthorinfo" class="col-sm-2">저자</label>
-                <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text">
+                <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text" value={{ contents.authorinfo }}>
             </div>
             <div class="form-group">
                 <label for="inputtotalpages" class="col-sm-2" name="totalpages">페이지수</label>
-                <input class="form-control creatdate" id="inputtotalpages" name="totalpages">
+                <input class="form-control creatdate" id="inputtotalpages" name="totalpages" value={{ contents.totalpages }}>
             </div>
             <div class="form-group">
-                <label for="inputpublisheddate" class="col-sm-3">저작시기</label>
-                <input type="date" class="form-control creatdate" id="inputpublisheddate"  name="publisheddate">
+                <label for="inputpublisheddate" class="col-sm-2">저작시기</label>
+                <input type="date" class="form-control creatdate" id="inputpublisheddate"  name="publisheddate" value="{{ date }}">
             </div>
             <div class="form-group">
                 <label for="inputprice" class="col-sm-2">판매 가격</label>
-                <input class="form-control col-sm-10 price" id="inputprice" name="price" type="text"/>
+                <input class="form-control col-sm-10 price" id="inputprice" name="price" type="text" value={{ contents.price }}>
                 <div class="priceunit">
                     nid
                 </div>
             </div>
             <div class="text-group">
                 <label for="inputintro">소개글</label>
-                <textarea rows="5" class="form-control" id="inputintro" name="intro" placeholder="구매 후 활용 방법, 흐름 등을 소개하여 구매자가 자료를 이해하는데 도움을 줄 수 있습니다."></textarea>
+                <textarea rows="5" class="form-control" id="inputintro" name="intro" placeholder="구매 후 활용 방법, 흐름 등을 소개하여 구매자가 자료를 이해하는데 도움을 줄 수 있습니다.">{{ contents.intro }}</textarea>
                 <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte1">0</span>자</li>
@@ -416,7 +415,7 @@ xpopup
             </div>
             <div class="text-group">
                 <label for="inputindex">목차</label>
-                <textarea rows="5" class="form-control" id="inputindex"  name="index" placeholder="목차 내용은 검색 결과에 반영되며, 구매 전 자료의 전반적인 흐름을 파악할 수 있게 도와줍니다."></textarea>
+                <textarea rows="5" class="form-control" id="inputindex"  name="index" placeholder="목차 내용은 검색 결과에 반영되며, 구매 전 자료의 전반적인 흐름을 파악할 수 있게 도와줍니다.">{{ contents.index }}</textarea>
                 <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte2">0</span>자</li>
@@ -424,14 +423,14 @@ xpopup
             </div>
             <div class="text-group">
                 <label for="inputtext">본문 내용</label>
-                <textarea rows="5" class="form-control" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
+                <textarea rows="5" class="form-control" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다.">{{ contents.contents }}</textarea>
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
                 </ul>
             </div>
             <div class="text-group">
                 <label for="inputreference">참고 문헌</label>
-                <textarea rows="5" class="form-control" id="inputreference" name="reference" placeholder="참고 문헌 입력은 자료 신뢰도를 높일 수 있습니다."></textarea>
+                <textarea rows="5" class="form-control" id="inputreference" name="reference" placeholder="참고 문헌 입력은 자료 신뢰도를 높일 수 있습니다.">{{ contents.reference }}</textarea>
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte4">0</span>자</li>
                 </ul>
@@ -539,7 +538,7 @@ xpopup
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-
+    console.log("{{ contents.publisheddate }}");
     jQuery(document).ready(function($){
         $('#user_files').on('change', function(){
             var fileee = $('#user_files').get(0).files[0]['name'];
@@ -668,21 +667,6 @@ xpopup
             if (!form.inputfile_after.value) {
                 alert("파일을 첨부해주세요.");
                 $('#inputfiles_before').focus();
-                return false;
-            }
-            if (!form.title.value) {
-                alert("제목을 적어주세요");
-                $('#inputtitle').focus();
-                return false;
-            }
-            if (form.category.value == "선택하세요") {
-                alert("카테고리를 선택해주세요");
-                $('#inputcategory').focus();
-                return false;
-            }
-            if (form.fileinfo.value == "선택하세요") {
-                alert("파일정보를 선택해주세요");
-                $('#inputfileinfo').focus();
                 return false;
             }
             if (!form.authorinfo.value) {
