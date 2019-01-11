@@ -144,11 +144,23 @@ SOCIALACCOUNT_ADAPTER = 'unid.my_adapter.MyAdapter'
 
 DATABASES = {
    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+       # 'ENGINE': 'django.db.backends.sqlite3',
+       # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
+
+       'ENGINE': 'django.db.backends.mysql',
+       'OPTIONS': {
+           'read_default_file': './db/cnf',
+           'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+           # 'charset': 'utf8'
+           },
+       'NAME': 'unid_db',  #mysql
+       'USER': 'jun', #root
+       'PASSWORD': 'jun', #1234
+       'HOST': '210.107.78.157', #공백으로 냅두면 default localhost
+       'PORT': '3306' #공백으로 냅두면 default 3306
+   }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
