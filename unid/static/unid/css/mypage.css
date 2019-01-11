@@ -6,9 +6,19 @@ background: #e0e0e0;
 background: #e0e0e0;
 margin: 0 auto;
 width: 1200px;
-height: 300px;
+height: 1500px;
 margin-top: 30px;
 box-shadow: 0px 0px 20px 0px #888888;
+}
+
+#user_profile{
+list-style: none;
+}
+
+ul{
+list-style: none;
+padding-left:0px;
+
 }
 
 #user-info{
@@ -33,23 +43,24 @@ font-size: small;
 #container{
 background: white;
 margin: 0 auto;
-width: 1200px;
+width: 1100px;
 height:1000px;
-margin-top: 0px;
+margin-top: 50px;
 box-shadow: 0px 0px 20px 0px #888888;
 }
 
 
-#contents-list{
-margin-left: 52px;
-padding-top:20px;
-display: grid;
-grid-template-columns: 1fr 1fr 7fr 1fr;
-text-align: left;
+#tabs{
+margin-left:50px;
+margin-right:50px;
+padding-top:40px;
 font-size: larger;
 font-weight: bold;
-grid-bottom: gray;
+border-bottom: 1px solid #c1c1c1;
+padding-bottom:5px;
 }
+
+
 
 #just-line{
 display: block;
@@ -57,6 +68,19 @@ border-bottom: 2px solid #e0e0e0;
 margin: 0 auto;
 width:1100px;
 height:2 -P 60220px;
+}
+
+
+.contents-kind {
+    margin: 10px auto 10px auto;
+    width: 100px;
+    background-color: red;
+    color: white;
+    border-radius:20px;
+    backgraound-size: 100px;
+    text-align: center;
+    padding:2px;
+    font-size:small;
 }
 
 #logo{
@@ -117,6 +141,15 @@ form {
 
     }
 
+#myarticles{
+    margin-left:50px;
+}
+
+
+#reply{
+    margin-left:50px;
+}
+
 #uploads{
     margin-left:50px;
 }
@@ -124,4 +157,57 @@ form {
 
 #downloads{
     margin-left:50px;
+}
+
+#myrewards{
+    margin-left:50px;
+}
+
+
+#wallet{
+    display: inline;
+    width:100px;
+    height:60px;
+    float: right;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+ul.tabs{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+ul.tabs li{
+  background: none;
+  display: inline-block;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+ul.tabs li.current{
+  background: ;
+  position: relative;
+}
+
+ul.tabs li.current:after{
+  content: '';
+  width: 79%;
+  height: 0px;
+  display: block;
+  position: absolute;
+  margin-top: 13px;
+  margin-left: -5px;
+  border-bottom: 5px solid #f00;
+}
+
+
+.tab-content{
+  display: none;
+  background: ;
+  padding: 15px;
+}
+
+.tab-content.current{
+  display: inherit;
 }

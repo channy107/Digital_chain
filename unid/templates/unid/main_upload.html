@@ -15,10 +15,11 @@
 <body>
 <div class="container1">
     <!-- contents InFo -->
+    <form id="myform" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
+          {% csrf_token %}
     <div class="contentsuploadrows">
         <h5 class="board-title">게시물 쓰기</h5>
-        <form id="myform" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
-          {% csrf_token %}
+
             <div class="form-group">
                 <label for="inputtitle" class="col-sm-2" id="#contentsName">제목</label>
                 <input class="form-control col-sm-10"  name="title" id="inputtitle" type="text">

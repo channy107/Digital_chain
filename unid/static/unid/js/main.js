@@ -1,17 +1,38 @@
-function heartChange1() {
-							$(document).ready(function() {
-								var dString = parseInt($('#dallor1').text());
-								var hString = parseInt($('#heart1').text());
 
-								hString = hString + parseInt(1);
+    jQuery(document).ready(function($){
+        $('.votings').on('click', function() {
+            var voting = parseInt($('#voting').text());
+            var reward = parseFloat($('#reward').text());
+            var posts_id = {{ posts.posts_id }}
+            console.log(voting)
+            console.log(reward)
 
-								$('#heart1').text(hString);
+            voting = voting + parseInt(1);
 
-								if (hString % 10 == 0)
-									dString = dString + parseInt(1);
+//            $('#voting').text(voting)
 
-									$("#dallor1").text(dString);
+            if (voting % 1 == 0)
+			     reward = reward + parseFloat(0.1);
+                 reward = reward.toFixed(1);
+//			     $("#reward").text(reward);
+			     console.log(voting)
+			     console.log(reward)
 
-							});
+            $.ajax({
+                    type: 'POST',
+                    url: "../unid/voting/",
+                    data :{
+                        id: posts_id,
+                        voting: voting,
+                        reward: reward,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                     success : function(res) {
+                        alert(res.Ans);
 
-						};
+                        }
+
+                    });
+
+            });
+        });
