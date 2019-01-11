@@ -19,10 +19,14 @@ import hashlib
 
 
 def mypage(request):
-    # mypage = MypageInfomation.objects.get(email)
+    mypage = myPageInfomation.objects.all()
     contentsboard = uploadContents.objects.all()
-    context = {'mypage': mypage,
-               'contentsboard': contentsboard}
+    articles = Post.objects.all()
+    transactions = wallet.objects.all()
+    context = {'articles':articles,
+               'transactions':transactions,
+               'mypage':mypage,
+               'contentsboard':contentsboard}
     return render(request, 'unid/mypage.html', context)
 
 

@@ -30,22 +30,23 @@
 <body>
 
 {% load socialaccount %}
-    <div id="outline">
-        <div id="container">
-            <div id="contents">
-                <div id="logo">
-                    <p><img style="width:210px" src="{% static 'unid/icon/unid_icon.png' %}"></p>
-                    <p><h1 style="text-align:center"><strong>가입하기</strong></h1></p>
-                    <p>기존에 사용하시던 계정으로</p>
-                    <p>간편하게 회원가입하세요!</p>
-                </div>
-                <div id="signUpLinks">
-                    <p><a href="{% provider_login_url 'google' method='oauth2' %}"><img style="width:350px" src="{% static 'unid/icon/google.png' %}" ></a></p>
-                    <p><a href="{% provider_login_url 'facebook' method='oauth2' %}"><img style="width:350px" src="{% static 'unid/icon/facebook.png' %}"></a></p>
-                    <p><a href="https://kauth.kakao.com/oauth/authorize?client_id=122f531f95d70dabb69ff17f4f1b0be2&redirect_uri=http://localhost:8000/unid/oauth&response_type=code"><img style="width:350px" src="{% static 'unid/icon/kakao.png' %}"></a></p>
-                </div>
-            </div>
-        </div>
+    <div id="container">
+        <ul id="contents">
+            <li><img style="width:210px" src="{% static 'unid/icon/unid_icon.png' %}"></li>
+            <br>
+            <li><h1 style=""><strong>회원가입</strong></h1></li>
+            <br>
+            <li>
+                <P style="margin:0px;">기존에 사용하시던 계정으로</P>
+                <P>간편하게 회원가입하세요!</P>
+            </li>
+            <br>
+            <li><a href="{% provider_login_url 'google' method='oauth2' %}"><img style="width:300px" src="{% static 'unid/icon/google.png' %}" ></a></li>
+            <br>
+            <li><a href="{% provider_login_url 'facebook' method='oauth2' %}"><img style="width:300px" src="{% static 'unid/icon/facebook.png' %}"></a></li>
+            <br>
+            <li><a href="https://kauth.kakao.com/oauth/authorize?client_id=122f531f95d70dabb69ff17f4f1b0be2&redirect_uri=http://localhost:8000/unid/oauth&response_type=code"><img style="width:300px" src="{% static 'unid/icon/kakao.png' %}"></a></li>
+        </ul>
     </div>
 
     

@@ -2,6 +2,7 @@
 <html lang="en">
 
 {% extends 'unid/navigationbar.html' %}
+
 {% load static %}
 {% block content %}
 
@@ -9,125 +10,252 @@
 <head>
     <link href="{% static 'unid/css/mypage.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('ul.tabs li').click(function(){
+            var tab_id = $(this).attr('data-tab');
+
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+            $(this).addClass('current');
+            $("#"+tab_id).addClass('current');
+            })
+        })
+    </script>
 </head>
 <body>
-<div id="myinfo">
+    <div id="myinfo">
+        <ul id="profile-icon">
+            {% if mypage == null %}
+                {% for myinfo in mypage %}
+                    <li style="text-align: center; margin-bottom:0px; padding-top:30px;"><img style="width:60px; margin-top:40px;" src="{{ myinfo.image_path }}"></li>
+                {% endfor %}
+                {% else %}
+                    <li style="text-align: center; margin-bottom:0px; padding-top:30px;"><img style="width:60px; margin-top:40px;" src="{% static 'unid/icon/user.png' %}"></li>
+                {% endif %}
+        </ul>
 
-    <div id="profile-icon">
-        <p style="text-align: center; margin-bottom:0px;"><img style="width:60px; margin-top:40px;" src="{% static 'unid/icon/user.png' %}"></p>
-    </div>
-    <div id="id">
-        <p style="text-align: center; font-size: xx-large; font-weight:600; ">gorappaduk</p>
-    </div>
-    <div id="profile">
-        <p style="text-align: center;">안녕하세요</p>
-    </div>
-    <div id="user-info">
-        <div id="follower">
-            <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/followers.png' %}">54팔로워</p>
-        </div>
-        <div id="number-of-contents">
-            <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/number-of-contents.png' %}">24게시글</p>
-        </div>
-        <div id="follow">
-            <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/follows.png' %}">54팔로우</p>
-        </div>
-    </div>
-    <div id="user-info2">
-        <div id="joining-date">
-            <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/joining-date.png' %}"> 2018-12-28가입</p>
-        </div>
-        <div id="authentication-info">
-            <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/square-academy-cap.png' %}">미인증</p>
-        </div>
-    </div>
-</div>
+        <ul id="user_profile">
+            {% for myinfo in mypage %}
+                <li style="text-align: center; font-size: xx-large; font-weight:600; ">{{ myinfo.name }}</li>
+                {% if myinfo.profile %}
+                    <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 15px;">{{ myinfo.profile }}</li>
+                {% else %}
+                    <li style="text-align: center;">프로필을 등록해 주세요!</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
 
-<div id="container">
-    <div id="contents-list">
-        <div id="history">
-            <a href="" style="text-align: left; color:black;">나의 활동</a>
-        </div>
-        <div id="resources">
-            <a href="" style="text-align: left; color:black;">나의 자료</a>
-        </div>
-        <div id="messages">
-            <a href="" style="text-align: left; color:black;">나의 보상</a>
-        </div>
-        <div id="wallet">
-            <a href="http://localhost:8000/unid/mywallet/" style="color:black;"><img style="width:30px;" src="{% static 'unid/icon/wallet-for-mypage.png' %}">지갑</a>
-        </div>
-    </div>
-    <div id="just-line"></div>
-        <!--<div id="my-contents">-->
-            <!--<p style="text-align: left; color:#9aa1a7;"><strong>내가 작성한 글</strong></p>-->
-        <!--</div>-->
-        <!--<div id="description">-->
-            <!--<p style="text-align: left; color:#9aa1a7"><strong>최근 댓글 내역</strong></p>-->
-        <!--</div>-->
-        <br>
-        <br>
-    <div id="uploads">
-        <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 올린 콘텐츠</strong></p>
-        <br>
-        {% for contents in contentsboard %}
-        <div class="user">
-            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-            <span class="writer">{{contents.writeremail}}</span>
-            <span class="writing-time">{{contents.publisheddate}}</span>
-            <span class="content-kind">{{contents.category}}</span>
-        </div>
-        <div class="row">
-            <div class="main-col-md-3">
-                <a href="#">
-                    <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
-                </a>
+        <div id="user-info">
+            <div id="follower">
+                <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/followers.png' %}">54팔로워</p>
             </div>
-            <div class="col-md-5">
+            <div id="number-of-contents">
+                <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/number-of-contents.png' %}">{{ articles.index }}게시글</p>
+            </div>
+            <div id="follow">
+                <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/follows.png' %}">54팔로우</p>
+            </div>
+        </div>
+        <div id="user-info2">
+            <div id="joining-date">
+                <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/joining-date.png' %}"> {{ myinfo.joiningdate }}</p>
+            </div>
+            <div id="authentication-info">
+                <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/square-academy-cap.png' %}">미인증</p>
+            </div>
+        </div>
+        <div id="container">
+            <ul class="tabs" id="tabs">
+                <li class="tab-link current" data-tab="tab-1">나의 활동</li> &nbsp&nbsp
+                <li class="tab-link" data-tab="tab-2">나의 자료</li> &nbsp&nbsp
+                <li class="tab-link" data-tab="tab-3">나의 보상</li>
+                <div id="wallet">
+                    <a href="" style="color:black;"><img style="width:30px;" src="{% static 'unid/icon/wallet-for-mypage.png' %}">지갑</a>
+                </div>
+            </ul>
 
-                <div class="detail-content">
-                    <h3>{{contents.title}}</h3>
-                    <p>
-                        {{contents.contents}}
-                    </p>
+            <div id="tab-1" class="tab-content current">
+                <div id="myarticles">
+                    <br>
+                    <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 작성한 글</strong></p>
+                    <br>
+                    {% if articles %}
+                        {% for article in articles %}
+                        <div class="user">
+                            {% if mypage %}
+                                {% for myinfo in mypage %}
+                                <img src="{{ myinfo.image_path }}" border="0" width="35" height="35">&nbsp
+                                {% endfor %}
+                            {% else %}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                            {% endif %}
+                            <span class="writer">{{article.writer}}</span>
+                            <span class="writing-time">{{article.created}}</span>
+                            <span class="content-kind">{{article.tags}}</span>
+                        </div>
+                        <div class="row">
+                            <div class="main-col-md-3">
+                                <a href="#">
+                                    <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-5">
+
+                                <div class="detail-content">
+                                    <h3>{{article.title}}</h3>
+                                    <p>
+                                        {{article.contents}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p><strong>등록된 글이 없습니다. 글을 등록해보세요!</strong></p>
+                    {% endif %}
+                </div>
+                <br>
+                <div id="reply">
+                    <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>최근 댓글 내역</strong></p>
+                    <br>
+                    <div class="user">
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                        <span class="writer">작성자</span>
+                        <span class="writing-time">3일전</span>
+                        <span class="content-kind">자소서</span>
+                    </div>
+                    <div class="row">
+                        <div class="main-col-md-3">
+                            <a href="#">
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            </a>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="detail-content">
+                                <h3>한양대 교양추천</h3>
+                                <p>
+                                    교양장인인 제가 생각했을때 가장 추천할만한 교양을 꼽자면 당연히 그거 죠
+                                    그 교양 그 이름이 무엇이냐.....
+                                    유쾌한 이노베이션 정효찬 교수님
+                                    교양으로 듣는 논어와 맹자
+                                    인간과 음악적 상상력 정경성 교수님
+                                    혁신과 잡종의 과학사 남영 교수님 이네요..
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-2" class="tab-content">
+                <div id="uploads">
+                    <br>
+                    <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 올린 콘텐츠</strong></p>
+                    <br>
+                    {% if contentsboard %}
+                    {% for contents in contentsboard %}
+                    <div class="user">
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp&nbsp
+                        <span class="writer">{{contents.writeremail}}</span>&nbsp&nbsp
+                        <span class="writing-time">{{contents.publisheddate}}</span>&nbsp&nbsp
+                        <span class="contents-kind">
+                            #{{contents.category}}
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="main-col-md-3">
+                            <a href="#">
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            </a>
+                        </div>
+                        <div class="col-md-5">
+
+                            <div class="detail-content">
+                                <h3>{{contents.title}}</h3>
+                                <p>
+                                    {{contents.contents}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p><strong>등록된 콘텐츠가 없습니다. 콘텐츠를 등록해보세요!</strong></p>
+                    {% endif %}
+                </div>
+                <br>
+                <div id="downloads">
+                    <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 받은 콘텐츠</strong></p>
+                    <br>
+                    <div class="user">
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                        <span class="writer">작성자</span>
+                        <span class="writing-time">3일전</span>
+                        <span class="content-kind">자소서</span>
+                    </div>
+                    <div class="row">
+                        <div class="main-col-md-3">
+                            <a href="#">
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            </a>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="detail-content">
+                                <h3>한양대 교양추천</h3>
+                                <p>
+                                    교양장인인 제가 생각했을때 가장 추천할만한 교양을 꼽자면 당연히 그거 죠
+                                    그 교양 그 이름이 무엇이냐.....
+                                    유쾌한 이노베이션 정효찬 교수님
+                                    교양으로 듣는 논어와 맹자
+                                    인간과 음악적 상상력 정경성 교수님
+                                    혁신과 잡종의 과학사 남영 교수님 이네요..
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-3" class="tab-content">
+                <div id="myrewards">
+                    <br>
+                    <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내 보상 내역</strong></p>
+                    <br>
+                    {% if transactions %}
+                    {% for transaction in transactions %}
+                    <div class="row">
+                        <div class="main-col-md-3">
+                            <a href="#">
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            </a>
+                        </div>
+                        <div class="col-md-5">
+
+                            <div class="detail-content">
+                                <p>
+                                    {{transaction.transactions}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p><strong>보상내역이 없습니다. 글을 등록하고 보상을 받으세요!</strong></p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
-    {% endfor %}
-    <br>
-    <div id="downloads">
-        <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 받은 콘텐츠</strong></p>
-        <br>
-        <div class="user">
-            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-            <span class="writer">작성자</span>
-            <span class="writing-time">3일전</span>
-            <span class="content-kind">자소서</span>
-        </div>
-        <div class="row">
-            <div class="main-col-md-3">
-                <a href="#">
-                    <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
-                </a>
-            </div>
-            <div class="col-md-5">
-                <div class="detail-content">
-                    <h3>한양대 교양추천</h3>
-                    <p>
-                        교양장인인 제가 생각했을때 가장 추천할만한 교양을 꼽자면 당연히 그거 죠
-                        그 교양 그 이름이 무엇이냐.....
-                        유쾌한 이노베이션 정효찬 교수님
-                        교양으로 듣는 논어와 맹자
-                        인간과 음악적 상상력 정경성 교수님
-                        혁신과 잡종의 과학사 남영 교수님 이네요..
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
-{% endblock %}
+<!--<script>-->
+    <!--var kk = {{ images.email }};-->
+    <!--var tt = {{ contentsboard.writeremail }};-->
+    <!--console.log(kk);-->
+    <!--console.log(tt);-->
+<!--</script>-->
 </html>
+{% endblock %}
