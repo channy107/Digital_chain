@@ -4,7 +4,9 @@
 <head>
     <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
-    <script src="{% static 'unid/js/main.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
 </head>
 <div class="container">
 <div class="row">
@@ -24,41 +26,46 @@
         <div class="col-lg-9">
             <h5>인기글</h5>
             <div class="container">
-                {% for info in post %}
+                {% for info in posts %}
                 <hr>
+                <div class="posts_id">
+                    {{info.posts_id}}
+                </div>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
                     <span class="writer">{{ info.user_id }}</span>
-                    <span class="writing-time">3일전</span>
+                    <span class="writing-time">{{info.created_at|timesince}}전</span>
                     <span class="contents-kind">{{ info.category }}</span>
                     </div>
                 <div class="row">
 
                     <div class="main-col-md-3">
-                        <a href="#">
-                            <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                       <a href="{% url 'main_detail' info.posts_id %}">
+                            <img src="{% static 'unid/img/'%}{{info.file}}" width="200px" height="200px">
                         </a>
                     </div>
                 <div class="col-md-5">
 
                     <div class="detail-content">
-                        <h3>{{ info.title }}</h3>
-                        <p>{{info.contents}}</p></div>
+                        <h3><a href="localhost:8000/unid/main_detail">{{ info.title }}</a></h3>
+                        <a href="main_detail?post={{info.id}}"><p>{{info.contents}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
+
                     <div>
-                        <span class="main-voting"><input onclick="heartChange1();" value="1" type="image" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="18" height="18"><span id="heart1">0</span></span>
+                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" ><i class="far fa-heart"></i><span id="voting">{{vote.voting_count}}</span></button></span>
                         <span class="main-voting">
-                        <input type="image" value="1" src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20"><span id="dallor1">0</span></span>
+                        <i class="fas fa-dollar-sign"></i><span id="reward">{{info.rewards}}</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
-
                     </div>
+
                 </div>
                 </div>
 
       <hr>
                 {% endfor %}
+                <div id="comment-more-{{post.id}}"></div>
         <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
                     <span class="writer">작성자</span>
@@ -84,9 +91,9 @@
 혁신과 잡종의 과학사 남영 교수님 이네요..</p></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>
-                        <span class="main-voting"><img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18"></span>3.29
+                        <span class="main-voting"><img class="rewards" src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18"></span>3.29
                         <span class="main-voting">
-                        <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></span>10
+                        <img class="votings" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></span>10
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
@@ -138,5 +145,42 @@
 
 
     </div>
+<script type="text/javascript">
 
+     $(".votings").click(function(){
+            var pk = $(this).attr('name')
+            var voting = parseInt($('#voting').text());
+            var reward = parseFloat($('#reward').text());
+
+
+            voting = voting + parseInt(1);
+
+//            $('#voting').text(voting)
+
+            if (voting % 1 == 0)
+			     reward = reward + parseFloat(0.1);
+                 reward = reward.toFixed(1);
+//			     $("#reward").text(reward);
+			     console.log(voting)
+			     console.log(reward)
+
+            $.ajax({
+                    type: 'POST',
+                    url: "voting/",
+                    data :{
+                        posts_id: pk,
+                        voting: voting,
+
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                     success : function(res) {
+                        alert(res.Ans);
+
+                        }
+
+                    });
+
+            });
+
+</script>
 {% endblock %}

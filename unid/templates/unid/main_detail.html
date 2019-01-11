@@ -1,0 +1,182 @@
+
+{% extends 'unid/navigationbar.html' %}
+{% load static %}
+{% block content %}
+<!-- Page Content -->
+<link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
+<link href="{% static 'unid/css/main_detail.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
+
+
+<div class="container1">
+    <!-- contents InFo -->
+    <div class="rows">
+        <div class="row">
+            <div class="main-info">
+                <div class="contents-kind">
+                    {{posts.category}}
+                </div>
+                <h2 align="center">
+                    <b> ㄴㅁㅇㅁㄴㅇ</b>
+                </h2>
+                <hr size="10" align="center" width=20% noshade="noshade" />
+                <p align="center" size ="5">
+                    <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">   {{ posts.user_id }}  3일전</p>
+
+            </div>
+        </div>
+        <!-- preview -->
+
+        <!-- detail of contents -->
+        <div class="row">
+
+            <div class="main-detail">
+                <img class="detail-img" src="{% static 'unid/img/'%}{{posts.file}}" alt="{{posts.file}}" width="600px" height="600px">
+
+                <p>컨텐츠 정보</p>
+                <p>저자 : {{ posts.user_id }}</p>
+
+                <p>저작시기 : {{ posts.created_at }}</p>
+
+
+                <p>본문내용: {{ posts.contents }}</p>
+
+                <p>비고: {{ posts.reference }}</p>
+
+
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="contents-tag">
+                <div>
+                    <img src="{% static 'unid/icon/tag-icon.png' %}" border="0" width="20" height="20">
+                    <span>{{ posts.tags }}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- replyment -->
+        <div class="row">
+            <div class="contents-reply">
+                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
+                10
+                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
+                2
+                <hr size="5" align="left" width=670px noshade="noshade" style="color: #b3afaf54;"/>
+                <div class="reply-list">
+                    {% for reply in replys %}
+                    <div class="reply">
+                        <div class="reply-picture">
+                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
+                        </div>
+                        <div class="reply-id">
+                            <span>{{ reply.user }}</span>
+                        </div>
+                        <div class="reply-date">
+                            <span>{{ reply.created_at }}</span>
+                        </div>
+                        <div class="reply-text">
+                            {{ reply.replytext }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="input-reply">
+                <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
+
+                <input type="button" class="form-control col-sm-2 replybutton" value="댓글작성" id="inputreply" repletstyle="margin:0 0 0 600px;">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+    jQuery(document).ready(function($){
+        //open popup
+        $('.cd-popup-trigger').on('click', function(event){
+            event.preventDefault();
+            $('.cd-popup').addClass('is-visible');
+
+        });
+
+        //close popup
+        $('.cd-popup').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup').removeClass('is-visible');
+            }
+
+        });
+        $('#inputreply').on('click', function() {
+            var reply = $('#inputreplytext').val();
+            var posts_id = {{ posts.posts_id }};
+            $.ajax({
+                type: 'POST',
+                url: '../mainreply/',
+                data: {
+                    id: posts_id,
+                    reply: reply,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                    location="{% url 'main_detail' posts.posts_id %}"
+                }
+            });
+        });
+
+    });
+
+    var WEB3 = require('web3');
+    var web3 = new WEB3();
+    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+
+    var contentsmasterContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+
+
+    let cc = contentsmasterContract.at( "0xbf5f1204ba8ee3bc0096459e9b80099d4fee2a7a" );
+
+    var contentsContract = web3.eth.contract([{"constant":false,"inputs":[],"name":"countUp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDownloadCount","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsPrice","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"count","type":"uint32"}],"name":"EventCountUp","type":"event"}]);
+
+    $(function() {
+        $('#enrollyes').click(function() {
+            let contentsprice = $('#inputprice').val();
+            let contentsname = $('#user_files').val();
+            cc.addContents (
+                contentsname,
+                contentsprice,
+                { from: web3.eth.coinbase, gas: 1000000 },
+                function(err, res) {
+                    if (!err) {
+                        console.log(res);
+                    } else {
+                        console.error(err);
+                    }
+                }
+            );
+        });
+    });
+
+</script>
+
+{% endblock %}
+
