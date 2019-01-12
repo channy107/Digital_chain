@@ -218,6 +218,8 @@ def oauth(request):
         time = timezone.now()
         rpc_url = "http://localhost:8545"
         w3 = Web3(HTTPProvider(rpc_url))
+        # return HttpResponse(w3.eth.accounts)
+
 
         password = request.POST['pwd']  # ★★★★
         account = w3.personal.newAccount(password)
