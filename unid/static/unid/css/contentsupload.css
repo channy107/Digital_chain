@@ -83,14 +83,14 @@
     left: 635px;
 }
 .price {
-    width: 160px;
+    width: 170px;
     position: relative;
-    right: 640px;
+    right: 630px;
 }
 .creatdate {
-    width: 300px;
+    width: 170px;
     position: relative;
-    right: 640px;
+    right: 630px;
 }
 .shortput {
     position: relative;
@@ -99,13 +99,13 @@
 .priceunit {
     float: right;
     position: relative;
-    right: 450px;
+    right: 428px;
     top: 10px;
 }
 .checks {
     position: relative;
     float: right;
-    right: 300px;
+    right: 235px;
     bottom: 5px;
 }
 .checks input[type="checkbox"] {

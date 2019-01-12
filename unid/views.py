@@ -2,7 +2,10 @@ import os
 from _sha256 import sha256
 from datetime import datetime
 from ftplib import FTP
+from PIL import Image
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.http import require_POST
@@ -16,7 +19,16 @@ from .models import *
 import random
 from django.shortcuts import render
 import hashlib
+from allauth.account.signals import user_logged_in
 
+
+def logged_in(sender, **kwargs):
+    user = kwargs['user']
+    request = kwargs['request']
+    member = myPageInfomation.objects.get(user=user)
+    request.session['user_email'] = member.email
+    request.session['user_name'] = member.name
+user_logged_in.connect(logged_in, sender=User)
 
 def mypage(request):
     mypage = myPageInfomation.objects.all()
@@ -45,7 +57,6 @@ def mywallet(request):
     #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount})
 
-
 def transaction(request):
     if request.method == 'GET':
         return render(request, 'unid/transaction.html', {})
@@ -71,17 +82,27 @@ def purchase(request):
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id).values()
-
-    # date = contents.created
-    # print(date[0:4])
-
-    # preview = previewInfo.objects.get(contents_id=id)
-    # return HttpResponse(contents.title)
+    previewlist = []
+    if previewInfo.objects.filter(contents_id=id).values():
+        for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
+            previewimage = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
+            previewlist.append(previewimage)
+        first_preview = previewlist[0]
+        try:
+            second_preview = previewlist[1]
+        except IndexError as e:
+            second_preview = ""
+        try:
+            third_preview = previewlist[2]
+        except IndexError as e:
+            third_preview = ""
+    else:
+        second_preview = '/media/default.png'
+        third_preview = '/media/default.png'
     return render(
         request,
         'unid/contentsdetail.html',
-        {'contents': contents, 'replys': replys}
-        # , 'preview': preview}
+        {'contents': contents, 'replys': replys, 'previewlist': previewlist, 'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,}
     )
 
 
@@ -157,82 +178,29 @@ def signup(request):
 
 def createaccount(request):
     if request.method == 'GET':
-        return render(request, 'unid/createaccount.html', {})
-    else:
-        rpc_url = "http://localhost:8545"
-        w3 = Web3(HTTPProvider(rpc_url))
-
-        pwd = request.POST['pwd']
-        account = w3.personal.newAccount(pwd)
-        br = myPageInfomation(email=request.POST['email'],
-                              name=request.POST['name'],
-                              joiningdate=timezone.now(),
-                              pwd=request.POST['pwd'],
-                              account=account
-                              )
-        br.save()
-        url = 'http://localhost:8000/unid'
-        return HttpResponseRedirect(url)
-
-
-def oauth(request):
-    if request.method == 'GET':
-        code = request.GET.get('code')
-        url = "https://kauth.kakao.com/oauth/token"
-        payload = "grant_type=authorization_code&client_id=122f531f95d70dabb69ff17f4f1b0be2&redirect_uri=http://localhost:8000/unid/oauth&code=" + str(
-            code)
-        headers = {
-            'Content-Type': "application/x-www-form-urlencoded",
-            'Cache-Control': "no-cache",
-        }
-        response = requests.request("POST", url, data=payload, headers=headers)
-        # response는 json형식이 아니니까 밑에 코드를 통해 json형식으로 바꾼다
-        access_token = json.loads(((response.text).encode('utf-8')))['access_token']
-        # return  HttpResponse(access_token)
-        url = "https://kapi.kakao.com/v1/user/signup"
-        headers.update({'Authorization': "Bearer " + str(access_token)})
-        response = requests.request("POST", url, headers=headers)
-        # return HttpResponse(response.text)
-        url = "https://kapi.kakao.com/v1/user/me"
-        response = requests.request("POST", url, headers=headers)
-        # email = json.loads(((response.text).encode('utf-8')))['email']
-        id = json.loads(((response.text).encode('utf-8')))['id']
-        nickname = json.loads(((response.text).encode('utf-8')))['properties']['nickname']
-        try:
-            member = myPageInfomation.objects.get(email=id)
-        except myPageInfomation.DoesNotExist:
-            return render(
-                request,
-                'unid/createaccount.html',
-                {'id': id, 'nickname': nickname}
-            )
+        account = myPageInfomation.objects.get(email=request.session['user_email']).account
+        if account:
+            request.session['user_account'] = account
+            return render(request, 'unid/main.html', {})
         else:
-            request.session['user_email'] = member.email
-            request.session['user_name'] = member.name
-            request.session['user_account'] = member.account
-
-            url = 'http://localhost:8000/unid/mywallet'
-            return HttpResponseRedirect(url)
-
+            return render(request, 'unid/createaccount.html', {})
     else:
-        time = timezone.now()
         rpc_url = "http://localhost:8545"
         w3 = Web3(HTTPProvider(rpc_url))
         # return HttpResponse(w3.eth.accounts)
 
 
-        password = request.POST['pwd']  # ★★★★
+        password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
-        br = myPageInfomation(email=request.POST['email'],
-                              name=request.POST['name'],
-                              joiningdate=timezone.now(),
-                              pwd=lockpwd,  # ★★★★
-                              account=account)
-        br.save()
+
+        myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                            joiningdate=timezone.now(),
+                            pwd=lockpwd,
+                            account=account
+                            )
         url = 'http://localhost:8000/unid'
         return HttpResponseRedirect(url)
-
 
 def contentsupload(request):
     if request.method == 'GET':
@@ -240,19 +208,23 @@ def contentsupload(request):
     else:  # submit으로 제출
         try:
             upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
-            upload_images = request.FILES.getlist('file_images')
+            upload_images = request.FILES.getlist('user_preview_files')
         except MultiValueDictKeyError:
             pass
         try:
+
             now = datetime.now()
             today = now.strftime('%Y-%m-%d')
             os.mkdir("uploadfiles/" + today)  # 그 날짜에 맞는 디렉토리 생성
-            # root_dir = "우리 서버"   # ★★★★★★★★★★★
-            # contents_dir = root_dir + "/" + today + "/"
-            # contents_dir = today + "/"
+            print(1)
         except FileExistsError as e:
             pass
-
+        try:
+            print(os.getcwd())
+            os.mkdir("media/" + today)
+        except FileExistsError as e:
+            pass
+        print(2)
         ftpfilelist = []
         uifilelist = []
         for upload_file in upload_files:  # 다중 파일 업로드
@@ -271,28 +243,35 @@ def contentsupload(request):
                 for chunk in upload_file.chunks():
                     file.write(chunk)
 
-        preview_ftp_filelist = []
+        preview_save_filelist = []
         preview_ui_filelist = []
         for upload_image in upload_images:
             number = str(random.random())
             previewfilename = upload_image.name
             extendname = previewfilename[previewfilename.find(".", -5):]
             real_preview_filename = number + extendname
-            preview_ftp_filelist.append(real_preview_filename)
+            preview_save_filelist.append(real_preview_filename)
             preview_ui_filelist.append(previewfilename)
             now = datetime.now()
             today = now.strftime('%Y-%m-%d')
-            contents_dir = "uploadfiles/" + today + "/"
+            print(os.getcwd())
+            contents_dir = "media/" + today + "/"
             # 해당 날짜의 디렉토리
             with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
                 for chunk in upload_image.chunks():
                     file.write(chunk)
-
-        # 검수시스템 추후 개발예정
-        # session = ftplib.FTP('210.107.78.157')
+            im = Image.open(contents_dir + real_preview_filename)
+            size = (1000, 1050)
+            im2 = im.resize(size)
+            im2.save(contents_dir + real_preview_filename)
+        """
+        
+        검수시스템 추후 개발예정
+        
+        """
         ftp = FTP()
-        ftp.connect("210.107.78.157")  # Ftp 주소 Connect(주소 , 포트)
-        ftp.login("unid", "dkagh")
+        ftp.connect("222.239.231.253")  # Ftp 주소 Connect(주소 , 포트)
+        ftp.login("unid", "qhdkscjfwj0!")
         ftp.cwd("/home/unid/contents")
         ftp_contents_dir = "/home/unid/contents/" + today + "/"
         try:
@@ -315,31 +294,20 @@ def contentsupload(request):
             filehashdatas.append(hashdata)
             uploadfile.close()
 
-        # Uploading preview file in preview folder
-        ftp.cwd("/home/unid/images/contents")
-        ftp_preview_images_dir = "/home/unid/images/contents/" + today + "/"
-        try:
-            ftp.mkd(today)
-        except:
-            ftp.cwd("/home/unid/images/contents/" + today)
-        ftp.cwd("/home/unid/images/contents/" + today)
-        for filename in preview_ftp_filelist:
-            file_name = filename
-            uploadfile = open(file_name, "rb")
-            ftp.storbinary('STOR ' + file_name, uploadfile)
-            uploadfile.close()
         os.chdir("..")
         os.chdir("..")
+
+
+        publisheddate = str(request.POST['publisheddate'])[0:10]
         br = uploadContents(
             writeremail=request.session['user_email'],
             title=request.POST['title'],
-            publisheddate=request.POST['publisheddate'],
+            publisheddate=publisheddate,
             category=request.POST['category'],
             price=request.POST['price'],
             tags=request.POST['tags'],
             fileinfo=request.POST['fileinfo'],
             totalpages=request.POST['totalpages'],
-            # previewpath=request.POST['previewpath'],
             authorinfo=request.POST['authorinfo'],
             intro=request.POST['intro'],
             index=request.POST['index'],
@@ -351,6 +319,7 @@ def contentsupload(request):
         idx = uploadContents.objects.all().order_by('-pk')[0].contents_id  # ★
         filelistlength = len(ftpfilelist)
         for i in range(filelistlength):
+            print(6)
             br = contentsInfo(
                 contents_id=idx,
                 uploadfilename=uifilelist[i],
@@ -360,38 +329,89 @@ def contentsupload(request):
             )
             br.save()
 
-        previewlistlength = len(preview_ftp_filelist)
+        preview_images_dir = "/media/" + today + "/"
+        previewlistlength = len(preview_save_filelist)
         for i in range(previewlistlength):
+            print(7)
             br = previewInfo(
                 contents_id=idx,
                 uploadpreviewname=preview_ui_filelist[i],
-                ftpsavepreviewname=preview_ftp_filelist[i],
-                imagepath=ftp_preview_images_dir,
+                savepreviewname=preview_save_filelist[i],
+                imagepath=preview_images_dir + preview_save_filelist[i],
             )
             br.save()
 
-        rpc_url = "http://localhost:8545"
-        w3 = Web3(HTTPProvider(rpc_url))
-
-        contentsMasterContract_address = Web3.toChecksumAddress("0xa083498c49c29719887b040f003a714684ec4f4c")
-        cmc = w3.eth.contract(address = contentsMasterContract_address, abi = [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
-        w3.personal.unlockAccount(w3.eth.accounts[0], "pass0", 0)
-        price = int(request.POST['price'])
-        for i in range(len(filehashdatas)):
-            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-            cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact({"from": w3.eth.accounts[0], "gas": 1000000 })
+        # rpc_url = "http://localhost:8545"
+        # w3 = Web3(HTTPProvider(rpc_url))
+        #
+        # contentsMasterContract_address = Web3.toChecksumAddress("0xdc299228c44567d397323ccf54046f18c31ff8aa")
+        # cmc = w3.eth.contract(address = contentsMasterContract_address, abi = [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])        # w3.personal.unlockAccount(w3.eth.accounts[0], "pass0", 0)
+        # price = int(request.POST['price'])
+        # for i in range(len(filehashdatas)):
+        #     # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
+        #     cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact({"from": w3.eth.accounts[0], "gas": 1000000 })
 
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)
 
 
+
+def postmodify(request, id):
+    if request.method == 'GET':
+        contents = uploadContents.objects.get(contents_id=id)
+        contentsinfolist = []
+        for i in range(len(contentsInfo.objects.filter(contents_id=id).values())):
+            contentsinfolist.append(contentsInfo.objects.filter(contents_id=id).values()[i]['uploadfilename'])
+        publisheddate = str(contents.publisheddate)[0:10]
+
+        return render(request, 'unid/postmodify.html', {'contents': contents, 'date':publisheddate, 'contentsinfolist': contentsinfolist})
+    else:
+        uploadContents.objects.filter(contents_id=id).update(
+            writeremail=request.session['user_email'],
+            title=request.POST['title'],
+            publisheddate=str(request.POST['publisheddate'])[0:10],
+            category=request.POST['category'],
+            price=request.POST['price'],
+            tags=request.POST['tags'],
+            fileinfo=request.POST['fileinfo'],
+            totalpages=request.POST['totalpages'],
+            # previewpath=request.POST['previewpath'],
+            authorinfo=request.POST['authorinfo'],
+            intro=request.POST['intro'],
+            index=request.POST['index'],
+            contents=request.POST['contents'],  # 소개글 제한?
+            reference=request.POST['reference'],
+            last_modified=timezone.now()
+        )
+
+        """
+        
+        삭제된 정보를 데이터 베이스에 넣어야 하는데 !!!!!!!!!!
+        
+        
+        
+        """
+
+        url = '/unid/contentstran/'
+        return HttpResponseRedirect(url)
+
+
+def postdelete(request):
+    uploadContents.objects.filter(contents_id=request.POST['id']).update(
+        last_modified=timezone.now(),
+        isdelete="삭제"
+    )
+
+    res = {"Ans": "삭제되었습니다."}
+    return JsonResponse(res)
+
+
 @require_POST
 def moneytrade(request):
-    rpc_url = "http://localhost:8545"
-    w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xa2b4fb8d101921540ea7f8dff906d1df07aa721d")
-    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-
+    # rpc_url = "http://localhost:8545"
+    # w3 = Web3(HTTPProvider(rpc_url))
+    # nidCoinContract_address = Web3.toChecksumAddress("0xfed54a55bde5e60cf9a3a426a890ddc6f64bd593")
+    # ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
@@ -409,7 +429,6 @@ def moneytrade(request):
     return JsonResponse(res)
     # 거래 내역 디비에 담기
 
-
 @require_POST
 def download(request):
     id = request.POST['id']
@@ -418,8 +437,8 @@ def download(request):
     print(contentsinfos)
     print(fileplace)
     ftp = FTP()
-    ftp.connect("210.107.78.157")
-    ftp.login("unid", "dkagh")
+    ftp.connect("222.239.231.253")
+    ftp.login("unid", "qhdkscjfwj0!")
     ftp.cwd(fileplace)
     for i in range(len(contentsinfos)):
         filename = contentsinfos[i]['ftpsavefilename']
@@ -441,7 +460,6 @@ def download(request):
 #          response = HttpResponse(f, content_type='application/octet-stream')
 #          response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
 #          return response
-
 
 def writereply(request):
     br = replysForContents(contents_id=request.POST['id'],
@@ -465,8 +483,11 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 
 
 def searchcontents(request, category):
-    allcontentslists = uploadContents.objects.order_by('-contents_id').filter(category=category)
-    # return HttpResponse(contentslists)
+    allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
+                                            Q(category=category) & Q(isdelete__isnull=True)
+                                                    )
+
+    # contentsthumbnail = previewInfo.objects.
     return render(
         request, 'unid/searchcontents.html',
         {'contentslists': allcontentslists}

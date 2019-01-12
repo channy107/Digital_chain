@@ -44,13 +44,13 @@
                     <label for="email">이메일주소</label>
                 </p>
                 <p>
-                    <input type="email" class="form-control" name=email value={{ id }} readonly/>
+                    <input type="email" class="form-control" name=email value={{ user.email }} readonly/>
                 </p>
                 <p>
                     <label for="name">이름</label>
                 </p>
                 <p>
-                    <input type="text" class="form-control" name=name value={{ nickname }} readonly/>
+                    <input type="text" class="form-control" name=name value={{ request.session.user_name }} readonly/>
                 </p>
                 <p>
                     <label for="pwd">비밀번호</label>

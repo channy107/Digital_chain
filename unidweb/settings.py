@@ -133,12 +133,12 @@ AUTHENTICATION_BACKENDS = (
 # -----------oauth------------------------------------------
 SITE_ID = 7  # 안맞으면 site maching the query ... 이거 대체 뭘까
 
-LOGIN_REDIRECT_URL = '/unid'
+LOGIN_REDIRECT_URL = '/unid/createaccount/'
 ACCOUNT_LOGOUT_REDIRECT_URL = "/unid"
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 WSGI_APPLICATION = 'unidweb.wsgi.application'
-
+SOCIALACCOUNT_ADAPTER = 'unid.my_adapter.MyAdapter'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
@@ -162,7 +162,6 @@ DATABASES = {
        'PORT': '3306' #공백으로 냅두면 default 3306
    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -194,7 +193,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -202,8 +201,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# MEDIA_URL = 'DB서버' # MEDIA 파일이 접근하는 URL이 저거로 시작
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploadfiles')  # 실제 파일이 위치하는 서버상 경로
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 실제 파일이 위치하는 서버상 경로
+MEDIA_URL = '/media/' # MEDIA 파일이 접근하는 URL이 저거로 시작
+
 
 # FILE_UPLOAD_HANDLERS =  [
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler" ,
