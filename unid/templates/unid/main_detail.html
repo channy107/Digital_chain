@@ -21,7 +21,7 @@
                 </h2>
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <p align="center" size ="5">
-                    <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">   {{ posts.user_id }}  3일전</p>
+                    <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">   {{ posts.user_id }}&nbsp&nbsp  {{posts.created_at|timesince}}</p>
 
             </div>
         </div>
@@ -63,10 +63,19 @@
         <!-- replyment -->
         <div class="row">
             <div class="contents-reply">
-                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
-                10
-                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
-                2
+                <div class="detail-like">
+                <img class="detail-like-img" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
+                {{posts.like_count}}
+            <a class="nav-links dropdown-toggle" id="like-list" data-toggle="dropdown">
+
+            <div class="dropdown-menu">
+                {% for like in likes %}
+                <a class="dropdown-item">{{like.liked_users}}</a>
+                {% endfor %}
+            </div>
+
+                <img class="detail-reply-img" src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">4</a>
+                 </div>
                 <hr size="5" align="left" width=670px noshade="noshade" style="color: #b3afaf54;"/>
                 <div class="reply-list">
                     {% for reply in replys %}
@@ -92,7 +101,7 @@
             <form class="input-reply">
                 <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
 
-                <input type="button" class="form-control col-sm-2 replybutton" value="댓글작성" id="inputreply" repletstyle="margin:0 0 0 600px;">
+                <input type="button" class="form-control col-sm-2 replybutton" value="댓글작성" id="inputMainreply" repletstyle="margin:0 0 0 600px;">
             </form>
         </div>
     </div>
@@ -126,7 +135,7 @@
             }
 
         });
-        $('#inputreply').on('click', function() {
+        $('#inputMainreply').on('click', function() {
             var reply = $('#inputreplytext').val();
             var posts_id = {{ posts.posts_id }};
             $.ajax({
