@@ -124,18 +124,3 @@ class LikeUsers(models.Model):
     liked_users = models.CharField(max_length=100)
     posts_id = models.CharField(max_length=100)
 
-class replyForPosts(models.Model):
-    IDX = models.AutoField(primary_key=True)
-    posts_id = models.IntegerField()
-    user = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    replytext = models.CharField(max_length=1000, blank=True, null=True)
-
-class walletInFormation(models.Model):
-    transactiondate = models.DateTimeField(null=True)
-    fromAccount = models.CharField(max_length=100, blank=True, null=True)
-    toAccount = models.CharField(max_length=100, blank=True, null=True)
-    balance = models.IntegerField(blank=True, null=True)
-    txid = models.CharField(max_length=100, blank=True, null=True)
-    type = models.CharField(max_length=100, blank=True, null=True)
