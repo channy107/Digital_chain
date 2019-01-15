@@ -114,7 +114,7 @@ def contentstran(request):
 
 def main(request):
     posts=Post.objects.order_by('-posts_id')
-    votes= Voting.objects.all()
+
     context = {'posts': posts}
     return render(request, 'unid/main.html', context)
 
@@ -122,7 +122,28 @@ def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
 
-    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys})
+    likes = LikeUsers.objects.filter(posts_id=id)
+    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys, 'likes':likes})
+
+def voting(request):
+    posts_id=request.POST['posts_id']
+    like_count=request.POST['like_count']
+    rewards=request.POST['rewards']
+    liked_users=request.POST['liked_users']
+
+
+    posts = Post.objects.get(posts_id=posts_id)
+    posts.like_count = like_count
+    posts.rewards = rewards
+
+    posts.save()
+
+    like = LikeUsers(posts_id=posts_id, liked_users=liked_users)
+
+    like.save()
+
+    res = {"Ans" : "보팅이 완료되었습니다."}
+    return JsonResponse(res)
 
 def mainreply(request):
     br = replyForPosts(posts_id=request.POST['id'],
@@ -135,19 +156,6 @@ def mainreply(request):
     res = {"Ans": "댓글 작성이 완료되었습니다."}
     return JsonResponse(res)
 
-def voting(request):
-    vr = Voting(posts_id=request.POST['posts_id'],
-                voting_count=request.POST['voting'],
-                    )
-    vr.save()
-
-    res = {"Ans": "보팅이 완료되었습니다."}
-    return JsonResponse(res)
-
-
-
-
-
 def main_upload(request):
     if request.method == 'GET':
         return render(request, 'unid/main_upload.html', {})
@@ -156,6 +164,7 @@ def main_upload(request):
         title = request.POST['title']
         category = request.POST['category']
         contents = request.POST['contents']
+        tags = request.POST['tags']
         upload_file = request.FILES['user_files']
         with open("unid/static/unid/img" + '/' + upload_file.name, 'wb') as file:
             for chunk in upload_file.chunks():
@@ -163,7 +172,7 @@ def main_upload(request):
 
         user = myPageInfomation.objects.get(email=sess)
 
-        info = Post(user=user, title=title, category=category, contents=contents, file=upload_file.name)
+        info = Post(title=title, user=user, category=category, contents=contents, file=upload_file.name, tags=tags)
         info.save()
 
         url = '../unid/'

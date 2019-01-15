@@ -29,7 +29,6 @@
                 {% for info in posts %}
                 <hr>
                 <div class="posts_id">
-                    {{info.posts_id}}
                 </div>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
@@ -52,9 +51,9 @@
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" ><i class="far fa-heart"></i><span id="voting">{{vote.voting_count}}</span></button></span>
+                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" ><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
-                        <i class="fas fa-dollar-sign"></i><span id="reward">{{info.rewards}}</span></span>
+                        <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
@@ -62,9 +61,9 @@
 
                 </div>
                 </div>
-
+ {% endfor %}
       <hr>
-                {% endfor %}
+
                 <div id="comment-more-{{post.id}}"></div>
         <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
@@ -102,12 +101,14 @@
                 </div>
                 </div>
             </div>
+
+            <div class="scroll"><button class="scroll"><i class="fas fa-chevron-down"></i></button></div>
             <h5>최신글</h5>
             <div class="container">
                 <hr>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    <span class="writer">작성자</span>
+                    <span class="writer">{{request.session.user_email}}</span>
                     <span class="writing-time">3일전</span>
                     <span class="contents-kind">#학교정보</span>
                     </div>
@@ -149,32 +150,30 @@
 
      $(".votings").click(function(){
             var pk = $(this).attr('name')
-            var voting = parseInt($('#voting').text());
-            var reward = parseFloat($('#reward').text());
+            var like_count = parseInt($('#voting-'+pk).text());
+            var rewards = parseFloat($('#reward-'+pk).text());
+            var liked_users = {{request.session.user_email}};
 
+            like_count = like_count + parseInt(1);
 
-            voting = voting + parseInt(1);
+                $('#voting-'+pk).text(like_count)
 
-//            $('#voting').text(voting)
-
-            if (voting % 1 == 0)
-			     reward = reward + parseFloat(0.1);
-                 reward = reward.toFixed(1);
-//			     $("#reward").text(reward);
-			     console.log(voting)
-			     console.log(reward)
-
+            if (like_count % 1 == 0)
+			     rewards = rewards + parseFloat(0.1);
+                 rewards = rewards.toFixed(1);
+			     $("#reward-"+pk).text(rewards);
             $.ajax({
                     type: 'POST',
                     url: "voting/",
                     data :{
                         posts_id: pk,
-                        voting: voting,
-
+                        like_count: like_count,
+                        rewards: rewards,
+                        liked_users: liked_users,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                         },
                      success : function(res) {
-                        alert(res.Ans);
+
 
                         }
 
