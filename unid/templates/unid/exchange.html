@@ -153,7 +153,7 @@
            var _decimals = 0;
            var NidCoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
 
-           var nd = NidCoinContract.at( "0xdb5e616615330b3ebefc41d547d109579900ca70" );
+           var nd = NidCoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
 
            // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
            function setAccountsList() {
@@ -169,13 +169,12 @@
 
            // 계정별 잔액을 출력
            function showStatus() {
-
                let statusAccount = `
                     <p id="ac" align="left" size ="5"></p>
                `;
 
                let statusBalance =`
-                   <h3 id="ba" align="right" size ="5"></h3>
+                   <h3 id="nd_bal" align="right" size ="5"> </h3>
                 `;
 
                $('#Status_account').empty();
@@ -186,11 +185,13 @@
 
                let totalAmount = 0;
                let accounts = web3.eth.accounts;
-               let account = accounts[0];
+               let account = "{{ request.session.user_account }}";
                let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
+               let nid_balance = nd.balanceOf(account);
                totalAmount += balance;
-               $('#ba').append(`${balance}eth`);
+               $('#ba').append(`${balance}nid`);
                $("#ac").append(`${account}`);
+               $('#nd_bal').append(`${nid_balance}nid`);
 
 
            }

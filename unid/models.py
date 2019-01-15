@@ -83,16 +83,6 @@ class replysForContents(models.Model):
 class Post(models.Model):
     posts_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100, default='SOME STRING')
-    contents = models.CharField(max_length=1000, default='SOME STRING')
-    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
-    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
-    category = models.CharField(max_length=50, default='SOME STRING')
-    tags = models.CharField(max_length=100, default='SOME STRING')
-
-class Like(models.Model):
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     file = models.FileField(max_length=1000, null=True)
     title = models.CharField(max_length=100)
     contents = models.CharField(max_length=1000, help_text="내용을 작성해주세요")
@@ -102,13 +92,12 @@ class Like(models.Model):
     tags = models.CharField(max_length=100)
     rewards = models.FloatField(default=0)
     liked_users = models.CharField(max_length=50)
+    like_count = models.IntegerField(default=0)
 
-class Voting(models.Model):
-    votings_id = models.AutoField(primary_key=True)
-    user = models.CharField(max_length=100)
-    posts_id = models.CharField(max_length=1000)
-    voting_count = models.IntegerField(default=0)
-
+class LikeUsers(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    liked_users = models.CharField(max_length=100)
+    posts_id = models.CharField(max_length=100)
 
 class replyForPosts(models.Model):
     IDX = models.AutoField(primary_key=True)
