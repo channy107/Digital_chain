@@ -3,7 +3,7 @@
         $('.votings').on('click', function() {
             var voting = parseInt($('#voting').text());
             var reward = parseFloat($('#reward').text());
-            var posts_id = {{ posts.posts_id }}
+            var posts_id = "{{ posts.posts_id }}";
             console.log(voting)
             console.log(reward)
 

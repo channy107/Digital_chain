@@ -1,10 +1,12 @@
 
 from django.contrib import admin
-from django.urls import path
-
+from django.urls import path, include
+from django.conf.urls import url
 from unid import views
 from .views import *
-
+from haystack.forms import ModelSearchForm
+from haystack.query import SearchQuerySet
+from haystack.views import SearchView
 
 
 
@@ -33,4 +35,7 @@ urlpatterns = [
     path('writereply/', views.writereply, name='writereply'),
     path('exchange/', exchange),
     path('purchase/', purchase),
+    path('download/', views.download, name='download'),
+    url(r'^navigationbar/', SearchView(template='unid/navigationbar.html'), name='haystack_search'),
+
 ]

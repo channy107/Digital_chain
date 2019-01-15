@@ -1,0 +1,15 @@
+{{ object.writeremail }}
+{{ object.title }}
+{{ object.publisheddate }}
+{{ object.category }}
+{{ object.tags }}
+{{ object.fileinfo }}
+{{ object.authorinfo }}
+{{ object.intro }}
+{{ object.index }}
+{{ object.contents }}
+{{ object.reference }}
+{{ object.user.email }}
+{{ object.created }}
+{{ object.contents_id }}
+{{ object.imagepath }}

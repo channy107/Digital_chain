@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 {% load static %}
@@ -51,7 +52,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="/unid/">
+        <a class="navbar-brand" href="/unid">
             <img src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="113" height="54">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
@@ -64,9 +65,18 @@
                     <span class="icon"><i class="fa fa-search"></i></span>
                  </div>
                  <div class="text-box">
-                     <form method="get" action="/search/">
+                     <form method="get" action="">
                          <input type="search" name="q" id="id_q" placeholder="Search..." />
+                         <ul id="id_models">
+                             <li>
+                                 <input type="checkbox" name="models" value="unid.note" id="id_models_0">" Notes"
+                             </li>
+                             <li>
+                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_1">" Upload contentss"
+                             </li>
+                         </ul>
                      </form>
+
                  </div>
               </div>
         </div>
@@ -100,8 +110,81 @@
             </ul>
         </div>
     </div>
-
 </nav>
+
+
+
+<head>
+    <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
+    <script src="{% static 'unid/js/main.js' %}"></script>
+</head>
+<div class="container">
+    <div class="row">
+        <div class="sidenav">
+
+          <h4 class="my-4">태그 카테고리</h4>
+          <div class="list-group">
+            <a href="#" class="list-group-item">#학교정보</a>
+            <a href="#" class="list-group-item">#학교주변리뷰</a>
+            <a href="#" class="list-group-item">#취업정보</a>
+            <a href="#" class="list-group-item">#질문</a>
+          </div>
+
+        </div>
+
+        <div class="col-lg-9">
+            {% if query %}
+            <h5>검색정보</h5>
+            <div class="container">
+                {% for result in page.object_list %}
+                <hr>
+                <div class="user">
+                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    <span class="writer">{{ result.object.writeremail }} </span>
+                    <span class="writing-time">{{ result.object.created|timesince }}</span>
+                    <span class="contents-kind">{{ result.object.category }}</span>
+                </div>
+                <div class="row">
+                    <div class="main-col-md-3">
+                        <a href="{% url 'contentsdetail' result.object.contents_id %}">
+                            {% if result.object.imagepath %}
+                            <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ result.object.imagepath }}" alt="">
+                            {% else %}
+                            <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
+                            {% endif %}
+                        </a>
+                    </div>
+                <div class="col-md-5">
+                    <div class="detail-content">
+                        <h3><a href="{% url 'contentsdetail' result.object.contents_id %}"/>{{ result.object.title }}</h3>
+                        <p><a href="{% url 'contentsdetail' result.object.contents_id %}"/>{{ result.object.intro }}</p></div>
+                            <!--<a class="btn btn-primary" href="#">View Project</a>-->
+                    <div>
+                        <span class="main-voting"><input onclick="heartChange1();" value="1" type="image" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="18" height="18"><span id="heart1">0</span></span>
+                        <span class="main-voting">
+                        <input type="image" value="1" src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20"><span id="dallor1">0</span></span>
+                        <span class="main-voting">
+                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
+
+
+                </div>
+            </div>
+        </div>
+      <hr>
+                {% empty %}
+                <p>검색 결과가 없습니다.</p>
+                {% endfor %}
+                {% else %}
+                {# Show some example queries to run, maybe query syntax, something else? #}
+
+                {% endif %}
+</div>
+
+
+
+
+
 
 
 

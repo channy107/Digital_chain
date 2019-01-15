@@ -447,7 +447,7 @@ xpopup
                                 <h4>저작물 판매에 대한 계약서/서약서</h4>
                             </div>
                             <div class="popuprow3">
-                                <textarea style="width: 1000px;height: 300px;" readonly>
+                                <textarea class="contracttext" style="width: 1000px;height: 300px;" readonly>
                                 저작권자인 (성명){{ request.session.user_name }}, (아이디){{ request.session.user_email }} 을 "갑"으로 온라인서비스 제공자인 ㈜지커뮤니케이션을 "을"로 하여 "갑"과 "을" 양 당사자는 저작물 판매(전송, 복제, 배포)에 관한 계약에 대해 동의하며 다음과 같이 계약을 체결한다.
 
 제 1조(계약내용)
@@ -502,6 +502,12 @@ xpopup
 
  본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
                                 </textarea>
+                                <div class="target" id="1">
+                                    <input class="zzzz" type="button" value="동의합니다." disabled/>
+                                </div>
+                                <div class="target" id="2">
+                                    <input class="cd-popup-no" type="button" value="동의하지않습니다." />
+                                </div>
                             </div>
                         </div> <!-- cd-popup-container -->
                     </div> <!-- cd-popup -->
@@ -512,7 +518,7 @@ xpopup
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
                         <div class="popuprow1">
-                            <h4>컨텐츠를 등록하시겠습니까?</h4>
+                            <h4>수정하시겠습니까?</h4>
                         </div>
                         <div class="popuprow2">
                             <ul id='popupinfo'>
@@ -540,6 +546,39 @@ xpopup
 <script>
     console.log("{{ contents.publisheddate }}");
     jQuery(document).ready(function($){
+        $('input:checkbox[id="ex_chk"]').on('change', function(){
+            $('.cd-popup1').addClass('is-visible');
+            });
+        $('.contracttext').on('scroll', function() {
+            if($('.contracttext').scrollTop() >= 700) {
+                $('.zzzz').removeAttr("disabled");
+            }
+    });
+        $('.cons').on('click', function(event){
+            event.preventDefault();
+            $('.cd-popup1').addClass('is-visible');
+        });
+
+        //close popup
+        $('.cd-popup1').on('click', function(event){  // $(event.target).is('.cd-popup1') || 팝업 밖 클릭시
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+                $('input:checkbox[id="ex_chk"]').prop("checked", false);
+            } else if( $(event.target).is('.zzzz')) {
+                    event.preventDefault();
+                    $(this).removeClass('is-visible');
+                    $('input:checkbox[id="ex_chk"]').prop("checked", true);
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup1').removeClass('is-visible');
+                $('input:checkbox[id="ex_chk"]').prop("checked", false);
+            }
+
+        });
         $('#user_files').on('change', function(){
             var fileee = $('#user_files').get(0).files[0]['name'];
             console.log(fileee);
@@ -641,34 +680,11 @@ xpopup
             var afterletterLength = $(this).val().length;
             $('#body_byte4').html(afterletterLength + "/1000");
         });
-        $('.cons').on('click', function(event){
-            event.preventDefault();
-            $('.cd-popup1').addClass('is-visible');
-        });
 
-        //close popup
-        $('.cd-popup1').on('click', function(event){
-            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup1') || $(event.target).is('.cd-popup-no')) {
-                event.preventDefault();
-                $(this).removeClass('is-visible');
-            }
-        });
-        //close popup when clicking the esc keyboard button
-        $(document).keyup(function(event){
-            if(event.which=='27'){
-                $('.cd-popup1').removeClass('is-visible');
-            }
-
-        });
         //open popup
         $('.cd-popup-trigger').on('click', function(event){
             event.preventDefault();
             var form = document.writeform;
-            if (!form.inputfile_after.value) {
-                alert("파일을 첨부해주세요.");
-                $('#inputfiles_before').focus();
-                return false;
-            }
             if (!form.authorinfo.value) {
                 alert("저자를 적어주세요");
                 $('#inputauthorinfo').focus();
@@ -710,17 +726,6 @@ xpopup
             }
 
             $('.cd-popup').addClass('is-visible');
-            let contentsprice = $('#inputprice').val();
-            let contentsname = $('#user_files').val();
-            console.log(contentsprice);
-            let upload_files = $('#user_files').get(0).files
-            $('#popupinfo').empty();
-            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>작성자 : </li> <li class='popupinformations'>" + "{{ request.session.user_email }}" + "</li> </ul><br><br>");
-            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>파일명 : </li> ");
-            for(var i=0; i<upload_files.length; i++) {
-                $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
-            };
-            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
 
         });
 

@@ -7,7 +7,7 @@
     <script src="{% static 'unid/js/main.js' %}"></script>
 </head>
 <div class="container">
-<div class="row">
+    <div class="row">
 
         <div class="sidenav">
 
@@ -31,16 +31,18 @@
                     <span class="writer">{{ contents.writeremail }}</span>
                     <span class="writing-time">{{ contents.created|timesince }}</span>
                     <span class="contents-kind">{{ contents.category }}</span>
-                    </div>
+                </div>
                 <div class="row">
-
                     <div class="main-col-md-3">
                         <a href="{% url 'contentsdetail' contents.contents_id %}">
-                            <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            {% if contents.imagepath %}
+                            <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
+                            {% else %}
+                            <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
+                            {% endif %}
                         </a>
                     </div>
                 <div class="col-md-5">
-
                     <div class="detail-content">
                         <h3><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.title }}</h3>
                         <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p></div>
@@ -51,15 +53,12 @@
                         <input type="image" value="1" src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20"><span id="dallor1">0</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
-
-
                     </div>
                 </div>
-                </div>
+            </div>
+        <hr>
+                    {% endfor %}
 
-      <hr>
-                {% endfor %}
-
-    </div>
+</div>
 
 {% endblock %}

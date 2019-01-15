@@ -348,21 +348,21 @@ xpopup
                 <div class="carousel-inner" role="listbox">
                     {% if first_preview %}
                     <div class="carousel-item active">
-                        <img class="d-block img-fluid" src="{{ first_preview }}" alt="first slide">
+                        <img class="d-block img-fluid" src="/{{ first_preview }}" alt="first slide">
                     </div>
                     {% if second_preview %}
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{{ second_preview }}" alt="Second slide">
+                        <img class="d-block img-fluid" src="/{{ second_preview }}" alt="Second slide">
                     </div>
                     {% endif %}
                     {% if third_preview %}
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{{ third_preview }}" alt="Third slide">
+                        <img class="d-block img-fluid" src="/{{ third_preview }}" alt="Third slide">
                     </div>
                     {% endif %}
                     {% else %}
                     <div class="carousel-item">
-                        <img class="d-block img-fluid" src="{{ first_preview }}" alt="first slide">
+                        <img class="d-block img-fluid" src="/{{ first_preview }}" alt="first slide">
                     </div>
                     {% endif %}
                 </div>
@@ -486,6 +486,8 @@ xpopup
 
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+    var downloadid = Math.random();
+    console.log(downloadid);
     jQuery(document).ready(function($){
         $('.postdelete').on('click', function(event) {
             event.preventDefault();
@@ -528,10 +530,12 @@ xpopup
             $('.cd-popup').addClass('is-visible');
             let contentstitle = "{{ contents.title }}";
             let contentsprice = {{ contents.price }};
+            let mybalance = {{ nid_balance }};
 
             $('#popupinfo').empty();
             $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
             $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupbalance'>내 잔고 : </li> <li class='popupinformations'>" + mybalance + " nid </li> </ul>");
         });
 
         //close popup
@@ -568,42 +572,35 @@ xpopup
 
 
         $('.cd-popup-buy-yes').on('click', function() {
-
+            var downloadid = Math.random();
+            console.log("zzz");
             var pwd = $('#inputpwd').val()
             if (!pwd) {
                 alert("비밀번호을 적어주세요");
                 $('#inputpwd').focus();
                 return false;
             }
+            var downloadid = Math.random();
+            console.log(downloadid);
 
             var writeremail = "{{ contents.writeremail }}";
             var contents_id = {{ contents.contents_id }};
-            var pwd = $('#inputpwd').val()
-
+            var contents_title = "{{ contents.title }}";
+            var postdata  = {
+                    'id': contents_id,
+                    'title': contents_title,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    };
+            var pwd = $('#inputpwd').val();
             $.ajax({
-                type: 'POST',
-                url: "../moneytrade/",
-                data : {
-                        writeremail: writeremail,
-                        id: contents_id,
-                        pwd: pwd,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                success : function(res) {
-                    alert(res.Ans)
-                    $.ajax({
-                        type: 'POST',
-                        url: "../download/",
-                        data : {
-                            id: contents_id,
-                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                            },
-                        success : function(res) {
-                            alert(res.Ans)
-                            location="{% url 'contentsdetail' contents.contents_id %}"
-                        }
-                    });
-                }
+                type: 'GET',
+                url: "../download/",
+                data: {
+                    id: contents_id,
+                    downloadid: downloadid,
+                    title: contents_title,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
             });
         });
     });

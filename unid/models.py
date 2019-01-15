@@ -2,6 +2,9 @@ from django.db import models
 from django import forms
 from datetime import datetime
 
+from unidweb import settings
+
+
 class myPageInfomation(models.Model):
     # apiprovider = models.CharField(max_length=50, blank=True, null=True)
     user = models.CharField(max_length=50, blank=True, null=True)
@@ -27,7 +30,14 @@ class wallet(models.Model):
     balance = models.IntegerField(blank=True, null=True)
     transactions = models.CharField(max_length=100, blank=True, null=True)
 
+class Note(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=200)
+    body = models.TextField()
 
+    def __str__(self):
+        return self.title
 
 class uploadContents(models.Model):
     contents_id = models.AutoField(primary_key=True)
@@ -48,12 +58,14 @@ class uploadContents(models.Model):
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
     downloadcount = models.IntegerField(null=True)
     isdelete = models.CharField(max_length=10, null=True)
+    imagepath = models.CharField(max_length=200, null=True)
+    hits = models.IntegerField(default=0)
 
 class contentsInfo(models.Model):
     IDX = models.AutoField(primary_key=True)
     contents_id = models.IntegerField()
-    uploadfilename = models.CharField(max_length=100)
-    ftpsavefilename = models.CharField(max_length=100)
+    uploadzipfilename = models.CharField(max_length=100)
+    uploadfile = models.CharField(max_length=100, null=True)
     contentspath = models.CharField(max_length=200)
     hash = models.CharField(max_length=150, null=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
@@ -77,39 +89,6 @@ class replysForContents(models.Model):
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=False, blank=False)
     replytext = models.CharField(max_length=1000, blank=True, null=True)
 
-
-
-
-class Post(models.Model):
-    posts_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100, default='SOME STRING')
-    contents = models.CharField(max_length=1000, default='SOME STRING')
-    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
-    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
-    category = models.CharField(max_length=50, default='SOME STRING')
-    tags = models.CharField(max_length=100, default='SOME STRING')
-
-class Like(models.Model):
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    file = models.FileField(max_length=1000, null=True)
-    title = models.CharField(max_length=100)
-    contents = models.CharField(max_length=1000, help_text="내용을 작성해주세요")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
-    category = models.CharField(max_length=50)
-    tags = models.CharField(max_length=100)
-    rewards = models.FloatField(default=0)
-    liked_users = models.CharField(max_length=50)
-
-class Voting(models.Model):
-    votings_id = models.AutoField(primary_key=True)
-    user = models.CharField(max_length=100)
-    posts_id = models.CharField(max_length=1000)
-    voting_count = models.IntegerField(default=0)
-
-
 class replyForPosts(models.Model):
     IDX = models.AutoField(primary_key=True)
     posts_id = models.IntegerField()
@@ -125,3 +104,22 @@ class walletInFormation(models.Model):
     balance = models.IntegerField(blank=True, null=True)
     txid = models.CharField(max_length=100, blank=True, null=True)
     type = models.CharField(max_length=100, blank=True, null=True)
+
+class Post(models.Model):
+    posts_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    file = models.FileField(max_length=1000, null=True)
+    title = models.CharField(max_length=100)
+    contents = models.CharField(max_length=1000, help_text="내용을 작성해주세요")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    category = models.CharField(max_length=50)
+    tags = models.CharField(max_length=100)
+    rewards = models.FloatField(default=0)
+    liked_users = models.CharField(max_length=50)
+
+class Voting(models.Model):
+    votings_id = models.AutoField(primary_key=True)
+    user = models.CharField(max_length=100)
+    posts_id = models.CharField(max_length=1000)
+    voting_count = models.IntegerField(default=0)

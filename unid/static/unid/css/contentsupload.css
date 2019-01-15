@@ -6,7 +6,7 @@
 }
 .contentsuploadrows {
     width: 1000px;
-    height: 1850px;
+    height: auto;
     /* height: 1600px; */
     margin: 0 auto;
     background-color: #ffffff!important;
@@ -170,4 +170,7 @@
     top: 30px;
     margin: 0 0 40px 0;
 }
-
+.enrollbutton {
+    position: relative;
+    bottom: 110px;
+}

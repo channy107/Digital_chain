@@ -1,6 +1,25 @@
 {% extends 'unid/navigationbar.html' %}
 {% load static %}
 {% block content %}
+
+{% if query %}
+<h3>Results</h3>
+
+{% for result in page.object_list %}
+    <p>{{ result.object.title }}</p>
+
+{% empty %}
+    <p>No results found.</p>
+{% endfor %}
+
+{% if page.has_previous or page.has_next %}
+    <div>
+        {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+        |
+        {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+    </div>
+{% endif %}
+{% else %}
 <head>
     <link href="{% static 'unid/css/contentstran.css' %}" rel="stylesheet">
 </head>
@@ -33,7 +52,7 @@
         <div class="row">
             <div class="contents-icon-tags1">
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/레포트">
+                    <a href="../searchcontents/레포트">
                         <img src="{% static 'unid/icon/report.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
@@ -43,41 +62,41 @@
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/강의자료">
+                    <a href="../searchcontents/강의자료">
                         <img src="{% static 'unid/icon/lecture document.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/강의자료" class="categoryname">
+                        <a href="../searchcontents/강의자료" class="categoryname">
                             # 강의자료
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/강의노트">
+                    <a href="../searchcontents/강의노트">
                         <img src="{% static 'unid/icon/lecture note.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/강의노트" class="categoryname">
+                        <a href="../searchcontents/강의노트" class="categoryname">
                             # 강의노트
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/시험자료">
+                    <a href="../searchcontents/시험자료">
                         <img src="{% static 'unid/icon/exam.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/시험자료" class="categoryname">
+                        <a href="../searchcontents/시험자료" class="categoryname">
                             # 시험자료
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/동영상">
+                    <a href="../searchcontents/동영상">
                         <img src="{% static 'unid/icon/video.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/동영상" class="categoryname">
+                        <a href="../searchcontents/동영상" class="categoryname">
                             # 동영상
                         </a>
                     </div>
@@ -85,41 +104,41 @@
             </div>
             <div class="contents-icon-tags2">
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/자소서">
+                    <a href="../searchcontents/자소서">
                         <img src="{% static 'unid/icon/resume.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/자소서" class="categoryname">
+                        <a href="../searchcontents/자소서" class="categoryname">
                             # 자소서
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/이력서">
+                    <a href="../searchcontents/이력서">
                         <img src="{% static 'unid/icon/profile.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/이력서" class="categoryname">
+                        <a href="../searchcontents/이력서" class="categoryname">
                             # 이력서
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/PPT">
+                    <a href="../searchcontents/PPT">
                         <img src="{% static 'unid/icon/ppt.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/PPT" class="categoryname">
+                        <a href="../searchcontents/PPT" class="categoryname">
                             # PPT
                         </a>
                     </div>
                 </div>
                 <div class="contents-icon-tag">
-                    <a href="http://localhost:8000/unid/searchcontents/논문">
+                    <a href="../searchcontents/논문">
                         <img src="{% static 'unid/icon/thesis.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/논문" class="categoryname">
+                        <a href="../searchcontents/논문" class="categoryname">
                             # 논문
                         </a>
                     </div>
@@ -127,8 +146,70 @@
             </div>
         </div>
     </div>
-
-
+    <!--<div class="contents-popular-row">-->
+        <!--<div class="contents-populars">-->
+            <!--<div>-->
+                <!--<div class="contents-popular-title">-->
+                    <!--인기컨텐츠-->
+                <!--</div>-->
+                <!--<div class="contents-popular-kind">-->
+                    <!--#자소서-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="contents-popular-contents">-->
+                <!--<div class="contents-popular-posting">-->
+                    <!--<div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>-->
+                    <!--<a target="_blank" href="mountains.jpg">-->
+                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
+                    <!--</a>-->
+                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
+                    <!--<div class="contents-price">-->
+                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="contents-popular-posting">-->
+                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
+                    <!--<a target="_blank" href="mountains.jpg">-->
+                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
+                    <!--</a>-->
+                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
+                    <!--<div class="contents-price">-->
+                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="contents-popular-posting">-->
+                    <!--<div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>-->
+                    <!--<a target="_blank" href="mountains.jpg">-->
+                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
+                    <!--</a>-->
+                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
+                    <!--<div class="contents-price">-->
+                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="contents-popular-posting">-->
+                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
+                    <!--<a target="_blank" href="mountains.jpg">-->
+                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
+                    <!--</a>-->
+                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
+                    <!--<div class="contents-price">-->
+                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="contents-popular-posting">-->
+                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
+                    <!--<a target="_blank" href="mountains.jpg">-->
+                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
+                    <!--</a>-->
+                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
+                    <!--<div class="contents-price">-->
+                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
     <div class="contents-popular-row">
         <div class="contents-populars">
             <div>
@@ -193,10 +274,105 @@
             </div>
         </div>
     </div>
+    <div class="contents-popular-row">
+        <div class="contents-populars">
+            <div>
+                <div class="contents-popular-title">
+                    인기컨텐츠
+                </div>
+                <div class="contents-popular-kind">
+                    #자소서
+                </div>
+            </div>
+            <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="carousel-item active">
+                        <div class="contents-popular-contents">
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>
+                                <a target="_blank" href="mountains.jpg">
+                                    <img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">
+                                </a>
+                                <div class="contents-popular-posting-date">2019-01-01</div>
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500
+                                </div>
+                            </div>
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>
+                                <a target="_blank" href="mountains.jpg">
+                                    <img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">
+                                </a>
+                                <div class="contents-popular-posting-date">2019-01-01</div>
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500
+                                </div>
+                            </div>
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>
+                                <a target="_blank" href="mountains.jpg">
+                                    <img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">
+                                </a>
+                                <div class="contents-popular-posting-date">2019-01-01</div>
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500
+                                </div>
+                            </div>
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>
+                                <a target="_blank" href="mountains.jpg">
+                                    <img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">
+                                </a>
+                                <div class="contents-popular-posting-date">2019-01-01</div>
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500
+                                </div>
+                            </div>
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>
+                                <a target="_blank" href="mountains.jpg">
+                                    <img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">
+                                </a>
+                                <div class="contents-popular-posting-date">2019-01-01</div>
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid" src="{{ second_preview }}" alt="Second slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid" src="{{ third_preview }}" alt="Third slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block img-fluid" src="{{ first_preview }}" alt="first slide">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
     var kk = "{{ request.session.user_email }}";
     console.log(kk);
 </script>
+
+{# Show some example queries to run, maybe query syntax, something else? #}
+{% endif %}
 {% endblock %}

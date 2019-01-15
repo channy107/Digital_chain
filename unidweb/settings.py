@@ -26,6 +26,7 @@ SECRET_KEY = '8ev70!908of3wx4w-n85a6v&p55c(f+6uew=&pvf@kc&g+@a=&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ALLOWED_HOSTS = ['192.168.0.5']
 ALLOWED_HOSTS = []
 
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'haystack',
     #
     'allauth',
     'allauth.account',
@@ -51,6 +53,15 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     
 ]
+
+WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh_index')
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': WHOOSH_INDEX,
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,7 +149,8 @@ ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 WSGI_APPLICATION = 'unidweb.wsgi.application'
 SOCIALACCOUNT_ADAPTER = 'unid.my_adapter.MyAdapter'
-
+AUTH_USER_MODEL = 'auth.User'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -202,9 +214,3 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # 실제 파일이 위치하는 서버상 경로
 MEDIA_URL = '/media/' # MEDIA 파일이 접근하는 URL이 저거로 시작
-
-
-# FILE_UPLOAD_HANDLERS =  [
-#     "django.core.files.uploadhandler.MemoryFileUploadHandler" ,
-#     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-# ]
