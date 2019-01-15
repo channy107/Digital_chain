@@ -95,7 +95,7 @@
                 </br>
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef"/>
                     <div>
-                        <p align="center" size ="5" id="idaccount"> {{ user.username }} 님의 보유자산</p>
+                        <p align="center" size ="5" id="idaccount"> {{ request.session.user_name }} 님의 보유자산</p>
                     </div>
                 <p align="center" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="230" height="230">  </p>
                     <div id="Status_balance">
@@ -257,7 +257,7 @@
 
         <div class="row">
             <div class="history">
-                    <h6> 송금내역  <span>{{ count }}건</span></h6>
+                    <h6> 거래내역  <span>{{ count }}건</span></h6>
             </div>
         </div>
 
@@ -269,9 +269,9 @@
                         <tr>
                           <th scope="col">승인날짜</th>
                           <th scope="col">보낸사람</th>
-                          <th scope="col">받은사람</th>
+                          <th scope="col">받는사람</th>
                           <th scope="col">금액</th>
-                          <th scope="col">트랜젝션아이디</th>
+                          <th scope="col">거래아이디</th>
                         </tr>
                       </thead>
                 {% for item in list %}
@@ -327,7 +327,7 @@
                     <span>프라이빗 키 </span>
                </br>
                     <div class="alert alert-success" role="alert">
-                          "pass0"
+                          "확인할수 없습니다"
                     </div>
                </p>
            </div>
@@ -337,7 +337,7 @@
        </div>
 </div>
 
-<!--key pop-->
+<!--chart pop-->
 <div id="chartPop" class="modal">
 
   <!-- Modal content -->
@@ -392,6 +392,43 @@
            </div>
        </div>
 </div>
+
+
+
+<!--&lt;!&ndash; Button trigger modal &ndash;&gt;-->
+<!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">-->
+  <!--Launch demo modal-->
+<!--</button>-->
+
+<!--&lt;!&ndash; Modal &ndash;&gt;-->
+<!--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
+  <!--<div class="modal-dialog modal-dialog-centered" role="document">-->
+    <!--<div class="modal-content">-->
+      <!--<div class="modal-header">-->
+        <!--<h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>-->
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+          <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+      <!--</div>-->
+      <!--<div class="modal-body">-->
+        <!--...-->
+      <!--</div>-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
+
+
+
+
+
+
+
+
 
         <script>// key pop function
 
@@ -453,6 +490,7 @@
                 }
         </script>
 
+
        <script> // solidity function
 
            var WEB3 = require('web3');
@@ -465,7 +503,7 @@
            var _decimals = 0;
            var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
 
-           var nd = nidcoinContract.at( "0xa2b4fb8d101921540ea7f8dff906d1df07aa721d" );
+           var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
 
            // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
            function setAccountsList() {
@@ -482,10 +520,6 @@
            // 계정별 잔액을 출력
            function showStatus() {
 
-               <!--let statusAccount = `-->
-                    <!--<p id="acc" align="center" size ="5"></p>-->
-               <!--`;-->
-
                let statusBalance =`
                    <h4 id="nd_bal" align="center" size ="5"></h4>
                    <h4 id="bal" align="center" size ="5"></h4>
@@ -494,11 +528,6 @@
                let statusAccountPop = `
                     <p id="pop" align="left" size ="5"></p>
                `;
-
-
-               <!--$('#Status_account').empty();-->
-               <!--$('#Status_account').append(statusAccount);-->
-
 
                $('#Status_balance').empty();
                $('#Status_balance').append(statusBalance);
@@ -511,11 +540,9 @@
                let account = "{{ request.session.user_account }}";
                let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
                let nid_balance = nd.balanceOf(account);
-               <!--totalAmount += balance;-->
-               <!--$("#acc").append(`${account}의 보유자산`);-->
                $('#bal').append(`${balance}eth`);
                $('#nd_bal').append(`${nid_balance}nid`);
-               <!--$('#pop').append(`${account}`);-->
+               $('#pop').append(`${account}`);
            }
 
            $(function() {

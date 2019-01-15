@@ -57,6 +57,7 @@ def mywallet(request):
     #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount})
 
+
 def transaction(request):
     if request.method == 'GET':
         return render(request, 'unid/transaction.html', {})
@@ -70,6 +71,7 @@ def transaction(request):
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("transaction")
         transactionData.save()
+
 
     return render(request,'unid/transaction.html', {})
 

@@ -18,7 +18,7 @@ urlpatterns = [
     path('contentsdetail/<int:id>', contentsdetail, name='contentsdetail'),
     path('contentstran/', contentstran, name='contentstran'),
     path('login/', views.login, name='login'),
-    path('transaction/', transaction),
+    path('transaction/', views.transaction, name='transaction'),
     path('login/', views.login, name='login'),
     path('signup/', views.signup, name='signup'),
     path('createaccount/', views.createaccount, name='createaccount'),
