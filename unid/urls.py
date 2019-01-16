@@ -35,6 +35,4 @@ urlpatterns = [
     path('exchange/', exchange),
     path('purchase/', purchase),
     path('download/', views.download, name='download'),
-    url(r'^navigationbar/', SearchView(template='unid/navigationbar.html'), name='haystack_search'),
-
 ]
