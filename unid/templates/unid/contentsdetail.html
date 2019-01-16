@@ -572,8 +572,6 @@ xpopup
 
 
         $('.cd-popup-buy-yes').on('click', function() {
-            var downloadid = Math.random();
-            console.log("zzz");
             var pwd = $('#inputpwd').val()
             if (!pwd) {
                 alert("비밀번호을 적어주세요");
@@ -592,14 +590,32 @@ xpopup
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                     };
             var pwd = $('#inputpwd').val();
+            var downloadid = Math.random();
+            console.log("zzz");
             $.ajax({
-                type: 'GET',
-                url: "../download/",
-                data: {
-                    id: contents_id,
-                    downloadid: downloadid,
-                    title: contents_title,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                type: 'POST',
+                url: "../moneytrade/",
+                data : {
+                        writeremail: writeremail,
+                        id: contents_id,
+                        pwd: pwd,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                success : function(res) {
+                    alert(res.Ans)
+                    $.ajax({
+                        type: 'GET',
+                        url: "../download/",
+                        data: {
+                            id: contents_id,
+                            downloadid: downloadid,
+                            title: contents_title,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                        success: function(res) {
+                            alert(res.Ans)
+                            }
+                        });
                     }
             });
         });

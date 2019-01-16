@@ -4,8 +4,6 @@ from django.urls import path, include
 from django.conf.urls import url
 from unid import views
 from .views import *
-from haystack.forms import ModelSearchForm
-from haystack.query import SearchQuerySet
 from haystack.views import SearchView
 
 

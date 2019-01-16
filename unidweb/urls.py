@@ -1,7 +1,4 @@
 from django.conf.urls import url
-from haystack.forms import ModelSearchForm
-from haystack.query import SearchQuerySet
-from haystack.views import SearchView
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
