@@ -43,13 +43,12 @@
     <link href="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" rel="stylesheet">
     <!--font awesome-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
 </head>
 
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="padding: 0 1rem;">
     <div class="container">
         <a class="navbar-brand" href="/unid/">
             <img src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="113" height="54">
@@ -71,29 +70,27 @@
               </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" style="vertical-align: middle;">
                 <li class="nav-item">
-                    <a class="nav-link" id="nav1" href="/unid">정보공유</a>
+                    <a class="nav-link unid-menus" id="nav1" href="/unid">정보공유</a>
                 </li>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <li class="nav-item">
-                    <a class="nav-link" id="nav2"href="/unid/contentstran">컨텐츠거래</a>
+                    <a class="nav-link unid-menus" id="nav2"href="/unid/contentstran">컨텐츠거래</a>
                 </li>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
                         <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
                     </a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="dropdown">
                         {% if user.email %}
-                        <a class="dropdown-item" href="/unid/mypage">마이페이지</a>
-                        <a class="dropdown-item" href="/unid/mywallet">내지갑</a>
-                        <a class="dropdown-item" href="/unid/main_upload">게시글작성</a>
-                        <a class="dropdown-item" href="/unid/contentsupload">컨텐츠등록</a>
-                        <a class="dropdown-item" href="/accounts/logout">로그아웃</a>
+                        <a class="dropdown-item" href="/unid/mypage" id="go-mypage">마이페이지</a>
+                        <a class="dropdown-item" href="/unid/mywallet" id="go-mywallet">내지갑</a>
+                        <a class="dropdown-item" href="/unid/main_upload" id="go-writepost">게시글작성</a>
+                        <a class="dropdown-item" href="/unid/contentsupload" id="go-uploadcontents">컨텐츠등록</a>
+                        <a class="dropdown-item" href="/accounts/logout" id="go-logout">로그아웃</a>
                         {% else %}
-                        <a class="dropdown-item" href="/unid/login">로그인</a>
-                        <a class="dropdown-item" href="/unid/signup">회원가입</a>
+                        <a class="dropdown-item" href="/unid/login" id="go-login">로그인</a>
+                        <a class="dropdown-item" href="/unid/signup" id="go-signup">회원가입</a>
                         {% endif %}
                     </div>
                 </li>
@@ -111,4 +108,5 @@
 
 
 </body>
+
 </html>

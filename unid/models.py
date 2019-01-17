@@ -58,7 +58,7 @@ class uploadContents(models.Model):
     imagepath = models.CharField(max_length=200, null=True)
     hits = models.IntegerField(default=0)
     txid = models.CharField(max_length=250, blank=True, null=True)
-    bbb = models.CharField(max_length=250, blank=True, null=True)
+    replymentcount = models.IntegerField(null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
     ddd = models.CharField(max_length=250, blank=True, null=True)
 

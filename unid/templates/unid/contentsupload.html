@@ -310,7 +310,7 @@ xpopup
                     <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
-                        .hwp, .ppt, .docx, .xlsx 형식의 파일만 가능합니다.
+                        .hwp, .ppt, .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
                         </li>
                     </ul>
                 </div>
@@ -370,17 +370,17 @@ xpopup
                     <option title="Combo 10" selected="selected">선택하세요</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="inputfileinfo" class="col-sm-2">파일정보</label>
-                <select class="form-control col-sm-10" id="inputfileinfo" name="fileinfo">
-                    <option title="Combo 1">PDF</option>
-                    <option title="Combo 2">Excel</option>
-                    <option title="Combo 3">한글</option>
-                    <option title="Combo 4">PPT</option>
-                    <option title="Combo 5">Word</option>
-                    <option title="Combo 6" selected="selected">선택하세요</option>
-                </select>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="inputfileinfo" class="col-sm-2">파일정보</label>-->
+                <!--<select class="form-control col-sm-10" id="inputfileinfo" name="fileinfo">-->
+                    <!--<option title="Combo 1">PDF</option>-->
+                    <!--<option title="Combo 2">Excel</option>-->
+                    <!--<option title="Combo 3">한글</option>-->
+                    <!--<option title="Combo 4">PPT</option>-->
+                    <!--<option title="Combo 5">Word</option>-->
+                    <!--<option title="Combo 6" selected="selected">선택하세요</option>-->
+                <!--</select>-->
+            <!--</div>-->
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
                 <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업, #취업, #성공적">
@@ -549,6 +549,9 @@ xpopup
 <script>
 
     jQuery(document).ready(function($){
+        $('#nav2').addClass('visible-place');
+        $('#nav1').removeClass('visible-place');
+
         $('input:checkbox[id="ex_chk"]').on('change', function(){
             $('.cd-popup1').addClass('is-visible');
             });
@@ -598,6 +601,9 @@ xpopup
         $('#user_preview_files').on('change', function(){
             var fileee = $('#user_preview_files').get(0).files[0]['name'];
             console.log(fileee);
+            for(var i=0; i<upload_files.length; i++) {
+                $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
+    };
             $('#input_previewfiles_after').val(fileee);
             $("#user_preview_file_before").hide();
             $("#user_preview_file_after").show();
@@ -701,11 +707,6 @@ xpopup
             if (form.category.value == "선택하세요") {
                 alert("카테고리를 선택해주세요");
                 $('#inputcategory').focus();
-                return false;
-            }
-            if (form.fileinfo.value == "선택하세요") {
-                alert("파일정보를 선택해주세요");
-                $('#inputfileinfo').focus();
                 return false;
             }
             if (!form.authorinfo.value) {

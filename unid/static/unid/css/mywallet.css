@@ -362,3 +362,23 @@
             cursor: pointer;
         }
 
+        .unid-menus {
+            height: 75px;
+            width: 130px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            text-align: center;
+            vertical-align: middle;
+
+        }
+        .visible-place {
+            background-color: #ebeaea;
+        }
+        .dropdown {
+            margin:0 0 0 60px;
+
+        }
+        .nav-item > a {
+            vertical-align: middle;
+            padding: 20px;
+            }

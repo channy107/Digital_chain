@@ -146,39 +146,42 @@
 
 
     </div>
-<script type="text/javascript">
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    jQuery(document).ready(function($){
+         $('#nav1').addClass('visible-place');
+         $(".votings").click(function(){
+                var pk = $(this).attr('name')
+                var like_count = parseInt($('#voting-'+pk).text());
+                var rewards = parseFloat($('#reward-'+pk).text());
+                var liked_users = "{{request.session.user_email}}";
 
-     $(".votings").click(function(){
-            var pk = $(this).attr('name')
-            var like_count = parseInt($('#voting-'+pk).text());
-            var rewards = parseFloat($('#reward-'+pk).text());
-            var liked_users = "{{request.session.user_email}}";
+                like_count = like_count + parseInt(1);
 
-            like_count = like_count + parseInt(1);
+                    $('#voting-'+pk).text(like_count)
 
-                $('#voting-'+pk).text(like_count)
-
-            if (like_count % 1 == 0)
-			     rewards = rewards + parseFloat(0.1);
-                 rewards = rewards.toFixed(1);
-			     $("#reward-"+pk).text(rewards);
-            $.ajax({
-                    type: 'POST',
-                    url: "voting/",
-                    data :{
-                        posts_id: pk,
-                        like_count: like_count,
-                        rewards: rewards,
-                        liked_users: liked_users,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                     success : function(res) {
+                if (like_count % 1 == 0)
+                     rewards = rewards + parseFloat(0.1);
+                     rewards = rewards.toFixed(1);
+                     $("#reward-"+pk).text(rewards);
+                $.ajax({
+                        type: 'POST',
+                        url: "voting/",
+                        data :{
+                            posts_id: pk,
+                            like_count: like_count,
+                            rewards: rewards,
+                            liked_users: liked_users,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                         success : function(res) {
 
 
-                        }
+                            }
 
-                    });
+                        });
 
+                });
             });
 
 </script>

@@ -13,10 +13,15 @@
 
           <h4 class="my-4">태그 카테고리</h4>
           <div class="list-group">
-            <a href="#" class="list-group-item">#학교정보</a>
-            <a href="#" class="list-group-item">#학교주변리뷰</a>
-            <a href="#" class="list-group-item">#취업정보</a>
-            <a href="#" class="list-group-item">#질문</a>
+            <a href="../searchcontents/레포트" class="list-group-item">#레포트</a>
+            <a href="../searchcontents/강의자료" class="list-group-item">#강의자료</a>
+            <a href="../searchcontents/강의노트" class="list-group-item">#강의노트</a>
+            <a href="../searchcontents/시험자료" class="list-group-item">#시험자료</a>
+            <a href="../searchcontents/동영상" class="list-group-item">#동영상</a>
+            <a href="../searchcontents/자소서" class="list-group-item">#자소서</a>
+            <a href="../searchcontents/이력서" class="list-group-item">#이력서</a>
+            <a href="../searchcontents/PPT" class="list-group-item">#PPT</a>
+            <a href="../searchcontents/논문" class="list-group-item">#논문</a>
           </div>
 
         </div>
@@ -28,8 +33,8 @@
                 <hr>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    <span class="writer">{{ contents.writeremail }}</span>
-                    <span class="writing-time">{{ contents.created|timesince }}</span>
+                    <span class="writer">{{ contents.writeremail.email }}</span>
+                    <span class="writing-time">{{ contents.created|timesince }}전</span>
                     <span class="contents-kind">{{ contents.category }}</span>
                 </div>
                 <div class="row">
@@ -45,14 +50,17 @@
                 <div class="col-md-5">
                     <div class="detail-content">
                         <h3><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.title }}</h3>
-                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p></div>
+                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p>
+                    </div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>
-                        <span class="main-voting"><input onclick="heartChange1();" value="1" type="image" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="18" height="18"><span id="heart1">0</span></span>
-                        <span class="main-voting">
-                        <input type="image" value="1" src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20"><span id="dallor1">0</span></span>
-                        <span class="main-voting">
-                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
+                        <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20">
+                        <span id="dallor1">{{ contents.price }}</span>
+                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
+                        <span>{{ contents.replymentcount }}</span>
+                    </div>
+                    <div>
+                        조회수 {{ contents.hits }} 다운로드수 {{ contents.downloadcount }}
                     </div>
                 </div>
             </div>
@@ -60,5 +68,11 @@
                     {% endfor %}
 
 </div>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    jQuery(document).ready(function($){
+        $('#nav2').addClass('visible-place');
+        });
+</script>
 
 {% endblock %}

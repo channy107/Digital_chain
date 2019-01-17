@@ -88,14 +88,14 @@ def purchase(request):
 def contentsdetail(request, id):
     # rpc_url = "http://localhost:8545"
     # w3 = Web3(HTTPProvider(rpc_url))
-    # nidCoinContract_address = Web3.toChecksumAddress("0xa781527930cf1155df00344d3178d36bcf7b1f5c")
-    # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+    # nidCoinContract_address = Web3.toChecksumAddress("0xbaae7f3bf8e0c823d11942265b8d38054b4d8f6f")
+    # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
 
-    account = myPageInfomation.objects.get(email=request.session['user_email']).account
-    # nid_balance = ncc.functions.balanceOf(account).call();
+    # account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
+
+    # nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id).values()
-
     contents.hits = contents.hits + 1  # 조회수 증가
     contents.save()
 
@@ -117,14 +117,78 @@ def contentsdetail(request, id):
         first_preview = 'media/default.png'
         second_preview = 'media/default.png'
         third_preview = 'media/default.png'
-    return render(
-        request,
-        'unid/contentsdetail.html',
-        {'contents': contents, 'replys': replys, 'previewlist': previewlist,
-         'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-         'nid_balance': nid_balance}
+
+    if downloadContents.objects.filter( Q(contents_id=id) & Q(downloader_email=request.session['user_email']) ):
+        # contents_id = uploadContents.objects.get(contents_id=id).contents_id
+        # title = uploadContents.objects.get(contents_id=id).title + ".zip"
+        downloadid = str(random.random())
+        return render(
+            request,
+            'unid/contentsdetail.html',
+            {'contents': contents, 'replys': replys, 'previewlist': previewlist,
+             'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
+             # 'nid_balance': nid_balance,
+             "downloadid": downloadid}
+        )
+             
+           # contentsdetail.html 403 번 줄 부터 확인 필요
+    else:
+        return render(
+            request,
+            'unid/contentsdetail.html',
+            {'contents': contents, 'replys': replys, 'previewlist': previewlist,
+             'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
+             # 'nid_balance': nid_balance
+             }
+        )
+
+@require_POST
+def moneytrade(request):
+    rpc_url = "http://localhost:8545"
+    w3 = Web3(HTTPProvider(rpc_url))
+    nidCoinContract_address = Web3.toChecksumAddress("0xbaae7f3bf8e0c823d11942265b8d38054b4d8f6f")
+    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+    writeremail = request.POST['writeremail']
+    sellerinfo = myPageInfomation.objects.get(email=writeremail)
+    price = uploadContents.objects.get(contents_id=request.POST['id']).price
+    selleraccount = Web3.toChecksumAddress(sellerinfo.account)
+    buyerinfo = myPageInfomation.objects.get(email=request.session['user_email'])
+    buyeraccount = Web3.toChecksumAddress(buyerinfo.account)
+    buyerpwd = request.POST['pwd']
+    print(buyerpwd)
+    print(selleraccount)
+    print(buyeraccount)
+    print(price)
+    w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
+    ncc.functions.transfer(selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+
+
+    contents_id = uploadContents.objects.get(contents_id=request.POST['id'])
+    downloader_email = myPageInfomation.objects.get(email=request.session['user_email'])
+
+    br = downloadContents (
+                            contents_id=contents_id,
+                            downloader_email=downloader_email
+    )
+    br.save()
+
+    wif = walletInFormation (
+                            fromAccount=buyerinfo.email,
+                            toAccount=sellerinfo.email,
+                            balance= price,
+                            type="("+request.POST['id']+")"+"콘텐츠 거래",
+
     )
 
+    """
+        txid=,
+        transactiondate=,
+    """
+    res = {'Ans': '결제되었습니다.'}
+    return JsonResponse(res)
+    """
+    거래 내역 디비에 담기
+    """
 
 def contentstran(request):
     return render(request, 'unid/contentstran.html', {})
@@ -164,7 +228,9 @@ def voting(request):
     return JsonResponse(res)
 
 def mainreply(request):
-    br = replyForPosts(posts_id=request.POST['id'],
+
+    id =Post.objects.get(posts_id=request.POST['id'])
+    br = replyForPosts(posts_id=id,
                            user=request.session['user_email'],
                            replytext=request.POST['reply']
                            )
@@ -193,7 +259,7 @@ def main_upload(request):
         info = Post(title=title, user=user, category=category, contents=contents, file=upload_file.name, tags=tags)
         info.save()
 
-        url = '../unid/'
+        url = '../'
         return HttpResponseRedirect(url)
 
 
@@ -210,7 +276,8 @@ def createaccount(request):
         account = myPageInfomation.objects.get(email=request.session['user_email']).account
         if account:
             request.session['user_account'] = account
-            return render(request, 'unid/main.html', {})
+            url = '../'
+            return HttpResponseRedirect(url)
         else:
             return render(request, 'unid/createaccount.html', {})
     else:
@@ -218,18 +285,20 @@ def createaccount(request):
         w3 = Web3(HTTPProvider(rpc_url))
         # return HttpResponse(w3.eth.accounts)
 
+        kk = w3.personal.listAccounts
+        print(kk)
+
 
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
-
 
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
                             joiningdate=timezone.now(),
                             pwd=lockpwd,
                             account=account
                             )
-        url = 'http://222.231.239.251/unid'
+        url = 'http://localhost:8000/unid'
         return HttpResponseRedirect(url)
 
 def contentsupload(request):
@@ -278,14 +347,15 @@ def contentsupload(request):
                 hashdata = hashlib.sha256(filedata).hexdigest()
                 filehashdatas.append(hashdata)
         if len(uifilelist) == 1:
-            filename = uifilelist[0].decode('utf-8')
+            filename = uifilelist[0]
             print(filename)
             zipname = number + ".zip"
             password = filehashdatas[0][0:8]
+            # with open(contents_dir + filename, 'wb') as file:
             pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password, 4)
         elif len(uifilelist) == 2:
-            filename = str(uifilelist[0]).encode('utf-8')
-            filename2 = str(uifilelist[1]).encode('utf-8')
+            filename = uifilelist[0]
+            filename2 =uifilelist[1]
             zipname = number + ".zip"
             password = filehashdatas[0][0:8]
             pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2], ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
@@ -351,44 +421,47 @@ def contentsupload(request):
 
         publisheddate = str(request.POST['publisheddate'])[0:10]
         preview_images_dir = "media/" + today + "/"
+        writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
         try:
             br = uploadContents(
-                writeremail=request.session['user_email'],
+                writeremail=writeremail,
                 title=request.POST['title'],
                 publisheddate=publisheddate,
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                fileinfo=request.POST['fileinfo'],
                 totalpages=request.POST['totalpages'],
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
-                imagepath=preview_images_dir + "thumb" + preview_save_filelist[0]
+                imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
+                downloadcount=0,
+                replymentcount=0
             )
             br.save()
         except IndexError as e:
             br = uploadContents(
-                writeremail=request.session['user_email'],
+                writeremail=writeremail,
                 title=request.POST['title'],
                 publisheddate=publisheddate,
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                fileinfo=request.POST['fileinfo'],
                 totalpages=request.POST['totalpages'],
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
+                downloadcount=0,
+                replymentcount=0
             )
             br.save()
 
 
-        idx = uploadContents.objects.all().order_by('-pk')[0].contents_id  # ★
+        idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
         filelistlength = len(filehashdatas)
         for i in range(filelistlength):
             print(6)
@@ -506,7 +579,6 @@ def postmodify(request, id):
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                fileinfo=request.POST['fileinfo'],
                 totalpages=request.POST['totalpages'],
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 authorinfo=request.POST['authorinfo'],
@@ -522,7 +594,6 @@ def postmodify(request, id):
             category=request.POST['category'],
             price=request.POST['price'],
             tags=request.POST['tags'],
-            fileinfo=request.POST['fileinfo'],
             totalpages=request.POST['totalpages'],
             authorinfo=request.POST['authorinfo'],
             intro=request.POST['intro'],
@@ -546,36 +617,12 @@ def postdelete(request):
     return JsonResponse(res)
 
 
-@require_POST
-def moneytrade(request):
-    rpc_url = "http://localhost:8545"
-    w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xa781527930cf1155df00344d3178d36bcf7b1f5c")
-    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-    writeremail = request.POST['writeremail']
-    sellerinfo = myPageInfomation.objects.get(email=writeremail)
-    price = uploadContents.objects.get(contents_id=request.POST['id']).price
-    selleraccount = Web3.toChecksumAddress(sellerinfo.account)
-
-    buyeraccount = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
-    buyerpwd = request.POST['pwd']
-    print(buyerpwd)
-    print(selleraccount)
-    print(buyeraccount)
-    print(price)
-    w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    ncc.functions.transfer(selleraccount, price).transact({'from': buyeraccount, 'gas': 2000000})
-    res = {'Ans': '결제되었습니다.'}
-    return JsonResponse(res)
-    """
-    거래 내역 디비에 담기
-    """
-
-
 def download(request):
     if request.method == "GET":
         id = request.GET['id']
+        print(id)
         contentsfile = contentsInfo.objects.filter(contents_id=id).values()
+        print(contentsfile)
         filepath = contentsfile[0]['contentspath']
         filename = contentsfile[0]['uploadzipfilename']
         print(filepath)
@@ -595,29 +642,45 @@ def download(request):
         print(filepath1)
         filename1 = os.path.basename(filepath1)
         print(filename1)
-        downloadid = request.GET['downloadid']
+
+        board = uploadContents.objects.get(contents_id=id)
+        board.downloadcount = board.downloadcount + 1
+        board.save()
+
+        # downloadid = request.GET['downloadid']
         with open(filepath1, 'rb') as f:
             response = HttpResponse(f, content_type='application/octet-stream')
-            response['Set-Cookie'] = 'download=' + downloadid;
-            response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename1.encode('utf-8'))
+            # response['Set-Cookie'] = 'download=' + downloadid;
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename1)
             return response
 
 def writereply(request):
-    br = replysForContents(contents_id=request.POST['id'],
-                           writeremail=request.session['user_email'],
+    id = uploadContents.objects.get(contents_id=request.POST['id'])
+    writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
+    br = replysForContents(contents_id=id,
+                           writeremail=writeremail,
                            replytext=request.POST['reply']
                            )
 
     br.save()
+    board = uploadContents.objects.get(contents_id=request.POST['id'])
+    board.replymentcount = board.replymentcount + 1
+    board.save()
+    created = replysForContents.objects.order_by('-contents_id').filter(contents_id=id).values()[0]['created']
 
-    res = {"Ans": "댓글 작성이 완료되었습니다."}
+    res = {
+        "Ans": "댓글 작성이 완료되었습니다.",
+        "writeremail": writeremail.email,
+        "created": created,
+        "replytext": request.POST['reply']
+       }
     return JsonResponse(res)
 
 
 def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id. urls.py 에서도 path에 입력해줘야함.
     board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
-    # board.hits = board.hits + 1    # 조회수 증가
-    # board.save()
+    board.hits = board.hits + 1    # 조회수 증가
+    board.save()
     # id 에 해당하는 정보들을 html에 넘겨줘서 사용
     # viewwork.html 에서 {{ board.memo }} 로 내용물 확인 가능
     return render(request, 'unid/contentsdetail.html', {'board': board})

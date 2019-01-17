@@ -1,0 +1,11 @@
+{{ object.user }}
+{{ object.title }}
+{{ object.file_path }}
+{{ object.contents }}
+{{ object.created_at }}
+{{ object.last_modified }}
+{{ object.category }}
+{{ object.tags }}
+{{ object.rewards }}
+{{ object.liked_users }}
+{{ object.like_count }}

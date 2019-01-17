@@ -289,6 +289,8 @@ xpopup
     <div class="rows">
         <div class="test">
             <a href="{% url 'postmodify' contents.contents_id %}">수정</a><button type="button" class="postdelete">삭제</button>
+            다운로드 횟수  {{ contents.downloadcount }}
+            조회수   {{ contents.hits }}
         </div>
         <div class="cd-popup1" role="alert">
             <div class="cd-popup-container1">
@@ -316,7 +318,7 @@ xpopup
                 <div class="zzz">
                     <div class="writerinfo">
                         <p align="center" size="5">
-                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35"> {{ contents.writeremail }}
+                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35"> {{ contents.writeremail.email }}
                         </p>
                     </div>
                     <div class="dateinfo">
@@ -399,7 +401,9 @@ xpopup
             <div class="contents-payment">
                 <div>
                     <p><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="30" height="30">{{ contents.price }} </p>
-
+                    {% if downloadid %}
+                    <a href="../download?id={{ contents.contents_id }}&title={{ contents.title }}.zip"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
+                    {% else %}
                     <button type="button" class="cd-popup-trigger" id='enrollcontents'>
                         <img src="{% static 'unid/icon/download-icon.png' %}" border="0" width="30" height="30">
                         Download
@@ -429,8 +433,8 @@ xpopup
                             </ul>
                             <a href="#0" class="cd-popup-close img-replace"></a>
                         </div> <!-- cd-popup-container -->
-
                     </div> <!-- cd-popup -->
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -460,7 +464,7 @@ xpopup
                             <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
                         </div>
                         <div class="reply-id">
-                            {{ reply.writeremail }}
+                            {{ reply.writeremail_id }}
                         </div>
                         <div class="reply-date">
                             {{ reply.created }}
@@ -473,6 +477,8 @@ xpopup
                 </div>
             </div>
         </div>
+
+
         <div class="row">
             <form class="input-reply">
                 <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
@@ -486,9 +492,10 @@ xpopup
 
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-    var downloadid = Math.random();
-    console.log(downloadid);
+
     jQuery(document).ready(function($){
+        $('#nav2').addClass('visible-place');
+
         $('.postdelete').on('click', function(event) {
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');
@@ -530,7 +537,7 @@ xpopup
             $('.cd-popup').addClass('is-visible');
             let contentstitle = "{{ contents.title }}";
             let contentsprice = {{ contents.price }};
-            let mybalance = {{ nid_balance }};
+            // let mybalance = {{ nid_balance }};
 
             $('#popupinfo').empty();
             $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
@@ -565,7 +572,27 @@ xpopup
                     },
                 success : function(res) {
                     alert(res.Ans);
-                    location="{% url 'contentsdetail' contents.contents_id %}"
+                    var writeremail= res.writeremail;
+                    var created= res.created;
+                    var replytext= res.replytext;
+                    $('#inputreplytext').val("");
+                    $('.reply-list').append(`
+                                       <div class="reply">
+                                            <div class="reply-picture">
+                                                <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
+                                            </div>
+                                            <div class="reply-id">
+                                                ${writeremail}
+                                            </div>
+                                            <div class="reply-date">
+                                                ${created}
+                                            </div>
+                                            <div class="reply-text">
+                                                ${replytext}
+                                            </div>
+                                        </div>
+                                `);
+
                 }
             });
         });
@@ -581,7 +608,7 @@ xpopup
             var downloadid = Math.random();
             console.log(downloadid);
 
-            var writeremail = "{{ contents.writeremail }}";
+            var writeremail = "{{ contents.writeremail.email }}";
             var contents_id = {{ contents.contents_id }};
             var contents_title = "{{ contents.title }}";
             var postdata  = {
@@ -591,7 +618,7 @@ xpopup
                     };
             var pwd = $('#inputpwd').val();
             var downloadid = Math.random();
-            console.log("zzz");
+            console.log(writeremail);
             $.ajax({
                 type: 'POST',
                 url: "../moneytrade/",
@@ -603,20 +630,8 @@ xpopup
                         },
                 success : function(res) {
                     alert(res.Ans)
-                    $.ajax({
-                        type: 'GET',
-                        url: "../download/",
-                        data: {
-                            id: contents_id,
-                            downloadid: downloadid,
-                            title: contents_title,
-                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                            },
-                        success: function(res) {
-                            alert(res.Ans)
-                            }
-                        });
-                    }
+                    location="{% url 'contentsdetail' contents.contents_id %}"
+                }
             });
         });
     });

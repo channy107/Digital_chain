@@ -71,7 +71,10 @@
                                  <input type="checkbox" name="models" value="unid.note" id="id_models_0">" Notes"
                              </li>
                              <li>
-                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_1">" Upload contentss"
+                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_1">" Upload contents"
+                             </li>
+                             <li>
+                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_2">" Informations"
                              </li>
                          </ul>
                      </form>
@@ -122,13 +125,13 @@
     <div class="row">
         <div class="sidenav">
 
-          <h4 class="my-4">태그 카테고리</h4>
-          <div class="list-group">
-            <a href="#" class="list-group-item">#학교정보</a>
-            <a href="#" class="list-group-item">#학교주변리뷰</a>
-            <a href="#" class="list-group-item">#취업정보</a>
-            <a href="#" class="list-group-item">#질문</a>
-          </div>
+            <h4 class="my-4">태그 카테고리</h4>
+            <div class="list-group">
+                <a href="#" class="list-group-item">#학교정보</a>
+                <a href="#" class="list-group-item">#학교주변리뷰</a>
+                <a href="#" class="list-group-item">#취업정보</a>
+                <a href="#" class="list-group-item">#질문</a>
+            </div>
 
         </div>
 
@@ -136,11 +139,13 @@
             {% if query %}
             <h5>검색정보</h5>
             <div class="container">
+
                 {% for result in page.object_list %}
+                {% if result.object.writeremail %}
                 <hr>
                 <div class="user">
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    <span class="writer">{{ result.object.writeremail }} </span>
+                    <span class="writer">{{ result.object.writeremail.email}} </span>
                     <span class="writing-time">{{ result.object.created|timesince }}</span>
                     <span class="contents-kind">{{ result.object.category }}</span>
                 </div>
@@ -169,15 +174,51 @@
 
                 </div>
             </div>
-        </div>
-      <hr>
-                {% empty %}
-                <p>검색 결과가 없습니다.</p>
-                {% endfor %}
                 {% else %}
-                {# Show some example queries to run, maybe query syntax, something else? #}
+                <hr>
+                <div class="posts_id">
+                </div>
+                <div class="user">
+                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    <span class="writer">{{ result.object.user_id }}</span>
+                    <span class="writing-time">{{result.object.created_at|timesince}}전</span>
+                    <span class="contents-kind">{{ result.object.category }}</span>
+                    </div>
+                <div class="row">
 
-                {% endif %}
+                    <div class="main-col-md-3">
+                       <a href="{% url 'main_detail' result.object.posts_id %}">
+                            <img src="{% static 'unid/img/'%}{{result.object.file}}" width="200px" height="200px">
+                        </a>
+                    </div>
+                <div class="col-md-5">
+
+                    <div class="detail-content">
+                        <h3><a href="{% url 'main_detail' result.object.posts_id %}">{{ result.object.title }}</a></h3>
+                        <a href="{% url 'main_detail' result.object.posts_id %}"><p>{{result.object.contents}}</p></a></div>
+                            <!--<a class="btn btn-primary" href="#">View Project</a>-->
+
+                    <div>
+                        <span class="main-voting"><button class="votings" name="{{ result.object.posts_id }}" ><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{result.object.posts_id}}">{{result.object.like_count}}</span></span>
+                        <span class="main-voting">
+                        <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{result.object.posts_id}}">{{result.object.rewards}}</span></span>
+                        <span class="main-voting">
+                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
+
+                    </div>
+
+                </div>
+                </div>
+            {% endif %}
+        </div>
+        <hr>
+             {% empty %}
+             <p>검색 결과가 없습니다.</p>
+             {% endfor %}
+             {% else %}
+             {# Show some example queries to run, maybe query syntax, something else? #}
+             {% endif %}
+
 </div>
 
 </body>

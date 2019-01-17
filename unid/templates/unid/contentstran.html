@@ -56,7 +56,7 @@
                         <img src="{% static 'unid/icon/report.png' %}" border="0" width="110" height="110">
                     </a>
                     <div class="desc">
-                        <a href="http://localhost:8000/unid/searchcontents/레포트" class="categoryname">
+                        <a href="../searchcontents/레포트" class="categoryname">
                             # 레포트
                         </a>
                     </div>
@@ -146,70 +146,6 @@
             </div>
         </div>
     </div>
-    <!--<div class="contents-popular-row">-->
-        <!--<div class="contents-populars">-->
-            <!--<div>-->
-                <!--<div class="contents-popular-title">-->
-                    <!--인기컨텐츠-->
-                <!--</div>-->
-                <!--<div class="contents-popular-kind">-->
-                    <!--#자소서-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="contents-popular-contents">-->
-                <!--<div class="contents-popular-posting">-->
-                    <!--<div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>-->
-                    <!--<a target="_blank" href="mountains.jpg">-->
-                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
-                    <!--</a>-->
-                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
-                    <!--<div class="contents-price">-->
-                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="contents-popular-posting">-->
-                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
-                    <!--<a target="_blank" href="mountains.jpg">-->
-                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
-                    <!--</a>-->
-                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
-                    <!--<div class="contents-price">-->
-                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="contents-popular-posting">-->
-                    <!--<div class="desc-1">한일병원 NCS기반 간호사 채용 자기소개서</div>-->
-                    <!--<a target="_blank" href="mountains.jpg">-->
-                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
-                    <!--</a>-->
-                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
-                    <!--<div class="contents-price">-->
-                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="contents-popular-posting">-->
-                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
-                    <!--<a target="_blank" href="mountains.jpg">-->
-                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
-                    <!--</a>-->
-                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
-                    <!--<div class="contents-price">-->
-                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="contents-popular-posting">-->
-                    <!--<div class="desc-1">2019년 대기업 인사팀 자기소개서 합격샘플</div>-->
-                    <!--<a target="_blank" href="mountains.jpg">-->
-                        <!--<img src="{% static 'unid/icon/report-icon.png' %}" border="0" width="160" height="180">-->
-                    <!--</a>-->
-                    <!--<div class="contents-popular-posting-date">2019-01-01</div>-->
-                    <!--<div class="contents-price">-->
-                        <!--<img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="10" height="10">1500-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
     <div class="contents-popular-row">
         <div class="contents-populars">
             <div>
@@ -368,11 +304,12 @@
     </div>
 </div>
 
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-    var kk = "{{ request.session.user_email }}";
-    console.log(kk);
+    jQuery(document).ready(function($){
+        $('#nav2').addClass('visible-place');
+        $
+    });
 </script>
-
-{# Show some example queries to run, maybe query syntax, something else? #}
 {% endif %}
 {% endblock %}

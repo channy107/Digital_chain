@@ -1,6 +1,6 @@
 import datetime
 from haystack import indexes
-from .models import Note, uploadContents
+from .models import Note, uploadContents, Post
 
 
 class NoteIndex(indexes.SearchIndex, indexes.Indexable):
@@ -27,5 +27,16 @@ class uploadContentsIndex(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
+class PostIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True, template_name='search/informations_text.txt')
+    writer = indexes.CharField(model_attr='user')
+    pub_date = indexes.DateTimeField(model_attr='last_modified')
+
+    def get_model(self):
+        return Post
+
+    def index_queryset(self, using=None):
+        """Used when the entire index for model is updated."""
+        return self.get_model().objects.all()
 
 
