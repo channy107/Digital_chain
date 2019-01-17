@@ -30,7 +30,7 @@ SECRET_KEY = '8ev70!908of3wx4w-n85a6v&p55c(f+6uew=&pvf@kc&g+@a=&'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['222.239.231.251', '222.239.231.252']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -170,9 +170,9 @@ DATABASES = {
            # 'charset': 'utf8'
            },
        'NAME': 'unid_db',  #mysql
-       'USER': 'jun', #root
-       'PASSWORD': 'jun', #1234
-       'HOST': '210.107.78.157', #공백으로 냅두면 default localhost
+       'USER': 'unid', #root
+       'PASSWORD': 'qhdkscjfwj0!', #1234
+       'HOST': '222.239.231.251', #공백으로 냅두면 default localhost
        'PORT': '3306' #공백으로 냅두면 default 3306
    }
 }
