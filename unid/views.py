@@ -71,19 +71,49 @@ def transaction(request):
         account_bal = request.POST['account_bal']
         tran_id = request.POST['tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal, txid=tran_id)
+        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+                                            txid=tran_id)
         transactionData.transactiondate = timezone.now()
-        transactionData.type = str("transaction")
+        transactionData.type = str("coinTransaction")
         transactionData.save()
 
+    return render(request, 'unid/transaction.html', {})
 
-    return render(request,'unid/transaction.html', {})
 
 def exchange(request):
-    return  render(request, 'unid/exchange.html', {})
+    if request.method == 'GET':
+        return render(request, 'unid/exchange.html', {})
+    else:
+        from_account = request.POST['e_from_account']
+        to_account = request.POST['e_to_account']
+        account_bal = request.POST['e_account_bal']
+        tran_id = request.POST['e_tran_id']
+
+        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+                                            txid=tran_id)
+        transactionData.transactiondate = timezone.now()
+        transactionData.type = str("exchange")
+        transactionData.save()
+
+    return render(request, 'unid/exchange.html', {})
+
 
 def purchase(request):
-    return  render(request, 'unid/purchase.html', {})
+    if request.method == 'GET':
+        return render(request, 'unid/purchase.html', {})
+    else:
+        from_account = request.POST['p_from_account']
+        to_account = request.POST['p_to_account']
+        account_bal = request.POST['p_account_bal']
+        tran_id = request.POST['p_tran_id']
+
+        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+                                            txid=tran_id)
+        transactionData.transactiondate = timezone.now()
+        transactionData.type = str("purchase")
+        transactionData.save()
+
+    return render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
     # rpc_url = "http://localhost:8545"

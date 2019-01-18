@@ -75,7 +75,6 @@
     </script>
 
 
-<body onload="proc()">
 <!-- Page Content -->
 <div class="container1">
     <!-- contents InFo -->
@@ -83,16 +82,16 @@
         <div class="row">
             <div class="contents-info">
                     <h5 class="contents-title">
-                        <a href="http://localhost:8000/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
+                        <a href="http://222.239.231.252:8545/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
                         <b> 토큰 구매</b></h5>
 
-                    <h4 class="contents-title2" align="right">
-                        <div id="key">
-                            <img src="{% static 'unid/icon/key.png' %}" border="0" width="25" height="25">
-                            <img src="{% static 'unid/icon/line-graph.png' %}" border="0" width="25" height="25">
-                        </div>
+                        <h4 class="contents-title2" align="right">
+                            <div>
+                                <img src="{% static 'unid/icon/key.png' %}" onload="proc()" id="key" border="0" width="25" height="25">
+                                <img src="{% static 'unid/icon/line-graph.png' %}" id="chart" border="0" width="25" height="25">
+                            </div>
 
-                    </h4>
+                        </h4>
                 </br>
                 </br>
 
@@ -106,8 +105,9 @@
                 </br>
                 </br>
                 </br>
+                </br>
                 <div class="exchange-predict">
-                <p align="left" size ="5"> 현재 eth 잔액 </p>
+                <p align="left" size ="5"> 내 eth 잔고 </p>
                 <p align="left" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="150" height="150">
                     <div id="Status_balance">
                     </div>
@@ -146,7 +146,7 @@
                                </div>
                                <div class="modal-body">
                                    <p>
-                                        <span>구매 할 금액</span> <div id="exchage-amount"></div>
+                                        <span>구매 할 금액</span> <div id="exchange-amount"></div>
                                    </p>
                                    <!--<p>-->
                                         <!--<span>예상수수료</span> <span>0.0043 eth</span>-->
@@ -163,7 +163,7 @@
                                    </p>
                                </div>
                                <div class="modal-footer">
-                                   <button type="button" class="btn btn-danger" id="btnSend" data-dismiss="modal" onclick="window.location.href='http://127.0.0.1:8000/unid/mywallet/'">확인</button>
+                                   <button type="button" class="btn btn-danger" id="btnSend" data-dismiss="modal" >확인</button>
                                </div>
                            </div>
                     </div>
@@ -185,7 +185,6 @@
 <div>
    <span>니드</span> <span id="value_NID"></span>
 </div>
-</body>
 
 
 <script>
@@ -203,6 +202,21 @@
         // When the user clicks on the button, open the modal
         btn.onclick = function() {
             modal.style.display = "block";
+
+            var txtBox2 = document.getElementById("amount");
+            var lines2 = txtBox2.value.split("\n");
+
+            // generate HTML version of text
+            var resultString2  = "<p>";
+            for (var i = 0; i < lines2.length; i++) {
+              resultString2 += lines2[i] + "nid <br />";
+            }
+            resultString2 += "</p>";
+
+            // print out to page
+            var   blk2   = document.getElementById("exchange-amount");
+            blk2.innerHTML  =  resultString2;
+
         }
 
         // When the user clicks on <span> (x), close the modal
@@ -224,18 +238,175 @@
 </script>
 
 
+<!--key pop-->
+<div id="keyPop" class="modal">
+
+    <!-- Modal content -->
+      <div class="modal-content">
+             <div class="modal-header">
+                 <h4 class="modal-title">개인 키 관리</h4>
+                 <button type="button" id="key-close" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+             </div>
+             <div class="modal-body">
+             <p align="left" size ="5"> 내 주소 </p>
+                      <div id="Status_account_pop"class="alert alert-success" role="alert"></div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" id="key-confirm" class="btn btn-danger" data-dismiss="modal">확인</button>
+             </div>
+         </div>
+  </div>
+
+  <!--chart pop-->
+  <div id="chartPop" class="modal">
+
+    <!-- Modal content -->
+      <div class="modal-content">
+             <div class="modal-header">
+                 <h4 class="modal-title">시세 정보</h4>
+                 <button type="button" id="chart-close" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+             </div>
+             <div class="modal-body">
+
+                  <!-- 거래소 시세 정보 -->
+                  <table border=1>
+                      <tr>
+                          <th></th>
+                          <th>코인원</th>
+                          <th>빗썸</th>
+                      </tr>
+                      <tr>
+                          <td>비트코인</td>
+                          <td id="coinone_BTC"></td>
+                          <td id="bithumb_BTC"></td>
+                      </tr>
+                      <tr>
+                          <td>이더리움</td>
+                          <td id="coinone_ETH"></td>
+                          <td id="bithumb_ETH"></td>
+                      </tr>
+                      <tr>
+                          <td>리플</td>
+                          <td id="coinone_XRP"></td>
+                          <td id="bithumb_XRP"></td>
+                      </tr>
+                      <tr>
+                          <td>기준시</td>
+                          <td colspan="4" id="lastUpdate"></td>
+                      </tr>
+                  </table>
+                 <span>1 eth</span>
+                 <div>
+                     <span>코인원기준</span> <span id="coinone_NID"></span>
+                 </div>
+                 <div>
+                     <span>빗썸기준</span> <span id="bithumb_NID"></span>
+                 </div>
+
+
+
+
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-danger" id="chart-confirm" data-dismiss="modal">확인</button>
+             </div>
+         </div>
+  </div>
+
+
+
+          <script>// key pop function
+
+
+                  // Get the modal
+                  var modal_key = document.getElementById('keyPop');
+
+                  // Get the button that opens the modal
+                  var btn_key = document.getElementById("key");
+
+                  // Get the <span> element that closes the modal
+                  var span_key = document.getElementById("key-close");
+
+                  // Get the <span> element that closes the modal
+                  var span_key2 = document.getElementById("key-confirm");
+
+
+                  // When the user clicks on the button, open the modal
+                  btn_key.onclick = function() {
+                      modal_key.style.display = "block";
+                  }
+
+                  // When the user clicks on <span> (x), close the modal
+                  span_key.onclick = function() {
+                      modal_key.style.display = "none";
+                  }
+
+                  // When the user clicks on <span> (x), close the modal
+                  span_key2.onclick = function() {
+                      modal_key.style.display = "none";
+                  }
+
+                  // When the user clicks anywhere outside of the modal, close it
+                  window.onclick = function(event) {
+                      if (event.target == modal_key) {
+                          modal_key.style.display = "none";
+                      }
+                  }
+          </script>
+
+          <script> // chart pop function
+
+                  // Get the modal
+                  var modal_chart = document.getElementById('chartPop');
+
+                  // Get the button that opens the modal
+                  var btn_chart = document.getElementById("chart");
+
+                  // Get the <span> element that closes the modal
+                  var span_chart = document.getElementById("chart-close");
+
+                  // Get the <span> element that closes the modal
+                  var span_chart2 = document.getElementById("chart-confirm");
+
+                  // When the user clicks on the button, open the modal
+                  btn_chart.onclick = function() {
+                      modal_chart.style.display = "block";
+                  }
+
+                  // When the user clicks on <span> (x), close the modal
+                  span_chart.onclick = function() {
+                      modal_chart.style.display = "none";
+                  }
+
+                  // When the user clicks on <span> (x), close the modal
+                  span_chart2.onclick = function() {
+                      modal_chart.style.display = "none";
+                  }
+
+                  // When the user clicks anywhere outside of the modal, close it
+                  window.onclick = function(event) {
+                      if (event.target == modal_chart) {
+                          modal_chart.style.display = "none";
+                      }
+                  }
+          </script>
+
+
+
 <script>
            var WEB3 = require('web3');
            var web3 = new WEB3();
-           web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+           //web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+           web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545")); //openeg webserver
 
            var _supply = 10000;
            var _name = "NidCoin";
            var _symbol = "nid";
            var _decimals = 0;
-           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+           var NidCoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
 
-           var nd = NidCoinContract.at( "0xa781527930cf1155df00344d3178d36bcf7b1f5c" );
+           //var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
+           var nd = nidcoinContract.at( "0xda386c6d5f9578bdd14477f1e57c3387552a8f59" );  //openeg geth deploy nidcoin
 
            // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
            function setAccountsList() {
@@ -251,19 +422,19 @@
 
            // 계정별 잔액을 출력
            function showStatus() {
-               let statusAccount = `
-                    <p id="ac" align="left" size ="5"></p>
-               `;
-
-               let statusBalance =`
-                   <h3 id="ba" align="right" size ="5"> </h3>
+                let statusBalance =`
+                   <h3 id="eth_bal" align="right" size ="5"> </h3>
                 `;
 
-               $('#Status_account').empty();
-               $('#Status_account').append(statusAccount);
+               let statusAccountPop = `
+                    <p id="pop" align="left" size ="5"></p>
+               `;
 
                $('#Status_balance').empty();
                $('#Status_balance').append(statusBalance);
+
+               $('#Status_account_pop').empty();
+               $('#Status_account_pop').append(statusAccountPop);
 
                let totalAmount = 0;
                let accounts = web3.eth.accounts;
@@ -271,9 +442,10 @@
                let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
                let nid_balance = nd.balanceOf(account);
                totalAmount += balance;
-               $('#ba').append(`${balance}`);
-               $("#ac").append(`${account}`);
-               $('#nd_bal').append(`${nid_balance}nid`);
+
+               $('#eth_bal').append(`${balance}eth`);
+               $('#pop').append(`${account}`);
+
 
 
            }
@@ -292,91 +464,96 @@
                $('#btnSend').click(function() {
                    let accounts = web3.eth.accounts;
                    let unidAccount = web3.eth.coinbase;
-                   let nidFromAccount = unidAccount;
-                   let nidToAccount    = "{{ request.session.user_account }}";
+                   let userAccount    = "{{ request.session.user_account }}";
                    let fromPassword = $('#fromPassword').val();
                    let nidAmount       = $('#amount').val();
-                   let ethAmount  = $('#amount').val() * 0.000001;
+                   let ethAmount  = $('#amount').val() * 0.001;
+                   let fromPasswordBase = 'pass0';
+
                    // 보내는 사람의 계정을 언락
-                   let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
-                   if (isUnlock) {
+                   let isUnlock = web3.personal.unlockAccount(userAccount, fromPassword);
+                   let isUnlockBase = web3.personal.unlockAccount(unidAccount, fromPasswordBase);
+                   if (isUnlock && isUnlockBase) {
+                       // user > coinbase (eth 전송)
                        web3.eth.sendTransaction ({
-                       from :fromAccount,
-                       to:toAccount,
-                       value: web3.toWei(amount, "ether")
+                       from :userAccount,
+                       to:unidAccount,
+                       value: web3.toWei(ethAmount, "ether")
                        }, function(err, res) {
                            if(!err) {
                                console.log('eth success')
-                           }
-                       })
-                       nd.transfer(toAccount, amount,{
-                           from   : fromAccount,
-                           gas: 2000000
-                       }, function(err, res) {
-                           let tranID = res;
-                           if (!err) {
-                                $.toast({
-                                    heading: '전송 진행중',
-                                    text: '전송이 진행 중입니다.',
-                                    showHideTransition: 'slide',
-                                    icon: 'info',
 
-                                     afterHidden: function () {
-                                           // 솔리디티에 transfer 함수를 호출한 결과로 반화되는 이벤트(=EvtTransfer)를 잡아서 처리
-                                           // transfer 함수를 통해서 생성된 트랜잭션이 블록체인에 들어갔을 때 발생
-                                           nd.EvtTransfer().watch(function(err, evt) {
-                                            if (!err) {
-                                                // ajax를 통해서 서버로 DB insert를 요청
-                                                // jquery ajax 검색
-                                                $.ajax({
-                                                    type:'POST',
-                                                    url: '../transaction/',
-                                                    data:{
-                                                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                                                    from_account : fromAccount,
-                                                    to_account : toAccount,
-                                                    account_bal : amount,
-                                                    tran_id : tranID
-                                                    },
-                                                    success: function(data) {
-                                                    }
-                                                });
-
-                                                //
-                                                console.log(evt);
-                                                    $.toast({
-                                                        heading: '전송 완료',
-                                                        text: '전송이 완료되었습니다.',
-                                                        showHideTransition: 'slide',
-                                                        icon: 'success',
-                                                        afterHidden: function(){
-                                                            window.location.href = 'http://localhost:8000/unid/mywallet/';
-                                                        }
-                                                    });
-                                        } else {
-                                            console.error(err);
-                                            $.toast({
-                                                        heading: '전송 실패',
-                                                        text: '전송에 실패하였습니다. 다시 시도해주세요.',
-                                                        showHideTransition: 'slide',
-                                                        icon: 'warning',
-                                                        afterHidden: function(){
-                                                            window.location.href = 'http://localhost:8000/unid/mywallet/';
-                                                        }
-                                                    });
-                                            }
-                                        });
-
-                                     }
-                                });
-                               console.log(`transacion pending... txid is ${res}.`);
-
-                           } else {
-                               console.error(err);
                            }
                        });
+                       // coinbase > user (nid 전송)
+                       nd.transfer(userAccount, nidAmount,{
+                                    from   : unidAccount,
+                                    gas: 2000000
+                                }, function(err, res) {
+                                    let tranID = res;
+                                    if (!err) {
+                                            $.toast({
+                                                heading: '구매 진행중',
+                                                text: '토큰 구매가 진행 중입니다.',
+                                                showHideTransition: 'slide',
+                                                icon: 'info',
+
+                                                afterHidden: function () {
+                                                    // 솔리디티에 transfer 함수를 호출한 결과로 반화되는 이벤트(=EvtTransfer)를 잡아서 처리
+                                                    // transfer 함수를 통해서 생성된 트랜잭션이 블록체인에 들어갔을 때 발생
+                                                    nd.EvtTransfer().watch(function(err, evt) {
+                                                        if (!err) {
+                                                            // ajax를 통해서 서버로 DB insert를 요청
+                                                            // jquery ajax 검색
+                                                            $.ajax({
+                                                                type:'POST',
+                                                                url: '../purchase/',
+                                                                data:{
+                                                                csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                                p_from_account : unidAccount,
+                                                                p_to_account : userAccount,
+                                                                p_account_bal : nidAmount,
+                                                                p_tran_id : tranID
+                                                                },
+                                                                success: function(data) {
+                                                                }
+                                                            });
+
+                                                            //
+                                                            console.log(evt);
+                                                                $.toast({
+                                                                    heading: '구매 완료',
+                                                                    text: '토큰구매가 완료되었습니다.',
+                                                                    showHideTransition: 'slide',
+                                                                    icon: 'success',
+                                                                    afterHidden: function(){
+                                                                        window.location.href = 'http://222.239.231.252:8545/unid/mywallet/';
+                                                                    }
+                                                                });
+                                                        } else {
+                                                            console.error(err);
+                                                            $.toast({
+                                                                        heading: '전송 실패',
+                                                                        text: '전송에 실패하였습니다. 다시 시도해주세요.',
+                                                                        showHideTransition: 'slide',
+                                                                        icon: 'warning',
+                                                                        afterHidden: function(){
+                                                                            window.location.href = 'http://222.239.231.252:8545/unid/mywallet/';
+                                                                        }
+                                                                    });
+                                                            }
+                                                        });
+
+                                                }
+                                            });
+                                        console.log(`transacion pending... txid is ${res}.`);
+
+                                    } else {
+                                        console.error(err);
+                                    }
+                            });
                    }
-               });
+                 });
 
            });
 
