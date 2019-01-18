@@ -10,7 +10,7 @@ from haystack.views import SearchView
 
 
 urlpatterns = [
-    path('mywallet/', mywallet,),
+    path('mywallet/', views.mywallet, name='mywallet'),
     path('', main, name='main'),
     path('main_upload', main_upload, name='main_upload'),
     path('main_detail/<int:id>', main_detail, name='main_detail'),
@@ -32,7 +32,7 @@ urlpatterns = [
     path('moneytrade/', views.moneytrade, name='moneytrade'),
     path('download/', views.download, name='download'),
     path('writereply/', views.writereply, name='writereply'),
-    path('exchange/', exchange),
-    path('purchase/', purchase),
+    path('exchange/', views.exchange, name='exchange'),
+    path('purchase/', views.purchase, name='purchase'),
     path('download/', views.download, name='download'),
 ]
