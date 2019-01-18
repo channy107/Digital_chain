@@ -328,7 +328,9 @@ xpopup
                 </div>
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    <div class="zzz" id="zzz" style="display: inline;">
+                        <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    </div>
                     <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
@@ -363,7 +365,7 @@ xpopup
                     <option title="Combo 3">강의노트</option>
                     <option title="Combo 4">시험자료</option>
                     <option title="Combo 5">동영상</option>
-                    <option title="Combo 6">자소서</option>
+                    <option title="Combo 6">자기소개서</option>
                     <option title="Combo 7">이력서</option>
                     <option title="Combo 9">PPT</option>
                     <option title="Combo 10">논문</option>
@@ -397,6 +399,9 @@ xpopup
             <div class="form-group">
                 <label for="inputtotalpages" class="col-sm-2" name="totalpages">페이지수</label>
                 <input class="form-control creatdate" id="inputtotalpages" name="totalpages">
+                <div class="totalpageunit">
+                    Page
+                </div>
             </div>
             <div class="form-group">
                 <label for="inputpublisheddate" class="col-sm-3">저작시기</label>
@@ -508,8 +513,8 @@ xpopup
                                 </div>
                                 <div>
                                     <ul class="cd-buttons">
-                                        <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
                                         <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
+                                        <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
                                     </ul>
                                 </div>
                             </div>
@@ -599,14 +604,13 @@ xpopup
         });
 
         $('#user_preview_files').on('change', function(){
-            var fileee = $('#user_preview_files').get(0).files[0]['name'];
-            console.log(fileee);
-            for(var i=0; i<upload_files.length; i++) {
-                $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
-    };
-            $('#input_previewfiles_after').val(fileee);
+            var upload_preview_files = $('#user_preview_files').get(0).files;
             $("#user_preview_file_before").hide();
-            $("#user_preview_file_after").show();
+            for(var i=0; i<upload_preview_files.length; i++) {
+                $('#zzz').append("<input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after[i]" type="text" readonly/>");
+                $('#input_previewfiles_after').val(upload_preview_files[i]);
+                $("#user_preview_file_after[i]").show();
+            };
         });
 
         $('#reupload_preview').on('click', function(){

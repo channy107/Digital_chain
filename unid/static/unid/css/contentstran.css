@@ -194,6 +194,7 @@
             box-shadow: 0px 0px 10px 5px #b3afaf54;
         }
         .contents-popular-row {
+            height: auto;
             width:1300px;
             margin: 40px auto;
             background-color:#ffffff!important;
@@ -202,6 +203,7 @@
         }
         .contents-populars {
             margin: 0 auto;
+            height: auto;
         }
         .contents-popular-tit {
             width: 200px;

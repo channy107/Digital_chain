@@ -41,14 +41,12 @@
         </ul>
 
         <ul id="user_profile">
-            {% for myinfo in mypage %}
-                <li style="text-align: center; font-size: xx-large; font-weight:600; ">{{ myinfo.name }}</li>
-                {% if myinfo.profile %}
-                    <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 15px;">{{ myinfo.profile }}</li>
-                {% else %}
+                <li style="text-align: center; font-size: xx-large; font-weight:600; ">{{ request.session.user_name }}</li>
+
+                    <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 15px;"></li>
+
                     <li style="text-align: center;">프로필을 등록해 주세요!</li>
-                {% endif %}
-            {% endfor %}
+
         </ul>
 
         <div id="user-info">

@@ -38,7 +38,7 @@ def mypage(request):
     mypage = myPageInfomation.objects.all()
     contentsboard = uploadContents.objects.all()
     articles = Post.objects.all()
-    transactions = wallet.objects.all()
+    transactions = walletInFormation.objects.all()
     context = {'articles':articles,
                'transactions':transactions,
                'mypage':mypage,
@@ -86,14 +86,14 @@ def purchase(request):
     return  render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
-    # rpc_url = "http://localhost:8545"
-    # w3 = Web3(HTTPProvider(rpc_url))
-    # nidCoinContract_address = Web3.toChecksumAddress("0xbaae7f3bf8e0c823d11942265b8d38054b4d8f6f")
-    # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+    rpc_url = "http://222.239.231.252:8545"
+    w3 = Web3(HTTPProvider(rpc_url))
+    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
+    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
-    # account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
+    account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
 
-    # nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
+    nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id).values()
     contents.hits = contents.hits + 1  # 조회수 증가
@@ -127,7 +127,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             # 'nid_balance': nid_balance,
+             'nid_balance': nid_balance,
              "downloadid": downloadid}
         )
              
@@ -138,15 +138,15 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             # 'nid_balance': nid_balance
+             'nid_balance': nid_balance
              }
         )
 
 @require_POST
 def moneytrade(request):
-    rpc_url = "http://localhost:8545"
+    rpc_url = "http://222.239.231.252:8545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xbaae7f3bf8e0c823d11942265b8d38054b4d8f6f")
+    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
     ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
@@ -191,7 +191,29 @@ def moneytrade(request):
     """
 
 def contentstran(request):
-    return render(request, 'unid/contentstran.html', {})
+
+
+    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")
+    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")
+    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")
+    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")
+    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")
+    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")
+    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")
+    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")
+
+    return render(request, 'unid/contentstran.html', {
+                                                        'populated_reports_lists': populated_reports_lists,
+                                                        'populated_forlecture_lists': populated_forlecture_lists,
+                                                        'populated_note_lists':populated_note_lists,
+                                                        'populated_paper_lists': populated_paper_lists,
+                                                        'populated_PPT_lists': populated_PPT_lists,
+                                                        'populated_resume_lists': populated_resume_lists,
+                                                        'populated_fiction_lists': populated_fiction_lists,
+                                                        'populated_fortest_lists': populated_fortest_lists,
+                                                        'populated_video_lists': populated_video_lists,
+    })
 
 
 def main(request):
@@ -259,7 +281,7 @@ def main_upload(request):
         info = Post(title=title, user=user, category=category, contents=contents, file=upload_file.name, tags=tags)
         info.save()
 
-        url = '../'
+        url = '/unid'
         return HttpResponseRedirect(url)
 
 
@@ -276,7 +298,7 @@ def createaccount(request):
         account = myPageInfomation.objects.get(email=request.session['user_email']).account
         if account:
             request.session['user_account'] = account
-            url = '../'
+            url = '/unid'
             return HttpResponseRedirect(url)
         else:
             return render(request, 'unid/createaccount.html', {})
@@ -298,7 +320,8 @@ def createaccount(request):
                             pwd=lockpwd,
                             account=account
                             )
-        url = 'http://localhost:8000/unid'
+        url = '/unid'
+
         return HttpResponseRedirect(url)
 
 def contentsupload(request):
@@ -332,7 +355,8 @@ def contentsupload(request):
             # file_name = upload_file.name
             # number = str(random.random())
             filename = upload_file.name
-            # extendname = filename[filename.find(".", -5):]
+            extendname = filename[filename.find(".", -4):]
+
             # real_filename = number + extendname
             # ftpfilelist.append(real_filename)
             uifilelist.append(filename)
@@ -486,15 +510,15 @@ def contentsupload(request):
             )
             br.save()
 
-        # rpc_url = "http://localhost:8545"
-        # w3 = Web3(HTTPProvider(rpc_url))
-        #
-        # contentsMasterContract_address = Web3.toChecksumAddress("0x1fba8cb5afb4330840ca7f7cc6c0b48a68a384d4")
-        # cmc = w3.eth.contract(address = contentsMasterContract_address, abi = [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
-        # price = int(request.POST['price'])
-        # for i in range(len(filehashdatas)):
-        #     # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-        #     cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact({"from": w3.eth.accounts[0], "gas": 1000000 })
+        rpc_url = "http://222.239.231.252:8545"
+        w3 = Web3(HTTPProvider(rpc_url))
+
+        contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
+        cmc = w3.eth.contract(address = contentsMasterContract_address, abi = [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
+        price = int(request.POST['price'])
+        for i in range(len(filehashdatas)):
+            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
+            cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact({"from": w3.eth.accounts[0], "gas": 1000000 })
 
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)

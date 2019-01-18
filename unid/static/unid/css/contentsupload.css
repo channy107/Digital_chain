@@ -170,3 +170,9 @@
     top: 30px;
     margin: 0 0 40px 0;
 }
+.totalpageunit {
+    float: right;
+    position: relative;
+    right: 417px;
+    top: 10px;
+    }

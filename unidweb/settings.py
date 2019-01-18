@@ -169,11 +169,16 @@ DATABASES = {
            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
            # 'charset': 'utf8'
            },
-       'NAME': 'unid_db',  #mysql
-       'USER': 'unid', #root
-       'PASSWORD': 'qhdkscjfwj0!', #1234
-       'HOST': '222.239.231.251', #공백으로 냅두면 default localhost
-       'PORT': '3306' #공백으로 냅두면 default 3306
+       # 'NAME': 'unid_db',  #mysql
+       # 'USER': 'unid', #root
+       # 'PASSWORD': 'qhdkscjfwj0!', #1234
+       # 'HOST': '222.239.231.251', #공백으로 냅두면 default localhost
+       # 'PORT': '3306' #공백으로 냅두면 default 3306
+       'NAME': 'unid_db',  # mysql
+       'USER': 'jun',  # root
+       'PASSWORD': 'jun',  # 1234
+       'HOST': '210.107.78.157',  # 공백으로 냅두면 default localhost
+       'PORT': '3306'  # 공백으로 냅두면 default 3306
    }
 }
 

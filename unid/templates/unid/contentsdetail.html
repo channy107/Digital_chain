@@ -196,7 +196,7 @@ xpopup
   transition: background-color 0.2s;
 }
 .cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a {
-  background: #fc7169;
+  background: #b6bece;
   border-radius: 0 0 0 .25em;
 }
 .popuprow1 {
@@ -219,7 +219,7 @@ xpopup
   background-color: #fc8982;
 }
 .cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a {
-  background: #b6bece;
+  background: #fc7169;
   border-radius: 0 0 .25em 0;
 }
 .no-touch .cd-popup-container .cd-buttons li:last-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:last-child a:hover {
@@ -344,8 +344,12 @@ xpopup
             <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    {% if second_preview %}
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    {% if third_preview %}
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    {% endif %}
+                    {% endif %}
                 </ol>
                 <div class="carousel-inner" role="listbox">
                     {% if first_preview %}
@@ -368,6 +372,7 @@ xpopup
                     </div>
                     {% endif %}
                 </div>
+                {% if second_preview %}
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -376,6 +381,7 @@ xpopup
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="sr-only">Next</span>
                 </a>
+                {% endif %}
             </div>
         </div>
         <!-- detail of contents -->
@@ -537,7 +543,7 @@ xpopup
             $('.cd-popup').addClass('is-visible');
             let contentstitle = "{{ contents.title }}";
             let contentsprice = {{ contents.price }};
-            // let mybalance = {{ nid_balance }};
+            let mybalance = {{ nid_balance }};
 
             $('#popupinfo').empty();
             $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
