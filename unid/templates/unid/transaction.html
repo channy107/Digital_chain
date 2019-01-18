@@ -80,7 +80,7 @@
         <div class="row">
             <div class="contents-info">
                     <h5 class="contents-title">
-                        <a href="http://222.239.231.252:8545/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
+                        <a href="http://www.unid.online/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
                         <b> 토큰 전송</b></h5>
 
                         <h4 class="contents-title2" align="right">
@@ -370,41 +370,33 @@
                   }
         </script>
 
-        <script> // chart pop function
+        <script> // address pop function
 
-                  // Get the modal
-                  var modal_chart = document.getElementById('chartPop');
+                // Get the modal
+                var modal_address = document.getElementById('addressPop');
 
-                  // Get the button that opens the modal
-                  var btn_chart = document.getElementById("chart");
+                // Get the button that opens the modal
+                var btn_address = document.getElementById('add-plus');
 
-                  // Get the <span> element that closes the modal
-                  var span_chart = document.getElementById("chart-close");
+                // Get the <span> element that closes the modal
+                var span_address = document.getElementsByClassName("address-close");
 
-                  // Get the <span> element that closes the modal
-                  var span_chart2 = document.getElementById("chart-confirm");
+                // When the user clicks on the button, open the modal
+                btn_address.onclick = function() {
+                    modal_address.style.display = "block";
 
-                  // When the user clicks on the button, open the modal
-                  btn_chart.onclick = function() {
-                      modal_chart.style.display = "block";
-                  }
+                // When the user clicks on <span> (x), close the modal
+                span_address.onclick = function() {
+                    modal_address.style.display = "none";
+                }
 
-                  // When the user clicks on <span> (x), close the modal
-                  span_chart.onclick = function() {
-                      modal_chart.style.display = "none";
-                  }
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                    if (event.target == modal_address) {
+                         modal_address.style.display = "none";
+                    }
+                }
 
-                  // When the user clicks on <span> (x), close the modal
-                  span_chart2.onclick = function() {
-                      modal_chart.style.display = "none";
-                  }
-
-                  // When the user clicks anywhere outside of the modal, close it
-                  window.onclick = function(event) {
-                      if (event.target == modal_chart) {
-                          modal_chart.style.display = "none";
-                      }
-                  }
         </script>
 
         <script> // chart pop function
@@ -564,7 +556,7 @@
                                                         showHideTransition: 'slide',
                                                         icon: 'success',
                                                         afterHidden: function(){
-                                                            window.location.href = 'http://222.239.231.252:8545/unid/mywallet/';
+                                                            window.location.href = 'http://www.unid.online/unid/mywallet/';
                                                         }
                                                     });
                                         } else {
@@ -575,7 +567,7 @@
                                                         showHideTransition: 'slide',
                                                         icon: 'warning',
                                                         afterHidden: function(){
-                                                            window.location.href = 'http://222.239.231.252:8545/unid/mywallet/';
+                                                            window.location.href = 'http://www.unid.online/unid/mywallet/';
                                                         }
                                                     });
                                             }
