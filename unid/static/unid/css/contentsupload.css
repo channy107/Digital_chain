@@ -164,7 +164,7 @@
     top: 30px;
     margin: 0 0 20px 0;
 }
-#user_preview_file_after {
+#user_preview_file_after, #user_preview_file_after1, #user_preview_file_after2 {
     display: none;
     position: relative;
     top: 30px;

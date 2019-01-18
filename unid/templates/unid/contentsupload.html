@@ -328,9 +328,7 @@ xpopup
                 </div>
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
-                    <div class="zzz" id="zzz" style="display: inline;">
-                        <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
-                    </div>
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
                     <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
@@ -604,13 +602,11 @@ xpopup
         });
 
         $('#user_preview_files').on('change', function(){
-            var upload_preview_files = $('#user_preview_files').get(0).files;
+            var fileee = $('#user_preview_files').get(0).files[0]['name'];
+            console.log(fileee);
+            $('#input_previewfiles_after').val(fileee);
             $("#user_preview_file_before").hide();
-            for(var i=0; i<upload_preview_files.length; i++) {
-                $('#zzz').append("<input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after[i]" type="text" readonly/>");
-                $('#input_previewfiles_after').val(upload_preview_files[i]);
-                $("#user_preview_file_after[i]").show();
-            };
+            $("#user_preview_file_after").show();
         });
 
         $('#reupload_preview').on('click', function(){
