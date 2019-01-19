@@ -47,6 +47,9 @@
 
         <div class="col-lg-9">
             <h5>인기글</h5>
+            <span class="count" id="count">
+                            {{ voting_count.votingcount }}
+                        </span>
             <div class="container">
                 {% for info in posts %}
                 <hr>
@@ -73,7 +76,7 @@
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" ><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
                         <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
@@ -170,40 +173,128 @@
     </div>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+function votingCount(){
+        today=new Date();
+        c_hour = today.getHours();
+        c_min = today.getMinutes();
+        var voting_count = "";
+
+        if (c_hour==00 && c_min == 00) {
+            voting_count = "10";
+        $.ajax ({
+                    type: 'POST',
+                    url: "my_cron_job/",
+                    data: {
+                        voting_count: voting_count,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        alert(res.Ans);
+                    }
+         })
+    }
+    }
+    setInterval("votingCount()", 60000);
     jQuery(document).ready(function($){
-         $('#nav1').addClass('visible-place');
-         $(".votings").click(function(){
-                var pk = $(this).attr('name')
-                var like_count = parseInt($('#voting-'+pk).text());
-                var rewards = parseFloat($('#reward-'+pk).text());
-                var liked_users = "{{request.session.user_email}}";
 
-                like_count = like_count + parseInt(1);
-
-                    $('#voting-'+pk).text(like_count)
-
-                if (like_count % 1 == 0)
-                     rewards = rewards + parseFloat(0.1);
-                     rewards = rewards.toFixed(1);
-                     $("#reward-"+pk).text(rewards);
-                $.ajax({
-                        type: 'POST',
-                        url: "voting/",
-                        data :{
-                            posts_id: pk,
-                            like_count: like_count,
-                            rewards: rewards,
-                            liked_users: liked_users,
-                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                            },
-                         success : function(res) {
+    $('#nav1').addClass('visible-place');
+    $(".votings").click(function() {
+                var pk = $(this).attr('name');
+                var like_count = parseInt($('#voting-' + pk).text());
+                var rewards = parseFloat($('#reward-' + pk).text());
+                var like_users = "{{request.session.user_email}}";
+                var voting_count = parseInt($('#count').text());
+                var votinged = "";
 
 
+                if (!like_users) {
+                    alert('로그인을 해주세요');
+                }
+
+
+                $.ajax ({
+                    type: 'POST',
+                    url: "../unid/",
+                    data: {
+                        posts_id: pk,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        alert(res.Ans);
+
+                        if (res.Ans == "보팅을 취소했습니다.") {
+
+                            if (voting_count >= 10) {
+                                like_count = like_count - parseInt(1);
+                                votinged = "좋아요취소";
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                rewards = rewards - parseFloat(0.1);
+                                }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+
+                            } else {
+                                like_count = like_count - parseInt(1);
+                                voting_count = voting_count + parseInt(1);
+
+                                votinged = "좋아요취소";
+
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                    rewards = rewards - parseFloat(0.1);
+                                    }
+                                rewards = rewards.toFixed(1);
+                                $("#reward-" + pk).text(rewards);
+                                $("#count").text(voting_count);
                             }
 
+                        } else if (res.Ans == "보팅을 완료했습니다.") {
+
+                            like_count = like_count + parseInt(1);
+                            voting_count = voting_count - parseInt(1);
+
+                            votinged = "좋아요";
+
+                            $('#voting-' + pk).text(like_count);
+
+                            if (like_count % 1 == 0) {
+                                rewards = rewards + parseFloat(0.1);
+                            }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+                            $("#count").text(voting_count);
+                            }
+
+                         else {
+                            votinged = "카운팅소진";
+                         }
+
+
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "voting/",
+                            data: {
+                                posts_id: pk,
+                                like_count: like_count,
+                                rewards: rewards,
+                                liked_users: like_users,
+                                votinged: votinged,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(res) {
+
+                            }
                         });
 
+                    }
                 });
+            });
             });
 
 </script>
