@@ -35,7 +35,25 @@
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
                     <span class="writer">{{ contents.writeremail.email }}</span>
                     <span class="writing-time">{{ contents.created|timesince }}전</span>
+                    {% if contents.category == "레포트" %}
                     <span class="contents-kind">{{ contents.category }}</span>
+                    {% elif contents.category == "강의노트" %}
+                    <span class="contents-kind" style="background-color: orange;">{{ contents.category }}</span>
+                    {% elif contents.category == "시험자료" %}
+                    <span class="contents-kind" style="background-color: green;">{{ contents.category }}</span>
+                    {% elif contents.category == "동영상" %}
+                    <span class="contents-kind" style="background-color: blue;">{{ contents.category }}</span>
+                    {% elif contents.category == "자소서" %}
+                    <span class="contents-kind" style="background-color: navy;">{{ contents.category }}</span>
+                    {% elif contents.category == "이력서" %}
+                    <span class="contents-kind" style="background-color: purple;">{{ contents.category }}</span>
+                    {% elif contents.category == "PPT" %}
+                    <span class="contents-kind" style="background-color: grey;">{{ contents.category }}</span>
+                    {% else %}
+                    <span class="contents-kind" style="background-color: pink;">{{ contents.category }}</span>
+
+
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="main-col-md-3">
@@ -50,7 +68,7 @@
                 <div class="col-md-5">
                     <div class="detail-content">
                         <h3><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.title }}</h3>
-                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro }}</p>
+                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro|truncatechars_html:190 }}</p>
                     </div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>

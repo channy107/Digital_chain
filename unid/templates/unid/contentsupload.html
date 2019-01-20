@@ -191,7 +191,7 @@ xpopup
   padding: 5px 20px 10px 20px;
   list-style: none;
 }
-.cd-popup-container .cd-buttons a, .cd-popup-container1 .cd-buttons a {
+.cd-popup-container .cd-buttons a, .cd-popup-container1 .cd-buttons a .cd-popup-container1 .cd-buttons input[type="button"]{
   display: block;
   height: 40px;
   line-height: 40px;
@@ -201,7 +201,7 @@ xpopup
   -moz-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a {
+.cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a, cd-popup-container1 .cd-buttons li:first-child input[type="button"]{
   background: #b6bece;
   border-radius: 0 0 0 .25em;
 }
@@ -222,7 +222,7 @@ xpopup
 }
 
 
-.cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a {
+.cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a, cd-popup-container1 .cd-buttons li:last-child input[type="button"] {
   background: #fc7169;
   border-radius: 0 0 .25em 0;
 }
@@ -509,17 +509,14 @@ xpopup
  본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
                                     </textarea>
                                 </div>
-                                <div>
-                                    <ul class="cd-buttons">
-                                        <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
-                                        <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
-                                    </ul>
-                                </div>
+                                <ul class="cd-buttons">
+                                    <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
+                                    <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
+                                </ul>
                             </div>
                         </div> <!-- cd-popup-container -->
                     </div> <!-- cd-popup -->
                 </div>
-                <div class="row">
                 <button type="button" class="cd-popup-trigger enrollbutton" name="enrollcontents" id="enrollcontents"> 콘텐츠 등록 </button>
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
@@ -612,6 +609,25 @@ xpopup
         $('#reupload_preview').on('click', function(){
             $("#user_preview_file_after").hide();
             $("#user_preview_file_before").show();
+        });
+        $('#inputtitle').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var letterLength = $(this).val().length;
+            var inputtext = $(this).val()
+
+            // 문서 객체에 입력한다.
+            $('#body_byte').html(letterLength + "/30");
+
+            if (letterLength > 30) {
+                alert("30자를 초과 입력 할 수 없습니다.");
+                console.log(inputtext)
+                str2 = inputtext.substr(0, 30);
+                console.log(str2.length);
+                console.log(str2);
+                $('#inputtitle').val(str2);
+            };
+            var afterletterLength = $(this).val().length;
+            $('#body_byte').html(afterletterLength + "/30");
         });
         $('#inputintro').on('keyup', function(){
             // 남은 글자 수를 구한다.

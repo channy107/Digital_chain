@@ -288,7 +288,11 @@ xpopup
     <!-- contents InFo -->
     <div class="rows">
         <div class="test">
+            {% if request.session.user_email == contents.writeremail %}
             <a href="{% url 'postmodify' contents.contents_id %}">수정</a><button type="button" class="postdelete">삭제</button>
+            {% endif %}
+        </div>
+        <div style="float: right;">
             다운로드 횟수  {{ contents.downloadcount }}
             조회수   {{ contents.hits }}
         </div>
@@ -325,14 +329,12 @@ xpopup
                         {{ contents.created|timesince }}전
                     </div>
                     <div class="fileinfo_box">
-                        <div class="fileinfo">
-                            <img src="{% static 'unid/icon/PDF-icon.png' %}" border="0" width="20" height="20">{{ contents.fileinfo }}
-                        </div>
-                        <div class="fileinfo">
-                            <img src="{% static 'unid/icon/page-icon.png' %}" border="0" width="20" height="20">{{ contents.totalpages }}page
-                        </div>
-                        <div class="fileinfo">
-                            <img src="{% static 'unid/icon/disk-icon.png' %}" border="0" width="20" height="20">파일크기
+                        <h5 class="dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">첨부 파일 ({{ files_infos|length }})</h5>
+                        <div class="dropdown-menu" id="dropdown">
+                            {% for filename in files_infos %}
+                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  {{ filename.aaa }}</h6>
+
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -458,10 +460,8 @@ xpopup
         <!-- replyment -->
         <div class="row">
             <div class="contents-reply">
-                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
-                10
                 <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
-                2
+                {{ contents.replymentcount }}
                 <hr size="5" align="left" width=670px noshade="noshade" style="color: #b3afaf54;"/>
                 <div class="reply-list">
                     {% for reply in replys %}
@@ -539,16 +539,29 @@ xpopup
         //open popup
         $('.cd-popup-trigger').on('click', function(event){
             event.preventDefault();
+            let isUser = "{{ request.session.user_email }}"
+            if ( !isUser ) {
+                alert("로그인이 필요합니다");
+                location="{% url 'login' %}"
+            } else {
+                $('.cd-popup').addClass('is-visible');
+                let contentstitle = "{{ contents.title }}";
+                let contentsprice = {{ contents.price }};
+                let mybalance = "{{ nid_balance }}";
+                console.log(mybalance);
 
-            $('.cd-popup').addClass('is-visible');
-            let contentstitle = "{{ contents.title }}";
-            let contentsprice = {{ contents.price }};
-            let mybalance = {{ nid_balance }};
+                if ( mybalance == "로그인이 필요합니다" ) {
+                    $('#popupinfo').empty();
+                    $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
+                    $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+                    } else {
+                        $('#popupinfo').empty();
+                        $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
+                        $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+                        $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupbalance'>내 잔고 : </li> <li class='popupinformations'>" + mybalance + " nid </li> </ul>");
+                    };
+                };
 
-            $('#popupinfo').empty();
-            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
-            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
-            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupbalance'>내 잔고 : </li> <li class='popupinformations'>" + mybalance + " nid </li> </ul>");
         });
 
         //close popup
@@ -566,6 +579,11 @@ xpopup
 
         });
         $('#inputreply').on('click', function() {
+            var isUser = "{{ request.session.user_email }}";
+            if ( !isUser ) {
+                alert("로그인이 필요합니다");
+                location="{% url 'login' %}"
+            }
             var reply = $('#inputreplytext').val();
             var contents_id = {{ contents.contents_id }};
             $.ajax({

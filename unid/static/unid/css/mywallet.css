@@ -165,7 +165,9 @@
 
         .contents-kind {
             margin: 10px auto 10px auto;
-            width: 100px;
+            width: 120px;
+            height: 27px;
+            display: inline-block;
             background-color: red;
             color: white;
             border-radius:20px;

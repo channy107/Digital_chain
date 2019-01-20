@@ -8,7 +8,9 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
+
 from django.views.decorators.http import require_POST
+from django.views.generic.base import View
 from web3 import Web3, HTTPProvider
 from django.shortcuts import render
 import requests
@@ -21,9 +23,23 @@ from .models import *
 import random
 from django.shortcuts import render
 import hashlib
-from allauth.account.signals import user_logged_in
+from allauth.account.signals import user_logged_in, user_logged_out
 import pyminizip
 import shutil
+
+from django.contrib.auth.mixins import AccessMixin
+from django.core.exceptions import ImproperlyConfigured
+
+from .mixins import ActiveOnlyMixin
+
+class MyView(ActiveOnlyMixin, View):
+    permission_denied_message = 'You must be logged in to view this page'
+    not_activated_message = 'You haven\'t activated your account yet'
+
+    not_activated_redirect = 'accounts:inactive_registration'
+
+
+
 
 
 def logged_in(sender, **kwargs):
@@ -34,6 +50,12 @@ def logged_in(sender, **kwargs):
     request.session['user_name'] = member.name
 user_logged_in.connect(logged_in, sender=User)
 
+
+# def logged_out(sender, **kwargs):
+#     request.session['user_email'] = {}
+#     request.session.modified = True
+# user_logged_out.connect(logged_out, sender=User)
+@login_required
 def mypage(request):
     mypage = myPageInfomation.objects.all()
     contentsboard = uploadContents.objects.all()
@@ -51,7 +73,7 @@ def contentsboard(request):
     context = {'contentsboard': contentsboard}
     return render(request, 'unid/contentsboard.html', context)
 
-
+@login_required
 def mywallet(request):
     walletInfo = walletInFormation.objects.all()
     walletcount = walletInFormation.objects.count()
@@ -61,7 +83,7 @@ def mywallet(request):
     #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount})
 
-
+@login_required
 def transaction(request):
     if request.method == 'GET':
         return render(request, 'unid/transaction.html', {})
@@ -79,7 +101,7 @@ def transaction(request):
 
     return render(request, 'unid/transaction.html', {})
 
-
+@login_required
 def exchange(request):
     if request.method == 'GET':
         return render(request, 'unid/exchange.html', {})
@@ -97,7 +119,7 @@ def exchange(request):
 
     return render(request, 'unid/exchange.html', {})
 
-
+@login_required
 def purchase(request):
     if request.method == 'GET':
         return render(request, 'unid/purchase.html', {})
@@ -116,14 +138,6 @@ def purchase(request):
     return render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
-    rpc_url = "http://222.239.231.252:8545"
-    w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
-    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-
-    account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
-
-    nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id).values()
     contents.hits = contents.hits + 1  # 조회수 증가
@@ -147,6 +161,26 @@ def contentsdetail(request, id):
         first_preview = 'media/default.png'
         second_preview = 'media/default.png'
         third_preview = 'media/default.png'
+    files_infos = contentsInfo.objects.filter(contents_id=id).values()
+
+    rpc_url = "http://222.239.231.252:8545"
+    w3 = Web3(HTTPProvider(rpc_url))
+    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
+    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+
+    try:
+        account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
+    except KeyError as e:
+        return render(
+            request,
+            'unid/contentsdetail.html',
+            {'contents': contents, 'replys': replys, 'previewlist': previewlist,
+             'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
+             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
+             }
+        )
+
+    nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
 
     if downloadContents.objects.filter( Q(contents_id=id) & Q(downloader_email=request.session['user_email']) ):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
@@ -158,17 +192,18 @@ def contentsdetail(request, id):
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'nid_balance': nid_balance,
-             "downloadid": downloadid}
+             "downloadid": downloadid, 'files_infos': files_infos
+             }
         )
-             
-           # contentsdetail.html 403 번 줄 부터 확인 필요
+
+               # contentsdetail.html 403 번 줄 부터 확인 필요
     else:
         return render(
             request,
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'nid_balance': nid_balance
+             'files_infos': files_infos, 'nid_balance': nid_balance
              }
         )
 
@@ -209,6 +244,7 @@ def moneytrade(request):
                             type="("+request.POST['id']+")"+"콘텐츠 거래",
 
     )
+    wif.save()
 
     """
         txid=,
@@ -223,15 +259,15 @@ def moneytrade(request):
 def contentstran(request):
 
 
-    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")
-    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")
-    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")
-    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")
-    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")
-    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")
-    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")
-    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")
+    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
 
     return render(request, 'unid/contentstran.html', {
                                                         'populated_reports_lists': populated_reports_lists,
@@ -322,7 +358,7 @@ def login(request):
 def signup(request):
     return render(request, 'unid/signup.html', {})
 
-
+@login_required
 def createaccount(request):
     if request.method == 'GET':
         account = myPageInfomation.objects.get(email=request.session['user_email']).account
@@ -354,6 +390,7 @@ def createaccount(request):
 
         return HttpResponseRedirect(url)
 
+@login_required
 def contentsupload(request):
     if request.method == 'GET':
         return render(request, 'unid/contentsupload.html', {})
@@ -380,13 +417,13 @@ def contentsupload(request):
         ftpfilelist = []
         uifilelist = []
         filehashdatas = []
+        filesize = []
         contents_dir = "uploadfiles/" + number + "/"
         for upload_file in upload_files:  # 다중 파일 업로드
             # file_name = upload_file.name
             # number = str(random.random())
             filename = upload_file.name
             extendname = filename[filename.find(".", -4):]
-
             # real_filename = number + extendname
             # ftpfilelist.append(real_filename)
             uifilelist.append(filename)
@@ -400,19 +437,24 @@ def contentsupload(request):
                 filedata = file.read()
                 hashdata = hashlib.sha256(filedata).hexdigest()
                 filehashdatas.append(hashdata)
+            file_size = os.path.size(contents_dir + filename)
+            filesize.append(file_size)
+
         if len(uifilelist) == 1:
             filename = uifilelist[0]
             print(filename)
             zipname = number + ".zip"
             password = filehashdatas[0][0:8]
             # with open(contents_dir + filename, 'wb') as file:
-            pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password, 4)
+            pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password,
+                                        4)
         elif len(uifilelist) == 2:
             filename = uifilelist[0]
-            filename2 =uifilelist[1]
+            filename2 = uifilelist[1]
             zipname = number + ".zip"
             password = filehashdatas[0][0:8]
-            pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2], ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
+            pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2],
+                                        ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
 
         preview_save_filelist = []
         preview_ui_filelist = []
@@ -444,9 +486,9 @@ def contentsupload(request):
             pass
 
         """
-        
+
         검수시스템 추후 개발예정
-        
+
         """
         ftp = FTP()
         ftp.connect("222.239.231.253")  # Ftp 주소 Connect(주소 , 포트)
@@ -514,7 +556,6 @@ def contentsupload(request):
             )
             br.save()
 
-
         idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
         filelistlength = len(filehashdatas)
         for i in range(filelistlength):
@@ -525,6 +566,7 @@ def contentsupload(request):
                 uploadfile=uifilelist[i],
                 contentspath=ftp_contents_dir,
                 hash=filehashdatas[i],
+                aaa=filesize[i],
             )
             br.save()
 
@@ -540,21 +582,47 @@ def contentsupload(request):
             )
             br.save()
 
-        rpc_url = "http://222.239.231.252:8545"
-        w3 = Web3(HTTPProvider(rpc_url))
-
-        contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
-        cmc = w3.eth.contract(address = contentsMasterContract_address, abi = [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
-        price = int(request.POST['price'])
-        for i in range(len(filehashdatas)):
-            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-            cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact({"from": w3.eth.accounts[0], "gas": 1000000 })
+        # rpc_url = "http://222.239.231.252:8545"
+        # w3 = Web3(HTTPProvider(rpc_url))
+        #
+        # contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
+        # cmc = w3.eth.contract(address=contentsMasterContract_address, abi=[{"constant": False, "inputs": [
+        #     {"name": "name", "type": "string"}, {"name": "price", "type": "uint32"},
+        #     {"name": "hash", "type": "string"}], "name": "addContents", "outputs": [], "payable": False,
+        #                                                                     "stateMutability": "nonpayable",
+        #                                                                     "type": "function"}, {"constant": True,
+        #                                                                                           "inputs": [
+        #                                                                                               {"name": "",
+        #                                                                                                "type": "address"}],
+        #                                                                                           "name": "contents",
+        #                                                                                           "outputs": [
+        #                                                                                               {"name": "",
+        #                                                                                                "type": "address"}],
+        #                                                                                           "payable": False,
+        #                                                                                           "stateMutability": "view",
+        #                                                                                           "type": "function"},
+        #                                                                    {"constant": True, "inputs": [],
+        #                                                                     "name": "getContentsAddressList",
+        #                                                                     "outputs": [{"name": "contentsAddressList",
+        #                                                                                  "type": "address[]"}],
+        #                                                                     "payable": False, "stateMutability": "view",
+        #                                                                     "type": "function"}, {"anonymous": False,
+        #                                                                                           "inputs": [
+        #                                                                                               {"indexed": False,
+        #                                                                                                "name": "name",
+        #                                                                                                "type": "string"}],
+        #                                                                                           "name": "EventAddContents",
+        #                                                                                           "type": "event"}])
+        # price = int(request.POST['price'])
+        # for i in range(len(filehashdatas)):
+        #     # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
+        #     cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact(
+        #         {"from": w3.eth.accounts[0], "gas": 1000000})
 
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)
 
-
-
+@login_required
 def postmodify(request, id):
     if request.method == 'GET':
         contents = uploadContents.objects.get(contents_id=id)
@@ -660,7 +728,7 @@ def postmodify(request, id):
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)
 
-
+@login_required
 def postdelete(request):
     uploadContents.objects.filter(contents_id=request.POST['id']).update(
         last_modified=timezone.now(),
@@ -670,7 +738,7 @@ def postdelete(request):
     res = {"Ans": "삭제되었습니다."}
     return JsonResponse(res)
 
-
+@login_required
 def download(request):
     if request.method == "GET":
         id = request.GET['id']
@@ -707,7 +775,7 @@ def download(request):
             # response['Set-Cookie'] = 'download=' + downloadid;
             response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename1)
             return response
-
+@login_required
 def writereply(request):
     id = uploadContents.objects.get(contents_id=request.POST['id'])
     writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
@@ -743,7 +811,7 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 def searchcontents(request, category):
     allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
                                             Q(category=category) & Q(isdelete__isnull=True)
-                                                    )
+                                        )
 
     return render(
         request, 'unid/searchcontents.html',

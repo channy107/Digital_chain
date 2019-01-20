@@ -145,13 +145,20 @@ AUTHENTICATION_BACKENDS = (
 )
 # -----------oauth------------------------------------------
 SITE_ID = 7  # 안맞으면 site maching the query ... 이거 대체 뭘까
-
+LOGIN_URL = '/unid/login/'
 LOGIN_REDIRECT_URL = '/unid/createaccount/'
 ACCOUNT_LOGOUT_REDIRECT_URL = "/unid"
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 WSGI_APPLICATION = 'unidweb.wsgi.application'
+
+PERMISSION_DENIED_MESSAGE = '로그인해'
+
+
 SOCIALACCOUNT_ADAPTER = 'unid.my_adapter.MyAdapter'
+
+
+
 AUTH_USER_MODEL = 'auth.User'
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Database
