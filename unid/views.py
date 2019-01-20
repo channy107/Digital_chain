@@ -283,10 +283,54 @@ def contentstran(request):
 
 
 def main(request):
-    posts=Post.objects.order_by('-posts_id')
+    if request.method == 'GET':
 
-    context = {'posts': posts}
-    return render(request, 'unid/main.html', context)
+        if request.session.keys():
+            posts = Post.objects.order_by('-posts_id')
+            sess = request.session['user_email']
+            voting_count = myPageInfomation.objects.get(email=sess)
+            context = {'voting_count':voting_count,
+                       'posts':posts}
+            return render(request, 'unid/main.html', context)
+
+        else:
+            posts = Post.objects.order_by('-posts_id')
+            context = {'posts': posts}
+
+            return render(request, 'unid/main.html', context)
+
+    else:
+        sess = request.session['user_email']
+        posts_id = request.POST['posts_id']
+        list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
+        count = myPageInfomation.objects.get(email=sess)
+        voting_count = count.votingcount
+        list = list.values()
+
+        if list:
+            if voting_count < 0:
+                res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            else :
+                res = {"Ans": "보팅을 취소했습니다."}
+        else:
+            if voting_count == 0:
+                res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            else :
+                res = {"Ans": "보팅을 완료했습니다."}
+
+        return JsonResponse(res)
+
+def my_cron_job(request):
+    voting_count = request.POST['voting_count']
+    myProfile = myPageInfomation.objects.all()
+
+    for count in myProfile:
+        count.votingcount = 10
+        count.save()
+
+    res = {"Ans": "보팅이 충전되었습니다."}
+
+    return JsonResponse(res)
 
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
@@ -300,20 +344,50 @@ def voting(request):
     like_count=request.POST['like_count']
     rewards=request.POST['rewards']
     liked_users=request.POST['liked_users']
+    votinged = request.POST['votinged']
+    count = myPageInfomation.objects.get(email=liked_users)
+    voting_count = count.votingcount
 
 
-    posts = Post.objects.get(posts_id=posts_id)
-    posts.like_count = like_count
-    posts.rewards = rewards
+    if votinged=="좋아요취소":
 
-    posts.save()
+        posts = Post.objects.get(posts_id=posts_id)
+        posts.like_count = like_count
+        posts.rewards = rewards
+        count.votingcount = int(voting_count) + 1
+        posts.save()
+        count.save()
 
-    like = LikeUsers(posts_id=posts_id, liked_users=liked_users)
+        posts_id = Post.objects.get(posts_id=posts_id)
 
-    like.save()
+        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, liked_users=liked_users)
 
-    res = {"Ans" : "보팅이 완료되었습니다."}
-    return JsonResponse(res)
+        for delete in voting_delete:
+            delete.delete()
+
+    elif votinged=="좋아요":
+        count.votingcount = int(voting_count) -1
+        count.save()
+        posts = Post.objects.get(posts_id=posts_id)
+        posts.like_count = like_count
+        posts.rewards = rewards
+        posts.save()
+
+        posts_id = Post.objects.get(posts_id=posts_id)
+
+        like = LikeUsers(posts_id=posts_id, liked_users=liked_users)
+
+        like.save()
+    else :
+        posts = Post.objects.get(posts_id=posts_id)
+        posts.like_count = like_count
+        posts.rewards = rewards
+        posts.save()
+
+
+    url = '../'
+    return HttpResponseRedirect(url)
+
 
 def mainreply(request):
 
