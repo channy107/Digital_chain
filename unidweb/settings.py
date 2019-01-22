@@ -157,7 +157,7 @@ PERMISSION_DENIED_MESSAGE = '로그인해'
 
 SOCIALACCOUNT_ADAPTER = 'unid.my_adapter.MyAdapter'
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 
 AUTH_USER_MODEL = 'auth.User'
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

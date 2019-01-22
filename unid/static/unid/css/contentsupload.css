@@ -78,10 +78,22 @@
     position: relative;
     right: 160px;
 }
+.files2 {
+    position: relative;
+    right: 240px;
+}
 .files-button {
     position: relative;
     left: 635px;
 }
+.files-button1 {
+    position: relative;
+    left: 558px;
+}
+#after_test {
+    display: none;
+
+    }
 .price {
     width: 170px;
     position: relative;

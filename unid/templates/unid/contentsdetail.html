@@ -288,7 +288,7 @@ xpopup
     <!-- contents InFo -->
     <div class="rows">
         <div class="test">
-            {% if request.session.user_email == contents.writeremail %}
+            {% if request.session.user_email == contents.writeremail_id %}
             <a href="{% url 'postmodify' contents.contents_id %}">수정</a><button type="button" class="postdelete">삭제</button>
             {% endif %}
         </div>
@@ -332,7 +332,7 @@ xpopup
                         <h5 class="dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">첨부 파일 ({{ files_infos|length }})</h5>
                         <div class="dropdown-menu" id="dropdown">
                             {% for filename in files_infos %}
-                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  {{ filename.aaa }}</h6>
+                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  |  {{ filename.aaa }}</h6>
 
                             {% endfor %}
                         </div>
@@ -389,19 +389,27 @@ xpopup
         <!-- detail of contents -->
         <div class="row">
             <div class="contents-detail">
-                <p>컨텐츠 정보</p>
-                <p>저자 : {{ contents.authorinfo }}</p>
-
-                <p>저작시기 : {{ contents.publisheddate }}</p>
-
-                <p>소개글: {{ contents.intro }}</p>
-
-                <p>목차:</p>
-                {{ contents.index }}
-
-                <p>본문내용: {{ contents.contents }}</p>
-
-                <p>비고: {{ contents.reference }}</p>
+                <div class="label">
+                    <h4><p>컨텐츠 정보</p></h4>
+                </div>
+                <div class="label">
+                    저자 : <h6>{{ contents.authorinfo }}</h6>
+                </div>
+                <div class="label">
+                    저작시기 : </h5> <h6>{{ contents.publisheddate }}</h6>
+                </div>
+                <div class="label">
+                    소개글: </h5> <h6>{{ contents.intro }}</h6>
+                </div>
+                <div class="label">
+                    목차:</h5> <h6>{{ contents.index }} </h6>
+                </div>
+                <div class="label">
+                    본문내용: </h5><h6>{{ contents.contents }}</h6>
+                </div>
+                <div class="label">
+                    비고: </h5> <h6>{{ contents.reference }}</h6>
+                </div>
             </div>
         </div>
         <!-- payment -->

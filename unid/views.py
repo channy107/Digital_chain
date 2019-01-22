@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.csrf import csrf_exempt
 
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
@@ -163,24 +164,24 @@ def contentsdetail(request, id):
         third_preview = 'media/default.png'
     files_infos = contentsInfo.objects.filter(contents_id=id).values()
 
-    rpc_url = "http://222.239.231.252:8545"
-    w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
-    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-
-    try:
-        account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
-    except KeyError as e:
-        return render(
-            request,
-            'unid/contentsdetail.html',
-            {'contents': contents, 'replys': replys, 'previewlist': previewlist,
-             'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
-             }
-        )
-
-    nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
+    # rpc_url = "http://222.239.231.252:8545"
+    # w3 = Web3(HTTPProvider(rpc_url))
+    # nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
+    # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+    #
+    # try:
+    #     account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
+    # except KeyError as e:
+    #     return render(
+    #         request,
+    #         'unid/contentsdetail.html',
+    #         {'contents': contents, 'replys': replys, 'previewlist': previewlist,
+    #          'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
+    #          'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
+    #          }
+    #     )
+    #
+    # nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
 
     if downloadContents.objects.filter( Q(contents_id=id) & Q(downloader_email=request.session['user_email']) ):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
@@ -191,7 +192,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'nid_balance': nid_balance,
+             # 'nid_balance': nid_balance,
              "downloadid": downloadid, 'files_infos': files_infos
              }
         )
@@ -203,7 +204,8 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'files_infos': files_infos, 'nid_balance': nid_balance
+             'files_infos': files_infos,
+             # 'nid_balance': nid_balance
              }
         )
 
@@ -470,65 +472,66 @@ def contentsupload(request):
         return render(request, 'unid/contentsupload.html', {})
     else:  # submit으로 제출
         try:
-            upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
+            # upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
+            # print(upload_files)
             upload_images = request.FILES.getlist('user_preview_files')
         except MultiValueDictKeyError as e:
             pass
-        try:
-            number = str(random.random())
-            print(number)
-            now = datetime.now()
-            today = now.strftime('%Y-%m-%d')
-            os.mkdir("uploadfiles/" + number)  # 그 날짜에 맞는 디렉토리 생성
-        except FileExistsError as e:
-            pass
+        # try:
+        #     number = str(random.random())
+        #     print(number)
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        #     os.mkdir("uploadfiles/" + number)  # 그 날짜에 맞는 디렉토리 생성
+        # except FileExistsError as e:
+        #     pass
         try:
             print(os.getcwd())
             os.mkdir("media/" + today)
         except FileExistsError as e:
             pass
-        print(2)
-        ftpfilelist = []
-        uifilelist = []
-        filehashdatas = []
-        filesize = []
-        contents_dir = "uploadfiles/" + number + "/"
-        for upload_file in upload_files:  # 다중 파일 업로드
-            # file_name = upload_file.name
-            # number = str(random.random())
-            filename = upload_file.name
-            extendname = filename[filename.find(".", -4):]
-            # real_filename = number + extendname
-            # ftpfilelist.append(real_filename)
-            uifilelist.append(filename)
-            # now = datetime.now()
-            # today = now.strftime('%Y-%m-%d')
-            # 해당 날짜의 디렉토리
-            with open(contents_dir + filename, 'wb') as file:  # 저장경로
-                for chunk in upload_file.chunks():
-                    file.write(chunk)
-            with open(contents_dir + filename, 'rb') as file:
-                filedata = file.read()
-                hashdata = hashlib.sha256(filedata).hexdigest()
-                filehashdatas.append(hashdata)
-            file_size = os.path.size(contents_dir + filename)
-            filesize.append(file_size)
+        # print(2)
+        # ftpfilelist = []
+        # uifilelist = []
+        # filehashdatas = []
+        # filesize = []
+        # contents_dir = "uploadfiles/" + number + "/"
+        # for upload_file in upload_files:  # 다중 파일 업로드
+        #     # file_name = upload_file.name
+        #     # number = str(random.random())
+        #     filename = upload_file.name
+        #     extendname = filename[filename.find(".", -4):]
+        #     # real_filename = number + extendname
+        #     # ftpfilelist.append(real_filename)
+        #     uifilelist.append(filename)
+        #     # now = datetime.now()
+        #     # today = now.strftime('%Y-%m-%d')
+        #     # 해당 날짜의 디렉토리
+        #     with open(contents_dir + filename, 'wb') as file:  # 저장경로
+        #         for chunk in upload_file.chunks():
+        #             file.write(chunk)
+        #     with open(contents_dir + filename, 'rb') as file:
+        #         filedata = file.read()
+        #         hashdata = hashlib.sha256(filedata).hexdigest()
+        #         filehashdatas.append(hashdata)
+        #     file_size = os.path.getsize(contents_dir + filename)
+        #     filesize.append(file_size)
 
-        if len(uifilelist) == 1:
-            filename = uifilelist[0]
-            print(filename)
-            zipname = number + ".zip"
-            password = filehashdatas[0][0:8]
-            # with open(contents_dir + filename, 'wb') as file:
-            pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password,
-                                        4)
-        elif len(uifilelist) == 2:
-            filename = uifilelist[0]
-            filename2 = uifilelist[1]
-            zipname = number + ".zip"
-            password = filehashdatas[0][0:8]
-            pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2],
-                                        ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
+        # if len(uifilelist) == 1:
+        #     filename = uifilelist[0]
+        #     print(filename)
+        #     zipname = number + ".zip"
+        #     password = filehashdatas[0][0:8]
+        #     # with open(contents_dir + filename, 'wb') as file:
+        #     pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password,
+        #                                 4)
+        # elif len(uifilelist) == 2:
+        #     filename = uifilelist[0]
+        #     filename2 = uifilelist[1]
+        #     zipname = number + ".zip"
+        #     password = filehashdatas[0][0:8]
+        #     pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2],
+        #                                 ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
 
         preview_save_filelist = []
         preview_ui_filelist = []
@@ -551,6 +554,7 @@ def contentsupload(request):
             size = (1000, 1050)
             im2 = im.resize(size)
             im2.save(contents_dir + real_preview_filename)
+        contents_dir = "media/" + today + "/"
         try:
             thumb = Image.open(contents_dir + preview_save_filelist[0])
             size = (180, 200)
@@ -564,31 +568,37 @@ def contentsupload(request):
         검수시스템 추후 개발예정
 
         """
+        print("fpt start")
         ftp = FTP()
         ftp.connect("222.239.231.253")  # Ftp 주소 Connect(주소 , 포트)
         ftp.login("unid", "qhdkscjfwj0!")
         ftp.cwd("/home/unid/contents")
         ftp_contents_dir = "/home/unid/contents/" + today + "/"
+        print("fpt")
         try:
             ftp.mkd(today)
         except:
             ftp.cwd("/home/unid/contents/" + today)
         ftp.cwd("/home/unid/contents/" + today)
-        os.chdir("uploadfiles/" + number)
+        filepath = request.POST['filepath']
+        filename = request.POST['filename']
+        os.chdir(filepath)
         # contents_dir = today + "/"
         # # with open(contents_dir + file_name, "wb") as file:
         # #     ftp.storlines('STOR %s' % file_name, file)
 
-        uploadfile = open(zipname, "rb")
-        ftp.storbinary('STOR ' + zipname, uploadfile)
+        uploadfile = open(filename, "rb")
+        ftp.storbinary('STOR ' + filename, uploadfile)
 
+        print("fpt end")
         uploadfile.close()
-
+        print(os.getcwd())
         os.chdir("..")
+        print(os.getcwd())
         os.chdir("..")
-
-        shutil.rmtree("uploadfiles/" + number)
-
+        print(os.getcwd())
+        shutil.rmtree(filepath)
+        print(os.getcwd())
         publisheddate = str(request.POST['publisheddate'])[0:10]
         preview_images_dir = "media/" + today + "/"
         writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
@@ -629,14 +639,17 @@ def contentsupload(request):
                 replymentcount=0
             )
             br.save()
-
+        uifilelist = request.POST['uifilelist'].split(',')
+        filehashdatas = request.POST['filehashdatas'].split(',')
+        filesize = request.POST['filesize'].split(',')
         idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
         filelistlength = len(filehashdatas)
+        print(filelistlength)
         for i in range(filelistlength):
             print(6)
             br = contentsInfo(
                 contents_id=idx,
-                uploadzipfilename=zipname,
+                uploadzipfilename=filename,
                 uploadfile=uifilelist[i],
                 contentspath=ftp_contents_dir,
                 hash=filehashdatas[i],
@@ -695,6 +708,103 @@ def contentsupload(request):
 
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)
+
+@csrf_exempt
+def test_validfile(request):
+    try:
+        print(os.getcwd())
+        upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
+        print(upload_files)
+    except MultiValueDictKeyError as e:
+        pass
+    try:
+        number = str(random.random())
+        print(number)
+        print(os.getcwd())
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        print(os.getcwd())
+        os.mkdir("uploadfiles/" + number)  # 그 날짜에 맞는 디렉토리 생성
+        print(os.getcwd())
+    except FileExistsError as e:
+        pass
+    try:
+        print(os.getcwd())
+
+        os.mkdir("media/" + today)
+    except FileExistsError as e:
+        pass
+    print(2)
+    ftpfilelist = []
+    uifilelist = []
+    filehashdatas = []
+    filesize = []
+    already_uploaded_list = []
+    contents_dir = "uploadfiles/" + number + "/"
+    for upload_file in upload_files:  # 다중 파일 업로드
+        # file_name = upload_file.name
+        # number = str(random.random())
+        filename = upload_file.name
+        extendname = filename[filename.find(".", -4):]
+        # real_filename = number + extendname
+        # ftpfilelist.append(real_filename)
+        uifilelist.append(filename)
+        # now = datetime.now()
+        # today = now.strftime('%Y-%m-%d')
+        # 해당 날짜의 디렉토리
+        with open(contents_dir + filename, 'wb') as file:  # 저장경로
+            for chunk in upload_file.chunks():
+                file.write(chunk)
+        with open(contents_dir + filename, 'rb') as file:
+            filedata = file.read()
+            hashdata = hashlib.sha256(filedata).hexdigest()
+            filehashdatas.append(hashdata)
+
+        if contentsInfo.objects.filter(hash=hashdata):
+            print("똑같아")
+            # shutil.rmtree("uploadfiles/" + number)
+            already_uploaded_list.append(filename)
+
+        file_size = os.path.getsize(contents_dir + filename)
+        print(file_size)
+        filesize.append(str(file_size/1000) + "KB")
+    print("중복없음")
+    # res = {"Ans": "해당 파일은 이미 등록 되어있습니다 : " + filename}
+    # return JsonResponse(res)
+    if already_uploaded_list:
+        res = {"Ans": "해당 파일은 이미 등록 되어있습니다 : ",
+               "list": already_uploaded_list }
+        shutil.rmtree("uploadfiles/" + number)
+        return JsonResponse(res)
+    else:
+        print(os.getcwd())
+        os.chdir("uploadfiles/" + number)
+        print(os.getcwd())
+
+
+        with zipfile.ZipFile('Unid_contents' + number + '.zip', mode='w') as f:
+            print(uifilelist[0])
+            f.write(uifilelist[0], compress_type=zipfile.ZIP_DEFLATED)
+        if len(uifilelist) >= 2:
+            for i in range(len(uifilelist)-1):
+                with zipfile.ZipFile('Unid_contents' + number + '.zip', mode='a') as f:
+                    f.write(uifilelist[i+1], compress_type=zipfile.ZIP_DEFLATED)
+        os.chdir("..")
+        os.chdir("..")
+        print(os.getcwd())
+        res = {
+                "Ans":"업로드되었습니다.",
+                "test":"test",
+                "filepath": contents_dir,
+                "filename": 'Unid_contents' + number + '.zip',
+                "ftpfilelist": ftpfilelist,
+                "uifilelist": uifilelist,
+                "filehashdatas": filehashdatas,
+                "filesize": filesize
+        }
+
+        return_obj = JsonResponse(res)
+        return return_obj
 
 @login_required
 def postmodify(request, id):

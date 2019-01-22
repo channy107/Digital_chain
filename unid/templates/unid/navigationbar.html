@@ -75,25 +75,32 @@
                     <a class="nav-link unid-menus" id="nav1" href="/unid">정보공유</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link unid-menus" id="nav2"href="/unid/contentstran">콘텐츠거래</a>
+                    <a class="nav-link unid-menus" id="nav2" href="/unid/contentstran">콘텐츠거래</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link unid-menus" id="nav4" href="#0">크라우드 펀딩</a>
+                </li>
+                {% if user.email %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
                         <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
                     </a>
                     <div class="dropdown-menu" id="dropdown">
-                        {% if user.email %}
                         <a class="dropdown-item" href="/unid/mypage" id="go-mypage">마이페이지</a>
                         <a class="dropdown-item" href="/unid/mywallet" id="go-mywallet">내지갑</a>
                         <a class="dropdown-item" href="/unid/main_upload" id="go-writepost">게시글작성</a>
                         <a class="dropdown-item" href="/unid/contentsupload" id="go-uploadcontents">콘텐츠등록</a>
                         <a class="dropdown-item" href="/accounts/logout" id="go-logout">로그아웃</a>
-                        {% else %}
-                        <a class="dropdown-item" href="/unid/login" id="go-login">로그인</a>
-                        <a class="dropdown-item" href="/unid/signup" id="go-signup">회원가입</a>
-                        {% endif %}
                     </div>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link unid-menus" id="go-login" href="/unid/login">로그인</a>
+                </li>
+                <li class="nav-item signup">
+                    <a class="nav-link unid-menus" id="go-signup" href="/unid/signup">회원가입</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
@@ -108,5 +115,14 @@
 
 
 </body>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
 
+    jQuery(document).ready(function($){
+        $('#nav4').on('click', function() {
+            alert("게시판 준비중입니다.");
+        });
+
+    });
+</script>
 </html>

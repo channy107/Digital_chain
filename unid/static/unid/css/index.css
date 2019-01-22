@@ -125,7 +125,16 @@
             padding: 20px;
 
         }
+        .contents-detail .label {
+            font-weight: bold;
+            font-size: 20px;
+            margin: 15px;
 
+        }
+        .contents-detail .label h6 {
+            display: inline;
+
+        }
         .contents-reply {
             width: 700px;
         }
@@ -276,4 +285,7 @@
         .hi {
             display: inline;
 
+        }
+        .test {
+            display: inline;
         }

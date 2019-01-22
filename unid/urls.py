@@ -36,4 +36,5 @@ urlpatterns = [
     path('purchase/', views.purchase, name='purchase'),
     path('download/', views.download, name='download'),
     path('my_cron_job/', my_cron_job, name='my_cron_job'),
+    path('test_validfile/', views.test_validfile, name='test_validfile'),
 ]

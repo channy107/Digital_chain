@@ -298,30 +298,51 @@ xpopup
     <!-- contents InFo -->
     <div class="contentsuploadrows">
         <h5 class="board-title">컨텐츠 등록</h5>
+        <div id="user_file_before">
+            <div id="user_file_over">
+                <form id="fileform" name="fileform" action="../test_validfile/" method="post" enctype="multipart/form-data">
+                    <input type="file"  id="user_files"  name="user_files" class="user_files"  title="파일찾기" multiple/>
+                </form>
+            </div>
+            <div class="form-group">
+                <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str">
+                    .hwp, .ppt, .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
+                    </li>
+                    <li class="tip_str">
+                    이미 등록된 콘텐츠는 업로드하실 수 없습니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="user_file_after">
+            <div class="form-group">
+                <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-7 files2"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button1" type="button" id="reupload" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
+                <input class="form-control col-sm-1 files-button1" type="button" id="uploadbutton" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="중복검사" readonly/>
+                <input class="form-control col-sm-1 files-button1" type="button" id="after_test" name="after_test" style="background-color: green;color: white;text-align:center;cursor: pointer;" readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str" style="color: red;" id="before_confirm" name="before_confirm">
+                    콘텐츠 중복검사 버튼을 클릭해주세요.
+                    </li>
+                    <li class="tip_str" style="color: blue; display: none;" id="after_connfirm" name="after_connfirm">
+                    업로드 가능한 콘텐츠입니다. 콘텐츠 등록시 업로드 되는 파일 내역을 볼 수 있습니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
           {% csrf_token %}
-            <div id="user_file_before">
-                <div id="user_file_over">
-                    <input type="file"  id="user_files"  name="user_files" class="user_files"  title="파일찾기" multiple/>
-                </div>
-                <div class="form-group">
-                    <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
-                    <ul class="str_ul">
-                        <li class="tip_str">
-                        .hwp, .ppt, .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="user_file_after">
-                <div class="form-group">
-                    <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
-                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" type="button" id="reupload" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
-                </div>
-            </div>
+            <input style="display:none;" id="filepath"  name="filepath" readonly/>
+            <input style="display:none;" id="filename"  name="filename" readonly/>
+            <input style="display:none;" id="ftpfilelist"  name="ftpfilelist"  readonly/>
+            <input style="display:none;" id="uifilelist"  name="uifilelist"  readonly/>
+            <input style="display:none;" id="filehashdatas"  name="filehashdatas"   readonly/>
+            <input style="display:none;" id="filesize"  name="filesize"  readonly/>
             <div id="user_preview_file_before">
                 <div id="user_file_over">
                     <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
@@ -329,7 +350,7 @@ xpopup
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
+                    <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;" value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
                         .jpg, .png 형식의 파일만 가능합니다.
@@ -338,6 +359,7 @@ xpopup
                     </ul>
                 </div>
             </div>
+
             <div id="user_preview_file_after">
                 <div class="form-group">
                     <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
@@ -393,13 +415,6 @@ xpopup
             <div class="form-group">
                 <label for="inputauthorinfo" class="col-sm-2">저자</label>
                 <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text">
-            </div>
-            <div class="form-group">
-                <label for="inputtotalpages" class="col-sm-2" name="totalpages">페이지수</label>
-                <input class="form-control creatdate" id="inputtotalpages" name="totalpages">
-                <div class="totalpageunit">
-                    Page
-                </div>
             </div>
             <div class="form-group">
                 <label for="inputpublisheddate" class="col-sm-3">저작시기</label>
@@ -552,6 +567,39 @@ xpopup
         $('#nav2').addClass('visible-place');
         $('#nav1').removeClass('visible-place');
 
+
+        $('#uploadbutton').on('click', function() {
+            var form = $('form')[1];
+            var formData = new FormData(form);
+                $.ajax({
+                    type: 'POST',
+                    url: "../test_validfile/",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(res) {
+                        if ( res.list ) {
+                            alert(res.Ans + res.list)
+                        }
+                        if ( res.test ) {
+                                alert(res.Ans)
+                                $('#after_test').val("체크체크");
+                                $("#uploadbutton").hide();
+                                $("#after_test").show();
+                                $('#before_confirm').hide();
+                                $('#after_connfirm').show();
+                                $('#filepath').val(res.filepath)
+                                $('#filename').val(res.filename)
+                                $('#ftpfilelist').val(res.ftpfilelist)
+                                $('#uifilelist').val(res.uifilelist)
+                                $('#filehashdatas').val(res.filehashdatas)
+                                $('#filesize').val(res.filesize)
+                                console.log($('#filepath').val());
+                                console.log($('#uifilelist').val());
+                            }
+                     }
+            });
+        });
         $('input:checkbox[id="ex_chk"]').on('change', function(){
             $('.cd-popup1').addClass('is-visible');
             });
@@ -586,16 +634,24 @@ xpopup
 
         });
         $('#user_files').on('change', function(){
+            let upload_files = $('#user_files').get(0).files
             var fileee = $('#user_files').get(0).files[0]['name'];
             console.log(fileee);
-            $('#inputfiles_after').val(fileee);
+            $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
             $("#user_file_before").hide();
             $("#user_file_after").show();
         });
 
         $('#reupload').on('click', function(){
+            $('#after_test').val();
             $("#user_file_after").hide();
             $("#user_file_before").show();
+            $("#after_test").hide();
+            $("#uploadbutton").show();
+            $('#after_connfirm').hide();
+            $('#before_confirm').show();
+
+
         });
 
         $('#user_preview_files').on('change', function(){
@@ -631,139 +687,125 @@ xpopup
         });
         $('#inputintro').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte1').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte += 2;
+                } else {
+                    totalByte++;
+                }
+                $('#body_byte1').html(totalByte + "/2000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 2000) {
+                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 1000);
                 console.log(str2);
                 $('#inputintro').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte1').html(afterletterLength + "/1000");
+                console.log($('#inputintro').val());
+            }
         });
         $('#inputindex').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte2').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte += 2;
+                } else {
+                    totalByte++;
+                }
+                $('#body_byte2').html(totalByte + "/2000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 2000) {
+                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputindex').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte2').html(afterletterLength + "/1000");
+            }
         });
         $('#inputtext').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte3').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte += 2;
+                } else {
+                    totalByte++;
+                }
+                $('#body_byte3').html(totalByte + "/2000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 2000) {
+                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputtext').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte3').html(afterletterLength + "/1000");
+            }
         });
         $('#inputreference').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte4').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte += 2;
+                } else {
+                    totalByte++;
+                }
+                $('#body_byte4').html(totalByte + "/2000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 2000) {
+                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputreference').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte4').html(afterletterLength + "/1000");
+            }
         });
+
 
         //open popup
         $('.cd-popup-trigger').on('click', function(event){
             event.preventDefault();
-            var form = document.writeform;
-            if (!form.inputfile_after.value) {
-                alert("파일을 첨부해주세요.");
-                $('#inputfiles_before').focus();
-                return false;
-            }
-            if (!form.title.value) {
-                alert("제목을 적어주세요");
-                $('#inputtitle').focus();
-                return false;
-            }
-            if (form.category.value == "선택하세요") {
-                alert("카테고리를 선택해주세요");
-                $('#inputcategory').focus();
-                return false;
-            }
-            if (!form.authorinfo.value) {
-                alert("저자를 적어주세요");
-                $('#inputauthorinfo').focus();
-                return false;
-            }
-            if (!form.totalpages.value) {
-                alert("페이지수를 적어주세요");
-                $('#inputtotalpages').focus();
-                return false;
-            }
-            if (!form.publisheddate.value) {
-                alert("저작시기를 적어주세요");
-                $('#inputpublisheddate').focus();
-                return false;
-            }
-            if (!form.price.value) {
-                alert("판매 가격을 적어주세요");
-                $('#inputprice').focus();
-                return false;
-            }
-            if (!form.intro.value) {
-                alert("소개글을 적어주세요");
-                $('#inputintro').focus();
-                return false;
-            }
-            if (!form.index.value) {
-                alert("목차를 적어주세요");
-                $('#inputindex').focus();
-                return false;
-            }if (!form.contents.value) {
-                alert("본문내용을 적어주세요");
-                $('#inputtext').focus();
-                return false;
-            }
-            if (!$('input:checkbox[id="ex_chk"]').is(":checked")) {
-                alert("계약서에 동의해주세요.");
-                $('#ex_chk').focus();
-                return false;
-            }
+
 
             $('.cd-popup').addClass('is-visible');
             let contentsprice = $('#inputprice').val();
