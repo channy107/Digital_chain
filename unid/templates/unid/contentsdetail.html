@@ -332,7 +332,7 @@ xpopup
                         <h5 class="dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">첨부 파일 ({{ files_infos|length }})</h5>
                         <div class="dropdown-menu" id="dropdown">
                             {% for filename in files_infos %}
-                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  |  {{ filename.aaa }}</h6>
+                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  |  {{ filename.filesize }}</h6>
 
                             {% endfor %}
                         </div>

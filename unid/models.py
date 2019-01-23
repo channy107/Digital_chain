@@ -45,7 +45,7 @@ class uploadContents(models.Model):
     price = models.IntegerField()
     tags = models.CharField(max_length=50)
     fileinfo = models.CharField(max_length=250)
-    totalpages = models.IntegerField()
+    # totalpages = models.IntegerField()
     authorinfo = models.CharField(max_length=1000)
     intro = models.CharField(max_length=1000)
     index = models.CharField(max_length=1000)
@@ -80,7 +80,7 @@ class contentsInfo(models.Model):
     hash = models.CharField(max_length=150, null=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
-    aaa = models.CharField(max_length=250, blank=True, null=True)
+    filesize = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 

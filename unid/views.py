@@ -1,6 +1,6 @@
 import os
 from _sha256 import sha256
-from datetime import datetime
+from datetime import datetime, time
 from ftplib import FTP
 from PIL import Image
 from django.contrib.auth.decorators import login_required
@@ -653,7 +653,7 @@ def contentsupload(request):
                 uploadfile=uifilelist[i],
                 contentspath=ftp_contents_dir,
                 hash=filehashdatas[i],
-                aaa=filesize[i],
+                filesize=filesize[i],
             )
             br.save()
 
@@ -669,42 +669,30 @@ def contentsupload(request):
             )
             br.save()
 
-        # rpc_url = "http://222.239.231.252:8545"
-        # w3 = Web3(HTTPProvider(rpc_url))
-        #
-        # contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
-        # cmc = w3.eth.contract(address=contentsMasterContract_address, abi=[{"constant": False, "inputs": [
-        #     {"name": "name", "type": "string"}, {"name": "price", "type": "uint32"},
-        #     {"name": "hash", "type": "string"}], "name": "addContents", "outputs": [], "payable": False,
-        #                                                                     "stateMutability": "nonpayable",
-        #                                                                     "type": "function"}, {"constant": True,
-        #                                                                                           "inputs": [
-        #                                                                                               {"name": "",
-        #                                                                                                "type": "address"}],
-        #                                                                                           "name": "contents",
-        #                                                                                           "outputs": [
-        #                                                                                               {"name": "",
-        #                                                                                                "type": "address"}],
-        #                                                                                           "payable": False,
-        #                                                                                           "stateMutability": "view",
-        #                                                                                           "type": "function"},
-        #                                                                    {"constant": True, "inputs": [],
-        #                                                                     "name": "getContentsAddressList",
-        #                                                                     "outputs": [{"name": "contentsAddressList",
-        #                                                                                  "type": "address[]"}],
-        #                                                                     "payable": False, "stateMutability": "view",
-        #                                                                     "type": "function"}, {"anonymous": False,
-        #                                                                                           "inputs": [
-        #                                                                                               {"indexed": False,
-        #                                                                                                "name": "name",
-        #                                                                                                "type": "string"}],
-        #                                                                                           "name": "EventAddContents",
-        #                                                                                           "type": "event"}])
-        # price = int(request.POST['price'])
-        # for i in range(len(filehashdatas)):
-        #     # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-        #     cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact(
-        #         {"from": w3.eth.accounts[0], "gas": 1000000})
+        rpc_url = "http://localhost:8545"
+        w3 = Web3(HTTPProvider(rpc_url))
+
+        contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
+        cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
+        price = int(request.POST['price'])
+        for i in range(len(filehashdatas)):
+            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
+            cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact(
+                {"from": w3.eth.accounts[0], "gas": 1000000})
+
+        poll_interval = 2
+
+        myfilter = cmc.eventFilter('EventAddContents', {'fromBlock': 0, 'toBlock': 'latest'});
+        eventlist = myfilter.get_all_entries()
+
+        while True:
+            print("New entries: ", len(eventlist))
+            for event in eventlist:
+                print("Event triggered")
+            print("된다")
+            # print("Get Hash:", cmc.functions.getHash().call())
+            time.sleep(poll_interval)
+
 
         url = '/unid/contentstran/'
         return HttpResponseRedirect(url)
