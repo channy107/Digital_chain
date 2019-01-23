@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 from web3 import Web3, HTTPProvider
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 import requests
 import json
@@ -285,42 +286,67 @@ def contentstran(request):
 
 
 def main(request):
-    if request.method == 'GET':
-
-        if request.session.keys():
-            posts = Post.objects.order_by('-posts_id')
-            sess = request.session['user_email']
-            voting_count = myPageInfomation.objects.get(email=sess)
-            context = {'voting_count':voting_count,
-                       'posts':posts}
-            return render(request, 'unid/main.html', context)
-
-        else:
-            posts = Post.objects.order_by('-posts_id')
-            context = {'posts': posts}
-
-            return render(request, 'unid/main.html', context)
-
-    else:
+    if request.session.keys():
+        posts = Post.objects.order_by('-posts_id')
         sess = request.session['user_email']
-        posts_id = request.POST['posts_id']
-        list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
-        count = myPageInfomation.objects.get(email=sess)
-        voting_count = count.votingcount
-        list = list.values()
+        voting_count = myPageInfomation.objects.get(email=sess)
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
 
-        if list:
-            if voting_count < 0:
-                res = {"Ans": "보팅을 모두 소진하셨습니다."}
-            else :
-                res = {"Ans": "보팅을 취소했습니다."}
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/main_ajax.html', context)
+
+        context = {'posts':posts, 'voting_count':voting_count}
+
+        return render(request, 'unid/main.html', context)
+    else:
+        posts = Post.objects.order_by('-posts_id')
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/main_ajax.html', context)
+
+        context = {'posts': posts}
+
+        return render(request, 'unid/main.html', context)
+
+def vote(request):
+    sess = request.session['user_email']
+    posts_id = request.POST['posts_id']
+    list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
+    count = myPageInfomation.objects.get(email=sess)
+    voting_count = count.votingcount
+    list = list.values()
+
+    if list:
+        if voting_count < 0:
+            res = {"Ans": "보팅을 모두 소진하셨습니다."}
         else:
-            if voting_count == 0:
-                res = {"Ans": "보팅을 모두 소진하셨습니다."}
-            else :
-                res = {"Ans": "보팅을 완료했습니다."}
+            res = {"Ans": "보팅을 취소했습니다."}
+    else:
+        if voting_count == 0:
+            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+        else:
+            res = {"Ans": "보팅을 완료했습니다."}
 
-        return JsonResponse(res)
+    return JsonResponse(res)
 
 def my_cron_job(request):
     voting_count = request.POST['voting_count']

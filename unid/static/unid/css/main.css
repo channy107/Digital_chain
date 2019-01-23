@@ -97,10 +97,10 @@ margin:10px;
 text-align: center;
 }
 
-button.scroll {
-background-color : white;
-border: none;
-cursor : pointer;
+#callmorepost {
+    background-color : white;
+    border: none;
+    cursor : pointer;
 }
 
 .rewards {
