@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
-
+import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 from web3 import Web3, HTTPProvider
@@ -232,24 +232,24 @@ def contentsdetail(request, id):
         third_preview = 'media/default.png'
     files_infos = contentsInfo.objects.filter(contents_id=id).values()
 
-    # rpc_url = "http://222.239.231.252:8545"
-    # w3 = Web3(HTTPProvider(rpc_url))
-    # nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
-    # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-    #
-    # try:
-    #     account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
-    # except KeyError as e:
-    #     return render(
-    #         request,
-    #         'unid/contentsdetail.html',
-    #         {'contents': contents, 'replys': replys, 'previewlist': previewlist,
-    #          'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-    #          'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
-    #          }
-    #     )
-    #
-    # nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
+    rpc_url = "http://222.239.231.252:8545"
+    w3 = Web3(HTTPProvider(rpc_url))
+    nidCoinContract_address = Web3.toChecksumAddress("0xb737fefad895718c95d69e7ec66b89b993a867d0")
+    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+
+    try:
+        account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
+    except KeyError as e:
+        return render(
+            request,
+            'unid/contentsdetail.html',
+            {'contents': contents, 'replys': replys, 'previewlist': previewlist,
+             'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
+             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
+             }
+        )
+
+    nid_balance = ncc.functions.balanceOf(account).call()     # contentsdetail.html 의 javascript 도 수정 (533)
 
     if downloadContents.objects.filter( Q(contents_id=id) & Q(downloader_email=request.session['user_email']) ):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
@@ -282,8 +282,9 @@ def contentsdetail(request, id):
 def moneytrade(request):
     rpc_url = "http://222.239.231.252:8545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0xda386c6d5f9578bdd14477f1e57c3387552a8f59")
+    nidCoinContract_address = Web3.toChecksumAddress("0xb737fefad895718c95d69e7ec66b89b993a867d0")
     ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
     price = uploadContents.objects.get(contents_id=request.POST['id']).price
@@ -296,8 +297,9 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    ncc.functions.transfer(selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
 
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
     contents_id = uploadContents.objects.get(contents_id=request.POST['id'])
     downloader_email = myPageInfomation.objects.get(email=request.session['user_email'])
@@ -305,6 +307,7 @@ def moneytrade(request):
     br = downloadContents (
                             contents_id=contents_id,
                             downloader_email=downloader_email
+
     )
     br.save()
 
@@ -313,19 +316,14 @@ def moneytrade(request):
                             toAccount=sellerinfo.email,
                             balance= price,
                             type="("+request.POST['id']+")"+"콘텐츠 거래",
-
+                            txid=receipt,
+                            transactiondate=timezone.now()
     )
     wif.save()
 
-    """
-        txid=,
-        transactiondate=,
-    """
+
     res = {'Ans': '결제되었습니다.'}
     return JsonResponse(res)
-    """
-    거래 내역 디비에 담기
-    """
 
 def contentstran(request):
 
@@ -723,17 +721,28 @@ def contentsupload(request):
         print("fpt")
         try:
             ftp.mkd(today)
+            print("fpt1")
         except:
             ftp.cwd("/home/unid/contents/" + today)
+            print("fpt2")
         ftp.cwd("/home/unid/contents/" + today)
+        print("fpt3")
+        print(os.getcwd())
         filepath = request.POST['filepath']
         filename = request.POST['filename']
+
+        print("fpt4")
+        print(os.getcwd())
         os.chdir(filepath)
+        print("fpt5")
+        print(os.getcwd())
         # contents_dir = today + "/"
         # # with open(contents_dir + file_name, "wb") as file:
         # #     ftp.storlines('STOR %s' % file_name, file)
 
         uploadfile = open(filename, "rb")
+        print("fpt6")
+        print(os.getcwd())
         ftp.storbinary('STOR ' + filename, uploadfile)
 
         print("fpt end")
@@ -756,7 +765,7 @@ def contentsupload(request):
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                totalpages=request.POST['totalpages'],
+                # totalpages=request.POST['totalpages'],
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
@@ -775,7 +784,7 @@ def contentsupload(request):
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                totalpages=request.POST['totalpages'],
+                # totalpages=request.POST['totalpages'],
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
@@ -791,17 +800,7 @@ def contentsupload(request):
         idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
         filelistlength = len(filehashdatas)
         print(filelistlength)
-        for i in range(filelistlength):
-            print(6)
-            br = contentsInfo(
-                contents_id=idx,
-                uploadzipfilename=filename,
-                uploadfile=uifilelist[i],
-                contentspath=ftp_contents_dir,
-                hash=filehashdatas[i],
-                filesize=filesize[i],
-            )
-            br.save()
+
 
         preview_images_dir = "media/" + today + "/"
         previewlistlength = len(preview_save_filelist)
@@ -815,32 +814,36 @@ def contentsupload(request):
             )
             br.save()
 
-        rpc_url = "http://localhost:8545"
+        rpc_url = "http://222.239.231.252:8545"
         w3 = Web3(HTTPProvider(rpc_url))
+        print("시작 트랜젝션")
+        contentsMasterContract_address = Web3.toChecksumAddress("0xca149e64697cf05530b93d28e2ef31085ecdb213")
 
-        contentsMasterContract_address = Web3.toChecksumAddress("0x78d577bbf287bf474d4c654f66cde3824158d8dd")
         cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
+
         price = int(request.POST['price'])
+        transactionHashList = []
         for i in range(len(filehashdatas)):
             # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-            cmc.functions.addContents(request.session['user_email'], price, filehashdatas[i]).transact(
+            tx_hash = cmc.functions.addContents(request.session['user_email'], filehashdatas[i]).transact(
                 {"from": w3.eth.accounts[0], "gas": 1000000})
+            receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+            transactionHashList.append(receipt)
 
-        poll_interval = 2
+        for i in range(filelistlength):
+            print(6)
+            br = contentsInfo(
+                contents_id=idx,
+                uploadzipfilename=filename,
+                uploadfile=uifilelist[i],
+                contentspath=ftp_contents_dir,
+                hash=filehashdatas[i],
+                filesize=filesize[i],
+                bbb=transactionHashList[i]
+            )
+            br.save()
 
-        myfilter = cmc.eventFilter('EventAddContents', {'fromBlock': 0, 'toBlock': 'latest'});
-        eventlist = myfilter.get_all_entries()
-
-        while True:
-            print("New entries: ", len(eventlist))
-            for event in eventlist:
-                print("Event triggered")
-            print("된다")
-            # print("Get Hash:", cmc.functions.getHash().call())
-            time.sleep(poll_interval)
-
-
-        url = '/unid/contentstran/'
+        url = '/unid/searchcontents/'+ request.POST['category']
         return HttpResponseRedirect(url)
 
 @csrf_exempt
@@ -934,6 +937,7 @@ def test_validfile(request):
                 "ftpfilelist": ftpfilelist,
                 "uifilelist": uifilelist,
                 "filehashdatas": filehashdatas,
+                "filehashdata": filehashdatas[0],
                 "filesize": filesize
         }
 
@@ -1019,7 +1023,7 @@ def postmodify(request, id):
                 category=request.POST['category'],
                 price=request.POST['price'],
                 tags=request.POST['tags'],
-                totalpages=request.POST['totalpages'],
+                # totalpages=request.POST['totalpages'],
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
@@ -1034,7 +1038,7 @@ def postmodify(request, id):
             category=request.POST['category'],
             price=request.POST['price'],
             tags=request.POST['tags'],
-            totalpages=request.POST['totalpages'],
+            # totalpages=request.POST['totalpages'],
             authorinfo=request.POST['authorinfo'],
             intro=request.POST['intro'],
             index=request.POST['index'],
@@ -1068,17 +1072,18 @@ def download(request):
         print(filepath)
         print(filename)
         number = str(random.random())
+        print(number)
         os.mkdir("downloads/" + number)
         ftp = FTP()
         ftp.connect("222.239.231.253")
         ftp.login("unid", "qhdkscjfwj0!")
         ftp.cwd(filepath)
-        downloadedfilename = request.GET['title'] + ".zip"
-        fd = open(os.path.join(settings.BASE_DIR, 'downloads', number, downloadedfilename), 'wb')
+        # downloadedfilename = contentsInfo.objects.filter(contents_id=id).values()['uploadzipfilename']
+        fd = open(os.path.join(settings.BASE_DIR, 'downloads', number, filename), 'wb')
         ftp.retrbinary("RETR " + filename, fd.write)
         fd.close()
 
-        filepath1 = os.path.join(settings.BASE_DIR, 'downloads', number, downloadedfilename)
+        filepath1 = os.path.join(settings.BASE_DIR, 'downloads', number, filename)
         print(filepath1)
         filename1 = os.path.basename(filepath1)
         print(filename1)
@@ -1091,7 +1096,7 @@ def download(request):
         with open(filepath1, 'rb') as f:
             response = HttpResponse(f, content_type='application/octet-stream')
             # response['Set-Cookie'] = 'download=' + downloadid;
-            response['Content-Disposition'] = 'attachment; filename="{}"'.format(filename1)
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format("Unid.zip")
             return response
 @login_required
 def writereply(request):

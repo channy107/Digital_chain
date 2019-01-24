@@ -9,6 +9,7 @@
     <link href="{% static 'unid/css/contentsupload.css' %}" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <style>
@@ -155,8 +156,8 @@ xpopup
 }
 .cd-popup-container {
   position: relative;
-  width: 90%;
-  max-width: 410px;
+  width: auto;
+  max-width: 540px;
   margin: 4em auto;
   background: #FFF;
   border-radius: .25em .25em .4em .4em;
@@ -283,6 +284,30 @@ xpopup
     float: right;
 }
 
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s;
+  /* , fadeout 0.5s 2.5s; */
+  animation: fadein 0.5s;
+  /* , fadeout 0.5s 2.5s; */
+}
+
 @media only screen and (min-width: 1170px) {
   .cd-popup-container {
     margin: 10% auto;
@@ -290,6 +315,24 @@ xpopup
   .cd-popup-container1 {
     margin: 10% auto;
   }
+
+
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
 
 
 </style>
@@ -313,7 +356,7 @@ xpopup
                     .hwp, .ppt, .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
                     </li>
                     <li class="tip_str">
-                    이미 등록된 콘텐츠는 업로드하실 수 없습니다.
+                    이미 등록된 콘텐츠는 업로드하실 수 없습니다.(최대 5개)
                     </li>
                 </ul>
             </div>
@@ -343,6 +386,7 @@ xpopup
             <input style="display:none;" id="uifilelist"  name="uifilelist"  readonly/>
             <input style="display:none;" id="filehashdatas"  name="filehashdatas"   readonly/>
             <input style="display:none;" id="filesize"  name="filesize"  readonly/>
+            <input style="display:none;" id="filehash"  name="filehash"  readonly/>
             <div id="user_preview_file_before">
                 <div id="user_file_over">
                     <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
@@ -354,7 +398,7 @@ xpopup
                     <ul class="str_ul">
                         <li class="tip_str">
                         .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
                         </li>
                     </ul>
                 </div>
@@ -522,8 +566,7 @@ xpopup
 5. 회원가입 시 또는 저작물 등록 신청 시 귀사에 제공한 본인의 개인정보는 모두 거짓이 없습니다.
 
  본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
-                                    </textarea>
-                                </div>
+                                </textarea>
                                 <ul class="cd-buttons">
                                     <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
                                     <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
@@ -555,12 +598,13 @@ xpopup
                     </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
             </div>
-        </div>
-     </form>
-
-
+        </form>
+    </div>
+    <div id="snackbar">콘텐츠 등록 중입니다...</div>
+</div>
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 <script>
 
     jQuery(document).ready(function($){
@@ -594,6 +638,7 @@ xpopup
                                 $('#uifilelist').val(res.uifilelist)
                                 $('#filehashdatas').val(res.filehashdatas)
                                 $('#filesize').val(res.filesize)
+                                $('#filehash').val(res.filehashdata)
                                 console.log($('#filepath').val());
                                 console.log($('#uifilelist').val());
                             }
@@ -668,22 +713,34 @@ xpopup
         });
         $('#inputtitle').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte').html(letterLength + "/30");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 30) {
-                alert("30자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 30);
-                console.log(str2.length);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte += 2;
+                } else {
+                    totalByte++;
+                }
+                $('#body_byte').html(totalByte + "/60");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 60) {
+                alert(60 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 30);
                 console.log(str2);
                 $('#inputtitle').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte').html(afterletterLength + "/30");
+                console.log($('#inputtitle').val());
+            }
         });
         $('#inputintro').on('keyup', function(){
             // 남은 글자 수를 구한다.
@@ -805,8 +862,92 @@ xpopup
         //open popup
         $('.cd-popup-trigger').on('click', function(event){
             event.preventDefault();
+            var form = document.writeform;
+            console.log(form.title.value);
+            console.log(form);
+            if (!$('#inputfiles_after').val()) {
+                alert("파일을 첨부 해주세요.");
+                $('#inputfiles_before').focus();
+                return false;
+            }
+            if ($('#after_test').val() != "체크체크") {
+                alert("파일 중복검사를 해주세요");
+                $('#uploadbutton').focus();
+                return false;
+            }
+            if (!form.title.value) {
+                alert("제목을 적어주세요");
+                $('#inputtitle').focus();
+                return false;
+            }
+            if (form.category.value == "선택하세요") {
+                alert("카테고리를 선택해주세요");
+                $('#inputcategory').focus();
+                return false;
+            }
+            if (!form.authorinfo.value) {
+                alert("저자를 적어주세요");
+                $('#inputauthorinfo').focus();
+                return false;
+            }
+            if (!form.totalpages.value) {
+                alert("페이지수를 적어주세요");
+                $('#inputtotalpages').focus();
+                return false;
+            }
+            if (!form.publisheddate.value) {
+                alert("저작시기를 적어주세요");
+                $('#inputpublisheddate').focus();
+                return false;
+            }
+            if (!form.price.value) {
+                alert("판매 가격을 적어주세요");
+                $('#inputprice').focus();
+                return false;
+            }
+            if (!form.intro.value) {
+                alert("소개글을 적어주세요");
+                $('#inputintro').focus();
+                return false;
+            }
+            if (!form.index.value) {
+                alert("목차를 적어주세요");
+                $('#inputindex').focus();
+                return false;
+            }if (!form.contents.value) {
+                alert("본문내용을 적어주세요");
+                $('#inputtext').focus();
+                return false;
+            }
+            if (!$('input:checkbox[id="ex_chk"]').is(":checked")) {
+                alert("계약서에 동의해주세요.");
+                $('#ex_chk').focus();
+                return false;
+            }
 
 
+            var WEB3 = require('web3');
+            var web3 = new WEB3();
+            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545"));
+            let contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+
+            console.log(1);
+            let cmc = contentsmasterContract.at("0xca149e64697cf05530b93d28e2ef31085ecdb213");
+            console.log(2);
+
+
+            console.log("{{request.session.user_email }}");
+            var hashdata = $('#filehash').val()
+            console.log(hashdata);
+            var account = "{{ request.session.user_account }}";
+            console.log(account);
+
+            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account}) ;
+            var gasPrice = web3.eth.gasPrice.toNumber();
+            var transactionFees = gas * gasPrice * 0.0000000000000000001;
+            console.log(transactionFees);
+
+            console.log(3);
             $('.cd-popup').addClass('is-visible');
             let contentsprice = $('#inputprice').val();
             let contentsname = $('#user_files').val();
@@ -819,6 +960,7 @@ xpopup
                 $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
             };
             $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
 
         });
 
@@ -838,37 +980,11 @@ xpopup
             }
 
         });
-    
-    });
-
-    var WEB3 = require('web3');
-    var web3 = new WEB3();
-    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-
-    var contentsmasterContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
-
-
-    let cc = contentsmasterContract.at( "0xbf5f1204ba8ee3bc0096459e9b80099d4fee2a7a" );
-
-    var contentsContract = web3.eth.contract([{"constant":false,"inputs":[],"name":"countUp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDownloadCount","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsPrice","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"count","type":"uint32"}],"name":"EventCountUp","type":"event"}]);
-
-    $(function() {
-        $('#enrollyes').click(function() {
-            let contentsprice = $('#inputprice').val();
-            let contentsname = $('#user_files').val();
-            cc.addContents (
-                contentsname,
-                contentsprice,
-                { from: web3.eth.coinbase, gas: 1000000 },
-                function(err, res) {
-                    if (!err) {
-                        console.log(res);
-                    } else {
-                        console.error(err);
-                    }
-                }
-            );       
-        });
+         $('#enrollyes').click(function() {
+              var x = document.getElementById("snackbar");
+              x.className = "show";
+               // setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            });
     });
 
 </script>

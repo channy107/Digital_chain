@@ -2,9 +2,8 @@
 {% load static %}
 {% block content %}
 <head>
-    <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/searchcontents.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
-    <script src="{% static 'unid/js/main.js' %}"></script>
 </head>
 <div class="container">
     <div class="row">
@@ -27,12 +26,16 @@
         </div>
 
         <div class="col-lg-9">
-            <h5>인기글</h5>
+            <h5>콘텐츠 게시글</h5>
             <div class="container">
                 {% for contents in contentslists %}
                 <hr>
                 <div class="user">
+                    {% if contents.writeremail.userimage %}
                     <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% else %}
+                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% endif %}
                     <span class="writer">{{ contents.writeremail.email }}</span>
                     <span class="writing-time">{{ contents.created|timesince }}전</span>
                     {% if contents.category == "레포트" %}
@@ -72,7 +75,7 @@
                     </div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>
-                        <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="20" height="20">
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20">
                         <span id="dallor1">{{ contents.price }} nid</span>
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
                         <span>{{ contents.replymentcount }} 개</span>
