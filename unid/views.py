@@ -420,8 +420,10 @@ def voting(request):
 def mainreply(request):
 
     id =Post.objects.get(posts_id=request.POST['id'])
+    sess = request.session['user_email']
+    user = myPageInfomation.objects.get(email=sess)
     br = replyForPosts(posts_id=id,
-                           user=request.session['user_email'],
+                           user=user,
                            replytext=request.POST['reply']
                            )
 
