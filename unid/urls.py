@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.conf.urls import url
 from unid import views
 from .views import *
-from haystack.views import SearchView
+# from haystack.views import SearchView
 
 
 
@@ -37,4 +37,6 @@ urlpatterns = [
     path('download/', views.download, name='download'),
     path('my_cron_job/', my_cron_job, name='my_cron_job'),
     path('test_validfile/', views.test_validfile, name='test_validfile'),
+    path('termsofuse/', views.termsofuse, name='termsofuse'),
+    path('privacy/', views.privacy, name='privacy'),
 ]

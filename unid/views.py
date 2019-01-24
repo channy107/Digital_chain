@@ -56,17 +56,77 @@ user_logged_in.connect(logged_in, sender=User)
 #     request.session['user_email'] = {}
 #     request.session.modified = True
 # user_logged_out.connect(logged_out, sender=User)
+
+
+def navigationbar(request):
+    if request.method =='GET':
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    return render(request, 'unid')
+
 @login_required
 def mypage(request):
-    mypage = myPageInfomation.objects.all()
-    contentsboard = uploadContents.objects.all()
-    articles = Post.objects.all()
-    transactions = walletInFormation.objects.all()
-    context = {'articles':articles,
-               'transactions':transactions,
-               'mypage':mypage,
-               'contentsboard':contentsboard}
-    return render(request, 'unid/mypage.html', context)
+    if request.method == 'GET':
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:2]
+        articles = Post.objects.filter(user_id=request.session['user_email'])[:2]
+        numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
+        myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
+        replies = replyForPosts.objects.filter(user_id=request.session['user_email'])
+        downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
+        context = {'articles':articles,
+                   'myreward':myreward,
+                   'mypage':mypage,
+                   'numbersOfArticles':numbersOfArticles,
+                   'contentsboard':contentsboard,
+                   'downloads':downloads,
+                   }
+        return render(request, 'unid/mypage.html', context)
+
+    else:
+        try:
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                name = request.POST['name'],
+                profile = request.POST['profile'],
+                last_modified = timezone.now()
+            )
+        except MultiValueDictKeyError:
+            pass
+
+        try:
+            userimage = request.FILES.get('user_image_upload')
+            background = request.FILES.get('background')
+            # profile_filename = request.POST['user_image_upload']
+            # background_filename = request.POST['background']
+
+
+            with open("media/imagesForUserProfile" + "/" + userimage.name, 'wb') as file:
+                for chunk in userimage.chunks():
+                    file.write(chunk)
+
+            with open("media/imagesForUserProfile" + "/" + background.name, 'wb') as file2:
+                for chunk in background.chunks():
+                    file2.write(chunk)
+
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                userimage = "media/imagesForUserProfile" + "/" + userimage.name,
+                aaa = "media/imagesForUserProfile" + "/" + background.name
+            )
+
+        except FileExistsError as e:
+            pass
+
+
+        url = '/unid/mypage'
+        return HttpResponseRedirect(url)
+
+
+
+def termsofuse(request):
+    return render(request, 'unid/termsofuse.html')
+
+def privacy(request):
+    return render(request, 'unid/privacy.html')
+
 
 
 def contentsboard(request):
