@@ -61,8 +61,7 @@ user_logged_in.connect(logged_in, sender=User)
 
 def navigationbar(request):
     if request.method =='GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    return render(request, 'unid')
+        return render(request, 'unid')
 
 @login_required
 def mypage(request):
@@ -132,23 +131,27 @@ def privacy(request):
 
 def contentsboard(request):
     contentsboard = uploadContents.objects.all()
-    context = {'contentsboard': contentsboard}
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    context = {'contentsboard': contentsboard, 'mypage':mypage}
     return render(request, 'unid/contentsboard.html', context)
 
 @login_required
 def mywallet(request):
     walletInfo = walletInFormation.objects.all()
     walletcount = walletInFormation.objects.count()
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     # html = ''
     # for info in walletInfo:
     #     info.transactiondate = timezone.now()
     #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
-    return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount})
+    return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage})
 
 @login_required
 def transaction(request):
     if request.method == 'GET':
-        return render(request, 'unid/transaction.html', {})
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        return render(request, 'unid/transaction.html', {'mypage':mypage})
     else:
         from_account = request.POST['from_account']
         to_account = request.POST['to_account']
@@ -166,7 +169,8 @@ def transaction(request):
 @login_required
 def exchange(request):
     if request.method == 'GET':
-        return render(request, 'unid/exchange.html', {})
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        return render(request, 'unid/exchange.html', {'mypage':mypage})
     else:
         from_account = request.POST['e_from_account']
         to_account = request.POST['e_to_account']
@@ -184,7 +188,8 @@ def exchange(request):
 @login_required
 def purchase(request):
     if request.method == 'GET':
-        return render(request, 'unid/purchase.html', {})
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        return render(request, 'unid/purchase.html', {'mypage':mypage})
     else:
         from_account = request.POST['p_from_account']
         to_account = request.POST['p_to_account']
@@ -196,8 +201,10 @@ def purchase(request):
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
         transactionData.save()
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
-    return render(request, 'unid/purchase.html', {})
+
+    return render(request, 'unid/purchase.html', {'mypage':mypage})
 
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
@@ -248,13 +255,14 @@ def contentsdetail(request, id):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
         # title = uploadContents.objects.get(contents_id=id).title + ".zip"
         downloadid = str(random.random())
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         return render(
             request,
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              # 'nid_balance': nid_balance,
-             "downloadid": downloadid, 'files_infos': files_infos
+             "downloadid": downloadid, 'files_infos': files_infos, 'mypage':mypage
              }
         )
 
@@ -331,6 +339,7 @@ def contentstran(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
     return render(request, 'unid/contentstran.html', {
                                                         'populated_reports_lists': populated_reports_lists,
@@ -342,10 +351,12 @@ def contentstran(request):
                                                         'populated_fiction_lists': populated_fiction_lists,
                                                         'populated_fortest_lists': populated_fortest_lists,
                                                         'populated_video_lists': populated_video_lists,
+                                                        'mypage':mypage
     })
 
 def info_popular(request):
     if request.session.keys():
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         posts = Post.objects.order_by('-like_count', '-created_at')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
@@ -363,7 +374,7 @@ def info_popular(request):
             context = {'posts': posts}
             return render(request, 'unid/info_popular_ajax.html', context)
 
-        context = {'posts':posts, 'voting_count':voting_count}
+        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
         return render(request, 'unid/info_popular.html', context)
     else:
@@ -389,6 +400,7 @@ def info_popular(request):
 
 def main(request):
     if request.session.keys():
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         posts = Post.objects.order_by('-posts_id')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
@@ -406,7 +418,7 @@ def main(request):
             context = {'posts': posts}
             return render(request, 'unid/main_ajax.html', context)
 
-        context = {'posts':posts, 'voting_count':voting_count}
+        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
         return render(request, 'unid/main.html', context)
     else:
@@ -465,9 +477,11 @@ def my_cron_job(request):
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
 
     likes = LikeUsers.objects.filter(posts_id=id)
-    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys, 'likes':likes})
+    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage})
 
 def voting(request):
     posts_id=request.POST['posts_id']
@@ -536,7 +550,8 @@ def mainreply(request):
 
 def main_upload(request):
     if request.method == 'GET':
-        return render(request, 'unid/main_upload.html', {})
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        return render(request, 'unid/main_upload.html', {'mypage':mypage})
     else:
         sess = request.session['user_email']
         title = request.POST['title']
@@ -599,7 +614,8 @@ def createaccount(request):
 @login_required
 def contentsupload(request):
     if request.method == 'GET':
-        return render(request, 'unid/contentsupload.html', {})
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        return render(request, 'unid/contentsupload.html', {'mypage':mypage})
     else:  # submit으로 제출
         try:
             # upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
