@@ -322,7 +322,11 @@ xpopup
                 <div class="zzz">
                     <div class="writerinfo">
                         <p align="center" size="5">
-                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35"> {{ contents.writeremail.email }}
+                            {% if contents.writeremail.userimage %}
+                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                            {% else %}
+                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                            {% endif %}
                         </p>
                     </div>
                     <div class="dateinfo">
@@ -416,9 +420,9 @@ xpopup
         <div class="row">
             <div class="contents-payment">
                 <div>
-                    <p><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="30" height="30">{{ contents.price }} </p>
+                    <p><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="30" height="30">  {{ contents.price }} nid</p>
                     {% if downloadid %}
-                    <a href="../download?id={{ contents.contents_id }}&title={{ contents.title }}.zip"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
+                    <a href="../download?id={{ contents.contents_id }}"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
                     <button type="button" class="cd-popup-trigger" id='enrollcontents'>
                         <img src="{% static 'unid/icon/download-icon.png' %}" border="0" width="30" height="30">
