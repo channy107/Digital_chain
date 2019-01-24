@@ -1,0 +1,85 @@
+<body>
+<div id="profile_container">
+    <div id="title">
+        <h1>프로필 등록</h1>
+    </div>
+    <form id="profile_modifier" method="post" enctype="multipart/form-data">
+        {% csrf token %}
+        <div id="user_image">
+            <label id="select_user_image" for="select_user_image">프로필 사진</label>
+            <input id="file_names_for_user_image" style="background-color: white;" type="text" readonly>
+            <button id="search_for_user_image" type="button">파일첨부</button>
+            <input id="test" type="file">
+        </div>
+        <div id="background_image">
+            <label id="select_background_image" for="select_background_image">배경 사진</label>
+            <input id="file_names_for_background_image" style="background-color: white;" type="text" readonly>
+            <button id="search_for_background_image" type="button">파일첨부</button>
+        </div>
+        <div id="profile_name">
+            <label id="input_profile_name" for="input_profile_name">유저명</label>
+            <input id="input_text_for_profile_name" style="background-color:white;" type="text" placeholder="유저명을 입력해주세요">
+        </div>
+        <div id="profile_profile">
+            <label id="input_profile_profile" for="input_profile_profile">프로필</label>
+            <textarea id="input_text_for_profile_profile" rows="5" style="background-color:white;" type="text" placeholder="프로필을 입력해주세요"></textarea>
+            <ul id="count_text">
+                <li id="byte_str"><span id="byte_str_for_js">0</span>자</li>
+            </ul>
+        </div>
+        <div id="profile_upload">
+            <button type="button", id="profile_upload_button">프로필 등록</button>
+        </div>
+    </form>
+</div>
+</body>
+
+<script>
+    jQuery(document).ready(function($){
+        $('#reupload').on('click', function(){
+            $("#user_file_after").hide();
+            $("#user_file_before").show();
+        });
+
+        $('#inputtitle').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var letterLength = $(this).val().length;
+            var inputtext = $(this).val()
+                        // 문서 객체에 입력한다.
+            $('#body_byte').html(letterLength + "/30");
+
+            if (letterLength > 30) {
+                alert("30자를 초과 입력 할 수 없습니다.");
+                console.log(inputtext)
+                str2 = inputtext.substr(0, 30);
+                console.log(str2.length);
+                console.log(str2);
+                $('#inputtitle').val(str2);
+            };
+            var afterletterLength = $(this).val().length;
+            $('#body_byte').html(afterletterLength + "/30");
+        });
+
+        $('#inputintro').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var letterLength = $(this).val().length;
+            var inputtext = $(this).val()
+
+            // 문서 객체에 입력한다.
+            $('#body_byte1').html(letterLength + "/1000");
+
+            if (letterLength > 1000) {
+                alert("1000자를 초과 입력 할 수 없습니다.");
+                console.log(inputtext)
+                str2 = inputtext.substr(0, 1000);
+                console.log(str2.length);
+                console.log(str2);
+                $('#inputintro').val(str2);
+            };
+            var afterletterLength = $(this).val().length;
+            $('#body_byte1').html(afterletterLength + "/1000");
+        });
+
+    });
+</script>
+
