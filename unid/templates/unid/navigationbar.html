@@ -84,7 +84,7 @@
                 {% if user.email %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
-                        <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
+                        <img src="/{{ mypage.userimage }}" style="border-radius: 50%" border="0" width="32" height="32">
                     </a>
                     <div class="dropdown-menu" id="dropdown">
                         <a class="dropdown-item" href="/unid/mypage" id="go-mypage">마이페이지</a>
@@ -110,14 +110,42 @@
 
 </nav>
 
-
-
 {% block content %}
 
 {% endblock %}
 
 
 </body>
+
+<br>
+<br>
+
+<footer>
+    <div id = "at_the_end"
+         style="
+            border-top: 1px solid #c1c1c1;
+            margin-top: 30px;
+            text-align:center;
+            padding-top: 30px;">
+        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="mailto:web-master@gmail.com" style="color:#828282;">인터넷광고/제휴문의</a></span>
+        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;" ><a href="mailto:web-master@gmail.com" style="color:#828282;">사이트관련문의</a></span>
+        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="/unid/termsofuse" style="color:#828282;">이용약관</a></span>
+        <span><a href="/unid/privacy" style="color:#828282; padding-right: 12px; padding-left: 10px;">개인정보처리방침</a></span>
+    </div>
+    <div id = "at_the_end2"
+         style="
+            margin-top: 5px;
+            text-align:center;
+            margin-left:-15px;
+            margin-bottom:30px;">
+        <img src="{% static 'unid/icon/unid_icon.png' %}" style="width:100px;">
+        <span>Copyright by Unid. All rights reserved. Since 2019</span>
+    </div>
+</footer>
+
+
+
+
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     jQuery(document).ready(function($){

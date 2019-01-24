@@ -13,6 +13,7 @@ import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 from web3 import Web3, HTTPProvider
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 import requests
 import json
@@ -56,17 +57,77 @@ user_logged_in.connect(logged_in, sender=User)
 #     request.session['user_email'] = {}
 #     request.session.modified = True
 # user_logged_out.connect(logged_out, sender=User)
+
+
+def navigationbar(request):
+    if request.method =='GET':
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    return render(request, 'unid')
+
 @login_required
 def mypage(request):
-    mypage = myPageInfomation.objects.all()
-    contentsboard = uploadContents.objects.all()
-    articles = Post.objects.all()
-    transactions = walletInFormation.objects.all()
-    context = {'articles':articles,
-               'transactions':transactions,
-               'mypage':mypage,
-               'contentsboard':contentsboard}
-    return render(request, 'unid/mypage.html', context)
+    if request.method == 'GET':
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:2]
+        articles = Post.objects.filter(user_id=request.session['user_email'])[:2]
+        numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
+        myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
+        replies = replyForPosts.objects.filter(user_id=request.session['user_email'])
+        downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
+        context = {'articles':articles,
+                   'myreward':myreward,
+                   'mypage':mypage,
+                   'numbersOfArticles':numbersOfArticles,
+                   'contentsboard':contentsboard,
+                   'downloads':downloads,
+                   }
+        return render(request, 'unid/mypage.html', context)
+
+    else:
+        try:
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                name = request.POST['name'],
+                profile = request.POST['profile'],
+                last_modified = timezone.now()
+            )
+        except MultiValueDictKeyError:
+            pass
+
+        try:
+            userimage = request.FILES.get('user_image_upload')
+            background = request.FILES.get('background')
+            # profile_filename = request.POST['user_image_upload']
+            # background_filename = request.POST['background']
+
+
+            with open("media/imagesForUserProfile" + "/" + userimage.name, 'wb') as file:
+                for chunk in userimage.chunks():
+                    file.write(chunk)
+
+            with open("media/imagesForUserProfile" + "/" + background.name, 'wb') as file2:
+                for chunk in background.chunks():
+                    file2.write(chunk)
+
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                userimage = "media/imagesForUserProfile" + "/" + userimage.name,
+                aaa = "media/imagesForUserProfile" + "/" + background.name
+            )
+
+        except FileExistsError as e:
+            pass
+
+
+        url = '/unid/mypage'
+        return HttpResponseRedirect(url)
+
+
+
+def termsofuse(request):
+    return render(request, 'unid/termsofuse.html')
+
+def privacy(request):
+    return render(request, 'unid/privacy.html')
+
 
 
 def contentsboard(request):
@@ -281,44 +342,111 @@ def contentstran(request):
                                                         'populated_video_lists': populated_video_lists,
     })
 
+def info_popular(request):
+    if request.session.keys():
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        sess = request.session['user_email']
+        voting_count = myPageInfomation.objects.get(email=sess)
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts':posts, 'voting_count':voting_count}
+
+        return render(request, 'unid/info_popular.html', context)
+    else:
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts': posts}
+
+        return render(request, 'unid/info_popular.html', context)
+
 
 def main(request):
-    if request.method == 'GET':
-
-        if request.session.keys():
-            posts = Post.objects.order_by('-posts_id')
-            sess = request.session['user_email']
-            voting_count = myPageInfomation.objects.get(email=sess)
-            context = {'voting_count':voting_count,
-                       'posts':posts}
-            return render(request, 'unid/main.html', context)
-
-        else:
-            posts = Post.objects.order_by('-posts_id')
-            context = {'posts': posts}
-
-            return render(request, 'unid/main.html', context)
-
-    else:
+    if request.session.keys():
+        posts = Post.objects.order_by('-posts_id')
         sess = request.session['user_email']
-        posts_id = request.POST['posts_id']
-        list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
-        count = myPageInfomation.objects.get(email=sess)
-        voting_count = count.votingcount
-        list = list.values()
+        voting_count = myPageInfomation.objects.get(email=sess)
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
 
-        if list:
-            if voting_count < 0:
-                res = {"Ans": "보팅을 모두 소진하셨습니다."}
-            else :
-                res = {"Ans": "보팅을 취소했습니다."}
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/main_ajax.html', context)
+
+        context = {'posts':posts, 'voting_count':voting_count}
+
+        return render(request, 'unid/main.html', context)
+    else:
+        posts = Post.objects.order_by('-posts_id')
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/main_ajax.html', context)
+
+        context = {'posts': posts}
+
+        return render(request, 'unid/main.html', context)
+
+def vote(request):
+    sess = request.session['user_email']
+    posts_id = request.POST['posts_id']
+    list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
+    count = myPageInfomation.objects.get(email=sess)
+    voting_count = count.votingcount
+    list = list.values()
+
+    if list:
+        if voting_count < 0:
+            res = {"Ans": "보팅을 모두 소진하셨습니다."}
         else:
-            if voting_count == 0:
-                res = {"Ans": "보팅을 모두 소진하셨습니다."}
-            else :
-                res = {"Ans": "보팅을 완료했습니다."}
+            res = {"Ans": "보팅을 취소했습니다."}
+    else:
+        if voting_count == 0:
+            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+        else:
+            res = {"Ans": "보팅을 완료했습니다."}
 
-        return JsonResponse(res)
+    return JsonResponse(res)
 
 def my_cron_job(request):
     voting_count = request.POST['voting_count']
@@ -392,8 +520,10 @@ def voting(request):
 def mainreply(request):
 
     id =Post.objects.get(posts_id=request.POST['id'])
+    sess = request.session['user_email']
+    user = myPageInfomation.objects.get(email=sess)
     br = replyForPosts(posts_id=id,
-                           user=request.session['user_email'],
+                           user=user,
                            replytext=request.POST['reply']
                            )
 
