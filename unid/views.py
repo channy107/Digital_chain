@@ -284,6 +284,48 @@ def contentstran(request):
                                                         'populated_video_lists': populated_video_lists,
     })
 
+def info_popular(request):
+    if request.session.keys():
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        sess = request.session['user_email']
+        voting_count = myPageInfomation.objects.get(email=sess)
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts':posts, 'voting_count':voting_count}
+
+        return render(request, 'unid/info_popular.html', context)
+    else:
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts': posts}
+
+        return render(request, 'unid/info_popular.html', context)
+
 
 def main(request):
     if request.session.keys():
