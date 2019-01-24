@@ -1130,8 +1130,9 @@ def searchcontents(request, category):
     allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
                                             Q(category=category) & Q(isdelete__isnull=True)
                                         )
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
     return render(
         request, 'unid/searchcontents.html',
-        {'contentslists': allcontentslists}
+        {'contentslists': allcontentslists, 'mypage':mypage}
     )
