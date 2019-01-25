@@ -57,7 +57,11 @@
                 </div>
 
                 <div class="user">
-                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% if mypage.userimage %}
+                        <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                    {% else %}
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% endif %}
                     <span class="writer">{{ info.user_id }}</span>
                     <span class="writing-time">{{info.created_at|timesince}}전</span>
                     <span class="contents-kind">{{ info.category }}</span>
