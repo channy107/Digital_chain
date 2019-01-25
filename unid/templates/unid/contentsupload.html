@@ -890,11 +890,6 @@ xpopup
                 $('#inputauthorinfo').focus();
                 return false;
             }
-            if (!form.totalpages.value) {
-                alert("페이지수를 적어주세요");
-                $('#inputtotalpages').focus();
-                return false;
-            }
             if (!form.publisheddate.value) {
                 alert("저작시기를 적어주세요");
                 $('#inputpublisheddate').focus();
@@ -929,21 +924,23 @@ xpopup
             var WEB3 = require('web3');
             var web3 = new WEB3();
             web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545"));
-            let contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+            var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
 
             console.log(1);
-            let cmc = contentsmasterContract.at("0xca149e64697cf05530b93d28e2ef31085ecdb213");
+            let cmc = contentsmasterContract.at("0xa9f965a95d80ce1cbb0b9395ab9e0eb8de8db746");
             console.log(2);
 
 
             console.log("{{request.session.user_email }}");
-            var hashdata = $('#filehash').val()
+            var hashdata = $('#filehash').val();
             console.log(hashdata);
             var account = "{{ request.session.user_account }}";
             console.log(account);
 
-            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account}) ;
+            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
+            console.log(gas);
             var gasPrice = web3.eth.gasPrice.toNumber();
+            console.log(gasPrice);
             var transactionFees = gas * gasPrice * 0.0000000000000000001;
             console.log(transactionFees);
 

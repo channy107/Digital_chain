@@ -191,7 +191,13 @@
             color:gray;
         }
         #nav4:hover{
-            opacity:0.7;
+            color:gray;
+        }
+        #go-login:hover{
+            color:gray;
+        }
+        #go-signup:hover{
+            color:gray;
         }
         .icon-name{
             font-family: 'Noto Sans KR', sans-serif;
@@ -397,6 +403,65 @@
         .user_image_small_icon {
             border-radius: 50%;
         }
+        .corperationCompanys {
+            width: 1300px;
+            margin: 0 auto;
+            border-bottom: 1px solid #c1c1c1;
+            height: 65px;
+        }
+        .corperationCompanys > div {
+            display: inline-block;
+            margin: 0 20px 0 0;
+        }
 
+        .corperationCompanys > div > img {
+            width: 120px;
+            height 70px;
+
+        }
+
+        #at_the_end {
+            width: 1100px;
+            padding-top: 20px;
+        }
+        #at_the_end2 {
+            width: 1100px;
+
+            margin-top: 8px;
+            padding-top: 6px;
+        }
+        #at_the_end2 div {
+            padding-right: 12px;
+            padding-left: 10px;
+            font-size: 15px;
+            color: #b1b1b1;
+            margin: 0 0 2px 0;
+        }
+        .zzz {
+            width: 100px;
+            height: 100px;
+        }
+        .zzzz {
+            display: inline-block;
+            float: right;
+            width: 110px;
+            position: relative;
+            top: 10px;
+
+            }
+        .zzzzz {
+            width: 1300px;
+            margin: 0 auto;
+        }
+        #at_the_end3 {
+            margin-top: 5px;
+            text-align:center;
+            margin-left:-15px;
+            margin-bottom:30px;
+        }
+        #at_the_end3 > span {
+            font-size: 12px;
+            color: #b1b1b1;
+        }
 
 

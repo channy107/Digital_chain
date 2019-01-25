@@ -532,21 +532,7 @@ xpopup
             }
 
         });
-        $('.cd-popup-delete-yes').on('click', function() {
-            var contents_id = {{ contents.contents_id }};
-            $.ajax({
-                type: 'POST',
-                url: "../postdelete/",
-                data : {
-                        id: contents_id,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                success : function(res) {
-                    alert(res.Ans)
-                    location="{% url 'contentstran' %}"
-                }
-            });
-        });
+
 
         //open popup
         $('.cd-popup-trigger').on('click', function(event){

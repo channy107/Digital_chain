@@ -323,32 +323,55 @@ def moneytrade(request):
     res = {'Ans': '결제되었습니다.'}
     return JsonResponse(res)
 
-def contentstran(request):
+def main(request):
+    if request.session.keys():
+
+        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
+        return render(request, 'unid/contentstran.html', {
+                                                            'populated_reports_lists': populated_reports_lists,
+                                                            'populated_forlecture_lists': populated_forlecture_lists,
+                                                            'populated_note_lists':populated_note_lists,
+                                                            'populated_paper_lists': populated_paper_lists,
+                                                            'populated_PPT_lists': populated_PPT_lists,
+                                                            'populated_resume_lists': populated_resume_lists,
+                                                            'populated_fiction_lists': populated_fiction_lists,
+                                                            'populated_fortest_lists': populated_fortest_lists,
+                                                            'populated_video_lists': populated_video_lists,
+                                                            'mypage':mypage
+        })
+    else :
+        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
 
 
-    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
-    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
-    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
-    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
-    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
-    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
-    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
-    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
-    return render(request, 'unid/contentstran.html', {
-                                                        'populated_reports_lists': populated_reports_lists,
-                                                        'populated_forlecture_lists': populated_forlecture_lists,
-                                                        'populated_note_lists':populated_note_lists,
-                                                        'populated_paper_lists': populated_paper_lists,
-                                                        'populated_PPT_lists': populated_PPT_lists,
-                                                        'populated_resume_lists': populated_resume_lists,
-                                                        'populated_fiction_lists': populated_fiction_lists,
-                                                        'populated_fortest_lists': populated_fortest_lists,
-                                                        'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage
-    })
+        return render(request, 'unid/contentstran.html', {
+            'populated_reports_lists': populated_reports_lists,
+            'populated_forlecture_lists': populated_forlecture_lists,
+            'populated_note_lists': populated_note_lists,
+            'populated_paper_lists': populated_paper_lists,
+            'populated_PPT_lists': populated_PPT_lists,
+            'populated_resume_lists': populated_resume_lists,
+            'populated_fiction_lists': populated_fiction_lists,
+            'populated_fortest_lists': populated_fortest_lists,
+            'populated_video_lists': populated_video_lists
+        })
 
 def info_popular(request):
     if request.session.keys():
@@ -394,7 +417,7 @@ def info_popular(request):
         return render(request, 'unid/info_popular.html', context)
 
 
-def main(request):
+def information(request):
     if request.session.keys():
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         posts = Post.objects.order_by('-posts_id')
@@ -412,11 +435,11 @@ def main(request):
 
         if request.is_ajax():
             context = {'posts': posts}
-            return render(request, 'unid/main_ajax.html', context)
+            return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
-        return render(request, 'unid/main.html', context)
+        return render(request, 'unid/information.html', context)
     else:
         posts = Post.objects.order_by('-posts_id')
         paginator = Paginator(posts, 3)
@@ -431,11 +454,11 @@ def main(request):
 
         if request.is_ajax():
             context = {'posts': posts}
-            return render(request, 'unid/main_ajax.html', context)
+            return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts': posts}
 
-        return render(request, 'unid/main.html', context)
+        return render(request, 'unid/information.html', context)
 
 def vote(request):
     sess = request.session['user_email']
@@ -473,11 +496,13 @@ def my_cron_job(request):
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
-
     likes = LikeUsers.objects.filter(posts_id=id)
-    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage})
+    if request.session.keys():
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        context = {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage}
+    else:
+        context = {'posts': posts, 'replys': replys, 'likes': likes}
+    return render(request, 'unid/main_detail.html', context)
 
 def voting(request):
     posts_id=request.POST['posts_id']
@@ -815,7 +840,7 @@ def contentsupload(request):
         rpc_url = "http://222.239.231.252:8545"
         w3 = Web3(HTTPProvider(rpc_url))
         print("시작 트랜젝션")
-        contentsMasterContract_address = Web3.toChecksumAddress("0xca149e64697cf05530b93d28e2ef31085ecdb213")
+        contentsMasterContract_address = Web3.toChecksumAddress("0xa9f965a95d80ce1cbb0b9395ab9e0eb8de8db746")
 
         cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
 
@@ -928,7 +953,7 @@ def test_validfile(request):
         os.chdir("..")
         print(os.getcwd())
         res = {
-                "Ans":"업로드되었습니다.",
+                "Ans":"업로드 가능한 콘텐츠입니다.",
                 "test":"test",
                 "filepath": contents_dir,
                 "filename": 'Unid_contents' + number + '.zip',
@@ -1045,7 +1070,7 @@ def postmodify(request, id):
             last_modified=timezone.now()
         )
 
-        url = '/unid/contentstran/'
+        url = '/unid/searchcontents/'+request.POST['category']
         return HttpResponseRedirect(url)
 
 @login_required

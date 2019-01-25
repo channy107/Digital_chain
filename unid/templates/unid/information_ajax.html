@@ -1,6 +1,4 @@
-{% extends 'unid/navigationbar.html' %}
 {% load static %}
-{% block content %}
 <head>
     <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
@@ -8,54 +6,9 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 </head>
+{% for info in posts %}
+<hr>
 
-    <div class="row-advertise">
-        <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel" align="center">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner" role="listbox">
-                <div class="carousel-item active">
-                    <img class="d-block img-fluid" src="/static/unid/icon/test1.jpg" alt="First slide">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block img-fluid" src="/static/unid/icon/test2.jpg" alt="Second slide">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block img-fluid" src="/static/unid/icon/test3.jpg" alt="Third slide">
-                </div>
-            </div>
-        </div>
-    </div>
-
-<div class="container">
-<div class="row">
-
-        <div class="sidenav">
-
-          <h4 class="my-4">태그 카테고리</h4>
-          <div class="list-group">
-            <a href="info_popular/" class="list-group-item">#인기</a>
-            <a href="#" class="list-group-item">#학교정보</a>
-            <a href="#" class="list-group-item">#학교주변리뷰</a>
-            <a href="#" class="list-group-item">#취업정보</a>
-            <a href="#" class="list-group-item">#질문</a>
-          </div>
-
-        </div>
-
-        <div class="col-lg-9">
-            <h5>최신글</h5>
-            <span class="count" id="count">
-                            {{ voting_count.votingcount }}
-                        </span>
-            <div class="container">
-                {% for info in posts %}
-                <hr>
-                <div class="posts_id">
-                </div>
                 <div class="user">
                     {% if info.user %}
                         <img src="/{{ info.user.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
@@ -76,31 +29,30 @@
                 <div class="col-md-5">
 
                     <div class="detail-content">
-                        <h3><a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a></h3>
-                        <a href="{% url 'main_detail' info.posts_id %}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
+                        <h3><a href="localhost:8000/unid/main_detail">{{ info.title }}</a></h3>
+                        <a href="main_detail?post={{info.id}}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+                        <span class="main-voting" ><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
                     </div>
 
+
+
                 </div>
                 </div>
  {% endfor %}
-  <div id="post_list_ajax"></div>
-    <input id="page" type="hidden" value="2">
-    {% if posts.paginator.count > 4 %}
-    <button id="callmorepost"><i class="fas fa-chevron-down"></i></button>
-    {% endif %}
+
 
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-function votingCount(){
+
+    function votingCount(){
         today=new Date();
         c_hour = today.getHours();
         c_min = today.getMinutes();
@@ -122,57 +74,7 @@ function votingCount(){
     }
     }
     setInterval("votingCount()", 60000);
-    jQuery(document).ready(function($){
-    $('#callmorepost').click(function(){
-        var page = $("#page").val();
-        var end_page = {{ posts.paginator.num_pages }};
-        if(page > end_page) {
-            return;
-        }
-        callMorePostAjax(page);
-        $("#page").val(parseInt(page)+1);
-    });
-
-    $(window).scroll(function() {
-        var scrollHeight = $(window).scrollTop() + $(window).height();
-        var documentHeight = $(document).height();
-
-        if (scrollHeight >= documentHeight) {
-            var page = $("#page").val();
-            var end_page = {{ posts.paginator.num_pages}};
-            if (page > end_page) {
-                return;
-            }
-
-            callMorePostAjax(page);
-            $("#page").val(parseInt(page)+1);
-        }
-    });
-
-    function callMorePostAjax(page) {
-        var end_page = {{ posts.paginator.num_pages }};
-        if(page > end_page) {
-            return;
-        }
-
-        $.ajax({
-            type : "POST",
-            url : "../unid/",
-            data : {
-                "page" : page,
-                "csrfmiddlewaretoken" : "{{ csrf_token }}"
-            },
-            success : addMorePostAjax,
-            dataType : "html",
-            error : function(request, status, error){
-                alert('오류발생');
-            },
-        });
-    }
-
-    function addMorePostAjax(data, textStatus, jqXHR) {
-        $("#post_list_ajax").append(data);
-    }
+jQuery(document).ready(function($){
 
     $('#nav1').addClass('visible-place');
     $(".votings").click(function() {
@@ -191,7 +93,7 @@ function votingCount(){
 
                 $.ajax ({
                     type: 'POST',
-                    url: "vote/",
+                    url: "../vote/",
                     data: {
                         posts_id: pk,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -255,7 +157,7 @@ function votingCount(){
 
                         $.ajax({
                             type: 'POST',
-                            url: "voting/",
+                            url: "../voting/",
                             data: {
                                 posts_id: pk,
                                 like_count: like_count,
@@ -275,4 +177,3 @@ function votingCount(){
             });
 
 </script>
-{% endblock %}
