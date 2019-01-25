@@ -10,5 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('unid/', include('unid.urls')),
     url(r'^accounts/', include('allauth.urls')),
-    # url(r'^search/', include('haystack.urls')),
+    url(r'^search/', include('haystack.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

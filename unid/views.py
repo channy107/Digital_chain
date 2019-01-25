@@ -317,8 +317,8 @@ def moneytrade(request):
     res = {'Ans': '결제되었습니다.'}
     return JsonResponse(res)
 
-def contentstran(request):
-
+def main(request):
+    populated_post_lists = Post.objects.order_by('like_count').filter(category="학교정보")[0:5]
 
     populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
     populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
@@ -330,7 +330,7 @@ def contentstran(request):
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
 
-    return render(request, 'unid/contentstran.html', {
+    return render(request, 'unid/contentstran.html', {  'populated_post_lists' : populated_post_lists,
                                                         'populated_reports_lists': populated_reports_lists,
                                                         'populated_forlecture_lists': populated_forlecture_lists,
                                                         'populated_note_lists':populated_note_lists,
@@ -385,7 +385,7 @@ def info_popular(request):
         return render(request, 'unid/info_popular.html', context)
 
 
-def main(request):
+def infomation(request):
     if request.session.keys():
         posts = Post.objects.order_by('-posts_id')
         sess = request.session['user_email']
@@ -801,7 +801,7 @@ def contentsupload(request):
         rpc_url = "http://222.239.231.252:8545"
         w3 = Web3(HTTPProvider(rpc_url))
         print("시작 트랜젝션")
-        contentsMasterContract_address = Web3.toChecksumAddress("0xca149e64697cf05530b93d28e2ef31085ecdb213")
+        contentsMasterContract_address = Web3.toChecksumAddress("0xa9f965a95d80ce1cbb0b9395ab9e0eb8de8db746")
 
         cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
 
@@ -914,7 +914,7 @@ def test_validfile(request):
         os.chdir("..")
         print(os.getcwd())
         res = {
-                "Ans":"업로드되었습니다.",
+                "Ans":"업로드 가능한 콘텐츠입니다.",
                 "test":"test",
                 "filepath": contents_dir,
                 "filename": 'Unid_contents' + number + '.zip',
@@ -1031,7 +1031,7 @@ def postmodify(request, id):
             last_modified=timezone.now()
         )
 
-        url = '/unid/contentstran/'
+        url = '/unid/searchcontents/'+request.POST['category']
         return HttpResponseRedirect(url)
 
 @login_required

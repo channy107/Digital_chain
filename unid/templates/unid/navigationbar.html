@@ -84,7 +84,11 @@
                 {% if user.email %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
+                        {% if mypage.userimage %}
                         <img src="/{{ mypage.userimage }}" style="border-radius: 50%" border="0" width="32" height="32">
+                        {% else %}
+                        <img src="{% static 'unid/icon/profle-icon.png' %}" style="border-radius: 50%" border="0" width="32" height="32">
+                        {% endif %}
                     </a>
                     <div class="dropdown-menu" id="dropdown">
                         <a class="dropdown-item" href="/unid/mypage" id="go-mypage">마이페이지</a>
@@ -121,23 +125,47 @@
 <br>
 
 <footer>
-    <div id = "at_the_end"
-         style="
-            border-top: 1px solid #c1c1c1;
-            margin-top: 30px;
-            text-align:center;
-            padding-top: 30px;">
-        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="mailto:web-master@gmail.com" style="color:#828282;">인터넷광고/제휴문의</a></span>
-        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;" ><a href="mailto:web-master@gmail.com" style="color:#828282;">사이트관련문의</a></span>
-        <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="/unid/termsofuse" style="color:#828282;">이용약관</a></span>
-        <span><a href="/unid/privacy" style="color:#828282; padding-right: 12px; padding-left: 10px;">개인정보처리방침</a></span>
+    <div class="corperationCompanys">
+        <div class="multicampus">
+            <img src="{% static 'unid/img/유니드 footer 멀티캠퍼스.png' %}">
+        </div>
+        <div class="HP">
+            <img src="{% static 'unid/img/유니드 footer HP.png' %}" style="width: 50px; height: 50px">
+        </div>
+        <div class="openeg">
+            <img src="{% static 'unid/img/유니드 footer openeg.png' %}">
+        </div>
+        <div class="ethereum">
+            <img src="{% static 'unid/img/유니드 footer ethereum.png' %}">
+        </div>
+        <div class="fabric">
+            <img src="{% static 'unid/img/유니드 footer fabric.png' %}">
+        </div>
     </div>
-    <div id = "at_the_end2"
-         style="
-            margin-top: 5px;
-            text-align:center;
-            margin-left:-15px;
-            margin-bottom:30px;">
+    <div class="zzzzz">
+        <div class="zzzz">
+            <img src="{% static 'unid/img/유니드 footer 과기부.png' %}" class="zzz">
+        </div>
+        <div id = "at_the_end">
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="#" style="color:#828282;">회사소개</a></span>
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="mailto:web-master@gmail.com" style="color:#828282;">인터넷광고/제휴문의</a></span>
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;"><a href="/unid/termsofuse" style="color:#828282;">이용약관</a></span>
+            <span><a href="/unid/privacy" style="border-right: 1px solid #c1c1c1; color:#828282; padding-right: 12px; padding-left: 10px;">개인정보처리방침</a></span>
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;" ><a href="mailto:web-master@gmail.com" style="color:#828282;">사이트관련문의</a></span>
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;" ><a href="mailto:web-master@gmail.com" style="color:#828282;">제안하기</a></span>
+            <span style="border-right: 1px solid #c1c1c1; padding-right: 12px; padding-left: 10px;" ><a href="#" style="color:#828282;">고객센터</a></span>
+        </div>
+        <div id = "at_the_end2">
+            <div style="padding-right: 12px; padding-left: 10px;">
+                (주)유니드 | 서울특별시 서초구 서초동 1302-2 내장산 | TEL:02-3470-2114
+            </div>
+            <div style="padding-right: 12px; padding-left: 10px;">
+                사업자등록번호:201-12-12345 | 통신판매번호:201-12-12345 | 개인정보 보호 책임자 : 인준희 | 대표이사 : 정용은 | 호스팅사업자 : 오픈이지
+            </div>
+        </div>
+    </div>
+
+    <div id = "at_the_end3">
         <img src="{% static 'unid/icon/unid_icon.png' %}" style="width:100px;">
         <span>Copyright by Unid. All rights reserved. Since 2019</span>
     </div>
