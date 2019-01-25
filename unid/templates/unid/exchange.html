@@ -74,6 +74,189 @@
 </script>
 
 
+
+
+
+<script>
+    var WEB3 = require('web3');
+    var web3 = new WEB3();
+    //web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+    web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545")); //openeg webserver
+
+    var _supply = 10000;
+    var _name = "NidCoin";
+    var _symbol = "nid";
+    var _decimals = 0;
+    var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+
+    //var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
+    var nd = nidcoinContract.at( "0xb737fefad895718c95d69e7ec66b89b993a867d0" );  //openeg geth deploy nidcoin
+
+    // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
+    function setAccountsList() {
+        let accounts = web3.eth.accounts;
+        accounts.forEach(account => {
+            $('.accountsList').append(`
+                <option value="${account}">
+                    ${account.substr(0,6)}...${account.substr(-4)}
+                </option>
+            `);
+        });
+    }
+
+    // 계정별 잔액을 출력
+    function showStatus() {
+        $.get('https://api.coinone.co.kr/ticker?currency=all', function(data) {
+
+        var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
+
+        let statusBalance =`
+            <h3 id="nd_bal" align="right" size ="5"> </h3>
+         `;
+
+        let statusAccountPop = `
+             <p id="pop" align="left" size ="5"></p>
+        `;
+
+        let potentialNid = `
+             <h3 id="nid_potent" align="right" size ="5"></h3>
+        `;
+
+        $('#potential_balance').empty();
+        $('#potential_balance').append(potentialNid);
+
+        $('#Status_balance').empty();
+        $('#Status_balance').append(statusBalance);
+
+        $('#Status_account_pop').empty();
+        $('#Status_account_pop').append(statusAccountPop);
+
+        let totalAmount = 0;
+        let accounts = web3.eth.accounts;
+        let account = "{{ request.session.user_account }}";
+        let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
+        let nid_balance = nd.balanceOf(account);
+        let nid_price = nd.balanceOf(account) / coinone_nid;
+        totalAmount += balance;
+
+        $('#nd_bal').append(`${nid_balance}nid`);
+        $('#nid_potent').append(`${nid_price}eth`);
+        $('#pop').append(`${account}`);
+
+        });
+
+    }
+
+    $(function() {
+        setAccountsList();
+        showStatus();
+
+
+        // 블록에 변화가 생겼을 때 계정별 잔액 정보를 갱신
+        web3.eth.filter('latest').watch(function() {
+            showStatus();
+        });
+
+        // 송금 버튼을 클릭했을 때, 송금을 요청
+        $('#btnSend').click(function() {
+            let accounts = web3.eth.accounts;
+            let unidAccount = web3.eth.coinbase;
+            let userAccount    = "{{ request.session.user_account }}";
+            let fromPassword = $('#fromPassword').val();
+            let nidAmount       = $('#amount').val()*1000;
+            let ethAmount  = $('#amount').val();
+            let fromPasswordBase = 'pass0';
+
+            // 보내는 사람의 계정을 언락
+            let isUnlock = web3.personal.unlockAccount(userAccount, fromPassword);
+            let isUnlockBase = web3.personal.unlockAccount(unidAccount, fromPasswordBase);
+            if (isUnlock && isUnlockBase) {
+                // coinbase > user (eth 전송)
+                web3.eth.sendTransaction ({
+                from :unidAccount,
+                to:userAccount,
+                value: web3.toWei(ethAmount, "ether")
+                }, function(err, res) {
+                    if(!err) {
+                        console.log('eth success')
+
+                    }
+                });
+                // user > coinbase (nid 전송)
+                nd.transfer(unidAccount, nidAmount,{
+                             from   : userAccount,
+                             gas: 2000000
+                         }, function(err, res) {
+                             let tranID = res;
+                             if (!err) {
+                                     $.toast({
+                                         heading: '구매 진행중',
+                                         text: '토큰 구매가 진행 중입니다.',
+                                         showHideTransition: 'slide',
+                                         icon: 'info',
+
+                                         afterHidden: function () {
+                                             // 솔리디티에 transfer 함수를 호출한 결과로 반화되는 이벤트(=EvtTransfer)를 잡아서 처리
+                                             // transfer 함수를 통해서 생성된 트랜잭션이 블록체인에 들어갔을 때 발생
+                                             nd.EvtTransfer().watch(function(err, evt) {
+                                                 if (!err) {
+                                                     // ajax를 통해서 서버로 DB insert를 요청
+                                                     // jquery ajax 검색
+                                                     $.ajax({
+                                                         type:'POST',
+                                                         url: '../exchange/',
+                                                         data:{
+                                                         csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                         e_from_account : userAccount,
+                                                         e_to_account : unidAccount,
+                                                         e_account_bal : nidAmount,
+                                                         e_tran_id : tranID
+                                                         },
+                                                         success: function(data) {
+                                                         }
+                                                     });
+
+                                                     //
+                                                     console.log(evt);
+                                                         $.toast({
+                                                             heading: '구매 완료',
+                                                             text: '토큰구매가 완료되었습니다.',
+                                                             showHideTransition: 'slide',
+                                                             icon: 'success',
+                                                             afterHidden: function(){
+                                                                 window.location.href = "/unid/mywallet";
+                                                             }
+                                                         });
+                                                 } else {
+                                                     console.error(err);
+                                                     $.toast({
+                                                                 heading: '전송 실패',
+                                                                 text: '전송에 실패하였습니다. 다시 시도해주세요.',
+                                                                 showHideTransition: 'slide',
+                                                                 icon: 'warning',
+                                                                 afterHidden: function(){
+                                                                     window.location.href = "/unid/mywallet";
+                                                                 }
+                                                             });
+                                                     }
+                                                 });
+
+                                         }
+                                     });
+                                 console.log(`transacion pending... txid is ${res}.`);
+
+                             } else {
+                                 console.error(err);
+                             }
+                     });
+            }
+          });
+
+    });
+
+
+
+</script>
 <!-- Page Content -->
 <div class="container1">
     <!-- contents InFo -->
@@ -81,7 +264,7 @@
         <div class="row">
             <div class="contents-info">
                     <h5 class="contents-title">
-                        <a href="http://www.unid.online/unid/mywallet/"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
+                        <a href="/unid/mywallet"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
                         <b> 토큰 환전</b></h5>
 
                         <h4 class="contents-title2" align="right">
@@ -391,179 +574,6 @@
                       }
                   }
           </script>
-
-
-
-
-<script>
-           var WEB3 = require('web3');
-           var web3 = new WEB3();
-           //web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-           web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545")); //openeg webserver
-
-           var _supply = 10000;
-           var _name = "NidCoin";
-           var _symbol = "nid";
-           var _decimals = 0;
-           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
-
-           //var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
-           var nd = nidcoinContract.at( "0xda386c6d5f9578bdd14477f1e57c3387552a8f59" );  //openeg geth deploy nidcoin
-
-           // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
-           function setAccountsList() {
-               let accounts = web3.eth.accounts;
-               accounts.forEach(account => {
-                   $('.accountsList').append(`
-                       <option value="${account}">
-                           ${account.substr(0,6)}...${account.substr(-4)}
-                       </option>
-                   `);
-               });
-           }
-
-           // 계정별 잔액을 출력
-           function showStatus() {
-                let statusBalance =`
-                   <h3 id="nd_bal" align="right" size ="5"> </h3>
-                `;
-
-               let statusAccountPop = `
-                    <p id="pop" align="left" size ="5"></p>
-               `;
-
-               $('#Status_balance').empty();
-               $('#Status_balance').append(statusBalance);
-
-               $('#Status_account_pop').empty();
-               $('#Status_account_pop').append(statusAccountPop);
-
-               let totalAmount = 0;
-               let accounts = web3.eth.accounts;
-               let account = "{{ request.session.user_account }}";
-               let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-               let nid_balance = nd.balanceOf(account);
-               totalAmount += balance;
-
-               $('#nd_bal').append(`${nid_balance}nid`);
-               $('#pop').append(`${account}`);
-
-
-
-           }
-
-           $(function() {
-               setAccountsList();
-               showStatus();
-
-
-               // 블록에 변화가 생겼을 때 계정별 잔액 정보를 갱신
-               web3.eth.filter('latest').watch(function() {
-                   showStatus();
-               });
-
-               // 송금 버튼을 클릭했을 때, 송금을 요청
-               $('#btnSend').click(function() {
-                   let accounts = web3.eth.accounts;
-                   let unidAccount = web3.eth.coinbase;
-                   let userAccount    = "{{ request.session.user_account }}";
-                   let fromPassword = $('#fromPassword').val();
-                   let nidAmount       = $('#amount').val()*1000;
-                   let ethAmount  = $('#amount').val();
-                   let fromPasswordBase = 'pass0';
-
-                   // 보내는 사람의 계정을 언락
-                   let isUnlock = web3.personal.unlockAccount(userAccount, fromPassword);
-                   let isUnlockBase = web3.personal.unlockAccount(unidAccount, fromPasswordBase);
-                   if (isUnlock && isUnlockBase) {
-                       // coinbase > user (eth 전송)
-                       web3.eth.sendTransaction ({
-                       from :unidAccount,
-                       to:userAccount,
-                       value: web3.toWei(ethAmount, "ether")
-                       }, function(err, res) {
-                           if(!err) {
-                               console.log('eth success')
-
-                           }
-                       });
-                       // user > coinbase (nid 전송)
-                       nd.transfer(unidAccount, nidAmount,{
-                                    from   : userAccount,
-                                    gas: 2000000
-                                }, function(err, res) {
-                                    let tranID = res;
-                                    if (!err) {
-                                            $.toast({
-                                                heading: '구매 진행중',
-                                                text: '토큰 구매가 진행 중입니다.',
-                                                showHideTransition: 'slide',
-                                                icon: 'info',
-
-                                                afterHidden: function () {
-                                                    // 솔리디티에 transfer 함수를 호출한 결과로 반화되는 이벤트(=EvtTransfer)를 잡아서 처리
-                                                    // transfer 함수를 통해서 생성된 트랜잭션이 블록체인에 들어갔을 때 발생
-                                                    nd.EvtTransfer().watch(function(err, evt) {
-                                                        if (!err) {
-                                                            // ajax를 통해서 서버로 DB insert를 요청
-                                                            // jquery ajax 검색
-                                                            $.ajax({
-                                                                type:'POST',
-                                                                url: '../exchange/',
-                                                                data:{
-                                                                csrfmiddlewaretoken: '{{ csrf_token }}',
-                                                                e_from_account : userAccount,
-                                                                e_to_account : unidAccount,
-                                                                e_account_bal : nidAmount,
-                                                                e_tran_id : tranID
-                                                                },
-                                                                success: function(data) {
-                                                                }
-                                                            });
-
-                                                            //
-                                                            console.log(evt);
-                                                                $.toast({
-                                                                    heading: '구매 완료',
-                                                                    text: '토큰구매가 완료되었습니다.',
-                                                                    showHideTransition: 'slide',
-                                                                    icon: 'success',
-                                                                    afterHidden: function(){
-                                                                        window.location.href = 'http://www.unid.online/unid/mywallet/';
-                                                                    }
-                                                                });
-                                                        } else {
-                                                            console.error(err);
-                                                            $.toast({
-                                                                        heading: '전송 실패',
-                                                                        text: '전송에 실패하였습니다. 다시 시도해주세요.',
-                                                                        showHideTransition: 'slide',
-                                                                        icon: 'warning',
-                                                                        afterHidden: function(){
-                                                                            window.location.href = 'http://www.unid.online/unid/mywallet/';
-                                                                        }
-                                                                    });
-                                                            }
-                                                        });
-
-                                                }
-                                            });
-                                        console.log(`transacion pending... txid is ${res}.`);
-
-                                    } else {
-                                        console.error(err);
-                                    }
-                            });
-                   }
-                 });
-
-           });
-
-
-
-</script>
-
-
 
 </body>
 
