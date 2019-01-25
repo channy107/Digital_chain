@@ -10,8 +10,8 @@
 <hr>
 
                 <div class="user">
-                    {% if mypage.userimage %}
-                        <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                    {% if info.user %}
+                        <img src="/{{ info.user.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
                     {% else %}
                         <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
                     {% endif %}
