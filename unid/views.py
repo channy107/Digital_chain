@@ -65,10 +65,10 @@ def mypage(request):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:2]
-        articles = Post.objects.filter(user_id=request.session['user_email'])[:2]
+        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:2]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
-        replies = replyForPosts.objects.filter(user_id=request.session['user_email'])
+        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
         context = {'articles':articles,
                    'myreward':myreward,
