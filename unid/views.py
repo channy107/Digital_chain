@@ -496,11 +496,13 @@ def my_cron_job(request):
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
-
     likes = LikeUsers.objects.filter(posts_id=id)
-    return render(request, 'unid/main_detail.html', {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage})
+    if request.session.keys():
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        context = {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage}
+    else:
+        context = {'posts': posts, 'replys': replys, 'likes': likes}
+    return render(request, 'unid/main_detail.html', context)
 
 def voting(request):
     posts_id=request.POST['posts_id']
