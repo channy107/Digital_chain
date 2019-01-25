@@ -106,7 +106,7 @@ function votingCount(){
         c_min = today.getMinutes();
         var voting_count = "";
 
-        if (c_hour==13 && c_min == 24) {
+        if (c_hour==17 && c_min == 10) {
             voting_count = "10";
         $.ajax ({
                     type: 'POST',
@@ -121,7 +121,7 @@ function votingCount(){
          })
     }
     }
-    setInterval("votingCount()", 60000);
+    setInterval("votingCount()", 30000);
     jQuery(document).ready(function($){
     $('#callmorepost').click(function(){
         var page = $("#page").val();

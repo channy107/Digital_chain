@@ -93,7 +93,7 @@ jQuery(document).ready(function($){
 
                 $.ajax ({
                     type: 'POST',
-                    url: "vote/",
+                    url: "../vote/",
                     data: {
                         posts_id: pk,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -157,7 +157,7 @@ jQuery(document).ready(function($){
 
                         $.ajax({
                             type: 'POST',
-                            url: "voting/",
+                            url: "../voting/",
                             data: {
                                 posts_id: pk,
                                 like_count: like_count,
