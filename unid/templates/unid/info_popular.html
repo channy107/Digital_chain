@@ -77,9 +77,9 @@
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting" ><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+                        <span class="main-voting" ><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
-                        <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">4</span>
 
