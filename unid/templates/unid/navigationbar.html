@@ -83,15 +83,14 @@
                 </li>
                 {% if user.email %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
                         {% if mypage.userimage %}
-                        <div id="user_image_icon" style="text-align:center;">
-                            <img style="width:90px; height:90px; border-radius:50%;" src="/{{ mypage.userimage }}">
-                        </div>
+                        <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
+                            <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                        </a>
                         {% else %}
-                        <div style="text-align:center;">
-                            <img style="width:60px; margin-top:40px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
-                        </div>
+                        <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
+                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
+                        </a>
                         {% endif %}
                     </a>
                     <div class="dropdown-menu" id="dropdown">
