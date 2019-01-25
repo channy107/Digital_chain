@@ -59,9 +59,6 @@ user_logged_in.connect(logged_in, sender=User)
 # user_logged_out.connect(logged_out, sender=User)
 
 
-def navigationbar(request):
-    if request.method =='GET':
-        return render(request, 'unid')
 
 @login_required
 def mypage(request):
@@ -79,6 +76,7 @@ def mypage(request):
                    'numbersOfArticles':numbersOfArticles,
                    'contentsboard':contentsboard,
                    'downloads':downloads,
+                   'replies':replies,
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -1135,9 +1133,7 @@ def searchcontents(request, category):
     allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
                                             Q(category=category) & Q(isdelete__isnull=True)
                                         )
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
     return render(
         request, 'unid/searchcontents.html',
-        {'contentslists': allcontentslists, 'mypage':mypage}
+        {'contentslists': allcontentslists}
     )

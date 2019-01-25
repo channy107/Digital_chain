@@ -38,12 +38,12 @@
             {% endif %}
         </div>
         <ul id="user_profile">
-                <li style="text-align: center; font-size: xx-large; font-weight:600; margin-top:15px; ">{{ mypage.name }}</li>
-                {% if mypage.profile %}
-                    <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 1px; font-size:large;">{{ mypage.profile }}</li>
-                {% else %}
-                    <li style="text-align: center;">프로필을 등록해 주세요!</li>
-                {% endif %}
+            <li style="text-align: center; font-size: xx-large; font-weight:600; margin-top:15px; ">{{ mypage.name }}</li>
+            {% if mypage.profile %}
+                <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 1px; font-size:large;">{{ mypage.profile }}</li>
+            {% else %}
+                <li style="text-align: center;">프로필을 등록해 주세요!</li>
+            {% endif %}
         </ul>
         <div id="user-info2">
             <div id="joining-date">
@@ -158,30 +158,27 @@
                 <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>최근 댓글 내역</strong></p>
                 <br>
                 {% if replies %}
-                <div class="user">
-                    {% if mypage.userimage %}
-                        <img class="user_image_small_icon" src="/{{ mypage.userimage }}" border="0" style="border-radius: 50%" width="35" height="35">&nbsp
-                    {% else %}
-                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    {% endif %}
-                    <span class="writer">{{mypage.name}}</span>
-                    <span class="writing-time">{{replies.created_at}}</span>
-                </div>
-                <div class="row">
-                    <div class="main-col-md-3">
-                        <a href="#">
-                            <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
-                        </a>
+                    {%  for reply in replies %}
+                    <div class="user">
+                        {% if mypage.userimage %}
+                            <img class="user_image_small_icon" src="/{{ mypage.userimage }}" border="0" style="border-radius: 50%" width="35" height="35">&nbsp
+                        {% else %}
+                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                        {% endif %}
+                        <span class="writer">{{ mypage.name }}</span>
+                        <span class="writing-time">{{ reply.created_at }}</span>
                     </div>
-                    <div class="col-md-5">
-                        <div class="detail-content">
-                            <h3>{{replies.post_id_id.title}}</h3>
-                            <p>
-                                {{replies.replytext}}
-                            </p>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="detail-content">
+                                <h3>{{ reply.post_id_id.title }}</h3>
+                                <p>
+                                    {{ reply.replytext }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    {% endfor %}
                 {% else %}
                     <p><strong>등록된 댓글이 없습니다. 글을 등록해보세요!</strong></p>
                 {% endif %}
@@ -225,7 +222,6 @@
                 {% else %}
                     <p><strong>등록된 콘텐츠가 없습니다. 콘텐츠을 등록해보세요!</strong></p>
                 {% endif %}
-                </div>
             </div>
             <br>
             <div id="downloads">
@@ -403,8 +399,6 @@
             </div>
         </div>
     </div>
-    </div>
-    </div>
 </body>
 <!--<script>-->
     <!--var kk = {{ articles }};-->
@@ -496,6 +490,8 @@ $(document).ready(function(){
     });
 });
 
+/* var kk = "{{ replies }}" ;
+console.log(kk); */
 
 </script>
 
