@@ -73,7 +73,7 @@
 
                     <div class="detail-content">
                         <h3><a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a></h3>
-                        <a href="{% url 'main_detail' info.posts_id %}"><p>{{info.contents}}</p></a></div>
+                        <a href="{% url 'main_detail' info.posts_id %}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>

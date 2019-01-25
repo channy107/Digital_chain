@@ -73,7 +73,7 @@
 
                     <div class="detail-content">
                         <h3><a href="localhost:8000/unid/main_detail">{{ info.title }}</a></h3>
-                        <a href="main_detail?post={{info.id}}"><p>{{info.contents}}</p></a></div>
+                        <a href="main_detail?post={{info.id}}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
