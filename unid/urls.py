@@ -11,16 +11,16 @@ from .views import *
 
 urlpatterns = [
     path('mywallet/', views.mywallet, name='mywallet'),
+    path('', main, name='main'),
     path('main_upload/', main_upload, name='main_upload'),
     path('info_popular/', info_popular, name='info_popular'),
-    path('infomation/', infomation, name='infomation'),
+    path('information/', information, name='information'),
     path('main_upload', main_upload, name='main_upload'),
     path('main_detail/<int:id>', main_detail, name='main_detail'),
     path('mainreply/', mainreply, name='maineply'),
     path('voting/', voting, name='voting'),
     path('vote/', vote, name='vote'),
     path('contentsdetail/<int:id>', contentsdetail, name='contentsdetail'),
-    path('', contentstran, name='contentstran'),
     path('login/', views.login, name='login'),
     path('transaction/', views.transaction, name='transaction'),
     path('login/', views.login, name='login'),

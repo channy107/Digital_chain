@@ -37,7 +37,7 @@
 
           <h4 class="my-4">태그 카테고리</h4>
           <div class="list-group">
-            <a href="info_popular/" class="list-group-item">#인기</a>
+            <a href="../info_popular/" class="list-group-item">#인기</a>
             <a href="#" class="list-group-item">#학교정보</a>
             <a href="#" class="list-group-item">#학교주변리뷰</a>
             <a href="#" class="list-group-item">#취업정보</a>
@@ -57,7 +57,11 @@
                 <div class="posts_id">
                 </div>
                 <div class="user">
-                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% if info.user %}
+                        <img src="/{{ info.user.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                    {% else %}
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% endif %}
                     <span class="writer">{{ info.user_id }}</span>
                     <span class="writing-time">{{info.created_at|timesince}}전</span>
                     <span class="contents-kind">{{ info.category }}</span>
@@ -73,13 +77,13 @@
 
                     <div class="detail-content">
                         <h3><a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a></h3>
-                        <a href="{% url 'main_detail' info.posts_id %}"><p>{{info.contents}}</p></a></div>
+                        <a href="{% url 'main_detail' info.posts_id %}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+                        <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
-                        <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
@@ -102,11 +106,11 @@ function votingCount(){
         c_min = today.getMinutes();
         var voting_count = "";
 
-        if (c_hour==00 && c_min == 00) {
+        if (c_hour==17 && c_min == 10) {
             voting_count = "10";
         $.ajax ({
                     type: 'POST',
-                    url: "my_cron_job/",
+                    url: "../my_cron_job/",
                     data: {
                         voting_count: voting_count,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -117,7 +121,7 @@ function votingCount(){
          })
     }
     }
-    setInterval("votingCount()", 60000);
+    setInterval("votingCount()", 30000);
     jQuery(document).ready(function($){
     $('#callmorepost').click(function(){
         var page = $("#page").val();
@@ -153,7 +157,7 @@ function votingCount(){
 
         $.ajax({
             type : "POST",
-            url : "../unid/",
+            url : "../../unid/information/",
             data : {
                 "page" : page,
                 "csrfmiddlewaretoken" : "{{ csrf_token }}"
@@ -187,7 +191,7 @@ function votingCount(){
 
                 $.ajax ({
                     type: 'POST',
-                    url: "vote/",
+                    url: "../vote/",
                     data: {
                         posts_id: pk,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -251,7 +255,7 @@ function votingCount(){
 
                         $.ajax({
                             type: 'POST',
-                            url: "voting/",
+                            url: "../voting/",
                             data: {
                                 posts_id: pk,
                                 like_count: like_count,

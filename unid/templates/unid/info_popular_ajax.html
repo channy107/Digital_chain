@@ -10,7 +10,11 @@
 <hr>
 
                 <div class="user">
-                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% if info.user %}
+                        <img src="/{{ info.user.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                    {% else %}
+                        <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                    {% endif %}
                     <span class="writer">{{ info.user_id }}</span>
                     <span class="writing-time">{{info.created_at|timesince}}전</span>
                     <span class="contents-kind">{{ info.category }}</span>
@@ -26,15 +30,15 @@
 
                     <div class="detail-content">
                         <h3><a href="localhost:8000/unid/main_detail">{{ info.title }}</a></h3>
-                        <a href="main_detail?post={{info.id}}"><p>{{info.contents}}</p></a></div>
+                        <a href="main_detail?post={{info.id}}"><p>{{info.contents|truncatechars_html:100}}</p></a></div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
 
                     <div>
-                        <span class="main-voting" ><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><i class="far fa-heart"></i></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+                        <span class="main-voting" ><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
                         <span class="main-voting">
-                        <i class="fas fa-dollar-sign"></i><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"><span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
                         <span class="main-voting">
-                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">4</span>
+                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
 
                     </div>
 
