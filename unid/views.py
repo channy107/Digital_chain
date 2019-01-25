@@ -324,31 +324,54 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def contentstran(request):
+    if request.session.keys():
+
+        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
+        return render(request, 'unid/contentstran.html', {
+                                                            'populated_reports_lists': populated_reports_lists,
+                                                            'populated_forlecture_lists': populated_forlecture_lists,
+                                                            'populated_note_lists':populated_note_lists,
+                                                            'populated_paper_lists': populated_paper_lists,
+                                                            'populated_PPT_lists': populated_PPT_lists,
+                                                            'populated_resume_lists': populated_resume_lists,
+                                                            'populated_fiction_lists': populated_fiction_lists,
+                                                            'populated_fortest_lists': populated_fortest_lists,
+                                                            'populated_video_lists': populated_video_lists,
+                                                            'mypage':mypage
+        })
+    else :
+        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
 
 
-    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
-    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
-    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
-    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
-    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
-    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
-    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
-    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
-    return render(request, 'unid/contentstran.html', {
-                                                        'populated_reports_lists': populated_reports_lists,
-                                                        'populated_forlecture_lists': populated_forlecture_lists,
-                                                        'populated_note_lists':populated_note_lists,
-                                                        'populated_paper_lists': populated_paper_lists,
-                                                        'populated_PPT_lists': populated_PPT_lists,
-                                                        'populated_resume_lists': populated_resume_lists,
-                                                        'populated_fiction_lists': populated_fiction_lists,
-                                                        'populated_fortest_lists': populated_fortest_lists,
-                                                        'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage
-    })
+        return render(request, 'unid/contentstran.html', {
+            'populated_reports_lists': populated_reports_lists,
+            'populated_forlecture_lists': populated_forlecture_lists,
+            'populated_note_lists': populated_note_lists,
+            'populated_paper_lists': populated_paper_lists,
+            'populated_PPT_lists': populated_PPT_lists,
+            'populated_resume_lists': populated_resume_lists,
+            'populated_fiction_lists': populated_fiction_lists,
+            'populated_fortest_lists': populated_fortest_lists,
+            'populated_video_lists': populated_video_lists
+        })
 
 def info_popular(request):
     if request.session.keys():
