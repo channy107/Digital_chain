@@ -394,7 +394,7 @@ def info_popular(request):
         return render(request, 'unid/info_popular.html', context)
 
 
-def main(request):
+def information(request):
     if request.session.keys():
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         posts = Post.objects.order_by('-posts_id')
@@ -412,11 +412,11 @@ def main(request):
 
         if request.is_ajax():
             context = {'posts': posts}
-            return render(request, 'unid/main_ajax.html', context)
+            return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
-        return render(request, 'unid/main.html', context)
+        return render(request, 'unid/information.html', context)
     else:
         posts = Post.objects.order_by('-posts_id')
         paginator = Paginator(posts, 3)
@@ -431,11 +431,11 @@ def main(request):
 
         if request.is_ajax():
             context = {'posts': posts}
-            return render(request, 'unid/main_ajax.html', context)
+            return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts': posts}
 
-        return render(request, 'unid/main.html', context)
+        return render(request, 'unid/information.html', context)
 
 def vote(request):
     sess = request.session['user_email']

@@ -37,7 +37,7 @@
 
           <h4 class="my-4">태그 카테고리</h4>
           <div class="list-group">
-            <a href="info_popular/" class="list-group-item">#인기</a>
+            <a href="../info_popular/" class="list-group-item">#인기</a>
             <a href="#" class="list-group-item">#학교정보</a>
             <a href="#" class="list-group-item">#학교주변리뷰</a>
             <a href="#" class="list-group-item">#취업정보</a>
@@ -106,11 +106,11 @@ function votingCount(){
         c_min = today.getMinutes();
         var voting_count = "";
 
-        if (c_hour==00 && c_min == 00) {
+        if (c_hour==13 && c_min == 24) {
             voting_count = "10";
         $.ajax ({
                     type: 'POST',
-                    url: "my_cron_job/",
+                    url: "../my_cron_job/",
                     data: {
                         voting_count: voting_count,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -157,7 +157,7 @@ function votingCount(){
 
         $.ajax({
             type : "POST",
-            url : "../unid/",
+            url : "../../unid/information/",
             data : {
                 "page" : page,
                 "csrfmiddlewaretoken" : "{{ csrf_token }}"
@@ -191,7 +191,7 @@ function votingCount(){
 
                 $.ajax ({
                     type: 'POST',
-                    url: "vote/",
+                    url: "../vote/",
                     data: {
                         posts_id: pk,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -255,7 +255,7 @@ function votingCount(){
 
                         $.ajax({
                             type: 'POST',
-                            url: "voting/",
+                            url: "../voting/",
                             data: {
                                 posts_id: pk,
                                 like_count: like_count,
