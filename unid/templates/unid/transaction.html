@@ -499,10 +499,66 @@
            var _name = "NidCoin";
            var _symbol = "nid";
            var _decimals = 0;
-           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+           var nidcoinContract = web3.eth.contract([ { constant: true,
+    inputs: [],
+    name: 'name',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: true,
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: true,
+    inputs: [],
+    name: 'decimals',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: true,
+    inputs: [ [Object] ],
+    name: 'balanceOf',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: true,
+    inputs: [],
+    name: 'symbol',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function' },
+  { constant: false,
+    inputs: [ [Object], [Object] ],
+    name: 'transfer',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function' },
+  { constant: false,
+    inputs: [ [Object] ],
+    name: 'getBalance',
+    outputs: [ [Object] ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function' },
+  { inputs: [ [Object], [Object], [Object], [Object] ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor' },
+  { anonymous: false,
+    inputs: [ [Object], [Object], [Object] ],
+    name: 'EvtTransfer',
+    type: 'event' } ]);
 
            //var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
-           var nd = nidcoinContract.at( "0x61a82766b582af461ba4953231b3fcd140691b91" );  //openeg geth deploy nidcoin
+           var nd = nidcoinContract.at( "0xa56a160c5e18e7f35a3da7046b177b1b3e0151c2" );  //openeg geth deploy nidcoin
 
            // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
            function setAccountsList() {
