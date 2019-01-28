@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="main-col-md-3">
                             <a href="#">
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="" alt="">
                             </a>
                         </div>
                         <div class="col-md-5">
@@ -206,7 +206,11 @@
                     <div class="row">
                         <div class="main-col-md-3">
                             <a href="#">
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">
+                            {% if contents.imagepath %}
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
+                            {% else %}
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
+                            {% endif %}
                             </a>
                         </div>
                         <div class="col-md-5">
@@ -246,7 +250,11 @@
                         <div class="row1">
                             <div class="main-col-md-31">
                                 <a href="#">
-                                    <img class="img-fluid rounded mb-3 mb-md-01" src="http://placehold.it/200x200" alt="">
+                                {% if contents.imagepath %}
+                                    <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
+                                {% else %}
+                                    <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
+                                {% endif %}
                                 </a>
                             </div>
                             <div class="col-md-51">
