@@ -326,8 +326,6 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def main(request):
-    if request.session.keys():
-
     populated_informations_school = Post.objects.order_by('like_count').filter(category="학교정보")[0:3]
     populated_informations_review = Post.objects.order_by('like_count').filter(category="학교주변리뷰")[0:3]
     populated_informations_getjob = Post.objects.order_by('like_count').filter(category="취업정보")[0:3]
@@ -359,7 +357,7 @@ def main(request):
                                                             'populated_fortest_lists': populated_fortest_lists,
                                                             'populated_video_lists': populated_video_lists,
                                                             'mypage':mypage
-    })
+                                                        })
     else :
         return render(request, 'unid/contentstran.html', {
             'populated_informations_school': populated_informations_school,
