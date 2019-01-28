@@ -924,31 +924,7 @@ xpopup
             var WEB3 = require('web3');
             var web3 = new WEB3();
             web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8545"));
-            var contentsmasterContract = web3.eth.contract([ { constant: False,
-    inputs: [ [Object], [Object] ],
-    name: 'addContents',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function' },
-  { constant: rue,
-    inputs: [ [Object] ],
-    name: 'contents',
-    outputs: [ [Object] ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function' },
-  { constant: true,
-    inputs: [],
-    name: 'getContentsAddressList',
-    outputs: [ [Object] ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function' },
-  { anonymous: false,
-    inputs: [ [Object] ],
-    name: 'EventAddContents',
-    type: 'event' } ]);
+            var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
 
             console.log(1);
             let cmc = contentsmasterContract.at("0xb6becca291012a67ec9e1f571ae584c497a29ae1");
