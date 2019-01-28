@@ -326,18 +326,27 @@ def moneytrade(request):
 def main(request):
     if request.session.keys():
 
-        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
-        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
-        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
-        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
-        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
-        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
-        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
-        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
-        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+    populated_informations_school = Post.objects.order_by('like_count').filter(category="학교정보")[0:3]
+    populated_informations_review = Post.objects.order_by('like_count').filter(category="학교주변리뷰")[0:3]
+    populated_informations_getjob = Post.objects.order_by('like_count').filter(category="취업정보")[0:3]
+    populated_informations_question = Post.objects.order_by('like_count').filter(category="질문")[0:3]
+    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
+    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
+    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
+    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
+    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
+    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
+    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
+    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+    if request.session.keys():
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
         return render(request, 'unid/contentstran.html', {
+                                                            'populated_informations_school': populated_informations_school,
+                                                            'populated_informations_review': populated_informations_review,
+                                                            'populated_informations_getjob': populated_informations_getjob,
+                                                            'populated_informations_question': populated_informations_question,
                                                             'populated_reports_lists': populated_reports_lists,
                                                             'populated_forlecture_lists': populated_forlecture_lists,
                                                             'populated_note_lists':populated_note_lists,
@@ -348,20 +357,13 @@ def main(request):
                                                             'populated_fortest_lists': populated_fortest_lists,
                                                             'populated_video_lists': populated_video_lists,
                                                             'mypage':mypage
-        })
+    })
     else :
-        populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
-        populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
-        populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
-        populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
-        populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
-        populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
-        populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
-        populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
-        populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
-
-
         return render(request, 'unid/contentstran.html', {
+            'populated_informations_school': populated_informations_school,
+            'populated_informations_review': populated_informations_review,
+            'populated_informations_getjob': populated_informations_getjob,
+            'populated_informations_question': populated_informations_question,
             'populated_reports_lists': populated_reports_lists,
             'populated_forlecture_lists': populated_forlecture_lists,
             'populated_note_lists': populated_note_lists,
