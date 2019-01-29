@@ -64,12 +64,13 @@ user_logged_in.connect(logged_in, sender=User)
 def mypage(request):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:2]
-        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:2]
+        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
+        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
+        contents_transfer = walletInFormation.objects.filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
-        downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
+        downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
         context = {'articles':articles,
                    'myreward':myreward,
                    'mypage':mypage,
@@ -77,41 +78,54 @@ def mypage(request):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
+                   'contents_transfer':contents_transfer
                    }
         return render(request, 'unid/mypage.html', context)
 
     else:
-        try:
-            myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                name = request.POST['name'],
-                profile = request.POST['profile'],
-                last_modified = timezone.now()
-            )
-        except MultiValueDictKeyError:
-            pass
 
-        try:
+
+        if request.FILES.get('user_image_upload'):
+
             userimage = request.FILES.get('user_image_upload')
-            background = request.FILES.get('background')
-            # profile_filename = request.POST['user_image_upload']
-            # background_filename = request.POST['background']
-
-
             with open("media/imagesForUserProfile" + "/" + userimage.name, 'wb') as file:
                 for chunk in userimage.chunks():
                     file.write(chunk)
 
+            user_email = myPageInfomation.objects.filter(email=request.session['user_email'])
+            update = user_email.update(
+            userimage = "media/imagesForUserProfile" + "/" + userimage.name)
+
+        if request.FILES.get('background'):
+            background = request.FILES.get('background')
             with open("media/imagesForUserProfile" + "/" + background.name, 'wb') as file2:
                 for chunk in background.chunks():
                     file2.write(chunk)
 
             myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                userimage = "media/imagesForUserProfile" + "/" + userimage.name,
-                aaa = "media/imagesForUserProfile" + "/" + background.name
-            )
+            aaa = "media/imagesForUserProfile" + "/" + background.name)
 
-        except FileExistsError as e:
-            pass
+
+        # user_profiles = myPageInfomation.objects.values('name')
+        # # if user_profiles:
+        # #     return HttpResponse(user_profiles)
+        # user_name = request.POST['name']
+        # user_profile = request.POST['profile'],
+        # for nameaa in user_profiles:
+        #     if user_name == nameaa:
+        #         return HttpResponse('중복된 이름입니다.')
+        #     else:
+        #         myPageInfomation.objects.filter(email=request.session['user_email']).update(
+        #             name=request.POST['name'],
+        #             profile=request.POST['profile'],
+        #             last_modified=timezone.now()
+        #         )
+
+        myPageInfomation.objects.filter(email=request.session['user_email']).update(
+            name = request.POST['name'],
+            profile = request.POST['profile'],
+            last_modified = timezone.now()
+        )
 
 
         url = '/unid/mypage'
@@ -156,7 +170,10 @@ def transaction(request):
         account_bal = request.POST['account_bal']
         tran_id = request.POST['tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("coinTransaction")
@@ -175,7 +192,10 @@ def exchange(request):
         account_bal = request.POST['e_account_bal']
         tran_id = request.POST['e_tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("exchange")
@@ -194,7 +214,10 @@ def purchase(request):
         account_bal = request.POST['p_account_bal']
         tran_id = request.POST['p_tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
