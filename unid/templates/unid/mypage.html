@@ -16,11 +16,7 @@
 
 
 <body>
-{% if mypage.aaa %}
     <div id="myinfo" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
-{% else %}
-    <div id="myinfo">
-{% endif %}
         <div style="text-align:right;">
             <a id="edit_icon" >
                 <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px;" src="{% static 'unid/icon/edit_icon.png' %}">
@@ -56,11 +52,7 @@
     </div>
 
 
-{% if mypage.aaa %}
     <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
-{% else %}
-    <div id="myinfo_edit_mode">
-{% endif %}
         <div style="text-align:right;">
             <a id="edit_icon" onclick="document.getElementById('user_profile_edit_form').submit()">
                 <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px;" src="{% static 'unid/icon/done_icon.jpg' %}">
@@ -205,9 +197,9 @@
                     </div>
                     <div class="row">
                         <div class="main-col-md-3">
-                            <a href="#">
-                            {% if contents.imagepath %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
+                            <a href="{% url 'contentsdetail' content.contents_id %}">
+                            {% if content.imagepath %}
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ content.imagepath }}" alt="">
                             {% else %}
                                 <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
                             {% endif %}
@@ -215,9 +207,10 @@
                         </div>
                         <div class="col-md-5">
                             <div class="detail-content">
-                                <h3>{{ content.title }}</h3>
-                                <p>
+                                <h3><a href="{% url 'contentsdetail' content.contents_id %}">{{ content.title }}</a></h3>
+                                <p><a href="{% url 'contentsdetail' content.contents_id %}">
                                     {{ content.contents|truncatechars_html:170 }}
+                                    </a>
                                 </p>
                             </div>
                         </div>
@@ -229,47 +222,76 @@
             </div>
             <br>
             <div id="downloads">
+                <br>
                 <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 받은 콘텐츠</strong></p>
                 <br>
-                <div id="downloads_contents">
-                    {% if downloads %}
-                        {% for download in downloads %}
-                        <div>
-                            <span class="user_image">
-                            {% if mypage.userimage %}
-                                <img class="user_image_small_icon" src="/{{ mypage.userimage }}" border="0" style="border-radius: 50%" width="35" height="35">&nbsp
+                {% if downloads %}
+                    {% for download in downloads %}
+                    <div id="downloads_contents">
+                        <span class="user_image">
+                        {% if mypage.userimage %}
+                            <img class="user_image_small_icon" src="/{{ mypage.userimage }}" border="0" style="border-radius: 50%" width="35" height="35">&nbsp
+                        {% else %}
+                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                        {% endif %}
+                        </span>
+                        <span class="writer" style="font-weight: 700; font-size: larger;">{{ mypage.name }} </span>
+                        <span class="writing-time">{{ download.contents_id.created }}</span>
+                        <span class="content-kind">{{ download.contents_id.category }}</span>
+                    </div>
+                    <div class="row">
+                        <div class="main-col-md-3">
+                            <a href="{% url 'contentsdetail' download.contents_id_id %}">
+                            {% if download.contents_id.imagepath %}
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ download.contents_id.imagepath }}" alt="">
                             {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
+                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
                             {% endif %}
-                            </span>
-                            <span class="writer" style="font-weight: 700; font-size: larger;">{{ mypage.name }} </span>
-                            <span class="writing-time">{{ download.content_id.created }}</span>
-                            <span class="content-kind">{{ download.content_id.category }}</span>
+                            </a>
                         </div>
-                        <div class="row1">
-                            <div class="main-col-md-31">
-                                <a href="#">
-                                {% if contents.imagepath %}
-                                    <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
-                                {% else %}
-                                    <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
-                                {% endif %}
-                                </a>
-                            </div>
-                            <div class="col-md-51">
-                                <div class="detail-content1">
-                                    <h3>{{ download.content_id.title }}</h3>
-                                    <p>
-                                        {{ download.content_id.contents }}
-                                    </p>
-                                </div>
+                        <div class="col-md-5">
+                            <div class="detail-content1">
+                                <h3><a href="{% url 'contentsdetail' download.contents_id_id %}" style="text-color: black; font-size:x-large">{{ download.contents_id.title }}</a></h3>
+                                <p><a href="{% url 'contentsdetail' download.contents_id_id %}"></a>
+                                    {{ download.contents_id.contents }}
+                                </p>
                             </div>
                         </div>
-                        {% endfor %}
-                    {% else %}
-                        <p><strong>다운로드한 콘텐츠가 없습니다. 콘텐츠을 구매해보세요!</strong></p>
-                    {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p><strong>다운로드한 콘텐츠가 없습니다. 콘텐츠을 구매해보세요!</strong></p>
+                {% endif %}
+            </div>
+            <div id="contents_transfer" style="margin-left: 50px;">
+                <br>
+                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>컨텐츠 거래 내역</strong></p>
+                <div class="row_for_table" style="width:970px">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">승인날짜</th>
+                                <th scope="col">올린사람</th>
+                                <th scope="col">받은사람</th>
+                                <th scope="col">금액</th>
+                                <th scope="col">콘텐츠</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if contents_transfer %}
+                            {% for content_transfer in contents_transfer %}
+                                <tr>
+                                    <th scope="row"> {{ content_transfer.transactiondate }}</th>
+                                    <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{ content_transfer.toAccount }}</td>
+                                    <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{ content_tranfer.fromAccount }}</td>
+                                    <td><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
+                                    <td>{{ content_transfer.aaa }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -279,128 +301,44 @@
                 <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내 보상 내역</strong></p>
                 <br>
                 {% if myreward %}
+                <div class="history-total">
+                    <div>
+                        <span>total</span> <span>10.4nid</span>
+                    </div>
+                    <div>
+                        <span>(+5.3)</span>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="history">
-                        <div>
-                            <span>컨텐츠 거래내역</span>
-                            <span>6건</span>
-                        </div>
-                        <div>
-                            <div class="history-total">
-                            <div>
-                                <span>total</span> <span>10.4nid</span>
-                            </div>
-                            <div>
-                                <span>(+3.4)</span>
-                            </div>
-                            </div>
-                        </div>
+                    <div class="history-detail">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">게시날짜</th>
+                              <th scope="col">보상여부</th>
+                              <th scope="col">금액</th>
+                              <th scope="col">게시글</th>
+                            </tr>
+                          </thead>
 
-                    </div>
-                </div>
+                          <tbody>
+                            <tr>
+                              <th scope="row">2019년 1월 18일 2:29 오후</th>
+                              <td><img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20"> 진행중 </td>
+                              <td><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 5.3 </td>
+                              <td>한양대 교양중 제일 재미있는 교양 추천의 보상</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">2019년 1월 18일 2:29 오후</th>
+                              <td><img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20"> 완료 </td>
+                              <td><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 10.4 </td>
+                              <td>한양대 교양중 제일 재미있는 교양 추천의 보상</td>
+                            </tr>
 
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
+                          </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history">
-                        <div>
-                            <span>보상내역</span>
-                            <span>6건</span>
-                        </div>
-                        <div>
-                            <div class="history-total">
-                            <div>
-                                <span>total</span> <span>10.4nid</span>
-                            </div>
-                            <div>
-                                <span>(+3.4)</span>
-                            </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="history-detail">
-                        2018.11.20   &nbsp&nbsp&nbsp
-                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">
-                        3.4nid
-                        <span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>
-                    </div>
-                </div>
-                </br>
-                </br>
-
-
-            <!--<div class="row">-->
-                <!--<div class="main-col-md-3">-->
-                    <!--<a href="#">-->
-                        <!--<img class="img-fluid rounded mb-3 mb-md-0" src="http://placehold.it/200x200" alt="">-->
-                    <!--</a>-->
-                <!--</div>-->
-                <!--<div class="col-md-5">-->
-
-                    <!--<div class="detail-content">-->
-                        <!--<p>-->
-                            <!--{{ myreward }}-->
-                        <!--</p>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
                 {% else %}
                     <p><strong>보상내역이 없습니다. 글을 등록하고 보상을 받으세요!</strong></p>
                 {% endif %}
