@@ -68,6 +68,7 @@ def mypage(request):
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:2]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
+        contents_transfer = walletInFormation.objects.filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
         context = {'articles':articles,
@@ -77,41 +78,54 @@ def mypage(request):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
+                   'contents_transfer':contents_transfer
                    }
         return render(request, 'unid/mypage.html', context)
 
     else:
-        try:
-            myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                name = request.POST['name'],
-                profile = request.POST['profile'],
-                last_modified = timezone.now()
-            )
-        except MultiValueDictKeyError:
-            pass
 
-        try:
+
+        if request.FILES.get('user_image_upload'):
+
             userimage = request.FILES.get('user_image_upload')
-            background = request.FILES.get('background')
-            # profile_filename = request.POST['user_image_upload']
-            # background_filename = request.POST['background']
-
-
             with open("media/imagesForUserProfile" + "/" + userimage.name, 'wb') as file:
                 for chunk in userimage.chunks():
                     file.write(chunk)
 
+            user_email = myPageInfomation.objects.filter(email=request.session['user_email'])
+            update = user_email.update(
+            userimage = "media/imagesForUserProfile" + "/" + userimage.name)
+
+        if request.FILES.get('background'):
+            background = request.FILES.get('background')
             with open("media/imagesForUserProfile" + "/" + background.name, 'wb') as file2:
                 for chunk in background.chunks():
                     file2.write(chunk)
 
             myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                userimage = "media/imagesForUserProfile" + "/" + userimage.name,
-                aaa = "media/imagesForUserProfile" + "/" + background.name
-            )
+            aaa = "media/imagesForUserProfile" + "/" + background.name)
 
-        except FileExistsError as e:
-            pass
+
+        # user_profiles = myPageInfomation.objects.values('name')
+        # # if user_profiles:
+        # #     return HttpResponse(user_profiles)
+        # user_name = request.POST['name']
+        # user_profile = request.POST['profile'],
+        # for nameaa in user_profiles:
+        #     if user_name == nameaa:
+        #         return HttpResponse('중복된 이름입니다.')
+        #     else:
+        #         myPageInfomation.objects.filter(email=request.session['user_email']).update(
+        #             name=request.POST['name'],
+        #             profile=request.POST['profile'],
+        #             last_modified=timezone.now()
+        #         )
+
+        myPageInfomation.objects.filter(email=request.session['user_email']).update(
+            name = request.POST['name'],
+            profile = request.POST['profile'],
+            last_modified = timezone.now()
+        )
 
 
         url = '/unid/mypage'

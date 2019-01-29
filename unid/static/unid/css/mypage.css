@@ -163,6 +163,10 @@ display: inline-block;
     margin-left:50px;
 }
 
+#contents_transfer{
+    margin-left:50px;
+}
+
 #myrewards{
     margin-left:50px;
 }
@@ -221,7 +225,12 @@ ul.tabs li.current:after{
 
 
 
-
+a {
+    color: black;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-text-decoration-skip: objects;
+}
 
 
 
