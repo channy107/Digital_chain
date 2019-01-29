@@ -64,13 +64,13 @@ user_logged_in.connect(logged_in, sender=User)
 def mypage(request):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:2]
-        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:2]
+        contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
+        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
         contents_transfer = walletInFormation.objects.filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
-        downloads = downloadContents.objects.filter(downloader_email_id=request.session['user_email'])[:2]
+        downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
         context = {'articles':articles,
                    'myreward':myreward,
                    'mypage':mypage,
