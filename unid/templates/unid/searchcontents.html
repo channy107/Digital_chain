@@ -90,8 +90,8 @@
                     </div>
                 <div class="col-md-5">
                     <div class="detail-content">
-                        <h3><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.title }}</h3>
-                        <p><a href="{% url 'contentsdetail' contents.contents_id %}"/>{{ contents.intro|truncatechars_html:190 }}</p>
+                        <h3><a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a></h3>
+                        <p><a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:190 }}</a></p>
                     </div>
                             <!--<a class="btn btn-primary" href="#">View Project</a>-->
                     <div>

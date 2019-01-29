@@ -199,3 +199,13 @@ class replyForPosts(models.Model):
     aaa = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
+
+class opinions(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    posts_id = models.IntegerField()
+    context = models.CharField(max_length=100)
+    fromuser = models.CharField(max_length=100)
+    writeruser = models.CharField(max_length=100)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)

@@ -30,7 +30,7 @@
             <div class="popular-rows-title">
                 인기게시글
             </div>
-            {% for list in populated_informations_school %}
+            {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
                     <li>
@@ -44,21 +44,23 @@
                         {{ list.user.email }}
                     </li>
                     <li>
-                        ·         {{ list.created_at }}
+                        ·         {{ list.created_at|timesince }}전
                     </li>
                     <li>
                         {{ list.category }}
                     </li>
                 </ul>
                 <div class="row-picture">
-                    <img src="">
+                    <a href="{% url 'main_detail' list.posts_id %}">
+                        <img src="">
+                    </a>
                 </div>
                 <ul class="row-middle">
                     <li>
-                        {{ list.title }}dasdsadas
+                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.title }}dasdsadas</a>
                     </li>
                     <li>
-                        {{ list.contents|truncatechars_html:190 }}
+                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.contents|truncatechars_html:190 }}</a>
                     </li>
                 </ul>
                 <ul class="row-bottom">
@@ -113,7 +115,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -145,7 +149,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -177,7 +183,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -209,7 +217,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -241,7 +251,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -273,7 +285,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -305,7 +319,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -337,7 +353,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
@@ -369,7 +387,9 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created }}</div>
+                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
+                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
+                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>

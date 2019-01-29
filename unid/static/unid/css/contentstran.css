@@ -288,15 +288,16 @@
     margin: 0 auto;
 }
 .contents-popular-posting {
-    width: 205px;
-    pedding: 0 0 30px 0;
-    margin: 18px 0 0 35px;
+    width: 200px;
+    padding: 17px 0 20px 30px;
     float: left;
+    height: auto;
 }
 .contents-popular-posting-date {
-    display: inline;
+    display: inline-block;
+    width: 160px;
     float: left;
-    margin: 0 60px 0 0;
+
 }
 .contents-recommend-posting {
     width: 180px;
@@ -315,7 +316,7 @@
     align-items: center;
     -ms-flex-pack: center;
     justify-content: center;
-    width: 5%;
+    width: 4%;
     color: #fff;
     text-align: center;
     opacity: .5;
@@ -363,6 +364,7 @@
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li:nth-child(1) img{
     width: 50px;
     height: 50px;
+    border-radius: 25px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li:nth-child(2) {
     font-size: 21px;
@@ -407,10 +409,19 @@
     height: 40px;
 
 }
+.information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(1) a {
+    color: black;
+    font-size: 30px;
+    font-weight: 500;
+}
 .information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(2) {
     height: 130px;
     width: 980px;
-
+}
+.information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(2) a {
+    color: black;
+    font-size: 25px;
+    font-weight: 400;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li {
     list-style: none;
@@ -434,7 +445,7 @@
     font-weight: bold;
 }
 
-.information-popular-row .popular-rows .popular-row ul:nth-child(4) li img {
+.information-popular-row .popular-rows .popular-row .row-bottom img {
     width: 30px;
     height: 30px;
 

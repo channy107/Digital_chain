@@ -288,6 +288,7 @@ def moneytrade(request):
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
     price = uploadContents.objects.get(contents_id=request.POST['id']).price
+    title = uploadContents.objects.get(contents_id=request.POST['id']).title
     selleraccount = Web3.toChecksumAddress(sellerinfo.account)
     buyerinfo = myPageInfomation.objects.get(email=request.session['user_email'])
     buyeraccount = Web3.toChecksumAddress(buyerinfo.account)
@@ -315,9 +316,10 @@ def moneytrade(request):
                             fromAccount=buyerinfo.email,
                             toAccount=sellerinfo.email,
                             balance= price,
-                            type="("+request.POST['id']+")"+"콘텐츠 거래",
+                            type="contentsTrasaction",
                             txid=receipt,
-                            transactiondate=timezone.now()
+                            transactiondate=timezone.now(),
+                            aaa=title
     )
     wif.save()
 
@@ -326,27 +328,23 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def main(request):
-    populated_informations_school = Post.objects.order_by('like_count').filter(category="학교정보")[0:3]
-    populated_informations_review = Post.objects.order_by('like_count').filter(category="학교주변리뷰")[0:3]
-    populated_informations_getjob = Post.objects.order_by('like_count').filter(category="취업정보")[0:3]
-    populated_informations_question = Post.objects.order_by('like_count').filter(category="질문")[0:3]
-    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:5]
-    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:5]
-    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:5]
-    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:5]
-    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:5]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:5]
-    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:5]
-    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:5]
-    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:5]
+    populated_informations = Post.objects.order_by('like_count')[0:6]
+
+    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:6]
+    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:6]
+    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:6]
+    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:6]
+    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:6]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:6]
+    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:6]
+    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:6]
+    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:6]
     if request.session.keys():
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
         return render(request, 'unid/contentstran.html', {
-                                                            'populated_informations_school': populated_informations_school,
-                                                            'populated_informations_review': populated_informations_review,
-                                                            'populated_informations_getjob': populated_informations_getjob,
-                                                            'populated_informations_question': populated_informations_question,
+                                                            'populated_informations': populated_informations,
+
                                                             'populated_reports_lists': populated_reports_lists,
                                                             'populated_forlecture_lists': populated_forlecture_lists,
                                                             'populated_note_lists':populated_note_lists,
@@ -360,10 +358,8 @@ def main(request):
                                                         })
     else :
         return render(request, 'unid/contentstran.html', {
-            'populated_informations_school': populated_informations_school,
-            'populated_informations_review': populated_informations_review,
-            'populated_informations_getjob': populated_informations_getjob,
-            'populated_informations_question': populated_informations_question,
+            'populated_informations_school': populated_informations,
+
             'populated_reports_lists': populated_reports_lists,
             'populated_forlecture_lists': populated_forlecture_lists,
             'populated_note_lists': populated_note_lists,
@@ -1164,3 +1160,26 @@ def searchcontents(request, category):
         request, 'unid/searchcontents.html',
         {'contentslists': allcontentslists}
     )
+def opinion(request):
+
+
+
+
+    res = {'Ans': '소중한 의견 감사합니다.'}
+    return JsonResponse(res)
+def unidAdmin(request):
+    allUsers = myPageInfomation.objects.all()
+    allBlackList = blackList.objects.all()
+    allTransacts = walletInFormation.objects.all()
+    allContents = uploadContents.objects.all()
+    allPost = Post.objects.all()
+    # allOpinions = Opinions.objects.all()
+    return render(request, 'unid/Unid_admin.html', {
+                                                    'allUsers': allUsers,
+                                                    'allBlackList': allBlackList,
+                                                    'allTransacts': allTransacts,
+                                                    'allContents': allContents,
+                                                    'allPost': allPost,
+                                                    # 'allOpinions': allOpinions
+    })
+

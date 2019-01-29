@@ -42,4 +42,5 @@ urlpatterns = [
     path('test_validfile/', views.test_validfile, name='test_validfile'),
     path('termsofuse/', views.termsofuse, name='termsofuse'),
     path('privacy/', views.privacy, name='privacy'),
+    path('unidadmin/', views.unidAdmin, name='unidAdmin'),
 ]

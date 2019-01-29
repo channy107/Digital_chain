@@ -47,9 +47,7 @@ q:before, q:after {
   -moz-transition: all 0.2s;
   transition: all 0.2s;
 }
-.no-touch .cd-nugget-info a:hover {
-  opacity: .8;
-}
+
 .cd-nugget-info span {
   vertical-align: middle;
   display: inline-block;
@@ -102,7 +100,7 @@ header h1 {
 xpopup
 
 -------------------------------- */
-.cd-popup, .cd-popup1 {
+.cd-popup, .cd-popup1, .cd-popup2{
   position: fixed;
   left: 0;
   top: 0;
@@ -116,12 +114,36 @@ xpopup
   transition: opacity 0.3s 0s, visibility 0s 0.3s;
   z-index: 1;
 }
-.cd-popup.is-visible, .cd-popup1.is-visible {
+.cd-popup.is-visible, .cd-popup1.is-visible, .cd-popup2.is-visible {
   opacity: 1;
   visibility: visible;
   -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
   -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
   transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+.cd-popup-container2 {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  margin: 4em auto;
+  background: #FFF;
+  border-radius: .25em .25em .4em .4em;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  padding: 30px;
 }
 .cd-popup-container1 {
   position: relative;
@@ -171,21 +193,21 @@ xpopup
   transition-duration: 0.3s;
   padding: 30px;
 }
-.cd-popup-container p, .cd-popup-container1 p{
+.cd-popup-container p, .cd-popup-container1 p, .cd-popup-container2 p{
   padding: 3em 1em;
 }
-.cd-popup-container .cd-buttons:after, .cd-popup-container1 .cd-buttons:after {
+.cd-popup-container .cd-buttons:after, .cd-popup-container1 .cd-buttons:after, .cd-popup-container2 .cd-buttons:after {
   content: "";
   display: table;
   clear: both;
 }
-.cd-popup-container .cd-buttons li, .cd-popup-container1 .cd-buttons li {
+.cd-popup-container .cd-buttons li, .cd-popup-container1 .cd-buttons li, .cd-popup-container2 .cd-buttons li {
   float: left;
   width: 50%;
   padding: 5px 20px 10px 20px;
   list-style: none;
 }
-.cd-popup-container .cd-buttons a, .cd-popup-container1 .cd-buttons a {
+.cd-popup-container .cd-buttons a, .cd-popup-container1 .cd-buttons a, .cd-popup-container2 .cd-buttons a {
   display: block;
   height: 40px;
   line-height: 40px;
@@ -195,7 +217,7 @@ xpopup
   -moz-transition: background-color 0.2s;
   transition: background-color 0.2s;
 }
-.cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a {
+.cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a, .cd-popup-container2 .cd-buttons li:first-child a {
   background: #b6bece;
   border-radius: 0 0 0 .25em;
 }
@@ -215,24 +237,27 @@ xpopup
     font-size: 0.8rem;
 }
 
-.no-touch .cd-popup-container .cd-buttons li:first-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:first-child a:hover {
-  background-color: #fc8982;
-}
-.cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a {
+
+.cd-popup-container .cd-buttons li:last-child a,
+.cd-popup-container1 .cd-buttons li:last-child a,
+.cd-popup-container2 .cd-buttons li:last-child a {
   background: #fc7169;
   border-radius: 0 0 .25em 0;
 }
-.no-touch .cd-popup-container .cd-buttons li:last-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:last-child a:hover {
-  background-color: #c5ccd8;
-}
-.cd-popup-container .cd-popup-close, .cd-popup-container1 .cd-popup-close {
+
+.cd-popup-container .cd-popup-close, .cd-popup-container1 .cd-popup-close, .cd-popup-container2 .cd-popup-close {
   position: absolute;
   top: 8px;
   right: 8px;
   width: 30px;
   height: 30px;
 }
-.cd-popup-container .cd-popup-close::before, .cd-popup-container .cd-popup-close::after, .cd-popup-container1 .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::after {
+.cd-popup-container .cd-popup-close::before,
+.cd-popup-container .cd-popup-close::after,
+.cd-popup-container1 .cd-popup-close::before,
+.cd-popup-container1 .cd-popup-close::after,
+.cd-popup-container2 .cd-popup-close::before,
+.cd-popup-container2 .cd-popup-close::after{
   content: '';
   position: absolute;
   top: 12px;
@@ -240,7 +265,7 @@ xpopup
   height: 3px;
   background-color: #8f9cb5;
 }
-.cd-popup-container .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::before {
+.cd-popup-container .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::before, .cd-popup-container2 .cd-popup-close::before {
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -248,7 +273,7 @@ xpopup
   transform: rotate(45deg);
   left: 8px;
 }
-.cd-popup-container .cd-popup-close::after, .cd-popup-container1 .cd-popup-close::after {
+.cd-popup-container .cd-popup-close::after, .cd-popup-container1 .cd-popup-close::after, .cd-popup-container2 .cd-popup-close::after {
   -webkit-transform: rotate(-45deg);
   -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
@@ -256,7 +281,7 @@ xpopup
   transform: rotate(-45deg);
   right: 8px;
 }
-.is-visible .cd-popup-container, .is-visible .cd-popup-container1 {
+.is-visible .cd-popup-container, .is-visible .cd-popup-container1, .is-visible .cd-popup-container2 {
   -webkit-transform: translateY(0);
   -moz-transform: translateY(0);
   -ms-transform: translateY(0);
@@ -279,6 +304,9 @@ xpopup
     margin: 10% auto;
   }
   .cd-popup-container1 {
+    margin: 10% auto;
+  }
+  .cd-popup-container2 {
     margin: 10% auto;
   }
 
@@ -308,7 +336,35 @@ xpopup
                 </ul>
                 <a href="#0" class="cd-popup-close img-replace"></a>
             </div> <!-- cd-popup-container -->
-
+        </div> <!-- cd-popup -->
+        <div class="opinion">
+            <input type="button" value="의견보내기">
+        </div>
+        <div class="cd-popup2" role="alert">
+            <div class="cd-popup-container2">
+                <div class="popuprow1">
+                    <h4>이 게시물에 대한 의견 보내기</h4>
+                    회원님의 소중한 의견은 Unid에서 문제를 파악하는데 사용됩니다.
+                </div>
+                <div>
+                    <form id="contents-opinion" name="contents-opinion" method='post' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="inputcategory" class="col-sm-2" >카테고리</label>
+                        <select class="form-control col-sm-2" id="inputcategory" name="category">
+                            <option title="Combo 1">음란물</option>
+                            <option title="Combo 2">혐오발언</option>
+                            <option title="Combo 3">폭력</option>
+                            <option title="Combo 4">허위정보</option>
+                            <option title="Combo 5">저작권 위반</option>
+                        </select>
+                    </form>
+                </div>
+                <ul class="cd-buttons">
+                    <li><a href="#0" class="cd-popup-no">돌아가기</a></li>
+                    <li><a href="#0" class="cd-popup-postopinion">보내기</a></li>
+                </ul>
+                <a href="#0" class="cd-popup-close img-replace"></a>
+            </div> <!-- cd-popup-container -->
         </div> <!-- cd-popup -->
         <div class="row">
             <div class="contents-info">
@@ -533,6 +589,49 @@ xpopup
 
         });
 
+        //open popup
+        $('.opinion').on('click', function(event){
+            event.preventDefault();
+            let isUser = "{{ request.session.user_email }}"
+            if ( !isUser ) {
+                alert("로그인이 필요합니다");
+                location="{% url 'login' %}"
+            } else {
+                $('.cd-popup2').addClass('is-visible');
+            };
+        });
+
+        //close popup
+        $('.cd-popup').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup').removeClass('is-visible');
+            }
+
+        });
+
+        $('.cd-popup-postopinion').on('click', function(event){
+            event.preventDefault();
+            let category = $('#inputcategory').val();
+            $.ajax({
+                type: 'POST',
+                url: '../opinion/',
+                data: {
+                    id: contents_id,
+                    category: category,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                    }
+                });
+            });
 
         //open popup
         $('.cd-popup-trigger').on('click', function(event){

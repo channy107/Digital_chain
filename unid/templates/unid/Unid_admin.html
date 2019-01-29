@@ -1,0 +1,115 @@
+{% extends 'unid/navigationbar.html' %}
+{% load static %}
+{% block content %}
+<!-- Page Content -->
+<head>
+    <link href="{% static 'unid/css/unidadmin.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
+</head>
+
+<div class="admin-container">
+    <div class="unid_users">
+        <div class="title">
+            Unid 사용자
+        </div>
+        {% for list in allUsers %}
+        <ul class="context">
+            <li>
+                <img src="/{{ list.userimamge }}" width="50px", height="50px">
+            </li>
+            <li>
+                {{ list.email }}
+            </li>
+            <li>
+                {{ list.name }}
+            </li>
+            <li>
+                {{ list.profile }}
+            </li>
+            <li>
+                {{ list.joiningdate }}
+            </li>
+            <li>
+                {{ list.votingcount }}
+            </li>
+            <li>
+                {{ list.account }}
+            </li>
+            <li>
+                {{ list.last_modified }}
+            </li>
+            <li>
+                {{ list.is_blacklist }}
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+
+    <div class="unid_blacklists">
+        <div class="title">
+            BLACK_LIST
+        </div>
+        <div class="context">
+            {% for list in allBlackList %}
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="unid_transacts">
+        <div class="title">
+            거래내역
+        </div>
+        <div class="context">
+            {% for list in allTransacts %}
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="unid_contents">
+        <div class="title">
+            콘텐츠게시글
+        </div>
+        <div class="context">
+            {% for list in allContents %}
+
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="unid_informations">
+        <div class="title">
+            정보공유게시글
+        </div>
+        <div class="context">
+            {% for list in allPost %}
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
