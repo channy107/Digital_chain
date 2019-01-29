@@ -156,7 +156,10 @@ def transaction(request):
         account_bal = request.POST['account_bal']
         tran_id = request.POST['tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("coinTransaction")
@@ -175,7 +178,10 @@ def exchange(request):
         account_bal = request.POST['e_account_bal']
         tran_id = request.POST['e_tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("exchange")
@@ -194,7 +200,10 @@ def purchase(request):
         account_bal = request.POST['p_account_bal']
         tran_id = request.POST['p_tran_id']
 
-        transactionData = walletInFormation(fromAccount=from_account, toAccount=to_account, balance=account_bal,
+        from_info = myPageInfomation.objects.get(account=from_account)
+        to_info = myPageInfomation.objects.get(account=to_account)
+
+        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
