@@ -25,7 +25,55 @@
             </div>
         </div>
     </div>
+    <div class="information-popular-row">
+        <div class="popular-rows">
+            <div class="popular-rows-title">
+                인기게시글
+            </div>
+            {% for list in populated_informations_school %}
+            <div class="popular-row">
+                <ul class="row-top">
+                    <li>
+                        {% if list.user.userimage %}
+                        <img src="/{{ list.user.userimage }}">
+                        {% else %}
+                        <img src="{% static 'unid/icon/profile-icon.png' %}">
+                        {% endif %}
+                    </li>
+                    <li>
+                        {{ list.user.email }}
+                    </li>
+                    <li>
+                        ·         {{ list.created_at }}
+                    </li>
+                    <li>
+                        {{ list.category }}
+                    </li>
+                </ul>
+                <div class="row-picture">
+                    <img src="">
+                </div>
+                <ul class="row-middle">
+                    <li>
+                        {{ list.title }}dasdsadas
+                    </li>
+                    <li>
+                        {{ list.contents|truncatechars_html:190 }}
+                    </li>
+                </ul>
+                <ul class="row-bottom">
+                    <li>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ list.like_count }}
+                    </li>
+                    <li>
+                        <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ list.rewards }}
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
 
+    </div>
     <div class="contents-popular-row">
         <div class="contents-populars">
             <div id="carouselExampleIndicators1" class="carousel slide my-4" data-ride="carousel1">
