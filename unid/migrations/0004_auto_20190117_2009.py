@@ -19,4 +19,22 @@ class Migration(migrations.Migration):
             name='replymentcount',
             field=models.IntegerField(null=True),
         ),
+        migrations.RenameField(
+            model_name='post',
+            old_name='ccc',
+            new_name='isdelete',
+        ),
+        migrations.RemoveField(
+            model_name='contentsinfo',
+            name='aaa',
+        ),
+        migrations.RemoveField(
+            model_name='uploadcontents',
+            name='totalpages',
+        ),
+        migrations.AddField(
+            model_name='contentsinfo',
+            name='filesize',
+            field=models.CharField(blank=True, max_length=250, null=True),
+        ),
     ]

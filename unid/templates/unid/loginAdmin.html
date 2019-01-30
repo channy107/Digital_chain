@@ -1,0 +1,40 @@
+{% extends 'unid/navigationbar.html' %}
+{% load static %}
+{% block content %}
+<div class="input-group" style="margin: 20% auto 10% 35%;">
+    <label class="input-group-text" for="pwd">PASSWORD</label>
+    <input class="form-control col-sm-2" type="password" id="pwd">
+    <div class="input-group-append">
+        <button type="button" class="btn btn-primary" id="submit">확인</button>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function($){
+        $('#submit').on('click', function() {
+            var pwd = $('#pwd').val();
+            console.log(pwd);
+            $.ajax ({
+                type: 'POST',
+                url: '../loginAdmin/',
+                data: {
+                        pwd: pwd,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(res) {
+                    alert(res.Ans);
+                    if(res.Ans == "환영합니다") {
+                        location="{% url 'unidAdmin' %}";
+                    }
+                }
+            });
+        });
+
+    });
+
+
+
+
+</script>
+
+{% endblock %}

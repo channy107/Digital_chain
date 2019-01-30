@@ -47,6 +47,7 @@ class MyView(ActiveOnlyMixin, View):
 def logged_in(sender, **kwargs):
     user = kwargs['user']
     request = kwargs['request']
+
     member = myPageInfomation.objects.get(user=user)
     request.session['user_email'] = member.email
     request.session['user_name'] = member.name
@@ -352,7 +353,6 @@ def moneytrade(request):
 
 def main(request):
     populated_informations = Post.objects.order_by('like_count')[0:6]
-
     populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:6]
     populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:6]
     populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:6]
@@ -362,7 +362,7 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:6]
-    if request.session.keys():
+    if request.session['user_email']:
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
         return render(request, 'unid/contentstran.html', {
@@ -625,6 +625,11 @@ def signup(request):
 def createaccount(request):
     if request.method == 'GET':
         account = myPageInfomation.objects.get(email=request.session['user_email']).account
+        if unidBlackList.objects.get(user_id=request.session['user_email']):
+            request.session['user_email'] = {}
+            request.session['user_name'] = {}
+            request.session.modified = True
+            return HttpResponse("사용이 금지 된 유저입니다.")
         if account:
             request.session['user_account'] = account
             url = '/unid'
@@ -1193,77 +1198,104 @@ def opinion(request):
         fromuser = request.session['user_email'],
         writeruser = request.POST['writeremail'],
         exceptopinion = request.POST['exceptOpinion'],
-        bbb = request.POST['title'],
-        ccc=  request.POST['type']
+        title = request.POST['title'],
+        type =  request.POST['type'],
+        result = "확인중"
     )
     br.save()
 
     res = {'Ans': '소중한 의견 감사합니다.'}
     return JsonResponse(res)
+
+
 def unidAdmin(request):
-    allUsers = myPageInfomation.objects.all()
-    allBlackList = blackList.objects.all()
-    allTransacts = walletInFormation.objects.all()
-    allContents = uploadContents.objects.all()
-    allPost = Post.objects.all()
-    allOpinions = opinions.objects.all()
-    return render(request, 'unid/Unid_admin.html', {
-                                                    'allUsers': allUsers,
-                                                    'allBlackList': allBlackList,
-                                                    'allTransacts': allTransacts,
-                                                    'allContents': allContents,
-                                                    'allPost': allPost,
-                                                    'allOpinions': allOpinions
-    })
+    if request.session['Unid_admin']:
+
+        allUsers = myPageInfomation.objects.all()
+        allBlackList = unidBlackList.objects.all()
+        allTransacts = walletInFormation.objects.all()
+        allContents = uploadContents.objects.all()
+        allPost = Post.objects.all()
+        allOpinions = opinions.objects.filter(result="확인중")
+        return render(request, 'unid/Unid_admin.html', {
+                                                        'allUsers': allUsers,
+                                                        'allBlackList': allBlackList,
+                                                        'allTransacts': allTransacts,
+                                                        'allContents': allContents,
+                                                        'allPost': allPost,
+                                                        'allOpinions': allOpinions
+        })
 
 
 def warninguser(request):
     id = request.POST['id']
     postType = request.POST['postType']
     writerUser = request.POST['writerUser']
+    number = request.POST['number']
+    br = opinions.objects.filter(IDX=number).update(result="경고")
     if postType == "contents":
         contents_info = uploadContents.objects.filter(contents_id=id)
         contents_info.update(isdelete="삭제")
         print(1)
         warningUser = myPageInfomation.objects.get(email=writerUser)
+
         print(2)
         print(warningUser)
-        br = reasonForBan (
-            user_id=warningUser,
-            reason=request.POST['reason']
+        br = blackReasonForBan (
+            user=warningUser,
+            reason=request.POST['reason'],
+            aaa=number,
         )
         br.save()
         print(3)
-        warningCount = len(reasonForBan.objects.filter(contents_id=id).values())
+        warningCount = len(blackReasonForBan.objects.filter(user_id=warningUser.email).values())
         print(4)
         print(warningCount)
-        if warningCount == 3:
-            br = blackList (
-                user=warningUser
+        if warningCount >= 3:
+            br = unidBlackList (
+                user=warningUser,
+                count=1
             )
             br.save()
-            res = {'Ans': "경고 3회 누적: " + warningUser + "는(은) 블랙리스트 처리되었습니다"}
+            mpi = myPageInfomation.objects.filter(email=writerUser)
+            mpi.update(is_blacklist="Yes")
+            res = {'Ans': "경고 3회 누적: " + warningUser.email + "는(은) 블랙리스트 처리되었습니다"}
             return JsonResponse(res)
     else:
         information_info = Post.objects.filter(post_id=id)
         information_info.update(isdelete="삭제")
         warningUser = myPageInfomation.objects.get(email=writerUser)
-        br = reasonForBan(
-            user_id=warningUser,
-            reason=request.POST['reason']
+        br = blackReasonForBan(
+            user=warningUser,
+            reason=request.POST['reason'],
+            aaa = number,
         )
+
+
         br.save()
-        warningCount = len(reasonForBan.objects.filter(contents_id=id).values())
-        if warningCount == 3:
-            br = blackList(
-                user=warningUser
+        warningCount = len(blackReasonForBan.objects.filter(user_id=warningUser.email).values())
+        if warningCount >= 3:
+            br = unidBlackList(
+                user=warningUser,
+                count=1
             )
             br.save()
-            res = {'Ans': "경고 3회 누적: " + warningUser + "는(은) 블랙리스트 처리되었습니다"}
+            mpi = myPageInfomation.objects.filter(email=writerUser)
+            mpi.update(is_blacklist="Yes")
+            res = {'Ans': "경고 3회 누적: " + warningUser.email + "는(은) 블랙리스트 처리되었습니다"}
             return JsonResponse(res)
 
+    res = {'Ans': "경고처리되었습니다."}
+    return JsonResponse(res)
 
+def noProblem(request):
+    posts_id = request.POST['id']
+    number = request.POST['number']
 
+    br = opinions.objects.filter(IDX=number).update(result="이상없음")
+
+    res={'Ans':'처리되었습니다.'}
+    return JsonResponse(res)
 def testpage(request):
 
     return render(request, 'unid/testpage.html', {})
@@ -1295,3 +1327,20 @@ def contentsBlockTest(request):
 
     res = {'Ans':'처리되었습니다.', 'receipt': transactionHashList}
     return JsonResponse(res)
+
+def loginAdmin(request):
+    if request.method == 'GET':
+        return render(request, 'unid/loginAdmin.html', {})
+
+    else:
+        password = request.POST['pwd']
+        if password == 'admin1' :
+            print(3)
+            request.session['Unid_admin'] = "IAMADMIN"
+            res={'Ans':'환영합니다'}
+            return JsonResponse(res)
+        else:
+            res = {'Ans':'패스워드를 다시 입력해주세요'}
+            return JsonResponse(res)
+
+

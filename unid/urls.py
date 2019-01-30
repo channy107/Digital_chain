@@ -45,6 +45,8 @@ urlpatterns = [
     path('unidadmin/', views.unidAdmin, name='unidAdmin'),
     path('opinion/', views.opinion, name='opinion'),
     path('warninguser/', views.warninguser, name='warninguser'),
+    path('noProblem/', views.noProblem, name='noProblem'),
     path('testpage/', views.testpage, name='testpage'),
     path('contentsBlockTest/', views.contentsBlockTest, name='contentsBlockTest'),
+    path('loginAdmin/', views.loginAdmin, name='loginAdmin'),
 ]

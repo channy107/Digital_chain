@@ -628,11 +628,17 @@ xpopup
 
         $('.cd-popup-postopinion').on('click', function(event){
             event.preventDefault();
+            console.log(1);
             let category = $('#inputcategory').val();
+            console.log(5);
             let exceptOpinion = $('#exception').val();
+            console.log(4);
             let writeremail = "{{ contents.writeremail.email }}";
+            console.log(3);
             let title = "{{ contents.title }}";
-            let type = "contents"
+            console.log(2);
+            let type = "contents";
+            console.log(type);
 
             $.ajax({
                 type: 'POST',
