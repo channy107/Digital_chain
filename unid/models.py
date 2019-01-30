@@ -121,9 +121,9 @@ class walletInFormation(models.Model):
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
 
-class blackList(models.Model):
-    IDX = models.AutoField(primary_key=True)
+class unidBlackList(models.Model):
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    IDX = models.AutoField(primary_key=True)
     is_blacklist = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
@@ -132,9 +132,9 @@ class blackList(models.Model):
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
-class reasonForBan(models.Model):
-    IDX = models.AutoField(primary_key=True)
+class blackReasonForBan(models.Model):
     user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    IDX = models.AutoField(primary_key=True)
     reason = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
@@ -208,5 +208,6 @@ class opinions(models.Model):
     fromuser = models.CharField(max_length=100)
     writeruser = models.CharField(max_length=100)
     exceptopinion = models.CharField(max_length=250, blank=True, null=True)
-    bbb = models.CharField(max_length=250, blank=True, null=True)
-    ccc = models.CharField(max_length=250, blank=True, null=True)
+    title = models.CharField(max_length=250, blank=True, null=True)
+    type = models.CharField(max_length=250, blank=True, null=True)
+    result = models.CharField(max_length=50, blank=True, null=True)
