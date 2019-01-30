@@ -19,7 +19,7 @@
     <div id="myinfo" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
         <div style="text-align:right;">
             <a id="edit_icon" >
-                <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px;" src="{% static 'unid/icon/edit_icon.png' %}">
+                <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; cursor: pointer; margin-right:40px;" src="{% static 'unid/icon/edit_icon.png' %}">
             </a>
         </div>
         <div id="profile-icon">
@@ -55,7 +55,7 @@
     <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
         <div style="text-align:right;">
             <a id="edit_icon" onclick="document.getElementById('user_profile_edit_form').submit()">
-                <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px;" src="{% static 'unid/icon/done_icon.jpg' %}">
+                <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px; cursor: pointer;" src="{% static 'unid/icon/done_icon.jpg' %}">
             </a>
         </div>
         <form id="user_profile_edit_form" method="POST" enctype="multipart/form-data">
@@ -67,15 +67,15 @@
                 <img style="width:60px; margin-top:40px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
                 {% endif %}
             </div>
-            <div id="user_image_edit" style="width: 80px; position: relative; bottom: 61px; left: 593px; cursor: pointer; opacity: 0;">
-                <input id="user_image_upload" type="file" name="user_image_upload" title="사진변경">
+            <div id="user_image_edit" style="width: 80px; position: relative; bottom: 61px; left: 516px; opacity: 0;">
+                <input id="user_image_upload" type="file" name="user_image_upload" style="width:79;" title="사진변경">
             </div>
             <!--<ul id="cd-buttons">-->
                 <!--<li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('user_profile_edit_form').submit()">수정완료</a></li>-->
             <!--</ul>-->
             <ul id="user_profile_edit">
                 <div id="user_name_modifier" style="text-align: center; font-size: xx-large; font-weight:600;">
-                    <input id="change_user_name" type="text" name="name" value="{{ mypage.name }}" style="text-align:center; border:1px solid black; background-color:transparent; width:170px; height:40px;">
+                    <input id="change_user_name" type="text" name="name" value="{{ mypage.name }}" oninput="checkId()">
                 </div>
                 <div id="user_profile_modifier" style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 15px; margin-left:370px;">
                     <input id="change_user_profile" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; border:1px solid black; background-color:transparent; width:300px; height:26px;">
@@ -90,9 +90,9 @@
                     <p style="text-align: center; display:inline;"><img style="width:20px; " src="{% static 'unid/icon/number-of-contents.png' %}">{{ numbersOfArticles }}게시글</p>
                 </div>
             </div>
-            <div id="edit_background" style="position: relative; text-align: right; margin-right:-30px;">
-                <label id="label" style="text-align:right;">배경사진변경</label>
-                <input id="background" style="width: 62px; position: relative; right: 80px; opcatity: 0; opacity: 0; cursor: pointer;" type="file" name="background" title="배경사진등록">
+            <div id="edit_background" style="position: relative; text-align: right; margin-right:-30px; cursor: pointer;">
+                <label id="label" style="text-align:right; position: relative; bottom: 40px;">배경사진변경</label>
+                <input id="background" style="width: 74px; position: relative; bottom: 40px; right: 80px; opcatity: 0; opacity: 0;" type="file" name="background" title="배경사진등록">
             </div>
         </form>
     </div>
@@ -377,6 +377,57 @@ $(document).ready(function(){
             $('#myinfo').show();
 	    }
 	});
+
+
+
+
+
+
+
+
+
+    $("#change_user_name").on('keyup', function(checkId) {
+
+        //userid 를 param.
+        var user_name =  $("#change_user_name").val();
+        var idck = 0;
+        $.ajax({
+            type : 'POST',
+            data : user_name,
+            url: "../user_name_verification/",
+            dataType : "json",
+            contentType: "application/json; charset=UTF-8",
+            success : function(res) {
+                if (res.Ans == 1) {
+
+                    alert("아이디가 존재합니다. 다른 아이디를 입력해주세요.");
+                    //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
+                    $("#change_user_name").addClass("has-error")
+                    $("#change_user_name").removeClass("has-success")
+                    $("#change_user_name").focus();
+
+
+                } else {
+                    alert("사용가능한 아이디입니다.");
+                    //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
+                    $("#change_user_name").addClass("has-success")
+                    $("#change_user_name").removeClass("has-error")
+                    $("#change_user_profile").focus();
+                    //아이디가 중복하지 않으면  idck = 1
+                    idck = 1;
+                }
+            },
+        });
+    });
+
+
+
+
+
+
+
+
+
 
 
     $('#change_user_name').on('keyup', function(){

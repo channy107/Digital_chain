@@ -69,7 +69,7 @@ def mypage(request):
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
-        contents_transfer = walletInFormation.objects.filter(type='contentsTransaction')
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
         context = {'articles':articles,
@@ -131,6 +131,18 @@ def mypage(request):
 
         url = '/unid/mypage'
         return HttpResponseRedirect(url)
+
+@csrf_exempt
+def user_name_verification(request):
+    # user_name = request.POST['name']
+    verification = myPageInfomation.objects.get(name=user_name)
+    if verification:
+        res = {'Ans':1}
+        return JsonResponse(res)
+        print(res)
+    else:
+        res = {'Ans':0}
+        return JsonResponse(res)
 
 
 
