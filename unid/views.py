@@ -1268,7 +1268,7 @@ def testpage(request):
 
     return render(request, 'unid/testpage.html', {})
 
-
+@csrf_exempt
 def contentsBlockTest(request):
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
