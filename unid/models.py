@@ -206,6 +206,6 @@ class opinions(models.Model):
     context = models.CharField(max_length=100)
     fromuser = models.CharField(max_length=100)
     writeruser = models.CharField(max_length=100)
-    aaa = models.CharField(max_length=250, blank=True, null=True)
+    exceptopinion = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)

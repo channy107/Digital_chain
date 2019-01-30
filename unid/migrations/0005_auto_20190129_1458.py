@@ -23,13 +23,4 @@ class Migration(migrations.Migration):
                 ('ccc', models.CharField(blank=True, max_length=250, null=True)),
             ],
         ),
-        migrations.RenameField(
-            model_name='contentsinfo',
-            old_name='aaa',
-            new_name='filesize',
-        ),
-        migrations.RemoveField(
-            model_name='uploadcontents',
-            name='totalpages',
-        ),
     ]

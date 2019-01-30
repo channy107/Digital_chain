@@ -283,7 +283,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             # 'nid_balance': nid_balance,
+             'nid_balance': nid_balance,
              "downloadid": downloadid, 'files_infos': files_infos, 'mypage':mypage
              }
         )
@@ -296,7 +296,7 @@ def contentsdetail(request, id):
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'files_infos': files_infos,
-             # 'nid_balance': nid_balance
+             'nid_balance': nid_balance
              }
         )
 
@@ -1183,10 +1183,20 @@ def searchcontents(request, category):
         request, 'unid/searchcontents.html',
         {'contentslists': allcontentslists}
     )
+
+@login_required
 def opinion(request):
 
-
-
+    br = opinions (
+        posts_id = request.POST['id'],
+        context = request.POST['category'],
+        fromuser = request.session['user_email'],
+        writeruser = request.POST['writeremail'],
+        exceptopinion = request.POST['exceptOpinion'],
+        bbb = request.POST['title'],
+        ccc=  request.POST['type']
+    )
+    br.save()
 
     res = {'Ans': '소중한 의견 감사합니다.'}
     return JsonResponse(res)
@@ -1196,13 +1206,69 @@ def unidAdmin(request):
     allTransacts = walletInFormation.objects.all()
     allContents = uploadContents.objects.all()
     allPost = Post.objects.all()
-    # allOpinions = Opinions.objects.all()
+    allOpinions = opinions.objects.all()
     return render(request, 'unid/Unid_admin.html', {
                                                     'allUsers': allUsers,
                                                     'allBlackList': allBlackList,
                                                     'allTransacts': allTransacts,
                                                     'allContents': allContents,
                                                     'allPost': allPost,
-                                                    # 'allOpinions': allOpinions
+                                                    'allOpinions': allOpinions
     })
 
+
+def warninguser(request):
+    id = request.POST['id']
+    postType = request.POST['postType']
+    if postType == "contents":
+        contents_info = uploadContents.objects.filter(contents_id=id)
+        contents_info.update(isdelete="삭제")
+        writer_info = uploadContents.objects.get(contents_id=id)
+        br = reasonForBan (
+            user_id=writer_info.writeremail_id,
+            reason=request.POST['reason']
+        )
+        br.save()
+
+    else:
+        information_info = Post.objects.get(post_id=id)
+        """
+        Post테이블에 isdelete 만들고 추가
+        데이터베이스에 삭제 추가 및 위에 br 코드 추가
+        """
+       
+    res={'Ans': "처리되었습니다"}
+    return JsonResponse(res)
+
+
+def testpage(request):
+
+    return render(request, 'unid/testpage.html', {})
+
+
+def contentsBlockTest(request):
+    rpc_url = "http://222.239.231.252:9545"
+    w3 = Web3(HTTPProvider(rpc_url))
+    print("시작 트랜젝션")
+    contentsMasterContract_address = Web3.toChecksumAddress("0x22862cf6b8c28aba4f0b519e3c93a31b9edd0d31")
+
+    cmc = w3.eth.contract(address=contentsMasterContract_address, abi=[
+        {"constant": False, "inputs": [{"name": "name", "type": "string"}, {"name": "hash", "type": "string"}],
+         "name": "addContents", "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
+        {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "contents",
+         "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
+        {"constant": True, "inputs": [], "name": "getContentsAddressList",
+         "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
+         "type": "function"}, {"anonymous": False, "inputs": [{"indexed": False, "name": "name", "type": "string"}],
+                               "name": "EventAddContents", "type": "event"}])
+
+    filehashdatas = request.POST['filehashdatas']
+
+    tx_hash = cmc.functions.addContents("testID", filehashdatas).transact(
+        {"from": w3.eth.accounts[0], "gas": 1000000})
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+    transactionHashList= receipt
+
+
+    res = {'Ans':'처리되었습니다.', 'receipt': transactionHashList}
+    return JsonResponse(res)
