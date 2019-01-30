@@ -122,8 +122,9 @@ class walletInFormation(models.Model):
 
 
 class blackList(models.Model):
-    user = models.AutoField(primary_key=True)
-    is_blacklist = models.CharField(max_length=250)
+    IDX = models.AutoField(primary_key=True)
+    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    is_blacklist = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
     count = models.IntegerField()
@@ -133,7 +134,7 @@ class blackList(models.Model):
 
 class reasonForBan(models.Model):
     IDX = models.AutoField(primary_key=True)
-    user = models.ForeignKey(blackList, on_delete=models.CASCADE)
+    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
     reason = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
@@ -177,7 +178,7 @@ class Post(models.Model):
     like_count = models.IntegerField(default=0)
     aaa = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
-    ccc = models.CharField(max_length=250, blank=True, null=True)
+    isdelete = models.CharField(max_length=250, blank=True, null=True)
 
 class LikeUsers(models.Model):
     IDX = models.AutoField(primary_key=True)

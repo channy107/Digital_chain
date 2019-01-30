@@ -126,6 +126,7 @@
             var post_id = $(this).attr('name');
             console.log(post_id);
             var postType = $('#postType' + post_id).text();
+            var writerUser = $('#writeruser' + post_id).text();
             var reason = $('#reason'+post_id).val();
             console.log(postType);
 
@@ -135,6 +136,7 @@
                 data: {
                     id: post_id,
                     postType: postType,
+                    writerUser: writerUser,
                     reason: reason,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                     },

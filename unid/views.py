@@ -1220,25 +1220,48 @@ def unidAdmin(request):
 def warninguser(request):
     id = request.POST['id']
     postType = request.POST['postType']
+    writerUser = request.POST['writerUser']
     if postType == "contents":
         contents_info = uploadContents.objects.filter(contents_id=id)
         contents_info.update(isdelete="삭제")
-        writer_info = uploadContents.objects.get(contents_id=id)
+        print(1)
+        warningUser = myPageInfomation.objects.get(email=writerUser)
+        print(2)
+        print(warningUser)
         br = reasonForBan (
-            user_id=writer_info.writeremail_id,
+            user_id=warningUser,
             reason=request.POST['reason']
         )
         br.save()
-
+        print(3)
+        warningCount = len(reasonForBan.objects.filter(contents_id=id).values())
+        print(4)
+        print(warningCount)
+        if warningCount == 3:
+            br = blackList (
+                user=warningUser
+            )
+            br.save()
+            res = {'Ans': "경고 3회 누적: " + warningUser + "는(은) 블랙리스트 처리되었습니다"}
+            return JsonResponse(res)
     else:
-        information_info = Post.objects.get(post_id=id)
-        """
-        Post테이블에 isdelete 만들고 추가
-        데이터베이스에 삭제 추가 및 위에 br 코드 추가
-        """
-       
-    res={'Ans': "처리되었습니다"}
-    return JsonResponse(res)
+        information_info = Post.objects.filter(post_id=id)
+        information_info.update(isdelete="삭제")
+        warningUser = myPageInfomation.objects.get(email=writerUser)
+        br = reasonForBan(
+            user_id=warningUser,
+            reason=request.POST['reason']
+        )
+        br.save()
+        warningCount = len(reasonForBan.objects.filter(contents_id=id).values())
+        if warningCount == 3:
+            br = blackList(
+                user=warningUser
+            )
+            br.save()
+            res = {'Ans': "경고 3회 누적: " + warningUser + "는(은) 블랙리스트 처리되었습니다"}
+            return JsonResponse(res)
+
 
 
 def testpage(request):
