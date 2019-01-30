@@ -133,14 +133,20 @@ def mypage(request):
 
 @csrf_exempt
 def user_name_verification(request):
-    # user_name = request.POST['name']
-    verification = myPageInfomation.objects.get(name=user_name)
-    if verification:
-        res = {'Ans':1}
-        return JsonResponse(res)
-        print(res)
-    else:
+    user_name = request.POST['name']
+    print(user_name)
+    print(request.session['user_name'])
+    if user_name == request.session['user_name']:
+
         res = {'Ans':0}
+        return JsonResponse(res)
+    else:
+        try:
+            verification = myPageInfomation.objects.get(name=user_name)
+        except:
+            res = {'Ans':0}
+            return JsonResponse(res)
+        res = {'Ans':1}
         return JsonResponse(res)
 
 
