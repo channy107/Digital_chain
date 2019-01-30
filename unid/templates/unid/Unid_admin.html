@@ -46,14 +46,42 @@
     </div>
 
     <div class="unid_blacklists">
-        <div class="title">
-            BLACK_LIST
-        </div>
-        <div class="context">
-            {% for list in allBlackList %}
-
+        <h2>OPINIONS</h2>
+        <p>사용자의 불편함을 개선합시다.</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>게시판</th>
+                    <th>게시글 제목</th>
+                    <th>작성자</th>
+                    <th>신고자</th>
+                    <th>신고이유</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allOpinions %}
+            <tr>
+                <td id="postType{{ list.posts_id }}">{{ list.ccc }}</td>
+                <td id="{{ list.posts_id }}"><a href="../contentsdetail/{{ list.posts_id }}">{{ list.bbb }}</a></td>
+                <td id="writeruser{{ list.posts_id }}">{{ list.writeruser }}</td>
+                <td id="fromuser{{ list.posts_id }}">{{ list.fromuser }}</td>
+                {% if list.exceptopinion %}
+                <td id="reason{{ list.posts_id }}">
+                    {{ list.context }} ( {{ list.exceptopinion }} )
+                    <input type="button" class="yellowCard" name="{{ list.posts_id }}" value="경고">
+                    <input type="button" class="noProblem" name="{{ list.posts_id }}" value="이상없음">
+                </td>
+                {% else %}
+                <td id="reason{{ list.posts_id }}">
+                    {{ list.context }}
+                    <input type="button" class="yellowCard" name="{{ list.posts_id }}" value="경고">
+                    <input type="button" class="noProblem" name="{{ list.posts_id }}" value="이상없음">
+                </td>
+                {% endif %}
+            </tr>
             {% endfor %}
-        </div>
+            </tbody>
+        </table>
     </div>
 
     <div class="unid_transacts">
@@ -91,25 +119,34 @@
 </div>
 
 
+<script>
 
+    jQuery(document).ready(function($){
+        $(document).on('click', '.yellowCard', function(){
+            var post_id = $(this).attr('name');
+            console.log(post_id);
+            var postType = $('#postType' + post_id).text();
+            var writerUser = $('#writeruser' + post_id).text();
+            var reason = $('#reason'+post_id).val();
+            console.log(postType);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            $.ajax({
+                type: 'POST',
+                url: '../warninguser/',
+                data: {
+                    id: post_id,
+                    postType: postType,
+                    writerUser: writerUser,
+                    reason: reason,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}
 

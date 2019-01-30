@@ -231,6 +231,22 @@ xpopup
     font-size: 0.95rem;
     text-align: left;
 }
+.popupcategory {
+    margin: 0 0 40px 0;
+}
+.popupcategory label {
+    position: relative;
+    right: 40px;
+}
+.popupcategory select {
+    float: right;
+    position: relative;
+    bottom: 10px;
+    right: 20px;
+}
+.popupcategory input {
+    display: none;
+}
 .popuprow3 {
     color: grey;
     padding: 0 0 30px 0;
@@ -346,18 +362,17 @@ xpopup
                     <h4>이 게시물에 대한 의견 보내기</h4>
                     회원님의 소중한 의견은 Unid에서 문제를 파악하는데 사용됩니다.
                 </div>
-                <div>
-                    <form id="contents-opinion" name="contents-opinion" method='post' enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label for="inputcategory" class="col-sm-2" >카테고리</label>
-                        <select class="form-control col-sm-2" id="inputcategory" name="category">
-                            <option title="Combo 1">음란물</option>
-                            <option title="Combo 2">혐오발언</option>
-                            <option title="Combo 3">폭력</option>
-                            <option title="Combo 4">허위정보</option>
-                            <option title="Combo 5">저작권 위반</option>
-                        </select>
-                    </form>
+                <div class="popupcategory">
+                    <label for="inputcategory" class="col-sm-3" >카테고리</label>
+                    <select class="form-control col-sm-7" id="inputcategory" name="category">
+                        <option title="Combo 1">음란물</option>
+                        <option title="Combo 2">혐오발언</option>
+                        <option title="Combo 3">폭력</option>
+                        <option title="Combo 4">허위정보</option>
+                        <option title="Combo 5">저작권 위반</option>
+                        <option title="Combo 5">기타</option>
+                    </select>
+                    <input type="text" class="col-sm-11 form-control" id="exception" placeholder="의견을 입력해주세요">
                 </div>
                 <ul class="cd-buttons">
                     <li><a href="#0" class="cd-popup-no">돌아가기</a></li>
@@ -600,10 +615,47 @@ xpopup
                 $('.cd-popup2').addClass('is-visible');
             };
         });
+        $('#inputcategory').on('change', function(event) {
+            event.preventDefault();
+            let isException = $('#inputcategory').val()
+            if (isException == "기타") {
+                $('#exception').show();
+            } else {
+                $('#exception').hide();
+
+            };
+        });
+
+        $('.cd-popup-postopinion').on('click', function(event){
+            event.preventDefault();
+            let category = $('#inputcategory').val();
+            let exceptOpinion = $('#exception').val();
+            let writeremail = "{{ contents.writeremail.email }}";
+            let title = "{{ contents.title }}";
+            let type = "contents"
+
+            $.ajax({
+                type: 'POST',
+                url: '../opinion/',
+                data: {
+                    id: {{ contents.contents_id }},
+                    category: category,
+                    exceptOpinion: exceptOpinion,
+                    writeremail: writeremail,
+                    title: title,
+                    type: type,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                    $('.cd-popup2').removeClass('is-visible');
+                    }
+                });
+            });
 
         //close popup
-        $('.cd-popup').on('click', function(event){
-            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
+        $('.cd-popup2').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup2') || $(event.target).is('.cd-popup-no')) {
                 event.preventDefault();
                 $(this).removeClass('is-visible');
             }
@@ -611,27 +663,10 @@ xpopup
         //close popup when clicking the esc keyboard button
         $(document).keyup(function(event){
             if(event.which=='27'){
-                $('.cd-popup').removeClass('is-visible');
+                $('.cd-popup2').removeClass('is-visible');
             }
 
         });
-
-        $('.cd-popup-postopinion').on('click', function(event){
-            event.preventDefault();
-            let category = $('#inputcategory').val();
-            $.ajax({
-                type: 'POST',
-                url: '../opinion/',
-                data: {
-                    id: contents_id,
-                    category: category,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                success : function(res) {
-                    alert(res.Ans);
-                    }
-                });
-            });
 
         //open popup
         $('.cd-popup-trigger').on('click', function(event){

@@ -43,4 +43,8 @@ urlpatterns = [
     path('termsofuse/', views.termsofuse, name='termsofuse'),
     path('privacy/', views.privacy, name='privacy'),
     path('unidadmin/', views.unidAdmin, name='unidAdmin'),
+    path('opinion/', views.opinion, name='opinion'),
+    path('warninguser/', views.warninguser, name='warninguser'),
+    path('testpage/', views.testpage, name='testpage'),
+    path('contentsBlockTest/', views.contentsBlockTest, name='contentsBlockTest'),
 ]
