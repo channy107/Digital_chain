@@ -48,5 +48,6 @@ urlpatterns = [
     path('noProblem/', views.noProblem, name='noProblem'),
     path('testpage/', views.testpage, name='testpage'),
     path('contentsBlockTest/', views.contentsBlockTest, name='contentsBlockTest'),
+    path('user_name_verification/', views.user_name_verification, name='user_name_verification'),
     path('loginAdmin/', views.loginAdmin, name='loginAdmin'),
 ]
