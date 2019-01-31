@@ -367,17 +367,6 @@ xpopup
                 </select>
             </div>
             <div class="form-group">
-                <label for="inputfileinfo" class="col-sm-2">파일정보</label>
-                <select class="form-control col-sm-10" id="inputfileinfo" name="fileinfo">
-                    <option title="Combo 1">PDF</option>
-                    <option title="Combo 2">Excel</option>
-                    <option title="Combo 3">한글</option>
-                    <option title="Combo 4">PPT</option>
-                    <option title="Combo 5">Word</option>
-                    <option title="Combo 6" selected="selected">{{ contents.fileinfo }}</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
                 <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" value="{{ contents.tags }}" placeholder="예) #대기업, #취업, #성공적">
                 <ul class="str_ul">
@@ -389,10 +378,6 @@ xpopup
             <div class="form-group">
                 <label for="inputauthorinfo" class="col-sm-2">저자</label>
                 <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text" value={{ contents.authorinfo }}>
-            </div>
-            <div class="form-group">
-                <label for="inputtotalpages" class="col-sm-2" name="totalpages">페이지수</label>
-                <input class="form-control creatdate" id="inputtotalpages" name="totalpages" value={{ contents.totalpages }}>
             </div>
             <div class="form-group">
                 <label for="inputpublisheddate" class="col-sm-2">저작시기</label>

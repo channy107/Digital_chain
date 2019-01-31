@@ -471,19 +471,19 @@ xpopup
                     저자 : <h6>{{ contents.authorinfo }}</h6>
                 </div>
                 <div class="label">
-                    저작시기 : </h5> <h6>{{ contents.publisheddate }}</h6>
+                    저작시기 : <h6>{{ contents.publisheddate }}</h6>
                 </div>
                 <div class="label">
-                    소개글: </h5> <h6>{{ contents.intro }}</h6>
+                    소개글: <h6>{{ contents.intro|linebreaksbr }}</h6>
                 </div>
                 <div class="label">
-                    목차:</h5> <h6>{{ contents.index }} </h6>
+                    목차: <h6>{{ contents.index|linebreaksbr }} </h6>
                 </div>
                 <div class="label">
-                    본문내용: </h5><h6>{{ contents.contents }}</h6>
+                    본문내용: <h6>{{ contents.contents }}</h6>
                 </div>
                 <div class="label">
-                    비고: </h5> <h6>{{ contents.reference }}</h6>
+                    비고: <h6>{{ contents.reference }}</h6>
                 </div>
             </div>
         </div>
@@ -491,7 +491,9 @@ xpopup
         <div class="row">
             <div class="contents-payment">
                 <div>
-                    <p><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="30" height="30">  {{ contents.price }} nid</p>
+                    <p><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="30" height="30" style="margin: 0 0 0 70px;">  {{ contents.price }} nid</p>
+                    {% if request.session.user_email == contents.writeremail_id %}
+                    {% else %}
                     {% if downloadid %}
                     <a href="../download?id={{ contents.contents_id }}"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
@@ -525,6 +527,7 @@ xpopup
                             <a href="#0" class="cd-popup-close img-replace"></a>
                         </div> <!-- cd-popup-container -->
                     </div> <!-- cd-popup -->
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>

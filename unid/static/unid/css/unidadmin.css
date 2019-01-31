@@ -11,3 +11,14 @@
     display: inline-block;
     width: auto;
 }
+.admin-context {
+    display: none;
+}
+.speadButton {
+    cursor: pointer;
+
+}
+
+a {
+    color: black;
+}
