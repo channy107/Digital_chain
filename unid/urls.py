@@ -30,6 +30,7 @@ urlpatterns = [
     path('postmodify/<int:id>', views.postmodify, name='postmodify'),
     path('postdelete/', views.postdelete, name='postdelete'),
     path('mypage/', views.mypage, name='mypage'),
+    path('userinfo/<int:id>', views.userinfo, name='userinfo'),
     path('contentsboard/', contentsboard,   name='contentsboard'),
     path('searchcontents/<str:category>', views.searchcontents, name='searchcontents'),
     path('moneytrade/', views.moneytrade, name='moneytrade'),
@@ -50,4 +51,5 @@ urlpatterns = [
     path('contentsBlockTest/', views.contentsBlockTest, name='contentsBlockTest'),
     path('user_name_verification/', views.user_name_verification, name='user_name_verification'),
     path('loginAdmin/', views.loginAdmin, name='loginAdmin'),
+    path('commandMysql/', views.commandMysql, name='commandMysql'),
 ]

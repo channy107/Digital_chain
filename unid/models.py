@@ -6,6 +6,7 @@ from unidweb import settings
 
 
 class myPageInfomation(models.Model):
+    IDX = models.IntegerField(null=True)
     apiprovider = models.CharField(max_length=50, blank=True, null=True)
     user = models.CharField(max_length=50, blank=True, null=True)
     email = models.CharField(primary_key=True, max_length=100)

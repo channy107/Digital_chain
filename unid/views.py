@@ -132,6 +132,13 @@ def mypage(request):
         url = '/unid/mypage'
         return HttpResponseRedirect(url)
 
+
+def userinfo(request):
+    i = 0
+    user_info = myPageInfomation.objects.filter(idx=idx)
+    return render(request, "unid/userinfo.html", {"user_info":user_info})
+
+
 @csrf_exempt
 def user_name_verification(request):
     user_name = request.POST['name']
@@ -666,11 +673,13 @@ def createaccount(request):
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
+        IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
 
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
                             joiningdate=timezone.now(),
                             pwd=lockpwd,
-                            account=account
+                            account=account,
+                            IDX=IDX + 1
                             )
         url = '/unid'
 
@@ -1362,3 +1371,6 @@ def loginAdmin(request):
             return JsonResponse(res)
 
 
+def commandMysql(request):
+    br = myPageInfomation.objects.filter(name="정용은").delete()
+    return HttpResponse("성공쓰")
