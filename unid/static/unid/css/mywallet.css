@@ -211,7 +211,7 @@
         .row-advertise {
             width: 100%;
             position: relative;
-            top: 0px;
+            top: -5px;
             margin: 0 auto;
         }
         .contents-icon-tags {
@@ -375,6 +375,7 @@
 
         .visible-place {
             background-color: #ebeaea;
+            height: 100%;
         }
         .dropdown {
             margin:0 0 0 60px;

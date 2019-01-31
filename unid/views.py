@@ -30,7 +30,7 @@ import pyminizip
 import shutil
 
 from django.contrib.auth.mixins import AccessMixin
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
 from .mixins import ActiveOnlyMixin
 
@@ -374,7 +374,7 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:6]
-    if request.session['user_email']:
+    if request.session.keys():
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
         return render(request, 'unid/contentstran.html', {
@@ -393,7 +393,7 @@ def main(request):
                                                         })
     else :
         return render(request, 'unid/contentstran.html', {
-            'populated_informations_school': populated_informations,
+            'populated_informations': populated_informations,
 
             'populated_reports_lists': populated_reports_lists,
             'populated_forlecture_lists': populated_forlecture_lists,
@@ -633,21 +633,25 @@ def login(request):
 def signup(request):
     return render(request, 'unid/signup.html', {})
 
+
+
 @login_required
 def createaccount(request):
     if request.method == 'GET':
         account = myPageInfomation.objects.get(email=request.session['user_email']).account
-        if unidBlackList.objects.get(user_id=request.session['user_email']):
+        try:
+            unidBlackList.objects.get(user_id=request.session['user_email'])
             request.session['user_email'] = {}
             request.session['user_name'] = {}
             request.session.modified = True
             return HttpResponse("사용이 금지 된 유저입니다.")
-        if account:
-            request.session['user_account'] = account
-            url = '/unid'
-            return HttpResponseRedirect(url)
-        else:
-            return render(request, 'unid/createaccount.html', {})
+        except ObjectDoesNotExist as e:
+            if account:
+                request.session['user_account'] = account
+                url = '/unid'
+                return HttpResponseRedirect(url)
+            else:
+                return render(request, 'unid/createaccount.html', {})
     else:
         rpc_url = "http://222.239.231.252:9545"
         w3 = Web3(HTTPProvider(rpc_url))
@@ -1221,22 +1225,26 @@ def opinion(request):
 
 
 def unidAdmin(request):
-    if request.session['Unid_admin']:
+    try:
+        if request.session['Unid_admin']:
 
-        allUsers = myPageInfomation.objects.all()
-        allBlackList = unidBlackList.objects.all()
-        allTransacts = walletInFormation.objects.all()
-        allContents = uploadContents.objects.all()
-        allPost = Post.objects.all()
-        allOpinions = opinions.objects.filter(result="확인중")
-        return render(request, 'unid/Unid_admin.html', {
-                                                        'allUsers': allUsers,
-                                                        'allBlackList': allBlackList,
-                                                        'allTransacts': allTransacts,
-                                                        'allContents': allContents,
-                                                        'allPost': allPost,
-                                                        'allOpinions': allOpinions
-        })
+            allUsers = myPageInfomation.objects.all()
+            allBlackList = unidBlackList.objects.all()
+            allTransacts = walletInFormation.objects.all()
+            allContents = uploadContents.objects.all()
+            allPost = Post.objects.all()
+            allOpinions = opinions.objects.filter(result="확인중")
+            return render(request, 'unid/Unid_admin.html', {
+                                                            'allUsers': allUsers,
+                                                            'allBlackList': allBlackList,
+                                                            'allTransacts': allTransacts,
+                                                            'allContents': allContents,
+                                                            'allPost': allPost,
+                                                            'allOpinions': allOpinions
+            })
+    except KeyError as e:
+        url = '/unid/loginAdmin'
+        return HttpResponseRedirect(url)
 
 
 def warninguser(request):
@@ -1260,7 +1268,7 @@ def warninguser(request):
         )
         br.save()
         print(3)
-        warningCount = len(blackReasonForBan.objects.filter(user_id=warningUser.email).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고") ).values())
         print(4)
         print(warningCount)
         if warningCount >= 3:
@@ -1271,6 +1279,10 @@ def warninguser(request):
             br.save()
             mpi = myPageInfomation.objects.filter(email=writerUser)
             mpi.update(is_blacklist="Yes")
+            """
+            ulc = uploadContents.objects.filter(writeremail=writerUser)
+            ulc.update(isdelete="삭제")
+            """
             res = {'Ans': "경고 3회 누적: " + warningUser.email + "는(은) 블랙리스트 처리되었습니다"}
             return JsonResponse(res)
     else:
@@ -1285,7 +1297,7 @@ def warninguser(request):
 
 
         br.save()
-        warningCount = len(blackReasonForBan.objects.filter(user_id=warningUser.email).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고")).values())
         if warningCount >= 3:
             br = unidBlackList(
                 user=warningUser,
@@ -1294,6 +1306,10 @@ def warninguser(request):
             br.save()
             mpi = myPageInfomation.objects.filter(email=writerUser)
             mpi.update(is_blacklist="Yes")
+            """
+            ulc = uploadContents.objects.filter(writeremail=writerUser)
+            ulc.update(isdelete="삭제")
+            """
             res = {'Ans': "경고 3회 누적: " + warningUser.email + "는(은) 블랙리스트 처리되었습니다"}
             return JsonResponse(res)
 

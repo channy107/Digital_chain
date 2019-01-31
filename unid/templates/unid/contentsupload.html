@@ -449,10 +449,10 @@ xpopup
             <!--</div>-->
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
-                <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업, #취업, #성공적">
+                <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업 #취업 #성공적">
                 <ul class="str_ul">
                     <li class="tip_str">
-                    태그를 입력해주세요. 쉼표로 구분(,) 최대 3개
+                    태그를 입력해주세요.
                     </li>
                 </ul>
             </div>
@@ -682,9 +682,13 @@ xpopup
             let upload_files = $('#user_files').get(0).files
             var fileee = $('#user_files').get(0).files[0]['name'];
             console.log(fileee);
-            $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
-            $("#user_file_before").hide();
-            $("#user_file_after").show();
+            if ( upload_files.length > 5 ) {
+                alert("최대 5개까지만 등록할 수 있습니다.");
+            } else {
+                $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_file_before").hide();
+                $("#user_file_after").show();
+            }
         });
 
         $('#reupload').on('click', function(){
@@ -700,11 +704,16 @@ xpopup
         });
 
         $('#user_preview_files').on('change', function(){
+            let upload_files = $('#user_preview_files').get(0).files
             var fileee = $('#user_preview_files').get(0).files[0]['name'];
             console.log(fileee);
-            $('#input_previewfiles_after').val(fileee);
-            $("#user_preview_file_before").hide();
-            $("#user_preview_file_after").show();
+            if ( upload_files.length > 3 ) {
+                alert("최대 3개까지만 등록할 수 있습니다.");
+            } else {
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_preview_file_before").hide();
+                $("#user_preview_file_after").show();
+            }
         });
 
         $('#reupload_preview').on('click', function(){
@@ -725,16 +734,16 @@ xpopup
             for (var i = 0; i < strLen; i++) {
                 oneChar = strValue.charAt(i);
                 if (escape(oneChar).length > 4) {
-                    totalByte += 2;
+                    totalByte++ ;
                 } else {
-                    totalByte++;
+                    totalByte += 0.5;
                 }
-                $('#body_byte').html(totalByte + "/60");
+                $('#body_byte').html(totalByte + "/30");
             }
             console.log(totalByte);
             // 넘어가는 글자는 자른다.
-            if (totalByte > 60) {
-                alert(60 + "자를 초과 입력 할 수 없습니다.");
+            if (totalByte > 30) {
+                alert(30 + "자를 초과 입력 할 수 없습니다.");
                 console.log(strValue);
                 str2 = strValue.substr(0, 30);
                 console.log(str2);
@@ -760,12 +769,12 @@ xpopup
                 } else {
                     totalByte++;
                 }
-                $('#body_byte1').html(totalByte + "/2000");
+                $('#body_byte1').html(totalByte + "/1000");
             }
             console.log(totalByte);
             // 넘어가는 글자는 자른다.
-            if (totalByte > 2000) {
-                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
                 console.log(strValue);
                 str2 = strValue.substr(0, 1000);
                 console.log(str2);
@@ -791,12 +800,12 @@ xpopup
                 } else {
                     totalByte++;
                 }
-                $('#body_byte2').html(totalByte + "/2000");
+                $('#body_byte2').html(totalByte + "/1000");
             }
             console.log(totalByte);
             // 넘어가는 글자는 자른다.
-            if (totalByte > 2000) {
-                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
                 str2 = strValue.substr(0, 1000);
                 $('#inputindex').val(str2);
             }
@@ -819,12 +828,12 @@ xpopup
                 } else {
                     totalByte++;
                 }
-                $('#body_byte3').html(totalByte + "/2000");
+                $('#body_byte3').html(totalByte + "/1000");
             }
             console.log(totalByte);
             // 넘어가는 글자는 자른다.
-            if (totalByte > 2000) {
-                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
                 str2 = strValue.substr(0, 1000);
                 $('#inputtext').val(str2);
             }
@@ -847,12 +856,12 @@ xpopup
                 } else {
                     totalByte++;
                 }
-                $('#body_byte4').html(totalByte + "/2000");
+                $('#body_byte4').html(totalByte + "/1000");
             }
             console.log(totalByte);
             // 넘어가는 글자는 자른다.
-            if (totalByte > 2000) {
-                alert(2000 + "자를 초과 입력 할 수 없습니다.");
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
                 str2 = strValue.substr(0, 1000);
                 $('#inputreference').val(str2);
             }
