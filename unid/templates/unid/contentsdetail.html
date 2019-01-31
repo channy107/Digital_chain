@@ -592,6 +592,21 @@ xpopup
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');
         });
+        $('.cd-popup-delete-yes').on('click', function() {
+            var id = {{ contents.contents_id }};
+            $.ajax({
+                type: 'POST',
+                url: '../postdelete/',
+                data: {
+                        id: id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(res) {
+                    alert(res.Ans);
+                    location="{% url 'searchcontents' contents.category %}";
+                    }
+                });
+            });
         //close popup
         $('.cd-popup1').on('click', function(event){
             if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup1') || $(event.target).is('.cd-popup-no')) {

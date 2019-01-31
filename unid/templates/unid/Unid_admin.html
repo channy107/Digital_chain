@@ -29,12 +29,12 @@
             <tbody>
             {% for list in allUsers %}
             <tr>
-                <td>{{ list.email }}</td>
+                <td>{{ list.email|truncatechars_html:10 }}</td>
                 <td>{{ list.name }}</td>
-                <td>{{ list.profile }}</td>
+                <td>{{ list.profile|truncatechars_html:5 }}</td>
                 <td>{{ list.joiningdate }}</td>
                 <td>{{ list.votingcount }}</td>
-                <td>{{ list.account }}</td>
+                <td>{{ list.account|truncatechars_html:10 }}</td>
                 <td>{{ list.last_modified }}</td>
                 <td>{{ list.is_blacklist }}</td>
 
@@ -166,13 +166,13 @@
             {% for list in allPost %}
             <tr>
                 <td>{{ list.posts_id }}</td>
-                <td>{{ list.title }}</td>
-                <td>{{ list.contents|truncatechars_html:20 }}</td>
+                <td>{{ list.title|truncatechars_html:15 }}</td>
+                <td>{{ list.contents|truncatechars_html:15 }}</td>
                 <td>{{ list.category }}</td>
                 <td>{{ list.tags }}</td>
                 <td>{{ list.rewards }}</td>
                 <td>{{ list.liked_count }}</td>
-                <td>{{ list.user_id }}</td>
+                <td>{{ list.user_id|truncatechars_html:10 }}</td>
                 <td>{{ list.created_at }}</td>
                 <td>{{ list.isdelete }}</td>
             </tr>
@@ -204,13 +204,13 @@
             {% for list in allPost %}
             <tr>
                 <td>{{ list.posts_id }}</td>
-                <td>{{ list.title }}</td>
-                <td>{{ list.contents|truncatechars_html:20 }}</td>
+                <td>{{ list.title|truncatechars_html:15 }}</td>
+                <td>{{ list.contents|truncatechars_html:15 }}</td>
                 <td>{{ list.category }}</td>
                 <td>{{ list.tags }}</td>
                 <td>{{ list.rewards }}</td>
                 <td>{{ list.liked_count }}</td>
-                <td>{{ list.user_id }}</td>
+                <td>{{ list.user_id|truncatechars_html:10 }}</td>
                 <td>{{ list.created_at }}</td>
                 <td>{{ list.isdelete }}</td>
             </tr>

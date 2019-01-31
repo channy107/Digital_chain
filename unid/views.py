@@ -1204,7 +1204,7 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 
 def searchcontents(request, category):
     allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
-                                            Q(category=category) & Q(isdelete__isnull=True)
+                                            Q(category=category) & ~Q(isdelete="삭제")
                                         )
     return render(
         request, 'unid/searchcontents.html',
