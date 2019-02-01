@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'unid',
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,6 +56,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.naver',
     'allauth.socialaccount.providers.facebook',
     
+]
+
+CRONJOBS = [
+    ('0 0 * * *', 'unid.views.my_cron_job'),
+    ('0 0 * * *', 'unid.views.writer_rewards'),
+    ('0 0 * * *', 'unid.views.liked_users_reward')
 ]
 
 WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh_index')
