@@ -541,7 +541,7 @@ def my_cron_job():
 def writer_rewards():
     now = datetime.now()
     reward_day = now - timedelta(days=1)
-    rewarded_day = reward_day - timedelta(days=7)
+    rewarded_day = reward_day - timedelta(days=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
     reward_values = reward.values()
     # print(reward_values)
@@ -562,10 +562,22 @@ def writer_rewards():
         w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
         tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
 
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+        store = walletInFormation.objects.all()
+        store.transactiondate = now
+        store.fromAccount = w3.eth.coinbase
+        store.toAccount = writer
+        store.balance = rewards
+        store.txid = receipt
+        store.type = "rewards"
+        store.aaa = "success"
+        store.save()
+
+
 def liked_users_reward():
     now = datetime.now()
     reward_day = now - timedelta(days=1)
-    rewarded_day = reward_day - timedelta(days=7)
+    rewarded_day = reward_day - timedelta(days=1)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
     reward_post_values = reward_post.values()
     # print(reward_post_values)
@@ -633,7 +645,16 @@ def liked_users_reward():
             w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
             tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusers, user_reward).transact(
                 {'from': w3.eth.coinbase, 'gas': 2000000})
-
+            receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+            store = walletInFormation.objects.all()
+            store.transactiondate = now
+            store.fromAccount = w3.eth.coinbase
+            store.toAccount = likedusers
+            store.balance = 0.2
+            store.txid = receipt
+            store.type = "rewards"
+            store.aaa = "success"
+            store.save()
             writer_reward_success.aaa = "success"
             writer_reward_success.save()
             reward_success.aaa = "success"
@@ -645,6 +666,7 @@ def main_detail(request, id):
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
     if request.session.keys():
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         context = {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage}
     else:
