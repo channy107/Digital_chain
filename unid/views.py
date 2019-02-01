@@ -145,8 +145,10 @@ def user_name_verification(request):
     print(user_name)
     print(request.session['user_name'])
     if user_name == request.session['user_name']:
-
         res = {'Ans':0}
+        return JsonResponse(res)
+    elif user_name == "":
+        res ={'Ans':2}
         return JsonResponse(res)
     else:
         try:
@@ -281,9 +283,8 @@ def contentsdetail(request, id):
 
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x5bf8997775c7dcb7a39e68fc5c43479ceb45eed1")
-    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
-)
+    nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+    ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
     try:
         account = Web3.toChecksumAddress(myPageInfomation.objects.get(email=request.session['user_email']).account)
@@ -330,7 +331,7 @@ def contentsdetail(request, id):
 def moneytrade(request):
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x5bf8997775c7dcb7a39e68fc5c43479ceb45eed1")
+    nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
     ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
 )
 
@@ -796,15 +797,17 @@ def createaccount(request):
         kk = w3.personal.listAccounts
         print(kk)
 
-
+        name = request.POST['name']
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
-        IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
-
+        print(1)
+        IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
+        print(IDX)
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
                             joiningdate=timezone.now(),
                             pwd=lockpwd,
+                            name=name,
                             account=account,
                             IDX=IDX + 1
                             )
@@ -1020,7 +1023,7 @@ def contentsupload(request):
         rpc_url = "http://222.239.231.252:9545"
         w3 = Web3(HTTPProvider(rpc_url))
         print("시작 트랜젝션")
-        contentsMasterContract_address = Web3.toChecksumAddress("0x22862cf6b8c28aba4f0b519e3c93a31b9edd0d31")
+        contentsMasterContract_address = Web3.toChecksumAddress("0x2679652bf8f5a8c4505bde0c164cc4c4e4e9a628")
 
         cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
 
@@ -1471,17 +1474,9 @@ def contentsBlockTest(request):
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
     print("시작 트랜젝션")
-    contentsMasterContract_address = Web3.toChecksumAddress("0x22862cf6b8c28aba4f0b519e3c93a31b9edd0d31")
+    contentsMasterContract_address = Web3.toChecksumAddress("0x2679652bf8f5a8c4505bde0c164cc4c4e4e9a628")
 
-    cmc = w3.eth.contract(address=contentsMasterContract_address, abi=[
-        {"constant": False, "inputs": [{"name": "name", "type": "string"}, {"name": "hash", "type": "string"}],
-         "name": "addContents", "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
-        {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "contents",
-         "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
-        {"constant": True, "inputs": [], "name": "getContentsAddressList",
-         "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
-         "type": "function"}, {"anonymous": False, "inputs": [{"indexed": False, "name": "name", "type": "string"}],
-                               "name": "EventAddContents", "type": "event"}])
+    cmc = w3.eth.contract(address=contentsMasterContract_address, abi=[{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
 
     filehashdatas = request.POST['filehashdatas']
 
@@ -1509,7 +1504,9 @@ def loginAdmin(request):
             res = {'Ans':'패스워드를 다시 입력해주세요'}
             return JsonResponse(res)
 
+from django.contrib import auth
+
 
 def commandMysql(request):
-    br = myPageInfomation.objects.filter(name="정용은").delete()
+    bbr = auth.user.objects.filter(username=yong0edu).delete()
     return HttpResponse("성공쓰")
