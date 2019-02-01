@@ -52,7 +52,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="padding: 0 1rem;">
     <div class="container">
         <a class="navbar-brand" href="/unid/">
-            <img src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="113" height="54">
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            <img id="unid-logo" src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="92" height="44">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +72,7 @@
               </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto" style="vertical-align: middle;">
+            <ul class="navbar-nav ml-auto" id="navbar-main" style="vertical-align:middle;">
                 <li class="nav-item">
                     <a class="nav-link unid-menus" id="nav1" href="/unid/information/">정보공유</a>
                 </li>
@@ -102,12 +103,9 @@
                     </div>
                 </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link unid-menus" id="go-login" href="/unid/login">로그인</a>
-                </li>
                 <li class="nav-item signup">
                     <div>
-                        <a class="unid-menus unid-menus-signup" id="go-signup" href="/unid/signup">회원가입</a>
+                        <a class="unid-menus unid-menus-signup" id="go-signup" href="/unid/login">시작하기</a>
                     </div>
                 </li>
                 {% endif %}
