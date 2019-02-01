@@ -564,14 +564,9 @@ def writer_rewards():
         tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
 
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-        store = walletInFormation.objects.all()
-        store.transactiondate = now
-        store.fromAccount = w3.eth.coinbase
-        store.toAccount = writer
-        store.balance = rewards
-        store.txid = receipt
-        store.type = "rewards"
-        store.aaa = "success"
+
+        store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=writer, balance=rewards, txid=receipt, type="rewards", aaa="success")
+
         store.save()
 
 
@@ -647,14 +642,7 @@ def liked_users_reward():
             tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusers, user_reward).transact(
                 {'from': w3.eth.coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-            store = walletInFormation.objects.all()
-            store.transactiondate = now
-            store.fromAccount = w3.eth.coinbase
-            store.toAccount = likedusers
-            store.balance = 0.2
-            store.txid = receipt
-            store.type = "rewards"
-            store.aaa = "success"
+            store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=likedusers, balance=0.2, txid=receipt, type="rewards", aaa="success")
             store.save()
             writer_reward_success.aaa = "success"
             writer_reward_success.save()
