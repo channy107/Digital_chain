@@ -25,90 +25,91 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="row">
-
+<div class="contents-post-container">
+    <div class="contents-post-row">
         <div class="sidenav">
-
-          <h4 class="my-4">태그 카테고리</h4>
-          <div class="list-group">
-            <a href="../searchcontents/레포트" class="list-group-item">#레포트</a>
-            <a href="../searchcontents/강의자료" class="list-group-item">#강의자료</a>
-            <a href="../searchcontents/강의노트" class="list-group-item">#강의노트</a>
-            <a href="../searchcontents/시험자료" class="list-group-item">#시험자료</a>
-            <a href="../searchcontents/동영상" class="list-group-item">#동영상</a>
-            <a href="../searchcontents/자기소개서" class="list-group-item">#자소서</a>
-            <a href="../searchcontents/이력서" class="list-group-item">#이력서</a>
-            <a href="../searchcontents/PPT" class="list-group-item">#PPT</a>
-            <a href="../searchcontents/논문" class="list-group-item">#논문</a>
-          </div>
-
-        </div>
-
-        <div class="col-lg-9">
-            <h5>콘텐츠 게시글</h5>
-            <div class="container">
-                {% for contents in contentslists %}
-                <hr>
-                <div class="user">
-                    {% if contents.writeremail.userimage %}
-                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    {% else %}
-                    <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp
-                    {% endif %}
-                    <span class="writer">{{ contents.writeremail.email }}</span>
-                    <span class="writing-time">{{ contents.created|timesince }}전</span>
-                    {% if contents.category == "레포트" %}
-                    <span class="contents-kind">{{ contents.category }}</span>
-                    {% elif contents.category == "강의노트" %}
-                    <span class="contents-kind" style="background-color: orange;">{{ contents.category }}</span>
-                    {% elif contents.category == "시험자료" %}
-                    <span class="contents-kind" style="background-color: green;">{{ contents.category }}</span>
-                    {% elif contents.category == "동영상" %}
-                    <span class="contents-kind" style="background-color: blue;">{{ contents.category }}</span>
-                    {% elif contents.category == "자소서" %}
-                    <span class="contents-kind" style="background-color: navy;">{{ contents.category }}</span>
-                    {% elif contents.category == "이력서" %}
-                    <span class="contents-kind" style="background-color: purple;">{{ contents.category }}</span>
-                    {% elif contents.category == "PPT" %}
-                    <span class="contents-kind" style="background-color: grey;">{{ contents.category }}</span>
-                    {% else %}
-                    <span class="contents-kind" style="background-color: pink;">{{ contents.category }}</span>
-
-
-                    {% endif %}
-                </div>
-                <div class="row">
-                    <div class="main-col-md-3">
-                        <a href="{% url 'contentsdetail' contents.contents_id %}">
-                            {% if contents.imagepath %}
-                            <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ contents.imagepath }}" alt="">
-                            {% else %}
-                            <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" alt="">
-                            {% endif %}
-                        </a>
-                    </div>
-                <div class="col-md-5">
-                    <div class="detail-content">
-                        <h3><a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a></h3>
-                        <p><a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:190 }}</a></p>
-                    </div>
-                            <!--<a class="btn btn-primary" href="#">View Project</a>-->
-                    <div>
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20">
-                        <span id="dallor1">{{ contents.price }} nid</span>
-                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
-                        <span>{{ contents.replymentcount }} 개</span>
-                    </div>
-                    <div>
-                        조회수 {{ contents.hits }} 다운로드수 {{ contents.downloadcount }}
-                    </div>
-                </div>
+            <h4 class="my-4">태그 카테고리</h4>
+            <div class="list-group">
+                <a href="../searchcontents/레포트" class="list-group-item">#레포트</a>
+                <a href="../searchcontents/강의자료" class="list-group-item">#강의자료</a>
+                <a href="../searchcontents/강의노트" class="list-group-item">#강의노트</a>
+                <a href="../searchcontents/시험자료" class="list-group-item">#시험자료</a>
+                <a href="../searchcontents/동영상" class="list-group-item">#동영상</a>
+                <a href="../searchcontents/자기소개서" class="list-group-item">#자소서</a>
+                <a href="../searchcontents/이력서" class="list-group-item">#이력서</a>
+                <a href="../searchcontents/PPT" class="list-group-item">#PPT</a>
+                <a href="../searchcontents/논문" class="list-group-item">#논문</a>
             </div>
-        <hr>
-                    {% endfor %}
-
+        </div>
+        <div class="information-popular-row">
+            <div class="popular-rows">
+                <div class="popular-rows-title">
+                    콘텐츠 게시글
+                </div>
+                <hr>
+                {% for contents in contentslists %}
+                <div class="popular-row">
+                    <ul class="row-top">
+                    <li>
+                        {% if contents.writeremail.userimage %}
+                        <img src="/{{ contents.user.userimage }}">
+                        {% else %}
+                        <img src="{% static 'unid/icon/profile-icon.png' %}">
+                        {% endif %}
+                    </li>
+                    <li>
+                        {{ contents.writeremail.email }}
+                    </li>
+                    <li>
+                        ·         {{ contents.created|timesince }}전
+                    </li>
+                    <li>
+                        {% if contents.category == "레포트" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "강의노트" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "시험자료" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "동영상" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "자소서" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "이력서" %}
+                        <span>{{ contents.category }}</span>
+                        {% elif contents.category == "PPT" %}
+                        <span>{{ contents.category }}</span>
+                        {% else %}
+                        <span>{{ contents.category }}</span>
+                        {% endif %}
+                    </li>
+                </ul>
+                <div class="row-picture">
+                    <a href="{% url 'contentsdetail' contents.contents_id %}">
+                        <img src="">
+                    </a>
+                </div>
+                <ul class="row-middle">
+                    <li>
+                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}dasdsadas</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:80 }}</a>
+                    </li>
+                </ul>
+                <ul class="row-bottom">
+                    <li>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
+                    </li>
+                    <li>
+                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
+
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     jQuery(document).ready(function($){

@@ -1,6 +1,6 @@
 import os
 from _sha256 import sha256
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from ftplib import FTP
 from PIL import Image
 from django.contrib.auth.decorators import login_required
@@ -437,7 +437,8 @@ def info_popular(request):
             posts = paginator.page(paginator.num_pages)
 
         if request.is_ajax():
-            context = {'posts': posts}
+            context = {'posts': posts,
+                       'page_num':page_num}
             return render(request, 'unid/info_popular_ajax.html', context)
 
         context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
@@ -456,7 +457,8 @@ def info_popular(request):
             posts = paginator.page(paginator.num_pages)
 
         if request.is_ajax():
-            context = {'posts': posts}
+            context = {'posts': posts,
+                       'page_num':page_num}
             return render(request, 'unid/info_popular_ajax.html', context)
 
         context = {'posts': posts}
@@ -481,7 +483,8 @@ def information(request):
             posts = paginator.page(paginator.num_pages)
 
         if request.is_ajax():
-            context = {'posts': posts}
+            context = {'posts': posts,
+                       'page_num':page_num}
             return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
@@ -500,7 +503,8 @@ def information(request):
             posts = paginator.page(paginator.num_pages)
 
         if request.is_ajax():
-            context = {'posts': posts}
+            context = {'posts': posts,
+                       'page_num':page_num}
             return render(request, 'unid/information_ajax.html', context)
 
         context = {'posts': posts}
@@ -528,17 +532,114 @@ def vote(request):
 
     return JsonResponse(res)
 
-def my_cron_job(request):
-    voting_count = request.POST['voting_count']
+def my_cron_job():
     myProfile = myPageInfomation.objects.all()
 
     for count in myProfile:
         count.votingcount = 10
         count.save()
 
-    res = {"Ans": "보팅이 충전되었습니다."}
+def writer_rewards():
+    now = datetime.now()
+    reward_day = now - timedelta(days=1)
+    rewarded_day = reward_day - timedelta(days=7)
+    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
+    reward_values = reward.values()
+    # print(reward_values)
 
-    return JsonResponse(res)
+    for i in range(len(reward_values)):
+        rpc_url = "http://222.239.231.252:9545"
+        w3 = Web3(HTTPProvider(rpc_url))
+        nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+        ncc = w3.eth.contract(address = nidCoinContract_address, abi= [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
+);
+        post_id = reward_values[i]['posts_id']
+        rewards = reward_values[i]['rewards']
+        writer = reward_values[i]['user_id']
+        writer_info = myPageInfomation.objects.get(email=writer)
+        writeraccount = writer_info.account
+        reward_nwei = int(rewards*10) * 100000000000000000
+        unidaccountpwd = "pass0"
+        w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
+        tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+
+def liked_users_reward():
+    now = datetime.now()
+    reward_day = now - timedelta(days=1)
+    rewarded_day = reward_day - timedelta(days=7)
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
+    reward_post_values = reward_post.values()
+    # print(reward_post_values)
+    for j in range(len(reward_post_values)):
+        post_id = reward_post_values[j]['posts_id']
+        userreward = reward_post_values[j]['rewards']
+        reward = LikeUsers.objects.filter(posts_id=post_id).exclude(bbb="success")
+        reward_values = reward.values()
+        # print(reward_values)
+        for i in range(len(reward_values)):
+            rpc_url = "http://222.239.231.252:9545"
+            w3 = Web3(HTTPProvider(rpc_url))
+            nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
+                {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
+                 "payable": False, "stateMutability": "view", "type": "function"},
+                {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
+                 "payable": False, "stateMutability": "view", "type": "function"},
+                {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
+                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                    {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                    {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
+                                                                                    "stateMutability": "nonpayable",
+                                                                                    "type": "function"},
+                {"constant": False, "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                                               {"name": "_rewards", "type": "int256"},
+                                               {"name": "_usercount", "type": "int256"}], "name": "userreward",
+                 "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
+                {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
+                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
+                 "type": "function"},
+                {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
+                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                    {"name": "_to", "type": "address"}, {"name": "_value", "type": "int256"}], "name": "transfer",
+                                                                                    "outputs": [], "payable": False,
+                                                                                    "stateMutability": "nonpayable",
+                                                                                    "type": "function"},
+                {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
+                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
+                 "type": "function"}, {
+                    "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
+                               {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
+                    "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
+                                                                                                "inputs": [
+                                                                                                    {"indexed": True,
+                                                                                                     "name": "from",
+                                                                                                     "type": "address"},
+                                                                                                    {"indexed": True,
+                                                                                                     "name": "to",
+                                                                                                     "type": "address"},
+                                                                                                    {"indexed": False,
+                                                                                                     "name": "value",
+                                                                                                     "type": "int256"}],
+                                                                                                "name": "EvtTransfer",
+                                                                                                "type": "event"}]
+                                  );
+            likedusers = reward_values[i]['liked_users']
+            usercount = reward.count()
+            user_info = myPageInfomation.objects.get(email=likedusers)
+            writer_reward_success = Post.objects.get(posts_id=post_id)
+            reward_success = LikeUsers.objects.get(posts_id=post_id, liked_users=likedusers)
+            likedusersaccount = user_info.account
+            user_reward = 0.2*100000000000000000000
+            unidaccountpwd = "pass0"
+            w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
+            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusers, user_reward).transact(
+                {'from': w3.eth.coinbase, 'gas': 2000000})
+
+            writer_reward_success.aaa = "success"
+            writer_reward_success.save()
+            reward_success.aaa = "success"
+            reward_success.save()
+
 
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
@@ -1216,7 +1317,7 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 
 def searchcontents(request, category):
     allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
-                                            Q(category=category) & Q(isdelete__isnull=True)
+                                            Q(category=category) & ~Q(isdelete="삭제")
                                         )
     return render(
         request, 'unid/searchcontents.html',

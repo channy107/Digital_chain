@@ -202,7 +202,7 @@ xpopup
   transition: background-color 0.2s;
 }
 .cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a {
-  background: #fc7169;
+  background: #b6bece;
   border-radius: 0 0 0 .25em;
 }
 .popuprow1 {
@@ -225,7 +225,7 @@ xpopup
   background-color: #fc8982;
 }
 .cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a {
-  background: #b6bece;
+  background: #fc7169;
   border-radius: 0 0 .25em 0;
 }
 .no-touch .cd-popup-container .cd-buttons li:last-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:last-child a:hover {
@@ -487,18 +487,14 @@ xpopup
 
  본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
                                 </textarea>
-                                <div class="target" id="1">
-                                    <input class="zzzz" type="button" value="동의합니다." disabled/>
-                                </div>
-                                <div class="target" id="2">
-                                    <input class="cd-popup-no" type="button" value="동의하지않습니다." />
-                                </div>
-                            </div>
-                        </div> <!-- cd-popup-container -->
-                    </div> <!-- cd-popup -->
+                                <ul class="cd-buttons">
+                                    <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
+                                    <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
+                                </ul>
+                            </div> <!-- cd-popup-container -->
+                        </div> <!-- cd-popup -->
+                    </div>
                 </div>
-            </div>
-            <div class="row">
                 <button type="button" class="cd-popup-trigger" name="enrollcontents" id="enrollcontents"> 콘텐츠 등록 </button>
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
@@ -515,15 +511,15 @@ xpopup
                         </div>
 
                         <ul class="cd-buttons">
-                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
                             <li><a href="#0" class="cd-popup-no">No</a></li>
+                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
-
             </div>
-         </form>
+        </form>
+    </div>
 
 
 </body>
@@ -673,11 +669,6 @@ xpopup
             if (!form.authorinfo.value) {
                 alert("저자를 적어주세요");
                 $('#inputauthorinfo').focus();
-                return false;
-            }
-            if (!form.totalpages.value) {
-                alert("페이지수를 적어주세요");
-                $('#inputtotalpages').focus();
                 return false;
             }
             if (!form.publisheddate.value) {

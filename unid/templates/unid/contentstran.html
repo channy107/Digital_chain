@@ -115,12 +115,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="160" height="180">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail_id }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail_id }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>
