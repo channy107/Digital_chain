@@ -105,14 +105,15 @@
 .unid-title {
 
     margin: 10px auto;
-    font-size: 35px;
-    font-weight: bold;
+    font-size: 40px;
+    font-weight: 700;
     color: white;
 }
 .unid-explain {
     margin: 15px auto;
-    font-size: 19px;
+    font-size: 20px;
     color: white;
+    font-weight: 300;
     width: 450px;
 }
 .unid-moreinfo {
@@ -120,11 +121,11 @@
     color: white;
     height: 30px;
     display: inline-block;
-    width: 120px;
+    width: 110px;
     background-color: #2f2f2f;
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 5px;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
 }
 .contentsmain-container1 {
@@ -204,7 +205,7 @@
     background-image: url("/static/unid/img/Unidmain.png");
     background-size: cover;
     width: auto;
-    height: 400px;
+    height: 480px;
     position: relative;
     top: 0px;
 }
@@ -264,7 +265,8 @@
     margin: 20px 0 0 20px;
     display: inline-block;
     font-weight: bold;
-    font-size: 16.3px;
+    font-size: 14.1px;
+    padding: 20px;
     }
 .contents-popular-kind {
     background-color: red;
@@ -344,8 +346,9 @@
     background-color: white;
 }
 .information-popular-row .popular-rows .popular-rows-title {
-    font-weight: bold;
-    font-size: 16.3px;
+    color : #333333;
+    font-weight: 500;
+    font-size: 14.1px;
     margin: 0 0 10px 0;
 }
 .information-popular-row .popular-rows .popular-row {
@@ -377,14 +380,14 @@
     border-radius: 25px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li:nth-child(2) {
-    font-size: 11px;
+    font-size: 13.1px;
     font-weight: bold;
-    color: black;
+    color: #333333;
     margin: 0 10px 0 5px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li:nth-child(3) {
-    font-size: 8px;
-    font-weight: bold;
+    font-size: 11px;
+    font-weight: 400;
     color: #666666;
     margin: 0 20px 0 5px;
 
@@ -417,12 +420,12 @@
     list-style: none;
     width: 980px;
     height: 20px;
-    margin: 0 0 5px 0;
+    margin: -5px 9px 9px 18px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(1) a {
-    color: black;
-    font-size: 13.3px;
-    font-weight: 550;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 500;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(2) {
     height: 40px;
@@ -430,8 +433,8 @@
     line-height: 16px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(3) li:nth-child(2) a {
-    color: black;
-    font-size: 13px;
+    color: #4d4d4d;
+    font-size: 14px;
     font-weight: 400;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) li {
@@ -452,7 +455,8 @@
     list-style: none;
     display: inline-block;
     margin: 0 20px 0 0;
-    font-size: 10.8px;
+    font-size: 13px;
+    color:#333333;
     font-weight: 400;
 }
 
