@@ -464,26 +464,56 @@ xpopup
         <!-- detail of contents -->
         <div class="row">
             <div class="contents-detail">
-                <div class="label">
+                <div class="contents-detail-row">
                     <h4><p>컨텐츠 정보</p></h4>
                 </div>
-                <div class="label">
-                    저자 : <h6>{{ contents.authorinfo }}</h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        저자
+                    </div>
+                    <div class="context">
+                        {{ contents.authorinfo }}
+                    </div>
                 </div>
-                <div class="label">
-                    저작시기 : <h6>{{ contents.publisheddate }}</h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        저작시기
+                    </div>
+                    <div class="context">
+                        {{ contents.publisheddate }}
+                    </div>
                 </div>
-                <div class="label">
-                    소개글: <h6>{{ contents.intro|linebreaksbr }}</h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        소개글
+                    </div>
+                    <div class="context">
+                        {{ contents.intro|linebreaksbr }}
+                    </div>
                 </div>
-                <div class="label">
-                    목차: <h6>{{ contents.index|linebreaksbr }} </h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        목차
+                    </div>
+                    <div class="context">
+                        {{ contents.index|linebreaksbr }}
+                    </div>
                 </div>
-                <div class="label">
-                    본문내용: <h6>{{ contents.contents }}</h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        본문내용
+                    </div>
+                    <div class="context">
+                        {{ contents.contents|linebreaksbr }}
+                    </div>
                 </div>
-                <div class="label">
-                    비고: <h6>{{ contents.reference }}</h6>
+                <div class="contents-detail-row">
+                    <div class="title">
+                        참고문헌
+                    </div>
+                    <div class="context">
+                        {{ contents.reference|linebreaksbr }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -594,11 +624,13 @@ xpopup
         });
         $('.cd-popup-delete-yes').on('click', function() {
             var id = {{ contents.contents_id }};
+            var type = 'contents';
             $.ajax({
                 type: 'POST',
                 url: '../postdelete/',
                 data: {
                         id: id,
+                        type: type,
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 success: function(res) {

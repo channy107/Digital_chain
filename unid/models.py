@@ -48,10 +48,10 @@ class uploadContents(models.Model):
     fileinfo = models.CharField(max_length=250)
     # totalpages = models.IntegerField()
     authorinfo = models.CharField(max_length=1000)
-    intro = models.CharField(max_length=1000)
-    index = models.CharField(max_length=1000)
-    contents = models.CharField(max_length=1000)  # 소개글 제한?
-    reference = models.CharField(max_length=1000, default=True)
+    intro = models.CharField(max_length=2000)
+    index = models.CharField(max_length=2000)
+    contents = models.CharField(max_length=2000)  # 소개글 제한?
+    reference = models.CharField(max_length=2000, default=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
     downloadcount = models.IntegerField(null=True)

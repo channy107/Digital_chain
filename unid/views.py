@@ -377,34 +377,19 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def main(request):
-    populated_informations = Post.objects.order_by('like_count')[0:6]
-    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(category="레포트")[0:6]
-    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의자료")[0:6]
-    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(category="강의노트")[0:6]
-    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(category="시험자료")[0:6]
-    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(category="동영상")[0:6]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(category="자소서")[0:6]
-    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(category="이력서")[0:6]
-    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(category="PPT")[0:6]
-    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(category="논문")[0:6]
-    if request.session.keys():
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-
-        return render(request, 'unid/contentstran.html', {
-                                                            'populated_informations': populated_informations,
-
-                                                            'populated_reports_lists': populated_reports_lists,
-                                                            'populated_forlecture_lists': populated_forlecture_lists,
-                                                            'populated_note_lists':populated_note_lists,
-                                                            'populated_paper_lists': populated_paper_lists,
-                                                            'populated_PPT_lists': populated_PPT_lists,
-                                                            'populated_resume_lists': populated_resume_lists,
-                                                            'populated_fiction_lists': populated_fiction_lists,
-                                                            'populated_fortest_lists': populated_fortest_lists,
-                                                            'populated_video_lists': populated_video_lists,
-                                                            'mypage':mypage
-                                                        })
-    else :
+    populated_informations = Post.objects.order_by('like_count').filter(~Q(isdelete="삭제"))[0:6]
+    populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="레포트"))[0:6]
+    populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의자료"))[0:6]
+    populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의노트"))[0:6]
+    populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="시험자료"))[0:6]
+    populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="동영상"))[0:6]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="자소서"))[0:6]
+    populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
+    populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
+    populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
+    try:
+        myPageInfomation.objects.filter(email=request.session['user_email']).values()
+    except KeyError as e:
         return render(request, 'unid/contentstran.html', {
             'populated_informations': populated_informations,
 
@@ -418,6 +403,23 @@ def main(request):
             'populated_fortest_lists': populated_fortest_lists,
             'populated_video_lists': populated_video_lists
         })
+
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    return render(request, 'unid/contentstran.html', {
+                                                        'populated_informations': populated_informations,
+
+                                                        'populated_reports_lists': populated_reports_lists,
+                                                        'populated_forlecture_lists': populated_forlecture_lists,
+                                                        'populated_note_lists':populated_note_lists,
+                                                        'populated_paper_lists': populated_paper_lists,
+                                                        'populated_PPT_lists': populated_PPT_lists,
+                                                        'populated_resume_lists': populated_resume_lists,
+                                                        'populated_fiction_lists': populated_fiction_lists,
+                                                        'populated_fortest_lists': populated_fortest_lists,
+                                                        'populated_video_lists': populated_video_lists,
+                                                        'mypage':mypage
+                                                    })
+
 
 def info_popular(request):
     if request.session.keys():
@@ -464,30 +466,10 @@ def info_popular(request):
 
 
 def information(request):
-    if request.session.keys():
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        posts = Post.objects.order_by('-posts_id')
-        sess = request.session['user_email']
-        voting_count = myPageInfomation.objects.get(email=sess)
-        paginator = Paginator(posts, 3)
-        page_num = request.POST.get('page')
-
-        try:
-            posts = paginator.page(page_num)
-        except PageNotAnInteger:
-            posts = paginator.page(1)
-        except EmptyPage:
-            posts = paginator.page(paginator.num_pages)
-
-        if request.is_ajax():
-            context = {'posts': posts}
-            return render(request, 'unid/information_ajax.html', context)
-
-        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
-
-        return render(request, 'unid/information.html', context)
-    else:
-        posts = Post.objects.order_by('-posts_id')
+    try:
+        myPageInfomation.objects.filter(email=request.session['user_email']).values()
+    except KeyError as e:
+        posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -506,6 +488,30 @@ def information(request):
 
         return render(request, 'unid/information.html', context)
 
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
+    sess = request.session['user_email']
+    voting_count = myPageInfomation.objects.get(email=sess)
+    paginator = Paginator(posts, 3)
+    page_num = request.POST.get('page')
+
+    try:
+        posts = paginator.page(page_num)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    if request.is_ajax():
+        context = {'posts': posts}
+        return render(request, 'unid/information_ajax.html', context)
+
+    context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
+
+    return render(request, 'unid/information.html', context)
+def logout(request):
+
+    return render(request, 'unid/logout.html', {})
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
@@ -543,11 +549,16 @@ def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
-    if request.session.keys():
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        context = {'posts': posts, 'replys': replys, 'likes':likes, 'mypage':mypage}
-    else:
-        context = {'posts': posts, 'replys': replys, 'likes': likes}
+
+    try:
+        myPageInfomation.objects.filter(email=request.session['user_email']).values()
+
+    except KeyError as e:
+        context = {'posts': posts, 'replys': replys, 'likes':likes}
+        return render(request, 'unid/main_detail.html', context)
+
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    context = {'posts': posts, 'replys': replys, 'likes': likes}
     return render(request, 'unid/main_detail.html', context)
 
 def voting(request):
@@ -677,7 +688,10 @@ def createaccount(request):
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
-        IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
+        try:
+            IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
+        except TypeError as e:
+            IDX = 0
 
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
                             joiningdate=timezone.now(),
@@ -1030,112 +1044,228 @@ def postmodify(request, id):
         contents = uploadContents.objects.get(contents_id=id)
         contentsinfolist = []
         for i in range(len(contentsInfo.objects.filter(contents_id=id).values())):
-            contentsinfolist.append(contentsInfo.objects.filter(contents_id=id).values()[i]['uploadzipfilename'])
+            contentsinfolist.append(contentsInfo.objects.filter(contents_id=id).values()[i]['uploadfile'])
         publisheddate = str(contents.publisheddate)[0:10]
+        if uploadContents.objects.filter(contents_id=id).values()[0]['imagepath']:
+            previewinfolist={}
+            for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
+                previewinfolist['preview'+str(i)] = previewInfo.objects.filter(contents_id=id).values()[i]['uploadpreviewname']
+            print(previewinfolist)
 
-        return render(request, 'unid/postmodify.html', {'contents': contents, 'date':publisheddate, 'contentsinfolist': contentsinfolist})
+            return render(request, 'unid/postmodify.html', {
+                                                            'contents': contents,
+                                                            'date':publisheddate,
+                                                            # 리스트를 담아서 보내면 리스트로 인식을 못함
+                                                            'contentsinfolist': contentsinfolist,
+                                                            'previewinfolist': previewinfolist
+                })
+        else:
+            return render(request, 'unid/postmodify.html', {
+                'contents': contents,
+                'date': publisheddate,
+                # 리스트를 담아서 보내면 리스트로 인식을 못함
+                'contentsinfolist': contentsinfolist,
+            })
     else:
 
         try:
             upload_images = request.FILES.getlist('user_preview_files')
         except MultiValueDictKeyError:
             pass
-        if upload_images:
-            for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
-                previewfilepath = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
-                print(os.getcwd())
-                os.remove(previewfilepath)
-            thumbnailimagepath = uploadContents.objects.get(contents_id=id).imagepath
-            os.remove(thumbnailimagepath)
-            previewInfo.objects.filter(contents_id=id).delete()
-            try:
-                now = datetime.now()
-                today = now.strftime('%Y-%m-%d')
-                print(os.getcwd())
-                os.mkdir("media/" + today)
-            except FileExistsError as e:
-                pass
 
-            preview_save_filelist = []
-            preview_ui_filelist = []
-            for upload_image in upload_images:
-                image_number = str(random.random())
-                previewfilename = upload_image.name
-                extendname = previewfilename[previewfilename.find(".", -5):]
-                real_preview_filename = image_number + extendname
-                preview_save_filelist.append(real_preview_filename)
-                preview_ui_filelist.append(previewfilename)
-                now = datetime.now()
-                today = now.strftime('%Y-%m-%d')
-                print(os.getcwd())
-                contents_dir = "media/" + today + "/"
-                # 해당 날짜의 디렉토리
-                with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
-                    for chunk in upload_image.chunks():
-                        file.write(chunk)
-                im = Image.open(contents_dir + real_preview_filename)
-                size = (1000, 1050)
-                im2 = im.resize(size)
-                im2.save(contents_dir + real_preview_filename)
-            try:
-                thumb = Image.open(contents_dir + preview_save_filelist[0])
-                size = (180, 200)
-                thumbnailimage = thumb.resize(size)
-                thumbnailimage.save(contents_dir + "thumb" + preview_save_filelist[0])
-            except IndexError as e:
-                pass
+        print(uploadContents.objects.filter(contents_id=id).values()[0]['imagepath'])
+        if uploadContents.objects.filter(contents_id=id).values()[0]['imagepath']:
+            if upload_images:
+                print("있있")
+                for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
+                    previewfilepath = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
+                    print(os.getcwd())
+                    os.remove(previewfilepath)
+                thumbnailimagepath = uploadContents.objects.get(contents_id=id).imagepath
+                os.remove(thumbnailimagepath)
+                previewInfo.objects.filter(contents_id=id).delete()
+                try:
+                    now = datetime.now()
+                    today = now.strftime('%Y-%m-%d')
+                    print(os.getcwd())
+                    os.mkdir("media/" + today)
+                except FileExistsError as e:
+                    pass
 
-            preview_images_dir = "media/" + today + "/"
-            previewlistlength = len(preview_save_filelist)
-            for i in range(previewlistlength):
-                print(7)
-                br = previewInfo(
-                    contents_id=id,
-                    uploadpreviewname=preview_ui_filelist[i],
-                    savepreviewname=preview_save_filelist[i],
-                    imagepath=preview_images_dir + preview_save_filelist[i],
+                preview_save_filelist = []
+                preview_ui_filelist = []
+                for upload_image in upload_images:
+                    image_number = str(random.random())
+                    previewfilename = upload_image.name
+                    extendname = previewfilename[previewfilename.find(".", -5):]
+                    real_preview_filename = image_number + extendname
+                    preview_save_filelist.append(real_preview_filename)
+                    preview_ui_filelist.append(previewfilename)
+                    now = datetime.now()
+                    today = now.strftime('%Y-%m-%d')
+                    print(os.getcwd())
+                    contents_dir = "media/" + today + "/"
+                    # 해당 날짜의 디렉토리
+                    with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
+                        for chunk in upload_image.chunks():
+                            file.write(chunk)
+                    im = Image.open(contents_dir + real_preview_filename)
+                    size = (1000, 1050)
+                    im2 = im.resize(size)
+                    im2.save(contents_dir + real_preview_filename)
+                try:
+                    thumb = Image.open(contents_dir + preview_save_filelist[0])
+                    size = (180, 200)
+                    thumbnailimage = thumb.resize(size)
+                    thumbnailimage.save(contents_dir + "thumb" + preview_save_filelist[0])
+                except IndexError as e:
+                    pass
+
+                preview_images_dir = "media/" + today + "/"
+                previewlistlength = len(preview_save_filelist)
+                IDX=uploadContents.objects.get(contents_id=id)
+                for i in range(previewlistlength):
+                    print(7)
+                    br = previewInfo(
+                        contents_id=IDX,
+                        uploadpreviewname=preview_ui_filelist[i],
+                        savepreviewname=preview_save_filelist[i],
+                        imagepath=preview_images_dir + preview_save_filelist[i],
+                    )
+                    br.save()
+
+                uploadContents.objects.filter(contents_id=id).update(
+                    title=request.POST['title'],
+                    publisheddate=str(request.POST['publisheddate'])[0:10],
+                    category=request.POST['category'],
+                    price=request.POST['price'],
+                    tags=request.POST['tags'],
+                    imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
+                    authorinfo=request.POST['authorinfo'],
+                    intro=request.POST['intro'],
+                    index=request.POST['index'],
+                    contents=request.POST['contents'],  # 소개글 제한?
+                    reference=request.POST['reference'],
+                    last_modified=timezone.now()
                 )
-                br.save()
 
-            uploadContents.objects.filter(contents_id=id).update(
-                title=request.POST['title'],
-                publisheddate=str(request.POST['publisheddate'])[0:10],
-                category=request.POST['category'],
-                price=request.POST['price'],
-                tags=request.POST['tags'],
-                # totalpages=request.POST['totalpages'],
-                imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
-                authorinfo=request.POST['authorinfo'],
-                intro=request.POST['intro'],
-                index=request.POST['index'],
-                contents=request.POST['contents'],  # 소개글 제한?
-                reference=request.POST['reference'],
-                last_modified=timezone.now()
-            )
-        uploadContents.objects.filter(contents_id=id).update(
-            title=request.POST['title'],
-            publisheddate=str(request.POST['publisheddate'])[0:10],
-            category=request.POST['category'],
-            price=request.POST['price'],
-            tags=request.POST['tags'],
-            # totalpages=request.POST['totalpages'],
-            authorinfo=request.POST['authorinfo'],
-            intro=request.POST['intro'],
-            index=request.POST['index'],
-            contents=request.POST['contents'],  # 소개글 제한?
-            reference=request.POST['reference'],
-            last_modified=timezone.now()
-        )
+            else:
+                print("있없")
+                uploadContents.objects.filter(contents_id=id).update(
+                    title=request.POST['title'],
+                    publisheddate=str(request.POST['publisheddate'])[0:10],
+                    category=request.POST['category'],
+                    price=request.POST['price'],
+                    tags=request.POST['tags'],
+                    authorinfo=request.POST['authorinfo'],
+                    intro=request.POST['intro'],
+                    index=request.POST['index'],
+                    contents=request.POST['contents'],  # 소개글 제한?
+                    reference=request.POST['reference'],
+                    last_modified=timezone.now()
+                )
+        else:
+            if upload_images:
+                print("없있")
+                try:
+                    now = datetime.now()
+                    today = now.strftime('%Y-%m-%d')
+                    print(os.getcwd())
+                    os.mkdir("media/" + today)
+                except FileExistsError as e:
+                    pass
+
+                preview_save_filelist = []
+                preview_ui_filelist = []
+                for upload_image in upload_images:
+                    image_number = str(random.random())
+                    previewfilename = upload_image.name
+                    extendname = previewfilename[previewfilename.find(".", -5):]
+                    real_preview_filename = image_number + extendname
+                    preview_save_filelist.append(real_preview_filename)
+                    preview_ui_filelist.append(previewfilename)
+                    now = datetime.now()
+                    today = now.strftime('%Y-%m-%d')
+                    print(os.getcwd())
+                    contents_dir = "media/" + today + "/"
+                    # 해당 날짜의 디렉토리
+                    with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
+                        for chunk in upload_image.chunks():
+                            file.write(chunk)
+                    im = Image.open(contents_dir + real_preview_filename)
+                    size = (1000, 1050)
+                    im2 = im.resize(size)
+                    im2.save(contents_dir + real_preview_filename)
+                try:
+                    thumb = Image.open(contents_dir + preview_save_filelist[0])
+                    size = (180, 200)
+                    thumbnailimage = thumb.resize(size)
+                    thumbnailimage.save(contents_dir + "thumb" + preview_save_filelist[0])
+                except IndexError as e:
+                    pass
+
+                preview_images_dir = "media/" + today + "/"
+                previewlistlength = len(preview_save_filelist)
+                IDX = uploadContents.objects.get(contents_id=id)
+                for i in range(previewlistlength):
+                    print(7)
+                    br = previewInfo(
+                        contents_id=IDX,
+                        uploadpreviewname=preview_ui_filelist[i],
+                        savepreviewname=preview_save_filelist[i],
+                        imagepath=preview_images_dir + preview_save_filelist[i],
+                    )
+                    br.save()
+
+                uploadContents.objects.filter(contents_id=id).update(
+                    title=request.POST['title'],
+                    publisheddate=str(request.POST['publisheddate'])[0:10],
+                    category=request.POST['category'],
+                    price=request.POST['price'],
+                    tags=request.POST['tags'],
+                    imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
+                    authorinfo=request.POST['authorinfo'],
+                    intro=request.POST['intro'],
+                    index=request.POST['index'],
+                    contents=request.POST['contents'],  # 소개글 제한?
+                    reference=request.POST['reference'],
+                    last_modified=timezone.now()
+                )
+
+            else:
+                print("없없")
+                uploadContents.objects.filter(contents_id=id).update(
+                    title=request.POST['title'],
+                    publisheddate=str(request.POST['publisheddate'])[0:10],
+                    category=request.POST['category'],
+                    price=request.POST['price'],
+                    tags=request.POST['tags'],
+                    authorinfo=request.POST['authorinfo'],
+                    intro=request.POST['intro'],
+                    index=request.POST['index'],
+                    contents=request.POST['contents'],  # 소개글 제한?
+                    reference=request.POST['reference'],
+                    last_modified=timezone.now()
+                )
+
 
         url = '/unid/searchcontents/'+request.POST['category']
         return HttpResponseRedirect(url)
 
-@login_required
 def postdelete(request):
-    uploadContents.objects.filter(contents_id=request.POST['id']).update(
-        last_modified=timezone.now(),
-        isdelete="삭제"
-    )
+    print(1)
+    type = request.POST['type']
+    print(type)
+    if type == "info":
+        Post.objects.filter(posts_id=request.POST['id']).update(
+
+            isdelete="삭제"
+        )
+    else:
+        uploadContents.objects.filter(contents_id=request.POST['id']).update(
+
+            isdelete="삭제"
+        )
 
     res = {"Ans": "삭제되었습니다."}
     return JsonResponse(res)
@@ -1212,9 +1342,66 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 
 
 def searchcontents(request, category):
-    allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
-                                            Q(category=category) & ~Q(isdelete="삭제")
-                                        )
+    try:
+        print("트라이1")
+        myPageInfomation.objects.filter(email=request.session['user_email']).values()
+    except KeyError as e:
+        print("익셉2")
+        contentsPost = uploadContents.objects.order_by('-contents_id').filter(
+                                                                Q(category=category) & ~Q(isdelete="삭제")
+                                                            )
+        print(3)
+        paginator = Paginator(contentsPost,5)
+        print(paginator)
+        page_num = request.POST.get('page')
+        print(page_num)
+        try:
+            contentsPost = paginator.page(page_num)
+            print(contentsPost)
+        except PageNotAnInteger:
+            contentsPost = paginator.page(1)
+            print(contentsPost)
+        except EmptyPage:
+            contentsPost = paginator.page(paginator.num_pages)
+            print(contentsPost)
+        if request.is_ajax():
+            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
+
+        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
+
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    contentsPost = uploadContents.objects.order_by('-contents_id').filter(
+                                                                Q(category=category) & ~Q(isdelete="삭제")
+                                                            )
+    paginator = Paginator(contentsPost, 3)
+    print("노에러paginator")
+    page_num = request.POST.get('page')
+    print(paginator)
+    try:
+        contentsPost = paginator.page(page_num)
+        print(contentsPost)
+    except PageNotAnInteger:
+        contentsPost = paginator.page(1)
+        print(contentsPost)
+    except EmptyPage:
+        contentsPost = paginator.page(paginator.num_pages)
+        print(contentsPost)
+
+    if request.is_ajax():
+        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
+
+    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
+
+
+
+
+
+
+
+
+    # allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
+    #                                         Q(category=category) & ~Q(isdelete="삭제")
+    #                                     )
     return render(
         request, 'unid/searchcontents.html',
         {'contentslists': allcontentslists}
@@ -1388,5 +1575,11 @@ def loginAdmin(request):
 
 
 def commandMysql(request):
-    br = myPageInfomation.objects.filter(name="정용은").delete()
+    br = myPageInfomation.delete()
+
     return HttpResponse("성공쓰")
+
+
+def funding(request):
+
+    return render(request, 'unid/funding.html', {})

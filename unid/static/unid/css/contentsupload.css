@@ -6,12 +6,11 @@
 }
 .contentsuploadrows {
     width: 1000px;
-    height: 1640px;
-    /* height: 1600px; */
+    height: auto;
     margin: 0 auto;
     background-color: #ffffff!important;
     border-width: 1px;
-    box-shadow: 0px 0px 10px 2px #b3afaf54;
+    box-shadow: 0px 0px 0px 2px #e6e6e6;
     box-sizing: border-box;
     border-style: solid;
     border-color: rgb(179, 179, 179);
@@ -189,3 +188,12 @@
     top: 10px;
     }
 
+#enrollcontents {
+    margin: 0 auto;
+
+}
+
+.enroll-button {
+    cursor: pointer;
+    background-color:red;
+}

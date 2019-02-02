@@ -52,7 +52,7 @@
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'main_detail' list.posts_id %}">
-                        <img src="">
+                        <img src="{% static 'unid/img/' %}{{ list.file }}" width="99px" height="75px" style="border-radius: 3px;">
                     </a>
                 </div>
                 <ul class="row-middle">

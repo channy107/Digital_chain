@@ -24,6 +24,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('transaction/', views.transaction, name='transaction'),
     path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
     path('signup/', views.signup, name='signup'),
     path('createaccount/', views.createaccount, name='createaccount'),
     path('contentsupload/', views.contentsupload, name='contentsupload'),
@@ -52,4 +53,5 @@ urlpatterns = [
     path('user_name_verification/', views.user_name_verification, name='user_name_verification'),
     path('loginAdmin/', views.loginAdmin, name='loginAdmin'),
     path('commandMysql/', views.commandMysql, name='commandMysql'),
+    path('funding/', views.funding, name='funding'),
 ]

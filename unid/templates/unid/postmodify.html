@@ -301,7 +301,7 @@ xpopup
                 <div class="form-group">
                     <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
                     {% for contents in contentsinfolist %}
-                    <input class="form-control col-sm-10 files1"  style="background-color: #d2d1d1;position:relative;left:0" name="inputfile" id="inputfiles_before" type="text" value="{{ contents }}"readonly/>
+                    <input class="form-control col-sm-10 files1"  style="background-color: #d2d1d1;position:relative;left:0" name="inputfile" id="inputfiles_before" type="text" value="{{ contents }} 등 {{ contents|length }}"readonly/>
                     {% endfor %}
                     <ul class="str_ul">
                         <li class="tip_str">
@@ -323,7 +323,11 @@ xpopup
                 </div>
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
+                    {% if previewinfolist %}
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="title" id="input_previewfiles_before" type="text" value="{{ previewinfolist.preview0 }} 등 {{ previewinfolist|length }}개" readonly/>
+                    {% else %}
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="title" id="input_previewfiles_before" type="text" readonly/>
+                    {% endif %}
                     <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
@@ -532,7 +536,7 @@ xpopup
             });
         $('.contracttext').on('scroll', function() {
             if($('.contracttext').scrollTop() >= 700) {
-                $('.zzzz').removeAttr("disabled");
+                $('.cd-popup-yes').removeAttr("disabled");
             }
     });
         $('.cons').on('click', function(event){
@@ -546,7 +550,7 @@ xpopup
                 event.preventDefault();
                 $(this).removeClass('is-visible');
                 $('input:checkbox[id="ex_chk"]').prop("checked", false);
-            } else if( $(event.target).is('.zzzz')) {
+            } else if( $(event.target).is('.cd-popup-yes')) {
                     event.preventDefault();
                     $(this).removeClass('is-visible');
                     $('input:checkbox[id="ex_chk"]').prop("checked", true);
@@ -574,92 +578,167 @@ xpopup
         });
 
         $('#user_preview_files').on('change', function(){
+            let upload_files = $('#user_preview_files').get(0).files
             var fileee = $('#user_preview_files').get(0).files[0]['name'];
             console.log(fileee);
-            $('#input_previewfiles_after').val(fileee);
-            $("#user_preview_file_before").hide();
-            $("#user_preview_file_after").show();
+            if ( upload_files.length > 3 ) {
+                alert("최대 3개까지만 등록할 수 있습니다.");
+            } else {
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_preview_file_before").hide();
+                $("#user_preview_file_after").show();
+            }
         });
 
         $('#reupload_preview').on('click', function(){
-            $("#user_file_after").hide();
-            $("#user_file_before").show();
+            $("#user_preview_file_after").hide();
+            $("#user_preview_file_before").show();
+        });
+        $('#inputtitle').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte').html(totalByte + "/30");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 30) {
+                alert(30 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 30);
+                console.log(str2);
+                $('#inputtitle').val(str2);
+                console.log($('#inputtitle').val());
+            }
         });
         $('#inputintro').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte1').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte1').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 1000);
                 console.log(str2);
                 $('#inputintro').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte1').html(afterletterLength + "/1000");
+                console.log($('#inputintro').val());
+            }
         });
         $('#inputindex').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte2').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte2').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputindex').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte2').html(afterletterLength + "/1000");
+            }
         });
         $('#inputtext').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte3').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte3').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputtext').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte3').html(afterletterLength + "/1000");
+            }
         });
         $('#inputreference').on('keyup', function(){
             // 남은 글자 수를 구한다.
-            var letterLength = $(this).val().length;
-            var inputtext = $(this).val()
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
 
-            // 문서 객체에 입력한다.
-            $('#body_byte4').html(letterLength + "/1000");
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
 
-            if (letterLength > 1000) {
-                alert("1000자를 초과 입력 할 수 없습니다.");
-                console.log(inputtext)
-                str2 = inputtext.substr(0, 1000);
-                console.log(str2.length);
-                console.log(str2);
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte4').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
                 $('#inputreference').val(str2);
-            };
-            var afterletterLength = $(this).val().length;
-            $('#body_byte4').html(afterletterLength + "/1000");
+            }
         });
 
         //open popup

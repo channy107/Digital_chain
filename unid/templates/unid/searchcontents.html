@@ -47,14 +47,14 @@
                     콘텐츠 게시글
                 </div>
                 <hr>
-                {% for contents in contentslists %}
+                {% for contents in contentsPost %}
                 <div class="popular-row">
                     <ul class="row-top">
                     <li>
                         {% if contents.writeremail.userimage %}
                         <img src="/{{ contents.user.userimage }}">
                         {% else %}
-                        <img src="{% static 'unid/icon/profile-icon.png' %}">
+                        <img src="{% static 'unid/icon/profle-icon.png' %}">
                         {% endif %}
                     </li>
                     <li>
@@ -85,12 +85,16 @@
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'contentsdetail' contents.contents_id %}">
-                        <img src="">
+                        {% if contents.imagepath %}
+                        <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
+                        {% else %}
+                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+                        {% endif %}
                     </a>
                 </div>
                 <ul class="row-middle">
                     <li>
-                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}dasdsadas</a>
+                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
                     </li>
                     <li>
                         <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:80 }}</a>
@@ -102,19 +106,82 @@
                     </li>
                     <li>
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
+                        <i class="fas fa-chevron-adown"></i>
                     </li>
                 </ul>
             </div>
             {% endfor %}
         </div>
+        <input id="page" type="hidden" value="2">
+        {% if contentsPost.paginator.count > 4 %}
+        <button id="callmorepost" class="form-control">
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        {% endif %}
     </div>
 </div>
 
+
+
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+
     jQuery(document).ready(function($){
         $('#nav2').addClass('visible-place');
+
+
+        $('#callmorepost').click(function(){
+            var page = $("#page").val();
+            console.log(page);
+            var end_page = {{ contentsPost.paginator.num_pages }};
+            console.log(end_page);
+            if(page > end_page) {
+                return;
+            }
+            callMorePostAjax(page);
+            $("#page").val(parseInt(page)+1);
         });
+
+        $(window).scroll(function() {
+            var scrollHeight = $(window).scrollTop() + $(window).height() + 2;
+            var documentHeight = $(document).height();
+            if (scrollHeight >= documentHeight) {
+                var page = $("#page").val();
+                var end_page = {{ contentsPost.paginator.num_pages}};
+                if (page > end_page) {
+                    return;
+                }
+
+                callMorePostAjax(page);
+                $("#page").val(parseInt(page)+1);
+            }
+        });
+
+        function callMorePostAjax(page) {
+            var end_page = {{ contentsPost.paginator.num_pages }};
+            if(page > end_page) {
+                return;
+            }
+
+            $.ajax({
+                type : "POST",
+                url : "../../unid/searchcontents/{{ category }}",
+                data : {
+                    "page" : page,
+                    "csrfmiddlewaretoken" : "{{ csrf_token }}"
+                },
+                success : addMorePostAjax,
+                dataType : "html",
+                error : function(request, status, error){
+                    alert('오류발생');
+                },
+            });
+        }
+
+        function addMorePostAjax(data, textStatus, jqXHR) {
+            $(".popular-rows").append(data);
+        }
+    });
 </script>
 
 {% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+{% extends 'unid/navigationbar.html' %}
+{% load static %}
+{% block content %}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>(로고) log in</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/signup.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
+    <!-- 검색아이콘 -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+{% load socialaccount %}
+    <div id="container">
+        <ul id="contents">
+            <li><img style="width:210px" src="{% static 'unid/icon/unid_icon.png' %}"></li>
+            <br>
+            <li><h1 style=""><strong>로그아웃</strong></h1></li>
+            <br>
+            <li>
+                <p style="margin:0px;">{{ request.session.user_email }}({{ request.session.user_name }})님</p><br>
+                <p style="margin:0px;">로그아웃 하시겠습니까?</p>
+
+
+            </li>
+            <br>
+            <form method="post" action="/accounts/logout/">
+               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+               <button type="submit">로그아웃</button>
+            </form>
+        </ul>
+    </div>
+
+
+</body>
+</html>
+
+{% endblock %}
