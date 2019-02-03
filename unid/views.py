@@ -65,9 +65,11 @@ user_logged_in.connect(logged_in, sender=User)
 def mypage(request):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
+        numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
@@ -75,7 +77,9 @@ def mypage(request):
         context = {'articles':articles,
                    'myreward':myreward,
                    'mypage':mypage,
+                   'joiningdate':joiningdate,
                    'numbersOfArticles':numbersOfArticles,
+                   'numbersOfcontents':numbersOfcontents,
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
