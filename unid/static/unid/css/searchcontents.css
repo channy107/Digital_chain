@@ -23,6 +23,7 @@ border: 1px solid white;
 .contents-post-container {
     width: 1300px;
     margin: 0 auto;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .sidenav {
     box-shadow: 0px 0px 0px 2px #e6e6e6;
@@ -189,7 +190,7 @@ margin:5px;
     width: 850px;
     height: 45px;
     display: inline-block;
-    margin: 0 15px 0 5px;
+    margin: 0 15px 0 10px;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(3) li {
     list-style: none;
@@ -228,7 +229,7 @@ margin:5px;
     height: 20px;
     width: 850px;
     display: inline-block;
-    margin: 0 20px 0 20px;
+    margin: 0 20px 0 10px;
     padding: 0;
 }
 .information-popular-row .popular-rows .popular-row ul:nth-child(4) li{

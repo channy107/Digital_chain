@@ -30,25 +30,26 @@
 <body>
 
 {% load socialaccount %}
+<div>
     <div id="container">
         <ul id="contents">
             <li><img style="width:210px" src="{% static 'unid/icon/unid_icon.png' %}"></li>
             <br>
-            <li><h1 style=""><strong>회원가입</strong></h1></li>
+            <li><h1 style=""><strong>로그인</strong></h1></li>
             <br>
             <li>
                 <P style="margin:0px;">기존에 사용하시던 계정으로</P>
                 <P>간편하게 회원가입하세요!</P>
             </li>
             <br>
-            <li><a href="{% provider_login_url 'google' method='oauth2' %}"><img style="width:300px" src="{% static 'unid/icon/google.png' %}" ></a></li>
+            <li><a href="{% provider_login_url 'google' method='oauth2' %}"><img style="width:279px" src="{% static 'unid/icon/google.png' %}" ></a></li>
             <br>
-            <li><a href="{% provider_login_url 'facebook' method='oauth2' %}"><img style="width:300px" src="{% static 'unid/icon/facebook.png' %}"></a></li>
+            <li><a href="{% provider_login_url 'facebook' method='oauth2' %}"><img style="width:279px" src="{% static 'unid/icon/facebook.png' %}"></a></li>
             <br>
             <!--<li><a href="https://kauth.kakao.com/oauth/authorize?client_id=122f531f95d70dabb69ff17f4f1b0be2&redirect_uri=http://localhost:8000/unid/oauth&response_type=code"><img style="width:300px" src="{% static 'unid/icon/kakao.png' %}"></a></li>-->
         </ul>
     </div>
-
+</div>
     
 </body>
 </html>

@@ -97,6 +97,7 @@
         }
         .container1 {
             margin:70px;
+            font-family: 'Noto Sans KR', sans-serif;
        }
         .writerinfo {
             margin: 10px 30px 0 200px;
@@ -127,16 +128,6 @@
             border-width: 2px;
             border-color: #b3afaf54;
             padding: 20px;
-
-        }
-        .contents-detail .label {
-            font-weight: bold;
-            font-size: 20px;
-            margin: 15px;
-
-        }
-        .contents-detail .label h6 {
-            display: inline;
 
         }
         .contents-reply {
@@ -292,4 +283,8 @@
         }
         .test {
             display: inline;
+        }
+        .context {
+
+
         }

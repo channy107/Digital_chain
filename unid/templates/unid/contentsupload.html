@@ -89,7 +89,6 @@ header h1 {
   display: block;
   width: 300px;
   height: 40px;
-  /* line-height: 50px; */
   text-align: center;
   color: #FFF;
   font-size: 14px;
@@ -97,7 +96,6 @@ header h1 {
   text-transform: uppercase;
   border-radius: 0.5em;
   background: #fb2323d1;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
 }
 @media only screen and (min-width: 1170px) {
   .cd-popup-trigger {
@@ -124,6 +122,7 @@ xpopup
   transition: opacity 0.3s 0s, visibility 0s 0.3s;
 }
 .cd-popup.is-visible, .cd-popup1.is-visible {
+  z-index: 1;
   opacity: 1;
   visibility: visible;
   -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
@@ -379,7 +378,7 @@ xpopup
             </div>
         </div>
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
-          {% csrf_token %}
+            {% csrf_token %}
             <input style="display:none;" id="filepath"  name="filepath" readonly/>
             <input style="display:none;" id="filename"  name="filename" readonly/>
             <input style="display:none;" id="ftpfilelist"  name="ftpfilelist"  readonly/>
@@ -575,7 +574,12 @@ xpopup
                         </div> <!-- cd-popup-container -->
                     </div> <!-- cd-popup -->
                 </div>
-                <button type="button" class="cd-popup-trigger enrollbutton" name="enrollcontents" id="enrollcontents"> 콘텐츠 등록 </button>
+            </div>
+            <div class="form-group">
+                <div class="enroll-button">
+                    <input class="cd-popup-trigger form-control col-sm-2 " name="enrollcontents" id="enrollcontents" value="콘텐츠 등록" readonly/>
+                </div>
+            </div>
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
                         <div class="popuprow1">
@@ -652,7 +656,7 @@ xpopup
             if($('.contracttext').scrollTop() >= 700) {
                 $('.cd-popup-yes').removeAttr("disabled");
             }
-    });
+        });
         $('.cons').on('click', function(event){
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');
@@ -765,9 +769,9 @@ xpopup
             for (var i = 0; i < strLen; i++) {
                 oneChar = strValue.charAt(i);
                 if (escape(oneChar).length > 4) {
-                    totalByte += 2;
+                    totalByte++ ;
                 } else {
-                    totalByte++;
+                    totalByte += 0.5;
                 }
                 $('#body_byte1').html(totalByte + "/1000");
             }
@@ -796,9 +800,9 @@ xpopup
             for (var i = 0; i < strLen; i++) {
                 oneChar = strValue.charAt(i);
                 if (escape(oneChar).length > 4) {
-                    totalByte += 2;
+                    totalByte++ ;
                 } else {
-                    totalByte++;
+                    totalByte += 0.5;
                 }
                 $('#body_byte2').html(totalByte + "/1000");
             }
@@ -824,9 +828,9 @@ xpopup
             for (var i = 0; i < strLen; i++) {
                 oneChar = strValue.charAt(i);
                 if (escape(oneChar).length > 4) {
-                    totalByte += 2;
+                    totalByte++ ;
                 } else {
-                    totalByte++;
+                    totalByte += 0.5;
                 }
                 $('#body_byte3').html(totalByte + "/1000");
             }
@@ -852,9 +856,9 @@ xpopup
             for (var i = 0; i < strLen; i++) {
                 oneChar = strValue.charAt(i);
                 if (escape(oneChar).length > 4) {
-                    totalByte += 2;
+                    totalByte++ ;
                 } else {
-                    totalByte++;
+                    totalByte += 0.5;
                 }
                 $('#body_byte4').html(totalByte + "/1000");
             }

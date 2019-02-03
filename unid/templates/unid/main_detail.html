@@ -333,6 +333,24 @@ xpopup
 <div class="container1">
     <!-- contents InFo -->
     <div class="rows">
+        {% if request.session.user_email == contents.writeremail_id %}
+        <div class="test">
+            <button type="button" class="postdelete">삭제</button>
+        </div>
+        <div class="cd-popup1" role="alert">
+            <div class="cd-popup-container1">
+                <div class="popuprow1">
+                    <h4>게시글을 삭제하시겠습니까?</h4>
+                </div>
+
+                <ul class="cd-buttons">
+                    <li><a href="#0" class="cd-popup-no">No</a></li>
+                    <li><a href="#0" class="cd-popup-delete-yes">Yes</a></li>
+                </ul>
+                <a href="#0" class="cd-popup-close img-replace"></a>
+            </div> <!-- cd-popup-container -->
+        </div> <!-- cd-popup -->
+        {% endif %}
         <div class="opinion">
             <input type="button" value="의견보내기">
         </div>
@@ -463,7 +481,41 @@ xpopup
 <script>
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
+        $('.postdelete').on('click', function(event) {
+            event.preventDefault();
+            $('.cd-popup1').addClass('is-visible');
+        });
+        $('.cd-popup-delete-yes').on('click', function() {
+            var id = {{ posts.posts_id }};
+            var type = 'info';
+            $.ajax({
+                type: 'POST',
+                url: '../postdelete/',
+                data: {
+                        id: id,
+                        type: type,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(res) {
+                    alert(res.Ans);
+                    location="{% url 'information' %}";
+                    }
+                });
+            });
+        //close popup
+        $('.cd-popup1').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup1') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup1').removeClass('is-visible');
+            }
 
+        });
         //open popup
         $('.opinion').on('click', function(event){
             event.preventDefault();

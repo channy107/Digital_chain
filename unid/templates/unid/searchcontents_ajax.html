@@ -1,0 +1,69 @@
+{% load static %}
+<head>
+    <link href="{% static 'unid/css/searchcontents.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
+</head>
+    {% for contents in contentsPost %}
+    <div class="popular-row">
+        <ul class="row-top">
+            <li>
+                {% if contents.writeremail.userimage %}
+                <img src="/{{ contents.user.userimage }}">
+                {% else %}
+                <img src="{% static 'unid/icon/profle-icon.png' %}">
+                {% endif %}
+            </li>
+            <li>
+                {{ contents.writeremail.email }}
+            </li>
+            <li>
+                ·         {{ contents.created|timesince }}전
+            </li>
+            <li>
+                {% if contents.category == "레포트" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "강의노트" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "시험자료" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "동영상" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "자소서" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "이력서" %}
+                <span>{{ contents.category }}</span>
+                {% elif contents.category == "PPT" %}
+                <span>{{ contents.category }}</span>
+                {% else %}
+                <span>{{ contents.category }}</span>
+                {% endif %}
+            </li>
+        </ul>
+        <div class="row-picture">
+            <a href="{% url 'contentsdetail' contents.contents_id %}">
+                {% if contents.imagepath %}
+                <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
+                {% else %}
+                <img src="/media/defaultthumbnail.png" width="99px" height="75px" style="border-radius: 3px;">
+                {% endif %}
+            </a>
+        </div>
+        <ul class="row-middle">
+            <li>
+                <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
+            </li>
+            <li>
+                <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:80 }}</a>
+            </li>
+        </ul>
+        <ul class="row-bottom">
+            <li>
+                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
+            </li>
+            <li>
+                <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+
