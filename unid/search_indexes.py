@@ -4,7 +4,7 @@ from .models import Note, uploadContents, Post
 
 
 class NoteIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True, template_name='search/note_text.txt')
+    text = indexes.EdgeNgramField(document=True, use_template=True, template_name='search/note_text.txt')
     author = indexes.CharField(model_attr='user')
     pub_date = indexes.DateTimeField(model_attr='pub_date')
 
@@ -16,7 +16,7 @@ class NoteIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 class uploadContentsIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True, template_name='search/uploadcontents_text.txt')
+    text = indexes.EdgeNgramField(document=True, use_template=True, template_name='search/uploadcontents_text.txt')
     writer = indexes.CharField(model_attr='writeremail')
     pub_date = indexes.DateTimeField(model_attr='last_modified')
 
@@ -28,7 +28,7 @@ class uploadContentsIndex(indexes.SearchIndex, indexes.Indexable):
         return self.get_model().objects.all()
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True, template_name='search/informations_text.txt')
+    text = indexes.EdgeNgramField(document=True, use_template=True, template_name='search/informations_text.txt')
     writer = indexes.CharField(model_attr='user')
     pub_date = indexes.DateTimeField(model_attr='last_modified')
 

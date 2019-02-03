@@ -21,7 +21,6 @@ urlpatterns = [
     path('voting/', voting, name='voting'),
     path('vote/', vote, name='vote'),
     path('contentsdetail/<int:id>', contentsdetail, name='contentsdetail'),
-    path('login/', views.login, name='login'),
     path('transaction/', views.transaction, name='transaction'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),

@@ -1,27 +1,25 @@
 {% extends 'unid/navigationbar.html' %}
 {% load static %}
 {% block content %}
-
-<link href="{% static 'unid/css/contentstran.css' %}" rel="stylesheet">
 <!--<link href="{% static 'unid/css/index.css' %}" rel="stylesheet">-->
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
 
 <!-- Page Content -->
 <div class="contentsmain-container1">
     <!-- contents InFo -->
-    <div class="row-advertise">
+    <div class="unid-main-picture">
         <div class="main-row">
             <br>
             <div class="unid-logo">
-                <img src="/static/unid/img/유니드 UI 리디자인_완성-04.png" width="80" height="80">
+                <img src="/static/unid/img/유니드 UI 리디자인_완성-04.png" width="75" height="75">
             </div>
             <div class="unid-title">
                 대학정보 나눔의 가치, 유니드
             </div>
             <div class="unid-explain">
-                대학에서 경험하고 얻은 것들을 유니드를 통해 나누어 보상을 받아보세요!
+                대학에서   경험하고   얻은   것들을   유니드를   통해   나누며   보상을 받아보세요!
             </div>
-            <div class="unid-moreinfo" id="unid-moreinfo-btn">
+            <div class="unid-moreinfo twinkle-transparent">
                 MORE INFO
             </div>
         </div>
@@ -31,7 +29,6 @@
             <div class="popular-rows-title">
                 인기게시글
             </div>
-            <br>
             {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
@@ -39,7 +36,7 @@
                         {% if list.user.userimage %}
                         <img src="/{{ list.user.userimage }}">
                         {% else %}
-                        <img src="{% static 'unid/icon/profile-icon.png' %}">
+                        <img src="{% static 'unid/icon/profle-icon.png' %}">
                         {% endif %}
                     </li>
                     <li>
@@ -52,15 +49,15 @@
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'main_detail' list.posts_id %}">
-                        <img src="{% static 'unid/img/취업강의-스타강사.jpg' %}" width="121px" height="91px">
+                        <img src="{% static 'unid/img/취업강의-스타강사.jpg' %}" width="99px" height="75px">
                     </a>
                 </div>
                 <ul class="row-middle">
                     <li>
-                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.title }}dasdsadas</a>
+                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.title }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.contents|truncatechars_html:190 }}</a>
+                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.contents|truncatechars_html:80 }}</a>
                     </li>
                 </ul>
                 <ul class="row-bottom">
@@ -107,7 +104,7 @@
                             {% for list in populated_reports_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">
@@ -382,7 +379,7 @@
                             {% for list in populated_video_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">

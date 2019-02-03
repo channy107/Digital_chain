@@ -514,9 +514,13 @@ def information(request):
     context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
     return render(request, 'unid/information.html', context)
+
+
 def logout(request):
 
     return render(request, 'unid/logout.html', {})
+
+
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
