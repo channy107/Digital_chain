@@ -15,6 +15,7 @@ urlpatterns = [
     path('main_upload/', main_upload, name='main_upload'),
     path('info_popular/', info_popular, name='info_popular'),
     path('information/', information, name='information'),
+    path('infotag/<str:category>', infotag, name='infotag'),
     path('main_upload', main_upload, name='main_upload'),
     path('main_detail/<int:id>', main_detail, name='main_detail'),
     path('mainreply/', mainreply, name='maineply'),
