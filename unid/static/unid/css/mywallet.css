@@ -4,17 +4,8 @@
         .element {
             .center-block();
         }
-        .container-1{
-              width: 300px;
-              vertical-align: middle;
-              white-space: nowrap;
-              position: relative;
-              margin:0 0 0 150px;
-        }
-
         .container-1 input#id_q{
-              width: 260px;
-              height: 50px;
+              height: 40px;
               background: rgb(253, 253, 253);
               border: none;
               border-style:solid;
@@ -46,10 +37,8 @@
         }
 
         .container-1 .icon{
-              position: absolute;
-              top: 50%;
-              margin-left: 17px;
-              margin-top: 14px;
+              margin-left: 13px;
+              margin-top: 6px;
               z-index: 1;
               color: #9a9a9a;
         }
@@ -174,68 +163,6 @@
             backgraound-size: 100px;
             text-align: center;
         }
-        .nav-item{
-            font-size: 1rem;
-            font-weight:500;
-        }
-        .nav-link{
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        #navbar-main{
-            position:relative;
-            left:-13px;
-        }
-        #nav1{
-            color:#4d4d4d;
-            font-weight:600;
-            font-size:14px;
-            position:relative;
-            left:-12px;
-        }
-        #nav2{
-            color:#4d4d4d;
-            font-weight:600;
-            font-size:14px;
-            position:relative;
-            left: -33px;
-        }
-        #nav4{
-            color:#4d4d4d;
-            font-weight:600;
-            font-size:14px;
-            position:relative;
-            left: -46px;
-        }
-        #go-signup{
-            position:relative;
-            left: -32px;
-        }
-
-        #nav1:hover{
-            color:gray;
-        }
-        #nav2:hover{
-            color:gray;
-        }
-        #nav4:hover{
-            color:gray;
-        }
-        #nav4:hover{
-            color:gray;
-        }
-        #go-login:hover{
-            color:gray;
-        }
-        #go-signup:hover{
-            color:gray;
-        }
-        #unid-logo:hover{
-            opacity:0.7;
-        }
-        #unid-moreinfo-btn:hover{
-            opacity:0.7;
-        }
-
         .icon-name{
             font-family: 'Noto Sans KR', sans-serif;
         }
@@ -400,39 +327,11 @@
             text-decoration: none;
             cursor: pointer;
         }
-
-        .unid-menus {
-            height: 75px;
-            width: 130px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            text-align: center;
-            vertical-align: middle;
-        }
-
         .visible-place {
             background-color: #ebeaea;
             height: 100%;
         }
-        .dropdown {
-            margin:0 0 0 60px;
 
-        }
-        .nav-item > a {
-            vertical-align: middle;
-            padding: 24px;
-        }
-        .unid-menus-signup {
-            width: 100px;
-            height: 50px;
-            background-color: #4d4d4d;
-            position: relative;
-            top: 21px;
-            padding: 9px;
-            color: white;
-            border-radius: 6px;
-            font-size:12px;
-        }
         .user_image_small_icon {
             border-radius: 50%;
         }

@@ -432,8 +432,8 @@ xpopup
         <div class="row">
             <div class="contents-reply">
                 <div class="detail-like">
-                <img class="detail-like-img" src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
-                {{posts.like_count}}
+                <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}</span></span>
+
             <a class="nav-links dropdown-toggle" id="like-list" data-toggle="dropdown">
 
             <div class="dropdown-menu">
@@ -441,6 +441,9 @@ xpopup
                 <a class="dropdown-item">{{like.liked_users}}</a>
                 {% endfor %}
             </div>
+
+             <span class="main-voting">
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{posts.posts_id}}">{{posts.rewards}}</span></span>
 
                 <img class="detail-reply-img" src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">4</a>
                  </div>
@@ -481,6 +484,104 @@ xpopup
 <script>
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
+        $(".votings").click(function() {
+                var pk = {{posts.posts_id}};
+                var like_count = parseInt($('#voting-' + pk).text());
+                var rewards = parseFloat($('#reward-' + pk).text());
+                var like_users = "{{request.session.user_email}}";
+                var voting_count = parseInt($('#count').text());
+                var votinged = "";
+
+
+                if (!like_users) {
+                    alert('로그인을 해주세요');
+                }
+
+
+                $.ajax ({
+                    type: 'POST',
+                    url: "../vote/",
+                    data: {
+                        posts_id: pk,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        alert(res.Ans);
+
+                        if (res.Ans == "보팅을 취소했습니다.") {
+
+                            if (voting_count >= 10) {
+                                like_count = like_count - parseInt(1);
+                                votinged = "좋아요취소";
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                rewards = rewards - parseFloat(0.1);
+                                }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+
+                            } else {
+                                like_count = like_count - parseInt(1);
+                                voting_count = voting_count + parseInt(1);
+
+                                votinged = "좋아요취소";
+
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                    rewards = rewards - parseFloat(0.1);
+                                    }
+                                rewards = rewards.toFixed(1);
+                                $("#reward-" + pk).text(rewards);
+                                $("#count").text(voting_count);
+                            }
+
+                        } else if (res.Ans == "보팅을 완료했습니다.") {
+
+                            like_count = like_count + parseInt(1);
+                            voting_count = voting_count - parseInt(1);
+
+                            votinged = "좋아요";
+
+                            $('#voting-' + pk).text(like_count);
+
+                            if (like_count % 1 == 0) {
+                                rewards = rewards + parseFloat(0.1);
+                            }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+                            $("#count").text(voting_count);
+                            }
+
+                         else {
+                            votinged = "카운팅소진";
+                         }
+
+
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "../voting/",
+                            data: {
+                                posts_id: pk,
+                                like_count: like_count,
+                                rewards: rewards,
+                                liked_users: like_users,
+                                votinged: votinged,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(res) {
+
+                            }
+                        });
+
+                    }
+                });
+            });
+
         $('.postdelete').on('click', function(event) {
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');

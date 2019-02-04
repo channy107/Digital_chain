@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 {% load static %}
+
 <html lang="en">
 
 <head>
@@ -29,6 +30,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/contentstran.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
     <!-- 검색아이콘 -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -52,8 +54,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="padding: 0 1rem;">
     <div class="container">
         <a class="navbar-brand" href="/unid/">
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <img id="unid-logo" src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="92" height="44">
+            <img class="twinkle-transparent" src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="80" height="35">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,26 +62,22 @@
         </button>
         <div class="box">
              <div class="container-1">
-                 <div class="icon-box">
-                    <span class="icon"><i class="fa fa-search"></i></span>
-                 </div>
-                 <div class="text-box">
-                     <form method="get" action="/search/">
-                         <input type="search" name="q" id="id_q" placeholder="Search..." />
-                     </form>
-                 </div>
+                 <span class="icon"><i class="fa fa-search"></i></span>
+                 <form method="get" action="/search/">
+                     <input type="search" name="q" id="id_q" placeholder="Search..." />
+                 </form>
               </div>
         </div>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse nav-menu-box" id="navbarResponsive">
             <ul class="navbar-nav ml-auto" id="navbar-main" style="vertical-align:middle;">
                 <li class="nav-item">
-                    <a class="nav-link unid-menus" id="nav1" href="/unid/information/">정보공유</a>
+                    <a class="nav-link unid-menus twinkle-grey" id="nav1" href="/unid/information/">정보공유</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link unid-menus" id="nav2" href="/unid/searchcontents/레포트">콘텐츠거래</a>
+                    <a class="nav-link unid-menus twinkle-grey" id="nav2" href="/unid/searchcontents/레포트">콘텐츠거래</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link unid-menus" id="nav4" href="/unid/funding">크라우드 펀딩</a>
+                <li class="nav-item" style="margin: 0 35px 0 12px;">
+                    <a class="nav-link unid-menus twinkle-grey" id="nav4" href="/unid/funding">크라우드 펀딩</a>
                 </li>
                 {% if user.email %}
                 <li class="nav-item dropdown">
@@ -95,17 +92,17 @@
                         {% endif %}
                     </a>
                     <div class="dropdown-menu" id="dropdown">
-                        <a class="dropdown-item" href="/unid/mypage" id="go-mypage">마이페이지</a>
-                        <a class="dropdown-item" href="/unid/mywallet" id="go-mywallet">내지갑</a>
-                        <a class="dropdown-item" href="/unid/main_upload" id="go-writepost">게시글작성</a>
-                        <a class="dropdown-item" href="/unid/contentsupload" id="go-uploadcontents">콘텐츠등록</a>
-                        <a class="dropdown-item" href="/unid/logout" id="go-logout">로그아웃</a>
+                        <a class="dropdown-item twinkle-grey" href="/unid/mypage" id="go-mypage">마이페이지</a>
+                        <a class="dropdown-item twinkle-grey" href="/unid/mywallet" id="go-mywallet">내지갑</a>
+                        <a class="dropdown-item twinkle-grey" href="/unid/main_upload" id="go-writepost">게시글작성</a>
+                        <a class="dropdown-item twinkle-grey" href="/unid/contentsupload" id="go-uploadcontents">콘텐츠등록</a>
+                        <a class="dropdown-item twinkle-grey" href="/unid/logout" id="go-logout">로그아웃</a>
                     </div>
                 </li>
                 {% else %}
                 <li class="nav-item signup">
                     <div>
-                        <a class="unid-menus unid-menus-signup" id="go-signup" href="/unid/login">시작하기</a>
+                        <a class="unid-menus unid-menus-signup twinkle-grey" href="/unid/login" style="color: white;">시작하기</a>
                     </div>
                 </li>
                 {% endif %}

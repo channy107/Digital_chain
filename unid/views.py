@@ -475,6 +475,52 @@ def info_popular(request):
 
         return render(request, 'unid/info_popular.html', context)
 
+def infotag(request, category):
+    try:
+        myPageInfomation.objects.filter(email=request.session['user_email']).values()
+    except KeyError as e:
+        allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
+        paginator = Paginator(allinfolists, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            allinfolists = paginator.page(page_num)
+        except PageNotAnInteger:
+            allinfolists = paginator.page(1)
+        except EmptyPage:
+            allinfolists = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'allinfolists': allinfolists,
+                       'page_num':page_num}
+            return render(request, 'unid/infotag_ajax.html', context)
+
+        context = {'allinfolists': allinfolists}
+
+        return render(request, 'unid/infotag.html', context)
+
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
+    sess = request.session['user_email']
+    voting_count = myPageInfomation.objects.get(email=sess)
+    paginator = Paginator(allinfolists, 3)
+    page_num = request.POST.get('page')
+
+    try:
+        allinfolists = paginator.page(page_num)
+    except PageNotAnInteger:
+        allinfolists = paginator.page(1)
+    except EmptyPage:
+        allinfolists = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'allinfolists': allinfolists,
+                       'page_num': page_num}
+            return render(request, 'unid/infotag_ajax.html', context)
+
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'mypage': mypage}
+
+    return render(request, 'unid/infotag.html', context)
 
 def information(request):
     try:
@@ -522,9 +568,13 @@ def information(request):
     context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
     return render(request, 'unid/information.html', context)
+
+
 def logout(request):
 
     return render(request, 'unid/logout.html', {})
+
+
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
