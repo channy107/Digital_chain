@@ -31,7 +31,6 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/contentstran.css' %}" rel="stylesheet">
-    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
     <!-- 검색아이콘 -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- 구글 notosan-font -->
@@ -81,15 +80,15 @@
                 </li>
                 {% if user.email %}
                 <li class="nav-item dropdown">
-                        {% if mypage.userimage %}
-                        <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
-                            <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
-                        </a>
-                        {% else %}
-                        <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
-                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
-                        </a>
-                        {% endif %}
+                    {% if mypage.userimage %}
+                    <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#" style="padding: 19px 0;">
+                        <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                    </a>
+                    {% else %}
+                    <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#" style="padding: 19px 0;">
+                        <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
+                    </a>
+                    {% endif %}
                     </a>
                     <div class="dropdown-menu" id="dropdown">
                         <a class="dropdown-item twinkle-grey" href="/unid/mypage" id="go-mypage">마이페이지</a>
@@ -164,7 +163,6 @@
     </div>
 
     <div id = "at_the_end3">
-        <img src="{% static 'unid/icon/unid_icon.png' %}" style="width:100px;">
         <span>Copyright by Unid. All rights reserved. Since 2019</span>
     </div>
 </footer>

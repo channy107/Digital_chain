@@ -3,7 +3,6 @@
 {% block content %}
 <!-- Page Content -->
 <link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
 
 <style>
 ul {
@@ -331,30 +330,8 @@ xpopup
 <div class="container1">
     <!-- contents InFo -->
     <div class="rows">
-        <div class="test">
-            {% if request.session.user_email == contents.writeremail_id %}
-            <a href="{% url 'postmodify' contents.contents_id %}">수정</a><button type="button" class="postdelete">삭제</button>
-            {% endif %}
-        </div>
-        <div style="float: right;">
-            다운로드 횟수  {{ contents.downloadcount }}
-            조회수   {{ contents.hits }}
-        </div>
-        <div class="cd-popup1" role="alert">
-            <div class="cd-popup-container1">
-                <div class="popuprow1">
-                    <h4>게시글을 삭제하시겠습니까?</h4>
-                </div>
-
-                <ul class="cd-buttons">
-                    <li><a href="#0" class="cd-popup-no">No</a></li>
-                    <li><a href="#0" class="cd-popup-delete-yes">Yes</a></li>
-                </ul>
-                <a href="#0" class="cd-popup-close img-replace"></a>
-            </div> <!-- cd-popup-container -->
-        </div> <!-- cd-popup -->
         <div class="opinion">
-            <input type="button" value="의견보내기">
+            <input type="button" value="의견보내기" class="pointeffect">
         </div>
         <div class="cd-popup2" role="alert">
             <div class="cd-popup-container2">
@@ -375,22 +352,21 @@ xpopup
                     <input type="text" class="col-sm-11 form-control" id="exception" placeholder="의견을 입력해주세요">
                 </div>
                 <ul class="cd-buttons">
-                    <li><a href="#0" class="cd-popup-no">돌아가기</a></li>
-                    <li><a href="#0" class="cd-popup-postopinion">보내기</a></li>
+                    <li class="pointeffect"><a href="#0" class="cd-popup-no">돌아가기</a></li>
+                    <li class="pointeffect"><a href="#0" class="cd-popup-postopinion">보내기</a></li>
                 </ul>
                 <a href="#0" class="cd-popup-close img-replace"></a>
             </div> <!-- cd-popup-container -->
         </div> <!-- cd-popup -->
         <div class="row">
-            <div class="contents-info">
+            <div class="contents-info1">
                 <div class="contents-kind">
                     {{ contents.category }}
                 </div>
-                <h2 align="center">
-                    <b> {{ contents.title }}</b>
-                </h2>
-                <hr size="10" align="center" width=20% noshade="noshade"/>
-                <div class="infobox">
+                <div align="center" class="contents-title">
+                    {{ contents.title }}
+                </div>
+                <div class="infobox"  align="center">
                     <div class="writerinfo">
                         <p align="center" size="5">
                             {% if contents.writeremail.userimage %}
@@ -403,17 +379,17 @@ xpopup
                     <div class="dateinfo">
                         {{ contents.created|timesince }}전
                     </div>
-                    <div class="fileinfo_box">
-                        <h5 class="dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">첨부 파일 ({{ files_infos|length }})</h5>
-                        <div class="dropdown-menu" id="dropdown">
-                            {% for filename in files_infos %}
-                            <h6 class="dropdown-item" href="#">{{ filename.uploadfile }}  |  {{ filename.filesize }}</h6>
-
-                            {% endfor %}
-                        </div>
+                </div>
+                <div class="fileinfo_box">
+                    <div class="dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
+                        <img src="{% static 'unid/icon/icons-첨부파일클립.png' %}" width="20" height="20" style="margin: 0 10px 0 0;">첨부 파일
+                    </div>
+                    <div class="dropdown-menu" id="dropdown">
+                        {% for filename in files_infos %}
+                        <div class="dropdown-item" href="#" style="font-size: 14px; font-weight: 300;">{{ filename.uploadfile }}  |  {{ filename.filesize }}</div>
+                        {% endfor %}
                     </div>
                 </div>
-
             </div>
         </div>
         <!-- preview -->
@@ -450,12 +426,16 @@ xpopup
                     {% endif %}
                 </div>
                 {% if second_preview %}
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style="height: 850px;">
+                    <span style="font-size: 3em; color: #dad8d8;">
+                        <i class="fas fa-angle-left"></i>
+                    </span>
                     <span class="sr-only">Previous</span>
                 </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" style="height: 850px;">
+                    <span style="font-size: 3em; color: #dad8d8;">
+                        <i class="fas fa-angle-right"></i>
+                    </span>
                     <span class="sr-only">Next</span>
                 </a>
                 {% endif %}
@@ -465,11 +445,8 @@ xpopup
         <div class="row">
             <div class="contents-detail">
                 <div class="contents-detail-row">
-                    <h4><p>컨텐츠 정보</p></h4>
-                </div>
-                <div class="contents-detail-row">
                     <div class="title">
-                        저자
+                        저자:
                     </div>
                     <div class="context">
                         {{ contents.authorinfo }}
@@ -477,7 +454,7 @@ xpopup
                 </div>
                 <div class="contents-detail-row">
                     <div class="title">
-                        저작시기
+                        저작시기:
                     </div>
                     <div class="context">
                         {{ contents.publisheddate }}
@@ -485,7 +462,7 @@ xpopup
                 </div>
                 <div class="contents-detail-row">
                     <div class="title">
-                        소개글
+                        소개글:
                     </div>
                     <div class="context">
                         {{ contents.intro|linebreaksbr }}
@@ -493,7 +470,7 @@ xpopup
                 </div>
                 <div class="contents-detail-row">
                     <div class="title">
-                        목차
+                        목차:
                     </div>
                     <div class="context">
                         {{ contents.index|linebreaksbr }}
@@ -501,7 +478,7 @@ xpopup
                 </div>
                 <div class="contents-detail-row">
                     <div class="title">
-                        본문내용
+                        본문내용:
                     </div>
                     <div class="context">
                         {{ contents.contents|linebreaksbr }}
@@ -509,7 +486,7 @@ xpopup
                 </div>
                 <div class="contents-detail-row">
                     <div class="title">
-                        참고문헌
+                        참고문헌:
                     </div>
                     <div class="context">
                         {{ contents.reference|linebreaksbr }}
@@ -527,9 +504,8 @@ xpopup
                     {% if downloadid %}
                     <a href="../download?id={{ contents.contents_id }}"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
-                    <button type="button" class="cd-popup-trigger" id='enrollcontents'>
-                        <img src="{% static 'unid/icon/download-icon.png' %}" border="0" width="30" height="30">
-                        Download
+                    <button type="button" class="cd-popup-trigger" id='enrollcontents' class="pointeffect">
+                        <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;">
                     </button>
                     <div class="cd-popup" role="alert">
                         <div class="cd-popup-container">
@@ -576,9 +552,39 @@ xpopup
         <!-- replyment -->
         <div class="row">
             <div class="contents-reply">
-                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
-                {{ contents.replymentcount }}
-                <hr size="5" align="left" width=670px noshade="noshade" style="color: #b3afaf54;"/>
+                <div>
+                    <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
+                    {{ contents.replymentcount }}
+                </div>
+                <div>
+                    <img src="{% static 'unid/icon/icons-다운로드.png' %}" width="20" height="20">
+                    <span>{{ contents.downloadcount }}</span>
+                </div>
+                <div>
+                    <img src="{% static 'unid/icon/icons-조회수.png' %}" width="20" height="20">
+                    <span>{{ contents.hits }}</span>
+                </div>
+                <div class="test">
+                    {% if request.session.user_email == contents.writeremail_id %}
+                    <a href="{% url 'postmodify' contents.contents_id %}">
+                        <img src="{% static 'unid/icon/icons-수정.png' %}" width="75" height="30">
+                    </a>
+                    <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">
+                    {% endif %}
+                </div>
+                <div class="cd-popup1" role="alert">
+                    <div class="cd-popup-container1">
+                        <div class="popuprow1">
+                            <h4>게시글을 삭제하시겠습니까?</h4>
+                        </div>
+
+                        <ul class="cd-buttons">
+                            <li><a href="#0" class="cd-popup-no">No</a></li>
+                            <li><a href="#0" class="cd-popup-delete-yes">Yes</a></li>
+                        </ul>
+                        <a href="#0" class="cd-popup-close img-replace"></a>
+                    </div> <!-- cd-popup-container -->
+                </div> <!-- cd-popup -->
                 <div class="reply-list">
                     {% for reply in replys %}
                     <div class="reply">
@@ -602,11 +608,19 @@ xpopup
 
 
         <div class="row">
+            {% if request.session.user_email %}
             <form class="input-reply">
-                <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
-
+                <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="댓글을 남겨보세요!"></textarea>
                 <input type="button" class="form-control col-sm-2 replybutton" value="댓글작성" id="inputreply" repletstyle="margin:0 0 0 600px;">
             </form>
+            {% else %}
+            <form class="input-reply">
+                <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
+                <a href="/unid/login">
+                    <input type="button" class="form-control col-sm-2 replybutton" value="로그인" id="inputreply" repletstyle="margin:0 0 0 600px;">
+                </a>
+            </form>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
+from haystack.query import SearchQuerySet
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -1698,3 +1699,31 @@ def commandMysql(request):
 def funding(request):
 
     return render(request, 'unid/funding.html', {})
+
+
+from django.http import JsonResponse
+from haystack.generic_views import SearchView
+from haystack.query import SearchQuerySet
+from django.shortcuts import render
+
+
+# def FreindSearch(request):
+#     if request.is_ajax():
+#         sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
+#         suggestions = [result.username for result in sqs]
+#         # Make sure you return a JSON object, not a bare list.
+#         # Otherwise, you could be vulnerable to an XSS attack.
+#         context = {'results': suggestions}
+#         return JsonResponse(context, safe=False)
+#
+#     return render(request, 'search/friend_search.html')
+def autocomplete(request):
+    sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
+    suggestions = [result.object.title for result in sqs]
+    print(suggestions)
+    # Make sure you return a JSON object, not a bare list.
+    # Otherwise, you could be vulnerable to an XSS attack.
+    the_data = json.dumps({
+        'results': suggestions
+    })
+    return HttpResponse(the_data, content_type='application/json')

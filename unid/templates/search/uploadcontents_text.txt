@@ -9,7 +9,6 @@
 {{ object.index }}
 {{ object.contents }}
 {{ object.reference }}
-{{ object.user.email }}
 {{ object.created }}
 {{ object.contents_id }}
 {{ object.imagepath }}
