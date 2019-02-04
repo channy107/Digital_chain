@@ -70,6 +70,8 @@ def mypage(request):
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
+        numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
+        numbersOfReply = len(replyForPosts.objects.filter(user_id=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTransaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
@@ -80,6 +82,8 @@ def mypage(request):
                    'joiningdate':joiningdate,
                    'numbersOfArticles':numbersOfArticles,
                    'numbersOfcontents':numbersOfcontents,
+                   'numbersOfDownloads':numbersOfDownloads,
+                   'numbersOfReply':numbersOfReply,
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,

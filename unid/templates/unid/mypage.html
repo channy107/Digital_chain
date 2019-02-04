@@ -23,26 +23,26 @@
     {% endif %}
         <div style="text-align:right;">
             <a id="edit_icon">
-                <img style="color: ##525f82; width:36px; margin-top:40px; margin-bottom:0px; cursor: pointer; margin-right:40px;" src="{% static 'unid/icon/ui icons-28.png' %}">
+                <img style="color: ##525f82; width:28px; margin-top:40px; margin-bottom:0px; cursor: pointer; margin-right:40px;" src="{% static 'unid/icon/ui icons-28.png' %}">
             </a>
         </div>
-        <div id="profile-icon" style="margin-top:-20px" >
+        <div id="profile-icon" style="margin-top:-25px" >
             {% if mypage.userimage %}
             <div id="user_image_icon" style="text-align:center;">
-                <img style="width:70px; border-radius:50%; padding-top:30px;" src="/{{ mypage.userimage }}">
+                <img style="width:67px; border-radius:50%; padding-top:30px;" src="/{{ mypage.userimage }}">
             </div>
             {% else %}
             <div style="text-align:center;">
-                <img style="width:70px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
+                <img style="width:67px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
             </div>
             {% endif %}
         </div>
         <ul id="user_profile">
-            <li style="text-align: center; font-size: xx-large; font-weight:600; margin-top:15px; ">{{ mypage.name }}</li>
+            <li style="text-align: center; font-size: 25px; font-weight:500;">{{ mypage.name }}</li>
             {% if mypage.profile %}
-                <li style="text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 4px; font-size:large;">{{ mypage.profile }}</li>
+                <li style="text-align: center; margin-top: 13px; font-size:13px">{{ mypage.profile }}</li>
             {% else %}
-                <li style="text-align: center;">프로필을 등록해 주세요!</li>
+                <li style="text-align: center; margin-top: 13px; font-size:13px">프로필을 등록해 주세요!</li>
             {% endif %}
         </ul>
         <div id="user-info2">
@@ -62,16 +62,16 @@
     <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
         <div id="edit_icon_div" style="text-align:right;">
             <a id="edit_icon" onclick="checkForm();">
-                <img style="color: ##525f82; width:50px; margin-top:40px; margin-bottom:0px; margin-right:40px; cursor: pointer;" src="{% static 'unid/icon/done_icon.jpg' %}">
+                <img style="color: ##525f82; width:28px; margin-top:40px; margin-bottom:0px; margin-right:40px; cursor: pointer;" src="{% static 'unid/icon/done_icon.jpg' %}">
             </a>
         </div>
         <form id="user_profile_edit_form" name="user_profile_edit_form" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <div id="profile-icon_edit" style="text-align:center; position: relative; bottom: -4px;">
+            <div id="profile-icon_edit" style="margin-top:-25px">
                 {% if mypage.userimage %}
-                <img style="width:70px; border-radius:50%; padding-top:30px;" src="/{{ mypage.userimage }}">
+                <img style="width:67px; border-radius:50%; padding-top:30px;" src="/{{ mypage.userimage }}">
                 {% else %}
-                <img style="width:70px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
+                <img style="width:67px; text-align: center; margin-bottom:0px; padding-top:30px;" src="{% static 'unid/icon/user.png' %}">
                 {% endif %}
             </div>
             <div id="user_image_edit" style="width: 80px; position: relative; bottom: 61px; left: 516px; opacity: 0;">
@@ -81,11 +81,11 @@
                 <!--<li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('user_profile_edit_form').submit()">수정완료</a></li>-->
             <!--</ul>-->
             <ul id="user_profile_edit">
-                <div id="user_name_modifier" style="height: 30px; text-align: center; font-size: xx-large; font-weight:600;">
+                <div id="user_name_modifier" style="text-align: center; font-size: 25px; font-weight:500;">
                     <input id="change_user_name" autocomplete="off" type="text" style="outline: none; text-align: center; border: 1px solid black; font-weight:600; background-color: transparent; width: 200px; height: 40px; bottom:10px; left: 0px" name="name" value="{{ mypage.name }}">
                 </div>
                 <span id="alert" style="width:100px; font-size:15px; color: #ed1b25; position: relative; left:830px; bottom: 44px; height: 30px;"></span>
-                <div id="user_profile_modifier" style="height: 30px; text-align: center; margin-left: 350px; margin-right: 350px; margin-top: 15px; margin-left:370px;bottom:25px; left: 4px;">
+                <div id="user_profile_modifier" style="text-align: center; margin-top: 13px; font-size:13px">
                     <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; border:1px solid black; background-color:transparent; width:300px; height:35px; font-size: large;">
                     <span class="col_red" id="body_byte3">0</span>자
                 </div>
@@ -109,7 +109,7 @@
     </div>
 
     <div id="container">
-        <ul class="tabs" id="tabs" style="margin-left:50px; margin-right:50px; padding-top:40px; font-size: larger; font-weight: bold; border-bottom: 1px solid #c1c1c1; padding-bottom:5px;">
+        <ul class="tabs" id="tabs" style="margin-left:50px; margin-right:50px; padding-top:40px; font-size: 18px; font-weight: 500; border-bottom: 1px solid #c1c1c1; padding-bottom:5px;">
             <li class="tab-link current" data-tab="tab-1">나의 활동</li> &nbsp&nbsp
             <li class="tab-link" data-tab="tab-2">나의 자료</li> &nbsp&nbsp
             <li class="tab-link" data-tab="tab-3">나의 보상</li>
@@ -118,9 +118,9 @@
             </div>
         </ul>
         <div id="tab-1" class="tab-content current">
-            <div id="myarticles" style="min-height:250px;">
-                <br>
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 작성한 글</strong></p>
+            <div id="content_column">
+                <div id="title_of_contents">내가 작성한 글</div>
+                <div id="number_of_something">{{ numbersOfArticles }}건</div>
                 <br>
                 {% if articles %}
                     {% for article in articles %}
@@ -153,12 +153,12 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p><strong>등록된 글이 없습니다. 글을 등록해보세요!</strong></p>
+                    <div id="text_message">등록된 글이 없습니다. 글을 등록해보세요!</div>
                 {% endif %}
             </div>
-            <br>
-            <div id="reply" style="min-height:250px;">
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>최근 댓글 내역</strong></p>
+            <div id="content_column" style="min-height:250px;">
+                <div id="title_of_contents">최근 댓글 내역</div>
+                <div id="number_of_something">{{ numbersOfReply }}건</div>
                 <br>
                 {% if replies %}
                     {%  for reply in replies %}
@@ -183,14 +183,14 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p><strong>등록된 댓글이 없습니다. 글을 등록해보세요!</strong></p>
+                    <div id="text_message">등록된 댓글이 없습니다. 글을 등록해보세요!</div>
                 {% endif %}
             </div>
         </div>
         <div id="tab-2" class="tab-content">
-            <div id="uploads" style="min-height:250px;">
-                <br>
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 올린 콘텐츠</strong></p>
+            <div id="content_column" style="min-height:250px;">
+                <div id="title_of_contents">내가 올린 콘텐츠</div>
+                <div id="number_of_something">{{ numbersOfcontents }}건</div>
                 <br>
                 {% if contentsboard %}
                     {% for content in contentsboard %}
@@ -228,13 +228,12 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p><strong>등록된 콘텐츠가 없습니다. 콘텐츠을 등록해보세요!</strong></p>
+                    <div id="text_message">등록된 콘텐츠가 없습니다. 콘텐츠을 등록해보세요!</div>
                 {% endif %}
             </div>
-            <br>
-            <div id="downloads" style="min-height:250px;">
-                <br>
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내가 받은 콘텐츠</strong></p>
+            <div id="content_column" style="min-height:250px;">
+                <div id="title_of_contents">내가 받은 콘텐츠</div>
+                <div id="number_of_something">{{ numbersOfDownloads }}건</div>
                 <br>
                 {% if downloads %}
                     {% for download in downloads %}
@@ -272,20 +271,19 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p><strong>다운로드한 콘텐츠가 없습니다. 콘텐츠을 구매해보세요!</strong></p>
+                    <div id="text_message">다운로드한 콘텐츠가 없습니다. 콘텐츠을 구매해보세요!</div>
                 {% endif %}
             </div>
-            <div id="contents_transfer" style="margin-left: 50px; min-height:250px;">
-                <br>
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>콘텐츠 거래 내역</strong></p>
-                <div class="row_for_table" style="width:970px">
+            <div id="content_column" style="margin-left: 50px; min-height:250px;">
+                <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 거래 내역</div>
+                <div class="row_for_table" style="width:970px; ">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" style="text-align: center; width:140px;">승인날짜</th>
-                                <th scope="col" style="text-align: center; width:500px;">콘텐츠</th>
-                                <th scope="col" style="text-align: center;">저자</th>
-                                <th scope="col" style="text-align: center;">금액</th>
+                                <th scope="col" id="col" style="width:140px;">승인날짜</th>
+                                <th scope="col" id="col" style="width:500px;">콘텐츠</th>
+                                <th scope="col" id="col" style="">저자</th>
+                                <th scope="col" id="col" style="">금액</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -305,10 +303,7 @@
             </div>
         </div>
         <div id="tab-3" class="tab-content">
-            <div id="myrewards">
-                <br>
-                <p style="text-align: left; font-size:larger; color:#9aa1a7;"><strong>내 보상 내역</strong></p>
-                <br>
+            <div id="content_column">내 보상 내역
                 {% if myreward %}
                 <div class="history-total">
                     <div>
@@ -349,7 +344,7 @@
                     </div>
                 </div>
                 {% else %}
-                    <p><strong>보상내역이 없습니다. 글을 등록하고 보상을 받으세요!</strong></p>
+                <div id="text_message">보상내역이 없습니다. 글을 등록하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
         </div>
