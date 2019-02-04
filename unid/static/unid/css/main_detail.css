@@ -13,6 +13,15 @@ q:before, q:after {
 content: '';
 content: none;
 }
+#like-list {
+    margin-left : 2px;
+    margin-right : 2px;
+}
+button.votings {
+background-color : white;
+border: none;
+cursor : pointer;
+}
 }
 .img-replace {
 /* replace text with an image */
