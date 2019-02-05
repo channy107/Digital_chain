@@ -19,7 +19,7 @@ class uploadContentsIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True, template_name='search/uploadcontents_text.txt')
     writer = indexes.CharField(model_attr='writeremail')
     pub_date = indexes.DateTimeField(model_attr='last_modified')
-
+    content_auto = indexes.EdgeNgramField(model_attr='title')
     def get_model(self):
         return uploadContents
 
@@ -27,10 +27,12 @@ class uploadContentsIndex(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 
+
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True, template_name='search/informations_text.txt')
     writer = indexes.CharField(model_attr='user')
     pub_date = indexes.DateTimeField(model_attr='last_modified')
+    content_auto = indexes.EdgeNgramField(model_attr='title')
 
     def get_model(self):
         return Post

@@ -8,65 +8,11 @@
         .element {
             .center-block();
         }
-        .container-1{
-              width: 300px;
-              vertical-align: middle;
-              white-space: nowrap;
-              position: relative;
-              margin:0 0 0 150px;
-        }
-
-        .container-1 input#search{
-            width: 300px;
-            height: 50px;
-            background: rgb(253, 253, 253);
-            border: none;
-            border-style: solid;
-            border-width: 1px;
-            border-color: rgb(202, 202, 202);
-            font-size: 10pt;
-            float: left;
-            color: #63717f;
-            padding-left: 45px;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-        }
-        .infobox {
-            width: 600px;
-            height: 100px;
-
-        }
-        .container-1 input#search::-webkit-input-placeholder {
-           color: #65737e;
-        }
-
-        .container-1 input#search:-moz-placeholder { /* Firefox 18- */
-           color: #65737e;
-        }
-
-        .container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
-           color: #65737e;
-        }
-
-        .container-1 input#search:-ms-input-placeholder {
-           color: #65737e;
-        }
-
-        .container-1 .icon{
-              position: absolute;
-              top: 50%;
-              margin-left: 17px;
-              margin-top: 14px;
-              z-index: 1;
-              color: #4f5b66;
-        }
 
         .row {
-            width:700px;
+            width:840px;
             padding:10px;
             margin: 0 auto;
-            margin:10px auto 10px auto;
         }
         .rows {
             width: 1150px;
@@ -82,59 +28,60 @@
         }
 
         .rows {
-            width:800px;
+            width: 1010px;
             margin: 0 auto;
             background-color:#ffffff!important;
             border-width:1px;
             box-shadow: 0px 0px 0px 1px #b3afaf54
         }
 
-        .contents-info {
-            width: 700px;
-            height:200px;
+        .contents-info1 {
+            width: 820px;
             border:1px;
-            margin: 30px;
         }
         .container1 {
             margin:70px;
             font-family: 'Noto Sans KR', sans-serif;
        }
+        .contents-title {
+            font-size: 30px;
+            font-weight: 550;
+
+        }
         .writerinfo {
-            margin: 10px 30px 0 200px;
+            margin: 10px 20px 0;
             display: inline-block;
+            font-weight: 500;
+            font-size: 13px;
+            height: 35px;
         }
         .dateinfo {
             display: inline-block;
+            font-size: 12px;
         }
         .fileinfo {
             float: left;
             margin: 0 10px;
             }
         .fileinfo_box {
-            width: 300px;
-            height: 100px;
-            margin: 0 auto;
+            width: 110px;
             cursor: pointer;
-            position: relative;
-            left: 400px;
+            float: right;
         }
         .carousel {
             margin: 0 auto;
-        }
-
-        .contents-detail {
-            width: 1000px;
-            border: solid;
-            border-width: 2px;
-            border-color: #b3afaf54;
-            padding: 20px;
-
+            border-width: 1px;
+            box-shadow: 0px 0px 0px 1px #b3afaf54;
         }
         .contents-reply {
-            width: 700px;
+            width: 840px;
+            height: 37px;
+            border-bottom: solid;
+            border-width: 2px;
+            border-color: #f2f2f2;
         }
         .contents-payment {
-            margin: 0 0 0 375px;
+            margin: 0 0 0 480px;
             text-align: right;
             position: relative;
             left: 23%;
@@ -169,8 +116,6 @@
             border-radius:20px;
             backgraound-size: 100px;
             text-align: center;
-            position: relative;
-            left: 260px;
         }
         .nav-item{
             font-size: 1rem;
@@ -181,7 +126,7 @@
         }
         .input-reply{
             width: 1000px;
-            margin: 0 auto;
+            margin: 0 auto 20px 0;
         }
 
         .row-advertise {
@@ -243,6 +188,16 @@
             text-align: center;
             display: inline;
         }
+        .title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0 0 12px 0;
+        }
+        .context {
+            margin: 0 0 12px 10px;
+            font-size: 15px;
+            font-weight: 400;
+        }
         .contents-recommend-row {
             width: 1300px;
             height: 400px;
@@ -274,17 +229,19 @@
             float: left;
         }
         .replybutton {
-            position:relative;
-            left: 567px;
-            }
+            float: right;
+        }
         .hi {
             display: inline;
 
         }
         .test {
-            display: inline;
+            margin: 0px 0 0 519px !important;
         }
-        .context {
+        .contents-reply div {
+            width: 50px;
+            display:inline;
+            margin: 0 10px 0 0;
 
 
         }

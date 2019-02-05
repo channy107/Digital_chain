@@ -339,7 +339,9 @@ xpopup
 <div class="container1">
     <!-- contents InFo -->
     <div class="contentsuploadrows">
-        <h5 class="board-title">컨텐츠 등록</h5>
+        <div class="board-title">
+            <img src="{% static 'unid/icon/icons-학사모.png' %}" width="30" height="20" style="margin: 0 15px 0 0;">컨텐츠 등록
+        </div>
         <div id="user_file_before">
             <div id="user_file_over">
                 <form id="fileform" name="fileform" action="../test_validfile/" method="post" enctype="multipart/form-data">
@@ -349,7 +351,7 @@ xpopup
             <div class="form-group">
                 <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
                 <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
+                <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;"value="파일 첨부"readonly/>
                 <ul class="str_ul">
                     <li class="tip_str">
                     .hwp, .ppt, .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
@@ -364,11 +366,11 @@ xpopup
             <div class="form-group">
                 <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
                 <input class="form-control col-sm-7 files2"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button1" type="button" id="reupload" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
-                <input class="form-control col-sm-1 files-button1" type="button" id="uploadbutton" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="중복검사" readonly/>
+                <input class="form-control col-sm-2 files-button1" type="button" id="reupload" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
+                <input class="form-control col-sm-1 files-button1" type="button" id="uploadbutton" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="중복검사" readonly/>
                 <input class="form-control col-sm-1 files-button1" type="button" id="after_test" name="after_test" style="background-color: green;color: white;text-align:center;cursor: pointer;" readonly/>
                 <ul class="str_ul">
-                    <li class="tip_str" style="color: red;" id="before_confirm" name="before_confirm">
+                    <li class="tip_str" style="color: #E64C3C;" id="before_confirm" name="before_confirm">
                     콘텐츠 중복검사 버튼을 클릭해주세요.
                     </li>
                     <li class="tip_str" style="color: blue; display: none;" id="after_connfirm" name="after_connfirm">
@@ -393,7 +395,7 @@ xpopup
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;" value="파일 첨부"readonly/>
+                    <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;" value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
                         .jpg, .png 형식의 파일만 가능합니다.
@@ -407,7 +409,7 @@ xpopup
                 <div class="form-group">
                     <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: red;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
+                    <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
                 </div>
             </div>
             <div class="form-group">
@@ -460,7 +462,7 @@ xpopup
                 <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text">
             </div>
             <div class="form-group">
-                <label for="inputpublisheddate" class="col-sm-3">저작시기</label>
+                <label for="inputpublisheddate" class="col-sm-3 pointeffect">저작시기</label>
                 <input type="date" class="form-control creatdate" id="inputpublisheddate"  name="publisheddate">
             </div>
             <div class="form-group">
@@ -503,9 +505,9 @@ xpopup
             <div class="form-group">
                 <label class="col-sm-2">계약 동의서</label>
                 <div class="checks">
-                    <input type="checkbox" id="ex_chk" name="checkconsensus" >
+                    <input type="checkbox" id="ex_chk" name="checkconsensus" class="pointeffect">
                     <label for="ex_chk">(필수) 등록하는 자료의 저작물 판매에 대한 계약/서약에 동의 합니다.</label>
-                    <button type="button" class="btn cons" name="cons" id="cons">동의서 보기</button>
+                    <button type="button" class="btn cons pointeffect" name="cons" id="cons">동의서 보기</button>
                     <div class="cd-popup1" role="alert">
                         <div class="cd-popup-container1">
                             <div class="popuprow1">
@@ -567,18 +569,16 @@ xpopup
  본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
                                 </textarea>
                                 <ul class="cd-buttons">
-                                    <li><input class="cd-popup-no" type="button" value="동의하지않습니다." /></li>
-                                    <li><input class="cd-popup-yes" type="button" value="동의합니다." disabled/></li>
+                                    <li><input class="cd-popup-no form-control pointeffect" type="button"  style="background-color: #B2B2B2; color: white;" value="동의하지않습니다." /></li>
+                                    <li><input class="cd-popup-yes form-control" type="button" style="background-color: #E64C3C; color: white;" value="동의합니다." disabled/></li>
                                 </ul>
                             </div>
                         </div> <!-- cd-popup-container -->
                     </div> <!-- cd-popup -->
                 </div>
             </div>
-            <div class="form-group">
-                <div class="enroll-button">
-                    <input class="cd-popup-trigger form-control col-sm-2 " name="enrollcontents" id="enrollcontents" value="콘텐츠 등록" readonly/>
-                </div>
+            <div class="form-group" align="center">
+                <input type="button" class="cd-popup-trigger form-control col-sm-2 pointeffect" name="enrollcontents" id="enrollcontents" style="background-color: #E64C3C; float: inherit;" value="콘텐츠 등록" readonly/>
             </div>
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
@@ -595,8 +595,8 @@ xpopup
                         </div>
 
                         <ul class="cd-buttons">
-                            <li><a href="#0" class="cd-popup-no">No</a></li>
-                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
+                            <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
+                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
@@ -654,6 +654,7 @@ xpopup
             });
         $('.contracttext').on('scroll', function() {
             if($('.contracttext').scrollTop() >= 700) {
+                $('.cd-popup-yes').addClass('pointeffect');
                 $('.cd-popup-yes').removeAttr("disabled");
             }
         });
@@ -937,7 +938,7 @@ xpopup
             var WEB3 = require('web3');
             var web3 = new WEB3();
             web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:9545"));
-            var contentsmasterContract = web3.eth.contract([{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+            var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
 
             console.log(1);
             let cmc = contentsmasterContract.at("0x2679652bf8f5a8c4505bde0c164cc4c4e4e9a628");

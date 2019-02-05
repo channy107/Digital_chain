@@ -3,6 +3,8 @@
 }
 .board-title {
     margin: 20px 0 20px 20px;
+    font-size: 17px;
+    font-weight: 500;
 }
 .contentsuploadrows {
     width: 1000px;
@@ -20,6 +22,20 @@
 .form-control {
     float: right;
     }
+.form-control1 {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    clear:right;
+}
 .text-group {
     clear: both;
     height: 200px;
@@ -191,9 +207,4 @@
 #enrollcontents {
     margin: 0 auto;
 
-}
-
-.enroll-button {
-    cursor: pointer;
-    background-color:red;
 }

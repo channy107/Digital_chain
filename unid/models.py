@@ -46,7 +46,6 @@ class uploadContents(models.Model):
     price = models.IntegerField()
     tags = models.CharField(max_length=50)
     fileinfo = models.CharField(max_length=250)
-    # totalpages = models.IntegerField()
     authorinfo = models.CharField(max_length=1000)
     intro = models.CharField(max_length=2000)
     index = models.CharField(max_length=2000)

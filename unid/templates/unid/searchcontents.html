@@ -4,6 +4,7 @@
 <head>
     <link href="{% static 'unid/css/searchcontents.css' %}" rel="stylesheet">
 </head>
+<div style="background-color: #f2f2f2;">
 <div class="row-advertise">
     <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel" align="center">
         <ol class="carousel-indicators">
@@ -24,101 +25,113 @@
         </div>
     </div>
 </div>
-<div class="contents-post-container">
-    <div class="contents-post-row">
-        <div class="sidenav">
-            <h4 class="my-4">태그 카테고리</h4>
-            <div class="list-group">
-                <a href="../searchcontents/레포트" class="list-group-item">#레포트</a>
-                <a href="../searchcontents/강의자료" class="list-group-item">#강의자료</a>
-                <a href="../searchcontents/강의노트" class="list-group-item">#강의노트</a>
-                <a href="../searchcontents/시험자료" class="list-group-item">#시험자료</a>
-                <a href="../searchcontents/동영상" class="list-group-item">#동영상</a>
-                <a href="../searchcontents/자기소개서" class="list-group-item">#자소서</a>
-                <a href="../searchcontents/이력서" class="list-group-item">#이력서</a>
-                <a href="../searchcontents/PPT" class="list-group-item">#PPT</a>
-                <a href="../searchcontents/논문" class="list-group-item">#논문</a>
-            </div>
-        </div>
-        <div class="information-popular-row">
-            <div class="popular-rows">
+<div class="contentsmain-container1">
+    <div class="contents-post-container">
+        <div class="contents-post-row">
+            <div class="sidenav">
                 <div class="popular-rows-title">
-                    콘텐츠 게시글
+                    태그 카테고리
                 </div>
-                <hr>
-                {% for contents in contentsPost %}
-                <div class="popular-row">
-                    <ul class="row-top">
-                    <li>
-                        {% if contents.writeremail.userimage %}
-                        <img src="/{{ contents.user.userimage }}">
-                        {% else %}
-                        <img src="{% static 'unid/icon/profle-icon.png' %}">
-                        {% endif %}
-                    </li>
-                    <li>
-                        {{ contents.writeremail.email }}
-                    </li>
-                    <li>
-                        ·         {{ contents.created|timesince }}전
-                    </li>
-                    <li>
-                        {% if contents.category == "레포트" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "강의노트" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "시험자료" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "동영상" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "자소서" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "이력서" %}
-                        <span>{{ contents.category }}</span>
-                        {% elif contents.category == "PPT" %}
-                        <span>{{ contents.category }}</span>
-                        {% else %}
-                        <span>{{ contents.category }}</span>
-                        {% endif %}
-                    </li>
-                </ul>
-                <div class="row-picture">
-                    <a href="{% url 'contentsdetail' contents.contents_id %}">
-                        {% if contents.imagepath %}
-                        <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
-                        {% else %}
-                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
-                        {% endif %}
-                    </a>
+                <div class="list-group">
+                    <a href="../searchcontents/레포트" class="list-group-item">#레포트</a>
+                    <a href="../searchcontents/강의자료" class="list-group-item">#강의자료</a>
+                    <a href="../searchcontents/강의노트" class="list-group-item">#강의노트</a>
+                    <a href="../searchcontents/시험자료" class="list-group-item">#시험자료</a>
+                    <a href="../searchcontents/동영상" class="list-group-item">#동영상</a>
+                    <a href="../searchcontents/자기소개서" class="list-group-item">#자소서</a>
+                    <a href="../searchcontents/이력서" class="list-group-item">#이력서</a>
+                    <a href="../searchcontents/PPT" class="list-group-item">#PPT</a>
+                    <a href="../searchcontents/논문" class="list-group-item">#논문</a>
                 </div>
-                <ul class="row-middle">
-                    <li>
-                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:80 }}</a>
-                    </li>
-                </ul>
-                <ul class="row-bottom">
-                    <li>
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
-                    </li>
-                    <li>
-                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
-                        <i class="fas fa-chevron-adown"></i>
-                    </li>
-                </ul>
             </div>
-            {% endfor %}
+            <div class="information-popular-row">
+                <div class="popular-rows">
+                    <div class="popular-rows-top">
+                        <div class="popular-rows-title">
+                            최신 글
+                        </div>
+                        <div class="write-button">
+                            <img src="{% static 'unid/icon/icons-콘텐츠등록.png' %}" width="90" height="30">
+                        </div>
+                    </div>
+                    <hr>
+                    {% for contents in contentsPost %}
+                    <div class="popular-row">
+                        <ul class="row-top">
+                        <li>
+                            {% if contents.writeremail.userimage %}
+                            <img src="/{{ contents.user.userimage }}">
+                            {% else %}
+                            <img src="{% static 'unid/icon/profle-icon.png' %}">
+                            {% endif %}
+                        </li>
+                        <li>
+                            {{ contents.writeremail.email }}
+                        </li>
+                        <li>
+                            ·         {{ contents.created|timesince }}전
+                        </li>
+                        <li>
+                            {% if contents.category == "레포트" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "강의노트" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "시험자료" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "동영상" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "자소서" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "이력서" %}
+                            <span>{{ contents.category }}</span>
+                            {% elif contents.category == "PPT" %}
+                            <span>{{ contents.category }}</span>
+                            {% else %}
+                            <span>{{ contents.category }}</span>
+                            {% endif %}
+                        </li>
+                    </ul>
+                    <div class="row-picture">
+                        <a href="{% url 'contentsdetail' contents.contents_id %}">
+                            {% if contents.imagepath %}
+                            <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
+                            {% else %}
+                            <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <ul class="row-middle">
+                        <li>
+                            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:65 }}</a>
+                        </li>
+                    </ul>
+                    <ul class="row-bottom">
+                        <li>
+                            <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
+                        </li>
+                        <li>
+                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
+                            <i class="fas fa-chevron-adown"></i>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            <input id="page" type="hidden" value="2">
+            {% if contentsPost.paginator.count > 4 %}
+            <button id="callmorepost" class="form-control">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            {% endif %}
         </div>
-        <input id="page" type="hidden" value="2">
-        {% if contentsPost.paginator.count > 4 %}
-        <button id="callmorepost" class="form-control">
-            <i class="fas fa-chevron-down"></i>
-        </button>
-        {% endif %}
     </div>
 </div>
+</div>
+</div>
+</body
 
 
 

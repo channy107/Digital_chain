@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
+from haystack.query import SearchQuerySet
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -496,10 +497,13 @@ def infotag(request, category):
 
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
-                       'page_num':page_num}
+                       'page_num':page_num,
+                       'category':category}
             return render(request, 'unid/infotag_ajax.html', context)
 
-        context = {'allinfolists': allinfolists}
+        context = {'allinfolists': allinfolists,
+                   'category': category,
+                   'page_num': page_num}
 
         return render(request, 'unid/infotag.html', context)
 
@@ -626,7 +630,9 @@ def writer_rewards():
         writer = reward_values[i]['user_id']
         writer_info = myPageInfomation.objects.get(email=writer)
         writeraccount = writer_info.account
+        writeraccount = Web3.toChecksumAddress(writeraccount)
         reward_nwei = int(rewards*10) * 100000000000000000
+        print(reward_nwei)
         unidaccountpwd = "pass0"
         w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
         tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
@@ -636,7 +642,6 @@ def writer_rewards():
         store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=writer, balance=rewards, txid=receipt, type="rewards", aaa="success")
 
         store.save()
-
 
 def liked_users_reward():
     now = datetime.now()
@@ -703,11 +708,13 @@ def liked_users_reward():
             user_info = myPageInfomation.objects.get(email=likedusers)
             writer_reward_success = Post.objects.get(posts_id=post_id)
             reward_success = LikeUsers.objects.get(posts_id=post_id, liked_users=likedusers)
-            likedusersaccount = user_info.account
-            user_reward = 0.2*100000000000000000000
+            useraccount = user_info.account
+            likedusersaccount = Web3.toChecksumAddress(useraccount)
+            user_reward = int(0.2*10) *10000000000000000
+            print(user_reward)
             unidaccountpwd = "pass0"
             w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
-            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusers, user_reward).transact(
+            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusersaccount, user_reward).transact(
                 {'from': w3.eth.coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
             store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=likedusers, balance=0.2, txid=receipt, type="rewards", aaa="success")
@@ -1837,3 +1844,31 @@ def commandMysql(request):
 def funding(request):
 
     return render(request, 'unid/funding.html', {})
+
+
+from django.http import JsonResponse
+from haystack.generic_views import SearchView
+from haystack.query import SearchQuerySet
+from django.shortcuts import render
+
+
+# def FreindSearch(request):
+#     if request.is_ajax():
+#         sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
+#         suggestions = [result.username for result in sqs]
+#         # Make sure you return a JSON object, not a bare list.
+#         # Otherwise, you could be vulnerable to an XSS attack.
+#         context = {'results': suggestions}
+#         return JsonResponse(context, safe=False)
+#
+#     return render(request, 'search/friend_search.html')
+def autocomplete(request):
+    sqs = SearchQuerySet().autocomplete(content_auto=request.GET.get('q', ''))[:5]
+    suggestions = [result.object.title for result in sqs]
+    print(suggestions)
+    # Make sure you return a JSON object, not a bare list.
+    # Otherwise, you could be vulnerable to an XSS attack.
+    the_data = json.dumps({
+        'results': suggestions
+    })
+    return HttpResponse(the_data, content_type='application/json')

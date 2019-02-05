@@ -2,65 +2,72 @@
 <head>
     <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
 </head>
-{% for info in posts %}
-                <div class="popular-row">
-                    <ul class="row-top">
-                    <li>
-                        {% if info.user.userimage %}
-                        <img src="/{{ info.user.userimage }}">
-                        {% else %}
-                        <img src="{% static 'unid/icon/profle-icon.png' %}">
-                        {% endif %}
-                    </li>
-                    <li>
-                        {{ info.user.email }}
-                    </li>
-                    <li>
-                        ·         {{ info.created_at|timesince }}전
-                    </li>
-                    <li>
-                        {% if info.category == "학교정보" %}
-                        <span>{{ info.category }}</span>
-                        {% elif info.category == "학교주변리뷰" %}
-                        <span>{{ info.category }}</span>
-                        {% elif info.category == "취업정보" %}
-                        <span>{{ info.category }}</span>
-                        {% else %}
-                        <span>{{ info.category }}</span>
-                        {% endif %}
-                    </li>
-                </ul>
-                <div class="row-picture">
-                    <a href="{% url 'main_detail' info.posts_id %}">
-                        {% if info.file_path %}
-                        <img src="/{{ info.file_path }}" width="99px" height="75px" style="border-radius: 3px;">
-                        {% else %}
-                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
-                        {% endif %}
-                    </a>
-                </div>
-                <ul class="row-middle">
-                    <li>
-                        <a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'main_detail' info.posts_id %}">{{ info.contents|truncatechars_html:100 }}</a>
-                    </li>
-                </ul>
-                <ul class="row-bottom">
-                    <li>
-                        <span class="main-voting"><button class="votings-{{page_num}}" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
-                    </li>
-                    <li>
-                        <span class="main-voting">
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
-                    </li>
-                    <li>
-                        <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
-                    </li>
-                </ul>
-            </div>
-            {% endfor %}
+<style>
+button.votings-{{page_num}} {
+    background-color : white;
+    border: none;
+    cursor : pointer;
+}
+</style>
+    {% for info in posts %}
+    <div class="popular-row">
+        <ul class="row-top">
+            <li>
+                {% if info.user.userimage %}
+                <img src="/{{ info.user.userimage }}">
+                {% else %}
+                <img src="{% static 'unid/icon/profle-icon.png' %}">
+                 {% endif %}
+            </li>
+            <li>
+                {{ info.user.email }}
+            </li>
+            <li>
+                {{ info.created_at|timesince }}전
+            </li>
+            <li>
+               {% if info.category == "학교정보" %}
+                   <span>{{ info.category }}</span>
+               {% elif info.category == "학교주변리뷰" %}
+                   <span>{{ info.category }}</span>
+               {% elif info.category == "취업정보" %}
+                   <span>{{ info.category }}</span>
+               {% else %}
+                   <span>{{ info.category }}</span>
+               {% endif %}
+            </li>
+        </ul>
+        <div class="row-picture">
+            <a href="{% url 'main_detail' info.posts_id %}">
+                {% if info.file_path %}
+                    <img src="/{{ info.file_path }}" width="99px" height="75px" style="border-radius: 3px;">
+                {% else %}
+                    <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+                {% endif %}
+            </a>
+        </div>
+        <ul class="row-middle">
+            <li>
+                <a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a>
+            </li>
+            <li>
+                <a href="{% url 'main_detail' info.posts_id %}">{{ info.contents|truncatechars_html:65 }}</a>
+            </li>
+        </ul>
+        <ul class="row-bottom">
+            <li>
+                <span class="main-voting"><button class="votings-{{page_num}}" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{info.posts_id}}">{{info.like_count}}</span></span>
+            </li>
+            <li>
+                <span class="main-voting">
+                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{info.posts_id}}">{{info.rewards}}</span></span>
+            </li>
+            <li>
+                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"></span>4
+            </li>
+        </ul>
+    </div>
+{% endfor %}
 
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
