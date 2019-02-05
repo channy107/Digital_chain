@@ -32,13 +32,15 @@
             {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
-                    <li>
-                        {% if list.user.userimage %}
-                        <img src="/{{ list.user.userimage }}">
-                        {% else %}
-                        <img src="{% static 'unid/icon/profle-icon.png' %}">
-                        {% endif %}
-                    </li>
+                    <a href="{% url 'user_detail' list.user.IDX %}">
+                        <li>
+                            {% if list.user.userimage %}
+                            <img src="/{{ list.user.userimage }}">
+                            {% else %}
+                            <img src="{% static 'unid/icon/profle-icon.png' %}">
+                            {% endif %}
+                        </li>
+                    </a>
                     <li>
                         {{ list.user.email }}
                     </li>
