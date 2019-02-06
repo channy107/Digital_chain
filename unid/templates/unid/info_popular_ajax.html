@@ -12,6 +12,7 @@ button.votings-{{page_num}} {
 {% for info in posts %}
      <div class="popular-row">
           <ul class="row-top">
+                  <a href="{% url 'user_detail' info.user.IDX %}">
                         <li>
                             {% if info.user.userimage %}
                             <img src="/{{ info.user.userimage }}">
@@ -22,6 +23,7 @@ button.votings-{{page_num}} {
                         <li>
                             {{ info.user.email }}
                         </li>
+                  </a>
                         <li>
                             ·         {{ info.created_at|timesince }}전
                         </li>

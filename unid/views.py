@@ -79,6 +79,14 @@ def mypage(request):
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
+        # sess = myPageInfomation.objects.filter(email=request.session['user_email'])
+        # mypost = Post.objects.filter(email=sess).exclude(aaa='success')
+        # values = mypost.values()
+        # for i in range(len(values)):
+        #     reward = values[i]['rewards']
+        #     myrewards = reward * 0.8
+        #     print(myrewards)
+
         context = {'articles':articles,
                    'myreward':myreward,
                    'likeusers':likeusers,
@@ -92,7 +100,8 @@ def mypage(request):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
-                   'contents_transfer':contents_transfer
+                   'contents_transfer':contents_transfer,
+                   # 'myrewards':myrewards
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -146,10 +155,7 @@ def mypage(request):
         return HttpResponseRedirect(url)
 
 
-def userinfo(request):
-    i = 0
-    user_info = myPageInfomation.objects.filter(idx=idx)
-    return render(request, "unid/userinfo.html", {"user_info":user_info})
+
 
 
 @csrf_exempt
@@ -772,7 +778,7 @@ def user_detail(request, id):
                    'replies':replies,
                    'contents_transfer':contents_transfer
                    }
-        return render(request, 'unid/mypage.html', context)
+        return render(request, 'unid/user_detail.html', context)
 
     else:
 

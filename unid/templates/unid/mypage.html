@@ -179,6 +179,12 @@
                 {% else %}
                 <div id="text_message">등록된 글이 없습니다. 글을 등록해보세요!</div>
                 {% endif %}
+                <input id="page" type="hidden" value="2">
+                {% if posts.paginator.count > 4 %}
+                <button id="callmorepost" class="form-control">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                {% endif %}
             </div>
             <div id="content_column" style="min-height:250px;">
                 <div id="title_of_contents">최근 댓글 내역</div>
@@ -420,7 +426,7 @@
                     </table>
                 </div>
                 {% else %}
-                <div id="text_message">보팅내역이 없습니다. 정보공유 게시글에 보팅하고 보상을 받으세요!</div>
+                <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
             <div id="content_column">
@@ -499,17 +505,21 @@
             document.getElementById('user_profile_edit_form').submit();
         }
     }
-
-    function calculate() {
-        var valueforvoting = document.calculate.value
+    var calculate = document.getElementById('calculate')
+    calculate = function calculate() {
+        var valueforvoting = document.getElementById('calculate').value
+        console.log(valueforvoting);
         var sumofreward = valueforvoting * 0.08
         var total = eval(sumofreward)
         if (valueforvoting==null) {
+            document.getElementById("calculate").hide;
             document.getElementById("calculate").text="0";
         }
         else {
+            document.getElementById("calculate").hide;
             document.getElementById("calculate").text(total);
         }
+        console.log(total);
     }
 
 
@@ -678,6 +688,58 @@
                 $('#change_user_profile').val(str2);
             }
         });
+
+        // 더보기 기능
+        $('#callmorepost').click(function(){
+            var page = $("#page").val();
+            var end_page = {{ posts.paginator.num_pages }};
+            if(page > end_page) {
+                return;
+            }
+            callMorePostAjax(page);
+            $("#page").val(parseInt(page)+1);
+        });
+
+        $(window).scroll(function() {
+            var scrollHeight = $(window).scrollTop() + $(window).height() + 2;
+            var documentHeight = $(document).height();
+
+            if (scrollHeight >= documentHeight) {
+                var page = $("#page").val();
+                var end_page = {{ posts.paginator.num_pages}};
+                if (page > end_page) {
+                    return;
+                }
+
+                callMorePostAjax(page);
+                $("#page").val(parseInt(page)+1);
+            }
+        });
+
+        function callMorePostAjax(page) {
+            var end_page = {{ posts.paginator.num_pages }};
+            if(page > end_page) {
+                return;
+            }
+
+            $.ajax({
+                type : "POST",
+                url : "../../unid/information/",
+                data : {
+                    "page" : page,
+                    "csrfmiddlewaretoken" : "{{ csrf_token }}"
+                },
+                success : addMorePostAjax,
+                dataType : "html",
+                error : function(request, status, error){
+                    alert('오류발생');
+                },
+            });
+        }
+
+        function addMorePostAjax(data, textStatus, jqXHR) {
+            $(".popular-rows").append(data);
+        }
     });
     /* var kk = "{{ replies }}" ;
     console.log(kk); */

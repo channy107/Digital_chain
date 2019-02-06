@@ -21,14 +21,10 @@
     {% else %}
     <div id="myinfo" style="color: ; background-size: cover;">
     {% endif %}
-        <div style="text-align:center; position:relative; padding-left: 1010px;">
-            <a id="edit_icon">
-                <img style="color: ##525f82; width:28px; margin-top:40px; margin-bottom:0px; cursor: pointer; margin-right:40px;" src="{% static 'unid/icon/ui icons-28.png' %}">
-            </a>
-        </div>
+        <div style="text-align:center; position:relative; padding-left: 1010px; margin-top:40px;"></div>
         <div id="profile-icon" style="margin-top:-25px" >
             {% if mypage.userimage %}
-            <div id="user_image_icon" style="text-align:center; padding-top:30px;">
+            <div id="user_image_icon" style="text-align:center; padding-top: 55px;">
                 <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             </div>
             {% else %}
