@@ -85,25 +85,14 @@ def mypage(request):
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
-        # sess = myPageInfomation.objects.filter(email=request.session['user_email'])
-        # mypost = Post.objects.filter(email=sess).exclude(aaa='success')
-        # values = mypost.values()
-        # for i in range(len(values)):
-        #     reward = values[i]['rewards']
-        #     myrewards = reward * 0.8
-        #     print(myrewards)
 
-        writer_rewards = articles.values()
-        for i in range(len(writer_rewards)):
-            rewards = writer_rewards[i]['rewards']
-            writer_reward = rewards * 8/100
+
 
         context = {'articles':articles,
                    'myreward':myreward,
                    'likeusers':likeusers,
                    'numbersOfLike':numbersOfLike,
                    'mypage':mypage,
-                   'writer_reward':writer_reward,
                    'joiningdate':joiningdate,
                    'joining':joining,
                    'numbersOfArticles':numbersOfArticles,
@@ -114,7 +103,6 @@ def mypage(request):
                    'downloads':downloads,
                    'replies':replies,
                    'contents_transfer':contents_transfer,
-                   # 'myrewards':myrewards
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -861,7 +849,7 @@ def voting(request):
 
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
-        posts.bbb = like_count * 0.08
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         count.votingcount = int(voting_count) + 1
         posts.save()
@@ -879,7 +867,7 @@ def voting(request):
         count.save()
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
-        posts.bbb = like_count * 0.08
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         posts.save()
 
@@ -891,7 +879,7 @@ def voting(request):
     else :
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
-        posts.bbb = like_count * 0.08
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         posts.save()
 
