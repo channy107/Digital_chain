@@ -71,7 +71,7 @@
             margin: 0 auto;
             background-color:#ffffff!important;
             border-width:1px;
-            box-shadow: 0px 0px 10px 2px #b3afaf54;
+            box-shadow: 0px 0px 0px 2px #e6e6e6;
             box-sizing: border-box;
             border-style: solid;
             border-color: rgb(179, 179, 179);
@@ -254,6 +254,12 @@
         }
         .user_image_small_icon {
             border-radius: 50%;
+        }
+
+        #pop {
+            margin-top:0px;
+            margin-bottom:0px;
+
         }
 
 

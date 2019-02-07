@@ -296,7 +296,7 @@
                 </br>
 
                 <p align="left" size ="5"> 구매할 토큰종류 </p>
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
+                <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
                 </br>
                 </br>
                 </br>
@@ -386,21 +386,28 @@
 
         // When the user clicks on the button, open the modal
         btn.onclick = function() {
-            modal.style.display = "block";
-
-            var txtBox2 = document.getElementById("amount");
-            var lines2 = txtBox2.value.split("\n");
-
-            // generate HTML version of text
-            var resultString2  = "<p>";
-            for (var i = 0; i < lines2.length; i++) {
-              resultString2 += lines2[i] + "nid <br />";
+            if($('#amount').val()==''){
+                alert('내용을 입력해주세요!');
             }
-            resultString2 += "</p>";
+            else{
+                modal.style.display = "block";
 
-            // print out to page
-            var   blk2   = document.getElementById("exchange-amount");
-            blk2.innerHTML  =  resultString2;
+                var txtBox2 = document.getElementById("amount");
+                var lines2 = txtBox2.value.split("\n");
+
+                // generate HTML version of text
+                var resultString2  = "<p>";
+                for (var i = 0; i < lines2.length; i++) {
+                resultString2 += lines2[i] + "nid <br />";
+                }
+                resultString2 += "</p>";
+
+                // print out to page
+                var   blk2   = document.getElementById("exchange-amount");
+                blk2.innerHTML  =  resultString2;
+            }
+
+
 
         }
 

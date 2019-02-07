@@ -127,7 +127,7 @@
 
 
         <!-- search bar -->
-        <div class="box">
+        <!-- <div class="box">
              <div class="container-2">
                  <div class="icon-box">
                     <span class="icon"><i class="fa fa-search"></i></span>
@@ -136,7 +136,7 @@
                     <input type="search" id="search2" placeholder="Search..." />
                  </div>
               </div>
-        </div>
+        </div> -->
 
         <!--mypage.html로 이동-->
          <!--history-->
@@ -282,8 +282,8 @@
                           <th scope="row">{{item.transactiondate}}</th>
                           <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{item.fromAccount}}</td>
                           <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{item.toAccount}}</td>
-                          <td><img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
-                          <td>{{item.txid|truncatechars_html:30 }}</td>
+                          <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
+                          <td>{{item.txid|truncatechars_html:20 }}</td>
                         </tr>
                       </tbody>
                  {% endfor %}
@@ -391,6 +391,7 @@
              </div>
          </div>
   </div>
+
 
           <script>// key pop function
 
@@ -518,8 +519,8 @@
                let totalAmount = 0;
                let accounts = web3.eth.accounts;
                let account = "{{ request.session.user_account }}";
-               let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-               let nid_balance = nd.balanceOf(account);
+               let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether")) ;
+               let nid_balance = nd.balanceOf(account) * 0.000000000000000001 ;
                $('#bal').append(`${balance}eth`);
                $('#nd_bal').append(`${nid_balance}nid`);
                $('#pop').append(`${account}`);
@@ -533,31 +534,6 @@
                web3.eth.filter('latest').watch(function() {
                    showStatus();
                });
-
-               // 송금 버튼을 클릭했을 때, 송금을 요청
-               $('#btnSend').click(function() {
-                   let fromAccount  = $('#fromAccounts').val();
-                   let toAccount    = $('#toAccounts').val();
-                   let fromPassword = $('#fromPassword').val();
-                   let amount       = $('#amount').val();
-
-                   // 보내는 사람의 계정을 언락
-                   let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
-                   if (isUnlock) {
-                       web3.eth.sendTransaction({
-                           from : fromAccount,
-                           to   : toAccount,
-                           value: web3.toWei(amount, "ether")
-                       }, function(err, res) {
-                           if (!err) {
-                               console.log(`txid is ${res}.`);
-                           } else {
-                               console.error(err);
-                           }
-                       });
-                   }
-               });
-
            });
        </script>
 

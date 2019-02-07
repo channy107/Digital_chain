@@ -196,8 +196,8 @@ def contentsboard(request):
 
 @login_required
 def mywallet(request):
-    walletInfo = walletInFormation.objects.all()
-    walletcount = walletInFormation.objects.count()
+    walletInfo = walletInFormation.objects.filter(fromAccount=request.session['user_name'])
+    walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_name']).count()
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
     # html = ''
@@ -220,7 +220,7 @@ def transaction(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount=from_info.name, toAccount=to_info.name, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("coinTransaction")
@@ -242,7 +242,7 @@ def exchange(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount=from_info.name, toAccount=to_info.name, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("exchange")
@@ -264,7 +264,7 @@ def purchase(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount=from_info.name, toAccount=to_info.name, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")

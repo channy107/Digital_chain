@@ -48,8 +48,8 @@
         .container-1 .icon{
               position: absolute;
               top: 50%;
-              margin-left: 17px;
-              margin-top: 14px;
+              margin-left: 13px;
+              margin-top:-11px;
               z-index: 1;
               color: #9a9a9a;
         }
@@ -116,7 +116,7 @@
 
         .rows {
             width:970px;
-            height:950px;
+            height:1030px;
             margin: 0 auto;
             background-color:#ffffff!important;
             border-width:1px;
@@ -348,3 +348,12 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        #pop {
+            margin-top:0px;
+            margin-bottom:0px;
+
+        }
+
+
+        

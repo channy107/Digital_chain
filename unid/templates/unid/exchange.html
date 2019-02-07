@@ -135,7 +135,7 @@
         let accounts = web3.eth.accounts;
         let account = "{{ request.session.user_account }}";
         let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-        let nid_balance = nd.balanceOf(account);
+        let nid_balance = nd.balanceOf(account)* 0.000000000000000001;
         let nid_price = nd.balanceOf(account) / coinone_nid;
         totalAmount += balance;
 
@@ -283,9 +283,9 @@
                 </br>
 
                 <p align="left" size ="5"> 환전할 토큰종류 </p>
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
+                <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/front.png' %}" border="0" width="10" height="10">&nbsp&nbsp&nbsp;
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> eth </span>
+                <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> eth </span>
                 </br>
                 </br>
                 </br>
@@ -359,18 +359,6 @@
 
 </div>
 
-<span>1 eth</span>
-<div>
-   <span>코인원기준</span> <span id="coinone_NID"></span>
-</div>
-<div>
-   <span>빗썸기준</span> <span id="bithumb_NID"></span>
-</div>
-<div>
-   <span>니드</span> <span id="value_NID"></span>
-</div>
-
-
 <script>
         //transaction pop
 
@@ -385,21 +373,27 @@
 
         // When the user clicks on the button, open the modal
         btn.onclick = function() {
-            modal.style.display = "block";
-
-            var txtBox2 = document.getElementById("amount");
-            var lines2 = txtBox2.value.split("\n");
-
-            // generate HTML version of text
-            var resultString2  = "<p>";
-            for (var i = 0; i < lines2.length; i++) {
-              resultString2 += lines2[i] + "eth <br />";
+            if($('#amount').val()==''){
+                alert('내용을 입력해주세요!');
             }
-            resultString2 += "</p>";
+            else{
+                modal.style.display = "block";
 
-            // print out to page
-            var   blk2   = document.getElementById("exchange-amount");
-            blk2.innerHTML  =  resultString2;
+                var txtBox2 = document.getElementById("amount");
+                var lines2 = txtBox2.value.split("\n");
+
+                // generate HTML version of text
+                var resultString2  = "<p>";
+                for (var i = 0; i < lines2.length; i++) {
+                resultString2 += lines2[i] + "eth <br />";
+                }
+                resultString2 += "</p>";
+
+                // print out to page
+                var   blk2   = document.getElementById("exchange-amount");
+                blk2.innerHTML  =  resultString2;
+            }
+
 
         }
 
