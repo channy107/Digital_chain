@@ -22,6 +22,7 @@
         -webkit-border-radius: 5px;
         -moz-border-radius: 5px;
       border-radius: 9px;
+      width: 360px;
 }
 
 .container-1 input#id_q::-webkit-input-placeholder {
@@ -48,14 +49,35 @@
 }
 
 
+.ac-results {
+    height: auto;
+    width: 360px;
+    text-align: left;
+    float: left;
+    background-color: white;
+    border-radius: 5px;
+    padding: 0 0 10px 0;
+    box-shadow: 0px 0px 0px 1px #e6e6e6;
+}
+.result-wrapper {
+    height: 28px;
+    padding: 7px 0 0 10px;
+    font-size: 15px;
+    font-weight: 400;
+}
+.ac-results a {
+    color: #2f2f2f;
+    font-family: 'Noto Sans KR', sans-serif;
+}
 .box {
-    width: 355px;
+    width: 500px;
     height: 70px;
     padding: 15px 0;
 }
 .container{
     margin: 0 auto;
     max-width: 1070px !important;;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .nav-menu-box {
     height: 70px;
@@ -65,14 +87,14 @@
     font-family: 'Noto Sans KR', sans-serif;
 }
 .unid-menus {
-    width: 105px;
+    width: 95px;
     padding-top: 0px;
     padding-bottom: 0px;
     text-align: center;
     vertical-align: middle;
 }
 #navbar-main {
-    margin-left: 135px !important;
+    margin-left: 40px !important
 }
 
 #navbar-main li a {
@@ -114,9 +136,8 @@
       width: 205px;
       vertical-align: middle;
       white-space: nowrap;
-      margin:0 0 0 150px;
+      margin: 0px 0 0 90px;
       height: 40px;
-      margin: 0 0 0 105px;
 }
 
 .container-1 input#search{
@@ -254,27 +275,6 @@
     text-align: right;
     position: relative;
     left: 25%;
-}
-.reply {
-    height: 70px;
-    margin: 20px 0 0 0;
-}
-.reply-picture {
-    margin: 0 20px 0 0;
-    float: left;
-}
-.reply-id {
-    width: 100px;
-    float: left;
-}
-.reply-date {
-    width: 500px;
-    float: left;
-}
-.reply-text {
-    width: 500px;
-    float: left;
-    margin: 10px 0 0 0;
 }
 .contents-kind {
     margin: 10px auto 10px auto;
@@ -560,7 +560,7 @@
     display: inline-block;
     width: 100px;
     float: left;
-    font-size: 13px;
+    font-size: 12px;
 }
 .contents-popular-title {
     position: relative;
@@ -655,4 +655,9 @@
 }
 .pointeffect {
     cursor: pointer;
+}
+.search-category {
+    margin: 0 0 15px;
+
+
 }

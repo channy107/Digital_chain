@@ -59,7 +59,7 @@ class uploadContents(models.Model):
     hits = models.IntegerField(default=0)
     txid = models.CharField(max_length=250, blank=True, null=True)
     replymentcount = models.IntegerField(null=True)
-    ccc = models.CharField(max_length=250, blank=True, null=True)
+    cagegory_path = models.CharField(max_length=250, blank=True, null=True)
     ddd = models.CharField(max_length=250, blank=True, null=True)
 
 class downloadContents(models.Model):

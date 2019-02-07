@@ -12,7 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
-from haystack.query import SearchQuerySet
+from haystack.generic_views import RESULTS_PER_PAGE
+from haystack.query import SearchQuerySet, EmptySearchQuerySet
+from haystack.views import SearchView
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -48,8 +50,11 @@ class MyView(ActiveOnlyMixin, View):
 def logged_in(sender, **kwargs):
     user = kwargs['user']
     request = kwargs['request']
+    try:
+        member = myPageInfomation.objects.get(user=user)
+    except ObjectDoesNotExist as e:
+        pass
 
-    member = myPageInfomation.objects.get(user=user)
     request.session['user_email'] = member.email
     request.session['user_name'] = member.name
 user_logged_in.connect(logged_in, sender=User)
@@ -66,7 +71,8 @@ user_logged_in.connect(logged_in, sender=User)
 def mypage(request):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate.strftime('%Y-%m-%d')
+        joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate
+        joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
@@ -79,13 +85,8 @@ def mypage(request):
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
-        # sess = myPageInfomation.objects.filter(email=request.session['user_email'])
-        # mypost = Post.objects.filter(email=sess).exclude(aaa='success')
-        # values = mypost.values()
-        # for i in range(len(values)):
-        #     reward = values[i]['rewards']
-        #     myrewards = reward * 0.8
-        #     print(myrewards)
+
+
 
         context = {'articles':articles,
                    'myreward':myreward,
@@ -93,6 +94,7 @@ def mypage(request):
                    'numbersOfLike':numbersOfLike,
                    'mypage':mypage,
                    'joiningdate':joiningdate,
+                   'joining':joining,
                    'numbersOfArticles':numbersOfArticles,
                    'numbersOfcontents':numbersOfcontents,
                    'numbersOfDownloads':numbersOfDownloads,
@@ -101,7 +103,6 @@ def mypage(request):
                    'downloads':downloads,
                    'replies':replies,
                    'contents_transfer':contents_transfer,
-                   # 'myrewards':myrewards
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -750,7 +751,8 @@ def main_detail(request, id):
 def user_detail(request, id):
     if request.method == 'GET':
         mypage = myPageInfomation.objects.get(IDX=id)
-        joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate.strftime('%Y-%m-%d')
+        joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
+        joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=mypage.email)[:3]
         articles = Post.objects.order_by('-posts_id').filter(user_id=mypage.email)[:3]
         numbersOfArticles = len(Post.objects.filter(user_id=mypage.email))
@@ -769,6 +771,7 @@ def user_detail(request, id):
                    'numbersOfLike':numbersOfLike,
                    'mypage':mypage,
                    'joiningdate':joiningdate,
+                   'joining':joining,
                    'numbersOfArticles':numbersOfArticles,
                    'numbersOfcontents':numbersOfcontents,
                    'numbersOfDownloads':numbersOfDownloads,
@@ -846,6 +849,7 @@ def voting(request):
 
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         count.votingcount = int(voting_count) + 1
         posts.save()
@@ -863,6 +867,7 @@ def voting(request):
         count.save()
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         posts.save()
 
@@ -874,6 +879,7 @@ def voting(request):
     else :
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
+        posts.bbb = int(like_count) * 8/100
         posts.rewards = rewards
         posts.save()
 
@@ -965,7 +971,7 @@ def createaccount(request):
             IDX = 0
 
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                            joiningdate=timezone.now(),
+                            joiningdate=datetime.now(),
                             pwd=lockpwd,
                             name=name,
                             account=account,
@@ -1139,7 +1145,8 @@ def contentsupload(request):
                 reference=request.POST['reference'],
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 downloadcount=0,
-                replymentcount=0
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png'
             )
             br.save()
         except IndexError as e:
@@ -1157,7 +1164,8 @@ def contentsupload(request):
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
                 downloadcount=0,
-                replymentcount=0
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png'
             )
             br.save()
         uifilelist = request.POST['uifilelist'].split(',')
@@ -1418,7 +1426,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path = "media/" + request.POST['category'] + '.png'
                 )
 
             else:
@@ -1434,7 +1443,9 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path="media/" + request.POST['category'] + '.png'
+
                 )
         else:
             if upload_images:
@@ -1501,7 +1512,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path="media/" + request.POST['category'] + '.png'
                 )
 
             else:
@@ -1517,7 +1529,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path = "media/" + request.POST['category'] + '.png'
                 )
 
 
@@ -1853,9 +1866,11 @@ def funding(request):
 
 
 from django.http import JsonResponse
-from haystack.generic_views import SearchView
 from haystack.query import SearchQuerySet
 from django.shortcuts import render
+from django.conf.urls import url
+from haystack.forms import ModelSearchForm
+from haystack.query import SearchQuerySet
 
 
 # def FreindSearch(request):
@@ -1878,3 +1893,59 @@ def autocomplete(request):
         'results': suggestions
     })
     return HttpResponse(the_data, content_type='application/json')
+
+
+#
+# class MySearchView(SearchView):
+#     # def extra_context(self):
+#     #
+#     #
+#     #     if self.results == []:
+#     #         extra['facets'] = self.form.search().facet_counts()
+#     #     else:
+#     #         extra['facets'] = self.results.facet_counts()
+#     #
+#     #     return extra
+#
+#     def get_query(self):
+#         super(MySearchView, self).get_query()
+#         """
+#         Returns the query provided by the user.
+#         Returns an empty string if the query is invalid.
+#         """
+#         if self.form.is_valid():
+#             # return self.form.cleaned_data["q"]
+#             return self.form
+#             # return "상속"
+#
+#         return ""
+#
+#     # def get_context(self):
+#     #     (paginator, page) = self.build_page()
+#     #
+#     #     context = {
+#     #         "query": self.query,
+#     #         "form": self.form,
+#     #         "page": page,
+#     #         "paginator": paginator,
+#     #         "suggestion": None,
+#     #     }
+#     #
+#     #     if (
+#     #             hasattr(self.results, "query")
+#     #             and self.results.query.backend.include_spelling
+#     #     ):
+#     #         context["suggestion"] = self.form.get_suggestion()
+#     #
+#     #     context.update(self.extra_context())
+#     #
+#     #     return context
+#     #
+#     # def create_response(self):
+#     #     """
+#     #     Generates the actual HttpResponse to send back to the user.
+#     #     """
+#     #
+#     #     context = self.get_context()
+#     #
+#     #     return render(self.request, self.template, context)
