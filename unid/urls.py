@@ -56,4 +56,5 @@ urlpatterns = [
     path('funding/', views.funding, name='funding'),
     # path('friendsearch', views.FriendSearch, name='friendsearch')
     # path('seach/autocomplete', views.autocomplete, name='autocomplete')
+
 ]

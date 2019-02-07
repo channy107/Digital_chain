@@ -51,46 +51,30 @@
                             최신 글
                         </div>
                         <div class="write-button">
-                            <img src="{% static 'unid/icon/icons-콘텐츠등록.png' %}" width="90" height="30">
+                            <a class="twinkle-grey pointeffect" href="/unid/contentsupload" id="go-uploadcontents">
+                                <img src="{% static 'unid/icon/icons-콘텐츠등록.png' %}" width="90" height="30">
+                            </a>
                         </div>
                     </div>
                     <hr>
                     {% for contents in contentsPost %}
                     <div class="popular-row">
                         <ul class="row-top">
-                        <li>
-                            {% if contents.writeremail.userimage %}
-                            <img src="/{{ contents.user.userimage }}">
-                            {% else %}
-                            <img src="{% static 'unid/icon/profle-icon.png' %}">
-                            {% endif %}
-                        </li>
-                        <li>
-                            {{ contents.writeremail.email }}
-                        </li>
-                        <li>
-                            ·         {{ contents.created|timesince }}전
-                        </li>
-                        <li>
-                            {% if contents.category == "레포트" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "강의노트" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "시험자료" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "동영상" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "자소서" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "이력서" %}
-                            <span>{{ contents.category }}</span>
-                            {% elif contents.category == "PPT" %}
-                            <span>{{ contents.category }}</span>
-                            {% else %}
-                            <span>{{ contents.category }}</span>
-                            {% endif %}
-                        </li>
-                    </ul>
+                            <li>
+                                {% if contents.writeremail.userimage %}
+                                <img src="/{{ contents.user.userimage }}">
+                                {% else %}
+                                <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                {% endif %}
+                            </li>
+                            <li>
+                                {{ contents.writeremail.email }}
+                            </li>
+                            <li>
+                                ·         {{ contents.created|timesince }}전
+                            </li>
+                            <img src="/{{ contents.cagegory_path }}" width="75" height="25">
+                        </ul>
                     <div class="row-picture">
                         <a href="{% url 'contentsdetail' contents.contents_id %}">
                             {% if contents.imagepath %}
@@ -114,7 +98,12 @@
                         </li>
                         <li>
                             <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
-                            <i class="fas fa-chevron-adown"></i>
+                        </li>
+                        <li>
+                            <img src="{% static 'unid/icon/icons-조회수.png' %}" width="15" height="10" style="width:15; height:10;"> {{ contents.hits }}
+                        </li>
+                        <li>
+                            <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ contents.downloadcount }}
                         </li>
                     </ul>
                 </div>

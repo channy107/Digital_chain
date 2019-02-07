@@ -97,7 +97,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #자소서
+                                #레포트
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -141,7 +141,7 @@
                             {% for list in populated_forlecture_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">
@@ -152,12 +152,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>
@@ -175,7 +178,7 @@
                             {% for list in populated_note_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">
@@ -186,12 +189,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>
@@ -206,10 +212,10 @@
                             </div>
                         </div>
                         <div class="contents-popular-contents">
-                            {% for list in populated_paper_lists %}
+                            {% for list in populated_fortest_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">
@@ -220,12 +226,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>
@@ -240,10 +249,10 @@
                             </div>
                         </div>
                         <div class="contents-popular-contents">
-                            {% for list in populated_PPT_lists %}
+                            {% for list in populated_video_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
                                 </div>
                                 {% if list.imagepath %}
                                 <a href="{% url 'contentsdetail' list.contents_id %}">
@@ -254,12 +263,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>
@@ -271,40 +283,6 @@
                             </div>
                             <div class="contents-popular-kind">
                                 #자소서
-                            </div>
-                        </div>
-                        <div class="contents-popular-contents">
-                            {% for list in populated_resume_lists %}
-                            <div class="contents-popular-posting">
-                                <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
-                                </div>
-                                {% if list.imagepath %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
-                                </a>
-                                {% else %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
-                                </a>
-                                {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
-                                <div class="contents-price">
-                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div>
-                            <div class="contents-popular-title">
-                                인기컨텐츠
-                            </div>
-                            <div class="contents-popular-kind">
-                                #이력서
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -322,80 +300,15 @@
                                     <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
                                 </a>
                                 {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
                                 <div class="contents-price">
                                     <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
                                 </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div>
-                            <div class="contents-popular-title">
-                                인기컨텐츠
-                            </div>
-                            <div class="contents-popular-kind">
-                                #PPT
-                            </div>
-                        </div>
-                        <div class="contents-popular-contents">
-                            {% for list in populated_fortest_lists %}
-                            <div class="contents-popular-posting">
-                                <div class="desc-1">
-                                    <h5><a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}</h5>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
                                 </div>
-                                {% if list.imagepath %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
-                                </a>
-                                {% else %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
-                                </a>
-                                {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
-                                <div class="contents-price">
-                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div>
-                            <div class="contents-popular-title">
-                                인기컨텐츠
-                            </div>
-                            <div class="contents-popular-kind">
-                                #논문
-                            </div>
-                        </div>
-                        <div class="contents-popular-contents">
-                            {% for list in populated_video_lists %}
-                            <div class="contents-popular-posting">
-                                <div class="desc-1">
-                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
-                                </div>
-                                {% if list.imagepath %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
-                                </a>
-                                {% else %}
-                                <a href="{% url 'contentsdetail' list.contents_id %}">
-                                    <img src="/media/defaultthumbnail.png" border="0" width="100" height="100">
-                                </a>
-                                {% endif %}
-                                <div class="contents-popular-posting-date">{{ list.|timesince }}전</div>
-                                <div class="contents-popular-posting-date">다운로드 수 : {{ list.downloadcount }}</div>
-                                <div class="contents-popular-posting-date">작성자 : {{ list.writeremail.user }}</div>
-                                <div class="contents-price">
-                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
-                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
                             </div>
                             {% endfor %}
                         </div>

@@ -27,6 +27,7 @@ border: 1px solid white;
     margin: 0 auto;
     font-family: 'Noto Sans KR', sans-serif;
     font-size: 14px;
+    min-height: 700px;
 }
 .row-advertise {
     width: 100%;
@@ -259,5 +260,4 @@ margin:5px;
 .information-popular-row .popular-rows .popular-row .row-bottom img {
     width: 15px;
     height: 15px;
-
 }
