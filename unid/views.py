@@ -78,12 +78,24 @@ def mypage(request):
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
         numbersOfReply = len(replyForPosts.objects.filter(user_id=request.session['user_email']))
-        myreward = walletInFormation.objects.filter(type='reward', toAccount=mypage.account)
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTransaction')
+        myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
+        likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
+        numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
+        # sess = myPageInfomation.objects.filter(email=request.session['user_email'])
+        # mypost = Post.objects.filter(email=sess).exclude(aaa='success')
+        # values = mypost.values()
+        # for i in range(len(values)):
+        #     reward = values[i]['rewards']
+        #     myrewards = reward * 0.8
+        #     print(myrewards)
+
         context = {'articles':articles,
                    'myreward':myreward,
+                   'likeusers':likeusers,
+                   'numbersOfLike':numbersOfLike,
                    'mypage':mypage,
                    'joiningdate':joiningdate,
                    'numbersOfArticles':numbersOfArticles,
@@ -93,7 +105,8 @@ def mypage(request):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
-                   'contents_transfer':contents_transfer
+                   'contents_transfer':contents_transfer,
+                   # 'myrewards':myrewards
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -147,10 +160,7 @@ def mypage(request):
         return HttpResponseRedirect(url)
 
 
-def userinfo(request):
-    i = 0
-    user_info = myPageInfomation.objects.filter(idx=idx)
-    return render(request, "unid/userinfo.html", {"user_info":user_info})
+
 
 
 @csrf_exempt
@@ -498,10 +508,13 @@ def infotag(request, category):
 
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
-                       'page_num':page_num}
+                       'page_num':page_num,
+                       'category':category}
             return render(request, 'unid/infotag_ajax.html', context)
 
-        context = {'allinfolists': allinfolists}
+        context = {'allinfolists': allinfolists,
+                   'category': category,
+                   'page_num': page_num}
 
         return render(request, 'unid/infotag.html', context)
 
@@ -628,7 +641,9 @@ def writer_rewards():
         writer = reward_values[i]['user_id']
         writer_info = myPageInfomation.objects.get(email=writer)
         writeraccount = writer_info.account
+        writeraccount = Web3.toChecksumAddress(writeraccount)
         reward_nwei = int(rewards*10) * 100000000000000000
+        print(reward_nwei)
         unidaccountpwd = "pass0"
         w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
         tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
@@ -638,7 +653,6 @@ def writer_rewards():
         store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=writer, balance=rewards, txid=receipt, type="rewards", aaa="success")
 
         store.save()
-
 
 def liked_users_reward():
     now = datetime.now()
@@ -705,11 +719,13 @@ def liked_users_reward():
             user_info = myPageInfomation.objects.get(email=likedusers)
             writer_reward_success = Post.objects.get(posts_id=post_id)
             reward_success = LikeUsers.objects.get(posts_id=post_id, liked_users=likedusers)
-            likedusersaccount = user_info.account
-            user_reward = 0.2*100000000000000000000
+            useraccount = user_info.account
+            likedusersaccount = Web3.toChecksumAddress(useraccount)
+            user_reward = int(0.2*10) *10000000000000000
+            print(user_reward)
             unidaccountpwd = "pass0"
             w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
-            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusers, user_reward).transact(
+            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusersaccount, user_reward).transact(
                 {'from': w3.eth.coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
             store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=likedusers, balance=0.2, txid=receipt, type="rewards", aaa="success")
@@ -735,6 +751,91 @@ def main_detail(request, id):
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     context = {'posts': posts, 'replys': replys, 'likes': likes}
     return render(request, 'unid/main_detail.html', context)
+
+def user_detail(request, id):
+    if request.method == 'GET':
+        mypage = myPageInfomation.objects.get(IDX=id)
+        joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate.strftime('%Y-%m-%d')
+        contentsboard = uploadContents.objects.filter(writeremail_id=mypage.email)[:3]
+        articles = Post.objects.order_by('-posts_id').filter(user_id=mypage.email)[:3]
+        numbersOfArticles = len(Post.objects.filter(user_id=mypage.email))
+        numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=mypage.email))
+        numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=mypage.email))
+        numbersOfReply = len(replyForPosts.objects.filter(user_id=mypage.email))
+        myreward = walletInFormation.objects.filter(type='rewards', toAccount=mypage.email)
+        likeusers = LikeUsers.objects.filter(liked_users=mypage.email)
+        numbersOfLike = len(LikeUsers.objects.filter(liked_users=mypage.email))
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
+        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=mypage.email)
+        downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=mypage.email)[:3]
+        context = {'articles':articles,
+                   'myreward':myreward,
+                   'likeusers':likeusers,
+                   'numbersOfLike':numbersOfLike,
+                   'mypage':mypage,
+                   'joiningdate':joiningdate,
+                   'numbersOfArticles':numbersOfArticles,
+                   'numbersOfcontents':numbersOfcontents,
+                   'numbersOfDownloads':numbersOfDownloads,
+                   'numbersOfReply':numbersOfReply,
+                   'contentsboard':contentsboard,
+                   'downloads':downloads,
+                   'replies':replies,
+                   'contents_transfer':contents_transfer
+                   }
+        return render(request, 'unid/user_detail.html', context)
+
+    else:
+
+
+        if request.FILES.get('user_image_upload'):
+
+            userimage = request.FILES.get('user_image_upload')
+            with open("media/imagesForUserProfile" + "/" + userimage.name, 'wb') as file:
+                for chunk in userimage.chunks():
+                    file.write(chunk)
+
+            user_email = myPageInfomation.objects.filter(email=request.session['user_email'])
+            update = user_email.update(
+            userimage = "media/imagesForUserProfile" + "/" + userimage.name)
+
+        if request.FILES.get('background'):
+            background = request.FILES.get('background')
+            with open("media/imagesForUserProfile" + "/" + background.name, 'wb') as file2:
+                for chunk in background.chunks():
+                    file2.write(chunk)
+
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+            aaa = "media/imagesForUserProfile" + "/" + background.name)
+
+
+        # user_profiles = myPageInfomation.objects.values('name')
+        # # if user_profiles:
+        # #     return HttpResponse(user_profiles)
+        # user_name = request.POST['name']
+        # user_profile = request.POST['profile'],
+        # for nameaa in user_profiles:
+        #     if user_name == nameaa:
+        #         return HttpResponse('중복된 이름입니다.')
+        #     else:
+        #         myPageInfomation.objects.filter(email=request.session['user_email']).update(
+        #             name=request.POST['name'],
+        #             profile=request.POST['profile'],
+        #             last_modified=timezone.now()
+        #         )
+
+        myPageInfomation.objects.filter(email=request.session['user_email']).update(
+            name = request.POST['name'],
+            profile = request.POST['profile'],
+            last_modified = timezone.now()
+        )
+
+
+        url = '/unid/mypage'
+        return HttpResponseRedirect(url)
+
+
+
 
 def voting(request):
     posts_id=request.POST['posts_id']

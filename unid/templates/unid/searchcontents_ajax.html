@@ -6,18 +6,20 @@
     {% for contents in contentsPost %}
     <div class="popular-row">
         <ul class="row-top">
+            <a href="{% url 'user_detail' contents.writeremail.IDX %}">
+                <li>
+                    {% if contents.writeremail.userimage %}
+                    <img src="/{{ contents.user.userimage }}">
+                    {% else %}
+                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                    {% endif %}
+                </li>
+                <li>
+                    {{ contents.writeremail.email }}
+                </li>
+            </a>
             <li>
-                {% if contents.writeremail.userimage %}
-                <img src="/{{ contents.user.userimage }}">
-                {% else %}
-                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                {% endif %}
-            </li>
-            <li>
-                {{ contents.writeremail.email }}
-            </li>
-            <li>
-                ·         {{ contents.created|timesince }}전
+                · {{ contents.created|timesince }}전
             </li>
             <li>
                 {% if contents.category == "레포트" %}
