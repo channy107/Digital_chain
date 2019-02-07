@@ -12,7 +12,9 @@ from django.views.decorators.csrf import csrf_exempt
 import time
 from django.views.decorators.http import require_POST
 from django.views.generic.base import View
-from haystack.query import SearchQuerySet
+from haystack.generic_views import RESULTS_PER_PAGE
+from haystack.query import SearchQuerySet, EmptySearchQuerySet
+from haystack.views import SearchView
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
@@ -48,8 +50,11 @@ class MyView(ActiveOnlyMixin, View):
 def logged_in(sender, **kwargs):
     user = kwargs['user']
     request = kwargs['request']
+    try:
+        member = myPageInfomation.objects.get(user=user)
+    except ObjectDoesNotExist as e:
+        pass
 
-    member = myPageInfomation.objects.get(user=user)
     request.session['user_email'] = member.email
     request.session['user_name'] = member.name
 user_logged_in.connect(logged_in, sender=User)
@@ -1152,7 +1157,8 @@ def contentsupload(request):
                 reference=request.POST['reference'],
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 downloadcount=0,
-                replymentcount=0
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png'
             )
             br.save()
         except IndexError as e:
@@ -1170,7 +1176,8 @@ def contentsupload(request):
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
                 downloadcount=0,
-                replymentcount=0
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png'
             )
             br.save()
         uifilelist = request.POST['uifilelist'].split(',')
@@ -1431,7 +1438,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path = "media/" + request.POST['category'] + '.png'
                 )
 
             else:
@@ -1447,7 +1455,9 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path="media/" + request.POST['category'] + '.png'
+
                 )
         else:
             if upload_images:
@@ -1514,7 +1524,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path="media/" + request.POST['category'] + '.png'
                 )
 
             else:
@@ -1530,7 +1541,8 @@ def postmodify(request, id):
                     index=request.POST['index'],
                     contents=request.POST['contents'],  # 소개글 제한?
                     reference=request.POST['reference'],
-                    last_modified=timezone.now()
+                    last_modified=timezone.now(),
+                    cagegory_path = "media/" + request.POST['category'] + '.png'
                 )
 
 
@@ -1866,9 +1878,11 @@ def funding(request):
 
 
 from django.http import JsonResponse
-from haystack.generic_views import SearchView
 from haystack.query import SearchQuerySet
 from django.shortcuts import render
+from django.conf.urls import url
+from haystack.forms import ModelSearchForm
+from haystack.query import SearchQuerySet
 
 
 # def FreindSearch(request):
@@ -1891,3 +1905,59 @@ def autocomplete(request):
         'results': suggestions
     })
     return HttpResponse(the_data, content_type='application/json')
+
+
+#
+# class MySearchView(SearchView):
+#     # def extra_context(self):
+#     #
+#     #
+#     #     if self.results == []:
+#     #         extra['facets'] = self.form.search().facet_counts()
+#     #     else:
+#     #         extra['facets'] = self.results.facet_counts()
+#     #
+#     #     return extra
+#
+#     def get_query(self):
+#         super(MySearchView, self).get_query()
+#         """
+#         Returns the query provided by the user.
+#         Returns an empty string if the query is invalid.
+#         """
+#         if self.form.is_valid():
+#             # return self.form.cleaned_data["q"]
+#             return self.form
+#             # return "상속"
+#
+#         return ""
+#
+#     # def get_context(self):
+#     #     (paginator, page) = self.build_page()
+#     #
+#     #     context = {
+#     #         "query": self.query,
+#     #         "form": self.form,
+#     #         "page": page,
+#     #         "paginator": paginator,
+#     #         "suggestion": None,
+#     #     }
+#     #
+#     #     if (
+#     #             hasattr(self.results, "query")
+#     #             and self.results.query.backend.include_spelling
+#     #     ):
+#     #         context["suggestion"] = self.form.get_suggestion()
+#     #
+#     #     context.update(self.extra_context())
+#     #
+#     #     return context
+#     #
+#     # def create_response(self):
+#     #     """
+#     #     Generates the actual HttpResponse to send back to the user.
+#     #     """
+#     #
+#     #     context = self.get_context()
+#     #
+#     #     return render(self.request, self.template, context)

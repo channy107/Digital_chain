@@ -585,28 +585,28 @@ xpopup
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
-                <div class="reply-list">
-                    {% for reply in replys %}
-                    <div class="reply">
-                        <div class="reply-picture">
-                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
-                        </div>
-                        <div class="reply-id">
-                            {{ reply.writeremail_id }}
-                        </div>
-                        <div class="reply-date">
-                            {{ reply.created }}
-                        </div>
-                        <div class="reply-text">
-                            {{ reply.replytext }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
             </div>
         </div>
-
-
+        <div class="row">
+            <div class="reply-list">
+                {% for reply in replys %}
+                <div class="reply">
+                    <div class="reply-picture">
+                        <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
+                    </div>
+                    <div class="reply-id">
+                        {{ reply.writeremail_id }}
+                    </div>
+                    <div class="reply-date">
+                        {{ reply.created }}
+                    </div>
+                    <div class="reply-text">
+                        {{ reply.replytext }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
         <div class="row">
             {% if request.session.user_email %}
             <form class="input-reply">

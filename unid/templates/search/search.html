@@ -1,135 +1,7 @@
-<!DOCTYPE html>
-
+{% extends 'unid/navigationbar.html' %}
 {% load static %}
 {% load highlight %}
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv = "Cache-Control" content = "no-cache">
-    <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
-    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
-    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
-
-    <script src="{% static 'unid/vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'unid/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <title>uni:d</title>
-
-
-    <!--favicon -->
-    <link rel="shortcut icon" href="{% static 'unid/icon/unid_favicon.ico' %}">
-    <!-- Bootstrap core CSS -->
-
-    <!-- Custom styles for this template -->
-    <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
-    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
-    <link href="{% static 'unid/css/contentstran.css' %}" rel="stylesheet">
-    <!-- 검색아이콘 -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- 구글 notosan-font -->
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
-    <!--wallet function-->
-    <!--<link rel="stylesheet" href="{% static 'unid/node_modules/bootstrap/dist/css/bootstrap.css' %}">-->
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
-    <script src="{% static 'unid/node_modules/jquery/dist/jquery.js' %}"></script>
-    <!--<script src="{% static 'unid/node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>-->
-    <!--transaction-toast-->
-    <script src="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.js' %}"></script>
-    <link href="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" rel="stylesheet">
-    <!--font awesome-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
-</head>
-
-<body>
-
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="/unid">
-            <img src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="113" height="54">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="box">
-             <div class="container-1">
-                 <div class="icon-box">
-                    <span class="icon"><i class="fa fa-search"></i></span>
-                 </div>
-                 <div class="text-box">
-                     <form method="get" action="/search/" class="autocomplete-me">
-                         <input type="text" name="q" id="id_q" class="autocomplete-me" placeholder="Search..." />
-                         <ul id="id_models" style="display: none;">
-                             <li>
-                                 <input type="checkbox" name="models" value="unid.note" id="id_models_0">" Notes"
-                             </li>
-                             <li>
-                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_1">" Upload contents"
-                             </li>
-                             <li>
-                                 <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_2">" Informations"
-                             </li>
-                         </ul>
-                     </form>
-
-                 </div>
-              </div>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" id="nav1" href="/unid/information/">정보공유</a>
-                </li>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <li class="nav-item">
-                    <a class="nav-link" id="nav2"href="/unid/searchcontents/레포트">컨텐츠거래</a>
-                </li>
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#">
-                        <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="32">
-                    </a>
-                    <div class="dropdown-menu">
-                        {% if user.email %}
-                        <a class="dropdown-item" href="/unid/mypage">마이페이지</a>
-                        <a class="dropdown-item" href="/unid/mywallet">내지갑</a>
-                        <a class="dropdown-item" href="/unid/main_upload">게시글작성</a>
-                        <a class="dropdown-item" href="/unid/contentsupload">컨텐츠등록</a>
-                        <a class="dropdown-item" href="/accounts/logout">로그아웃</a>
-                        {% else %}
-                        <a class="dropdown-item" href="/unid/login">로그인</a>
-                        <a class="dropdown-item" href="/unid/signup">회원가입</a>
-                        {% endif %}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-
-
-<head>
-    <link href="{% static 'unid/css/main.css' %}" rel="stylesheet">
-    <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
-    <script src="{% static 'unid/js/main.js' %}"></script>
-    <style>
-        .bg-warning {
-            background-color: red;
-        }
-
-
-    </style>
-</head>
+{% block content %}
 <div class="container" style="margin: 90px auto;">
     {% if query %}
     <div class="information-popular-row">
@@ -138,8 +10,50 @@
                 검색정보
             </div>
             <hr>
-            <div>
+            <div class = "search-category">
                 정보공유
+            </div>
+            {% for result in page.object_list %}
+            {% if result.object.user_id %}
+            <div class="popular-row">
+                <ul class="row-top">
+                    <li>
+                        <img src="{% static 'unid/icon/profle-icon.png' %}">
+                    </li>
+                    <li>
+                        {{ result.object.user.email}}
+                    </li>
+                    <li>
+                        ·         {{ result.object.created_at|timesince }}전
+                    </li>
+                    <li>
+                        <span>{{ result.object.category }}</span>
+                    </li>
+                </ul>
+                <div class="row-picture">
+                    <a href="{% url 'main_detail' result.object.posts_id %}">
+                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+                    </a>
+                </div>
+                <ul class="row-middle">
+                    <li>
+                        <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.title with query css_class "bg-warning" %}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.contents with query css_class "bg-warning" max_length 73 %}</a>
+                    </li>
+                </ul>
+                <ul class="row-bottom">
+                    <li>
+                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ result.object.like_count }}
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+            {% endfor %}
+            <hr>
+            <div class = "search-category">
+                콘텐츠 거래
             </div>
             {% for result in page.object_list %}
             {% if result.object.writeremail_id %}
@@ -159,27 +73,10 @@
                         ·         {{ result.object.created|timesince }}전
                     </li>
                     <li>
-                        {% if result.object.category == "레포트" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "강의노트" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "시험자료" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "동영상" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "자소서" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "이력서" %}
-                        <span>{{ result.object.category }}</span>
-                        {% elif result.object.category == "PPT" %}
-                        <span>{{ result.object.category }}</span>
-                        {% else %}
-                        <span>{{ result.object.category }}</span>
-                        {% endif %}
                     </li>
                 </ul>
                 <div class="row-picture">
-                    <a href="">
+                    <a href="{% url 'contentsdetail' result.object.contents_id %}">
                         {% if result.object.imagepath %}
                         <img src="/{{ result.object.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
                         {% else %}
@@ -189,10 +86,10 @@
                 </div>
                 <ul class="row-middle">
                     <li>
-                        <a href="">{% highlight result.object.title with query css_class "bg-warning" %}|truncatechars_html:80</a>
+                        <a href="{% url 'contentsdetail' result.object.contents_id %}">{% highlight result.object.title with query css_class "bg-warning" %}</a>
                     </li>
                     <li>
-                        <a href="">{% highlight result.object.intro with query css_class "bg-warning" %}</a>
+                        <a href="{% url 'contentsdetail' result.object.contents_id %}">{% highlight result.object.intro with query css_class "bg-warning" max_length 73 %}</a>
                     </li>
                 </ul>
                 <ul class="row-bottom">
@@ -201,48 +98,12 @@
                     </li>
                     <li>
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ result.object.downloadcount }}
-                        <i class="fas fa-chevron-adown"></i>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                콘텐츠 거래
-            </div>
-            {% else %}
-            <div class="popular-row">
-                <ul class="row-top">
-                    <li>
-                        <img src="{% static 'unid/icon/profle-icon.png' %}">
                     </li>
                     <li>
-                        {{ result.object.user.email}}
+                        <img src="{% static 'unid/icon/icons-조회수.png' %}" width="20" height="20"> {{ result.object.hits }}
                     </li>
                     <li>
-                        ·         {{ result.object.created_at|timesince }}전
-                    </li>
-                    <li>
-                        <span>{{ result.object.category }}</span>
-                    </li>
-                </ul>
-                <div class="row-picture">
-                    <a href="">
-                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
-                    </a>
-                </div>
-                <ul class="row-middle">
-                    <li>
-                        <a href="">{% highlight result.object.title with query css_class "bg-warning" %}</a>
-                    </li>
-                    <li>
-                        <a href="">{% highlight result.object.contents with query css_class "bg-warning" %}</a>
-                    </li>
-                </ul>
-                <ul class="row-bottom">
-                    <li>
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ result.object.like_count }}
-                    </li>
-                    <li>
-                        <i class="fas fa-chevron-adown"></i>
+                        <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ result.object.downloadcount }}
                     </li>
                 </ul>
             </div>
@@ -258,99 +119,18 @@
 
 
 </body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 
-<script type="text/javascript">
-
-console.log({{ page.object_list }});
-// In a perfect world, this would be its own library file that got included
-// on the page and only the ``$(document).ready(...)`` below would be present.
-// But this is an example.
-var Autocomplete = function(options) {
-  this.form_selector = options.form_selector
-  this.url = options.url || '/search/autocomplete/'
-  this.delay = parseInt(options.delay || 300)
-  this.minimum_length = parseInt(options.minimum_length || 3)
-  this.form_elem = null
-  this.query_box = null
-}
-
-Autocomplete.prototype.setup = function() {
-  var self = this
-  console.log(1);
-  this.form_elem = $(this.form_selector)
-  this.query_box = this.form_elem.find('input[name=q]')
-  console.log(2);
-  // Watch the input box.
-  this.query_box.on('keyup', function() {
-    var query = self.query_box.val()
-    console.log(3);
-    if(query.length < self.minimum_length) {
-      console.log(4);
-      return false
-    }
-
-    self.fetch(query)
-  })
-
-  // On selecting a result, populate the search field.
-  this.form_elem.on('click', '.ac-result', function(ev) {
-    self.query_box.val($(this).text())
-    console.log(5);
-    $('.ac-results').remove()
-    console.log(6);
-    return false
-  })
-}
-
-Autocomplete.prototype.fetch = function(query) {
-  var self = this
-    console.log(6);
-  $.ajax({
-    url: this.url
-  , data: {
-      'q': query
-    }
-  , success: function(data) {
-      self.show_results(data)
-      console.log(7);
-    }
-  })
-}
-
-Autocomplete.prototype.show_results = function(data) {
-  // Remove any existing results.
-  $('.ac-results').remove()
-    console.log(8);
-  var results = data.results || []
-  var results_wrapper = $('<div class="ac-results"></div>')
-  var base_elem = $('<div class="result-wrapper"><a href="#" class="ac-result"></a></div>')
-
-  if(results.length > 0) {
-    for(var res_offset in results) {
-        console.log(9);
-      var elem = base_elem.clone()
-      // Don't use .html(...) here, as you open yourself to XSS.
-      // Really, you should use some form of templating.
-      elem.find('.ac-result').text(results[res_offset])
-      console.log(10);
-      results_wrapper.append(elem)
-    }
-  }
-  else {
-    var elem = base_elem.clone()
-    elem.text("No results found.")
-    results_wrapper.append(elem)
-  }
-
-  this.query_box.after(results_wrapper)
-}
-
-$(document).ready(function() {
-  window.autocomplete = new Autocomplete({
-    form_selector: '.autocomplete-me'
-  })
-  window.autocomplete.setup()
-})
-</script>
 </html>
+<script>
+    console.log("{{ query }}");
+    console.log("{{ form }}");
+    console.log("{{ page }}");
+    console.log("{{ paginator }}");
+    console.log("{{ suggestion }}");
+    console.log("{{ page.object_list }}");
+
+
+
+
+</script>
+{% endblock %}

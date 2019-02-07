@@ -45,6 +45,106 @@
     <!--transaction-toast-->
     <script src="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.js' %}"></script>
     <link href="{% static 'unid/node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+            var some_id = $('#id_q');
+            some_id.prop('type', 'text');
+            some_id.removeAttr('autocomplete');
+
+        });
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    // In a perfect world, this would be its own library file that got included
+    // on the page and only the ``$(document).ready(...)`` below would be present.
+    // But this is an example.
+    var Autocomplete = function(options) {
+      this.form_selector = options.form_selector
+      this.url = options.url || '/search/autocomplete/'
+      this.delay = parseInt(options.delay || 300)
+      this.minimum_length = parseInt(options.minimum_length || 3)
+      this.form_elem = null
+      this.query_box = null
+    }
+
+    Autocomplete.prototype.setup = function() {
+      var self = this
+      console.log(1);
+      this.form_elem = $(this.form_selector)
+      this.query_box = this.form_elem.find('input[name=q]')
+      console.log(2);
+      // Watch the input box.
+      this.query_box.on('keyup', function() {
+        var query = self.query_box.val()
+        console.log(3);
+        if(query.length < self.minimum_length) {
+          console.log(4);
+          return false
+        }
+
+        self.fetch(query)
+      })
+
+      // On selecting a result, populate the search field.
+      this.form_elem.on('click', '.ac-result', function(ev) {
+        self.query_box.val($(this).text())
+        console.log(5);
+        $('.ac-results').remove()
+        console.log(6);
+        return false
+      })
+    }
+
+    Autocomplete.prototype.fetch = function(query) {
+      var self = this
+        console.log(6);
+      $.ajax({
+        url: this.url
+      , data: {
+          'q': query
+        }
+      , success: function(data) {
+          self.show_results(data)
+          console.log(7);
+        }
+      })
+    }
+
+    Autocomplete.prototype.show_results = function(data) {
+      // Remove any existing results.
+      $('.ac-results').remove()
+        console.log(8);
+      var results = data.results || []
+      var results_wrapper = $('<div class="ac-results"></div>')
+      var base_elem = $('<div class="result-wrapper"><a href="#" class="ac-result"></a></div>')
+
+      if(results.length > 0) {
+        for(var res_offset in results) {
+            console.log(9);
+          var elem = base_elem.clone()
+          // Don't use .html(...) here, as you open yourself to XSS.
+          // Really, you should use some form of templating.
+          elem.find('.ac-result').text(results[res_offset])
+          console.log(results[res_offset]);
+          console.log(10);
+          results_wrapper.append(elem)
+        }
+      }
+      this.query_box.after(results_wrapper)
+    }
+
+    $(document).ready(function() {
+      window.autocomplete = new Autocomplete({
+        form_selector: '.autocomplete-me'
+      })
+      window.autocomplete.setup()
+
+
+    })
+
+
+    </script>
 </head>
 
 <body>
@@ -62,8 +162,23 @@
         <div class="box">
              <div class="container-1">
                  <span class="icon"><i class="fa fa-search"></i></span>
-                 <form method="get" action="/search/">
-                     <input type="search" name="q" id="id_q" placeholder="Search..." />
+                 <form method="get" action="/search/" class="autocomplete-me" autocomplete="off">
+                     {% if query %}
+                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown" data-toggle="dropdown" value="{{ query }}" placeholder="Search..." autocomplete="off" />
+                     {% else %}
+                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown" data-toggle="dropdown" placeholder="Search..." autocomplete="off" />
+                     {% endif %}
+                     <ul id="id_models" style="display: none;">
+                         <li>
+                             <input type="checkbox" name="models" value="unid.note" id="id_models_0">" Notes"
+                         </li>
+                         <li>
+                             <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_1">" Upload contents"
+                         </li>
+                         <li>
+                             <input type="checkbox" name="models" value="unid.uploadcontents" id="id_models_2">" Informations"
+                         </li>
+                     </ul>
                  </form>
               </div>
         </div>
@@ -154,10 +269,7 @@
         </div>
         <div id = "at_the_end2">
             <div style="padding-right: 12px; padding-left: 10px;">
-                (주)유니드 | 서울특별시 서초구 서초동 1302-2 내장산 | TEL:02-3470-2114
-            </div>
-            <div style="padding-right: 12px; padding-left: 10px;">
-                사업자등록번호:201-12-12345 | 통신판매번호:201-12-12345 | 개인정보 보호 책임자 : 인준희 | 대표이사 : 정용은 | 호스팅사업자 : 오픈이지
+                (주)유니드  서울특별시 서초구 서초동 1302-2 내장산  TEL:02-3470-2114
             </div>
         </div>
     </div>
