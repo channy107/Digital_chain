@@ -129,6 +129,51 @@ xpopup
   -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
   transition: opacity 0.3s 0s, visibility 0s 0s;
 }
+.cd-popup3 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #5959597d;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  z-index: 1;
+}
+
+.cd-popup3.is-visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+.cd-popup-container3 {
+  position: relative;
+  width: 35%;
+  max-width: 500px;
+  height: auto;
+  margin: 9em auto;
+  text-align: center;
+  background: #FFF;
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  padding: 30px;
+}
 .cd-popup-container1 {
   position: relative;
   width: 90%;
@@ -282,31 +327,142 @@ xpopup
     font-weight: bold;
     float: right;
 }
+#link {color: #E45635;display:block;font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;text-align:center; text-decoration: none;}
+#link:hover {color: #CCCCCC}
 
-#snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  font-size: 17px;
+#link, #link:hover {-webkit-transition: color 0.5s ease-out;-moz-transition: color 0.5s ease-out;-ms-transition: color 0.5s ease-out;-o-transition: color 0.5s ease-out;transition: color 0.5s ease-out;}
+
+/** BEGIN CSS **/
+@keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
 }
 
-#snackbar.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s;
-  /* , fadeout 0.5s 2.5s; */
-  animation: fadein 0.5s;
-  /* , fadeout 0.5s 2.5s; */
+@-moz-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
 }
 
+@-webkit-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-o-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-moz-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-webkit-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-o-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-moz-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-webkit-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-o-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+.loading-container,
+.loading {
+    height: 170px;
+    position: relative;
+    width: 170px;
+    border-radius: 100%;
+}
+
+
+.loading-container { margin: 40px auto }
+
+.loading {
+    border: 2px solid transparent;
+    border-color: transparent #E64C3C; transparent #E64C3C;
+    -moz-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -o-transform-origin: 50% 50%;
+    -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -webkit-transform-origin: 50% 50%;
+    animation: rotate-loading 1.5s linear 0s infinite normal;
+    transform-origin: 50% 50%;
+}
+
+.loading-container:hover .loading {
+    border-color: transparent #E45635 transparent #E45635;
+}
+.loading-container:hover .loading,
+.loading-container .loading {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+#loading-text {
+    -moz-animation: loading-text-opacity 2s linear 0s infinite normal;
+    -o-animation: loading-text-opacity 2s linear 0s infinite normal;
+    -webkit-animation: loading-text-opacity 2s linear 0s infinite normal;
+    animation: loading-text-opacity 2s linear 0s infinite normal;
+    color: #ec1010;
+    font-family: "Helvetica Neue, "Helvetica", ""arial";
+    font-weight: bold;
+    margin-top: 45px;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: -10px;
+    width: 167px;
+}
+.loading-text2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2F2F2F;
+}
+.loading-text3 {
+    font-size: 14px;
+    color: #989898;
+    margin: 10px 0 15px 0;
+    font-weight: bold;
+}
 @media only screen and (min-width: 1170px) {
   .cd-popup-container {
     margin: 10% auto;
@@ -570,7 +726,7 @@ xpopup
                                 </textarea>
                                 <ul class="cd-buttons">
                                     <li><input class="cd-popup-no form-control pointeffect" type="button"  style="background-color: #B2B2B2; color: white;" value="동의하지않습니다." /></li>
-                                    <li><input class="cd-popup-yes form-control" type="button" style="background-color: #E64C3C; color: white;" value="동의합니다." disabled/></li>
+                                    <li><input class="cd-popup-yes1 form-control" type="button" style="background-color: #E64C3C; color: white;" value="동의합니다." disabled/></li>
                                 </ul>
                             </div>
                         </div> <!-- cd-popup-container -->
@@ -580,32 +736,43 @@ xpopup
             <div class="form-group" align="center">
                 <input type="button" class="cd-popup-trigger form-control col-sm-2 pointeffect" name="enrollcontents" id="enrollcontents" style="background-color: #E64C3C; float: inherit;" value="콘텐츠 등록" readonly/>
             </div>
-                <div class="cd-popup" role="alert">
-                    <div class="cd-popup-container">
-                        <div class="popuprow1">
-                            <h4>컨텐츠를 등록하시겠습니까?</h4>
-                        </div>
-                        <div class="popuprow2">
-                            <ul id='popupinfo'>
+            <div class="cd-popup" role="alert">
+                <div class="cd-popup-container">
+                    <div class="popuprow1">
+                        <h4>컨텐츠를 등록하시겠습니까?</h4>
+                    </div>
+                    <div class="popuprow2">
+                        <ul id='popupinfo'>
 
-                            </ul>
-                        </div>
-                        <div class="popuprow3">
-                            컨텐츠는 저자가 책정한 판매가에 따라 구매자가 지불한 니드코인을 통해 보상되며 이더리움 네트워크 사정에 의해 처리속도가 지연될 수 있습니다.
-                        </div>
-
-                        <ul class="cd-buttons">
-                            <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
-                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
                         </ul>
-                        <a href="#0" class="cd-popup-close img-replace"></a>
-                    </div> <!-- cd-popup-container -->
-                </div> <!-- cd-popup -->
-            </div>
-        </form>
-    </div>
-    <div id="snackbar">콘텐츠 등록 중입니다...</div>
+                    </div>
+                    <div class="popuprow3">
+                        컨텐츠는 저자가 책정한 판매가에 따라 구매자가 지불한 니드코인을 통해 보상되며 이더리움 네트워크 사정에 의해 처리속도가 지연될 수 있습니다.
+                    </div>
+
+                    <ul class="cd-buttons">
+                        <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
+                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
+                    </ul>
+                    <a href="#0" class="cd-popup-close img-replace"></a>
+                </div> <!-- cd-popup-container -->
+            </div> <!-- cd-popup -->
+            <div class="cd-popup3">
+                <div class="cd-popup-container3">
+                    <div class="loading-container" >
+                        <div class="loading"></div>
+                        <div id="loading-text">
+                            <img src="/media/icon-로딩바.png" width="100" height="100">
+                        </div>
+                    </div>
+                    <div class="loading-text2">콘텐츠 등록중입니다...</div>
+                    <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                </div> <!-- cd-popup-container -->
+            </div> <!-- cd-popup -->
+        </div>
+    </form>
 </div>
+
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
@@ -654,8 +821,8 @@ xpopup
             });
         $('.contracttext').on('scroll', function() {
             if($('.contracttext').scrollTop() >= 700) {
-                $('.cd-popup-yes').addClass('pointeffect');
-                $('.cd-popup-yes').removeAttr("disabled");
+                $('.cd-popup-yes1').addClass('pointeffect');
+                $('.cd-popup-yes1').removeAttr("disabled");
             }
         });
         $('.cons').on('click', function(event){
@@ -669,7 +836,7 @@ xpopup
                 event.preventDefault();
                 $(this).removeClass('is-visible');
                 $('input:checkbox[id="ex_chk"]').prop("checked", false);
-            } else if( $(event.target).is('.cd-popup-yes')) {
+            } else if( $(event.target).is('.cd-popup-yes1')) {
                     event.preventDefault();
                     $(this).removeClass('is-visible');
                     $('input:checkbox[id="ex_chk"]').prop("checked", true);
@@ -951,12 +1118,12 @@ xpopup
             var account = "{{ request.session.user_account }}";
             console.log(account);
 
-            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
-            console.log(gas);
-            var gasPrice = web3.eth.gasPrice.toNumber();
-            console.log(gasPrice);
-            var transactionFees = gas * gasPrice * 0.0000000000000000001;
-            console.log(transactionFees);
+           // var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
+           // console.log(gas);
+           // var gasPrice = web3.eth.gasPrice.toNumber();
+           // console.log(gasPrice);
+           // var transactionFees = gas * gasPrice * 0.0000000000000000001;
+          //  console.log(transactionFees);
 
             console.log(3);
             $('.cd-popup').addClass('is-visible');
@@ -971,7 +1138,7 @@ xpopup
                 $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
             };
             $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
-            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
+           // $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
 
         });
 
@@ -991,11 +1158,10 @@ xpopup
             }
 
         });
-         $('#enrollyes').click(function() {
-              var x = document.getElementById("snackbar");
-              x.className = "show";
-               // setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-            });
+         $('.cd-popup-yes').on('click', function() {
+             $('.cd-popup').removeClass('is-visible');
+             $('.cd-popup3').addClass('is-visible');
+         });
     });
 
 </script>

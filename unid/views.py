@@ -582,10 +582,10 @@ def information(request):
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
 
-        if request.is_ajax():
-            context = {'posts': posts,
-                       'page_num':page_num}
-            return render(request, 'unid/information_ajax.html', context)
+    if request.is_ajax():
+        context = {'posts': posts,
+                   'page_num':page_num}
+        return render(request, 'unid/information_ajax.html', context)
 
     context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
 
@@ -1683,14 +1683,65 @@ def opinion(request):
 def unidAdmin(request):
     try:
         if request.session['Unid_admin']:
+            rpc_url = "http://222.239.231.252:9545"
+            w3 = Web3(HTTPProvider(rpc_url))
+            nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
+                {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
+                 "payable": False, "stateMutability": "view", "type": "function"},
+                {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
+                 "payable": False, "stateMutability": "view", "type": "function"},
+                {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
+                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                    {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                    {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
+                                                                                    "stateMutability": "nonpayable",
+                                                                                    "type": "function"},
+                {"constant": False, "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                                               {"name": "_rewards", "type": "int256"},
+                                               {"name": "_usercount", "type": "int256"}], "name": "userreward",
+                 "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
+                {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
+                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
+                 "type": "function"},
+                {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
+                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                    {"name": "_to", "type": "address"}, {"name": "_value", "type": "int256"}], "name": "transfer",
+                                                                                    "outputs": [], "payable": False,
+                                                                                    "stateMutability": "nonpayable",
+                                                                                    "type": "function"},
+                {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
+                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
+                 "type": "function"}, {
+                    "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
+                               {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
+                    "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
+                                                                                                "inputs": [
+                                                                                                    {"indexed": True,
+                                                                                                     "name": "from",
+                                                                                                     "type": "address"},
+                                                                                                    {"indexed": True,
+                                                                                                     "name": "to",
+                                                                                                     "type": "address"},
+                                                                                                    {"indexed": False,
+                                                                                                     "name": "value",
+                                                                                                     "type": "int256"}],
+                                                                                                "name": "EvtTransfer",
+                                                                                                "type": "event"}])
 
+            admin_account = w3.eth.coinbase
+            admin_balance = ncc.functions.balanceOf(admin_account).call()
             allUsers = myPageInfomation.objects.all()
             allBlackList = unidBlackList.objects.all()
             allTransacts = walletInFormation.objects.all()
             allContents = uploadContents.objects.all()
             allPost = Post.objects.all()
             allOpinions = opinions.objects.filter(result="확인중")
+            allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
+
             return render(request, 'unid/Unid_admin.html', {
+                                                            'admin_balance': admin_balance,
+                                                            'admin_account': admin_account,
                                                             'allUsers': allUsers,
                                                             'allBlackList': allBlackList,
                                                             'allTransacts': allTransacts,
