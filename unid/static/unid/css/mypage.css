@@ -19,7 +19,6 @@ height: 300px;
 margin-top: 19px;
 box-shadow: 0px 0px 0px 2px #e6e6e6;
 color: white;
-text-shadow: 0.5px 0.5px 0.1px black;
 }
 
 
@@ -28,13 +27,17 @@ list-style: none;
 height:80px;
 }
 
-#user_profile{
-list-style: none;
-height:80px;
+#user_image_upload.aaa::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.aaa::-webkit-file-upload-button {
+  visibility: hidden;
 }
 
 #myinfo_edit_mode{
 display:none;
+text-shadow: 0.5px 0.5px 0.1px black;
 }
 
 form{
@@ -87,6 +90,11 @@ margin: 0 auto;
 font-size: 11px;
 text-shadow: 0.5px 0.5px 0.5px black;
 color:  white;
+margin-left: 41%;
+}
+
+#user-info2.edit_mode{
+margin-top: -12px;
 }
 
 #container{
@@ -110,6 +118,8 @@ font-weight: bold;
 border-bottom: 1px solid #c1c1c1;
 padding-bottom:5px;
 }
+
+
 
 
 

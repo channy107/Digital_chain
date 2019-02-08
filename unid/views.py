@@ -82,7 +82,7 @@ def mypage(request):
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
@@ -303,7 +303,7 @@ def contentsdetail(request, id):
 
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+    nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
     ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
     try:
@@ -351,9 +351,9 @@ def contentsdetail(request, id):
 def moneytrade(request):
     rpc_url = "http://222.239.231.252:9545"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
-    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
-)
+    nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
+    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+
 
     writeremail = request.POST['writeremail']
     sellerinfo = myPageInfomation.objects.get(email=writeremail)
@@ -425,7 +425,7 @@ def main(request):
             'populated_video_lists': populated_video_lists
         })
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email'])
     return render(request, 'unid/contentstran.html', {
                                                         'populated_informations': populated_informations,
 
@@ -438,7 +438,9 @@ def main(request):
                                                         'populated_fiction_lists': populated_fiction_lists,
                                                         'populated_fortest_lists': populated_fortest_lists,
                                                         'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage
+                                                        'mypage':mypage,
+
+
                                                     })
 
 
@@ -629,7 +631,7 @@ def writer_rewards():
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:9545"
         w3 = Web3(HTTPProvider(rpc_url))
-        nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
+        nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
         ncc = w3.eth.contract(address = nidCoinContract_address, abi= [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
 );
         post_id = reward_values[i]['posts_id']
@@ -666,49 +668,8 @@ def liked_users_reward():
         for i in range(len(reward_values)):
             rpc_url = "http://222.239.231.252:9545"
             w3 = Web3(HTTPProvider(rpc_url))
-            nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
-            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
-                {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                    {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                                               {"name": "_rewards", "type": "int256"},
-                                               {"name": "_usercount", "type": "int256"}], "name": "userreward",
-                 "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
-                {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
-                 "type": "function"},
-                {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_to", "type": "address"}, {"name": "_value", "type": "int256"}], "name": "transfer",
-                                                                                    "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
-                 "type": "function"}, {
-                    "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
-                               {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
-                    "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
-                                                                                                "inputs": [
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "from",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "to",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": False,
-                                                                                                     "name": "value",
-                                                                                                     "type": "int256"}],
-                                                                                                "name": "EvtTransfer",
-                                                                                                "type": "event"}]
+            nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
                                   );
             likedusers = reward_values[i]['liked_users']
             usercount = reward.count()
@@ -966,7 +927,8 @@ def createaccount(request):
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
         try:
-            IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
+            IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
+            print(IDX)
         except TypeError as e:
             IDX = 0
 
