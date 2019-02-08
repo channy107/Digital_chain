@@ -81,7 +81,7 @@
             <div class="contents-info">
                     <h5 class="contents-title">
                         <a href="/unid/mywallet"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
-                        <b> 토큰 전송</b></h5>
+                        <b> 토큰 송금</b></h5>
 
                         <h4 class="contents-title2" align="right">
                             <div>
@@ -98,12 +98,12 @@
                 </br>
                 </br>
 
-                <p align="left" size ="5"> 전송할 토큰종류 </p>
-                <img src="{% static 'unid/icon/dollar.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>
+                <p align="left" size ="5"> 송금할 토큰종류 </p>
+                <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>
                 </br>
                 </br>
                 </br>
-                <p align="left" size ="5"> 전송 받을 주소 </p>
+                <p align="left" size ="5"> 송금 받을 주소 </p>
                 <input type="text" id="toAccounts" class="transaction-input" placeholder="전송받을 사람의 유니드 주소를 입력해주세요" />&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/plus.png' %}" id="add-plus" border="0" width="42" height="42">
                 </br>
@@ -118,7 +118,7 @@
                 </p>
                 <hr size="10" align="right" width=80% noshade="noshade" color="#efefef" />
                 </div>
-                <p align="left" size ="5"> 전송 할 금액 </p>
+                <p align="left" size ="5"> 송금 할 금액 </p>
                 <input type="number" id="amount" class="transaction-input" placeholder="금액을 입력해주세요" />
                 <h2> nid </h2>
                 </br>
@@ -126,7 +126,7 @@
 
                 <!-- Trigger/Open The Modal -->
                 <p align="center">
-                    <button type="button" class="btn btn-dark" id="myBtn">전송하기</button>
+                    <button type="button" class="btn btn-dark" id="myBtn">송금하기</button>
                 </p>
 
 
@@ -192,13 +192,71 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <th scope="row">2019년 1월 10일</th>
+                        <th scope="row">2019년 2월 7일</th>
                         <td>인준희</td>
-                        <td><div id="address-clip">0x54c81ab5a13420ab236049242f4540f16055dfed</div></td>
+                        <td><div id="address-clip">0x730278bf59F66a55E0B1A4A37A0F4827720059B3</div></td>
                         <td><button type="button" class="btn btn-dark" id="clip1">복사</button></td>
                       </tr>
                     </tbody>
                   </table>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">전송시간</th>
+                        <th scope="col">유저</th>
+                        <th scope="col">전송주소</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 7일</th>
+                        <td>양홍주</td>
+                        <td><div id="address-clip">0x465f0e1c50bcf162530baf9272ddea6955c52ac8</div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip2">복사</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">전송시간</th>
+                        <th scope="col">유저</th>
+                        <th scope="col">전송주소</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 7일</th>
+                        <td>임헌찬</td>
+                        <td><div id="address-clip">0xf55bB3D69Eb7D589b30ea5b72B77b1dBA6A3453C</div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip3">복사</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">전송시간</th>
+                        <th scope="col">유저</th>
+                        <th scope="col">전송주소</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 7일</th>
+                        <td>정용은</td>
+                        <td><div id="address-clip">0xa20c296790e91bc50c571856b563e8f2c8d5a8db</div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip4">복사</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+
              <div class="modal-footer">
              </div>
          </div>
@@ -281,7 +339,23 @@
          </div>
   </div>
 
+        <!--animation pop-->
+        <div id="aniPop" class="modal">
 
+            <!-- Modal content -->
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">개인 키 관리</h4>
+                        <button type="button" id="ani-close" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                     
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="ani-confirm" class="btn btn-danger" data-dismiss="modal">확인</button>
+                    </div>
+                </div>
+        </div>
 
         <script>//transaction confirm pop
 
@@ -469,7 +543,10 @@
 
         <script> // clipboard copy
 
-        let clipboard = "0x54c81ab5a13420ab236049242f4540f16055dfed";
+        let clipboard1 = "0x730278bf59F66a55E0B1A4A37A0F4827720059B3";
+        let clipboard2 = "0x465f0e1c50bcf162530baf9272ddea6955c52ac8";
+        let clipboard3 = "0xf55bB3D69Eb7D589b30ea5b72B77b1dBA6A3453C";
+        let clipboard4 = "0xa20c296790e91bc50c571856b563e8f2c8d5a8db";
 
         function copyToClipboard(val) {
         var t = document.createElement("textarea");
@@ -482,10 +559,21 @@
 
 
         $('#clip1').click(function() {
-        copyToClipboard(`${clipboard}`);
+        copyToClipboard(`${clipboard1}`);
         alert('주소가 복사되었습니다.');
         });
-
+        $('#clip2').click(function() {
+        copyToClipboard(`${clipboard2}`);
+        alert('주소가 복사되었습니다.');
+        });
+        $('#clip3').click(function() {
+        copyToClipboard(`${clipboard3}`);
+        alert('주소가 복사되었습니다.');
+        });
+        $('#clip4').click(function() {
+        copyToClipboard(`${clipboard4}`);
+        alert('주소가 복사되었습니다.');
+        });
         </script>
 
 
@@ -561,9 +649,8 @@
                    let fromAccount = "{{ request.session.user_account }}";
                    let toAccount    = $('#toAccounts').val();
                    let fromPassword = $('#fromPassword').val();
-                   let amount       = $('#amount').val();
+                   var amount       = $('#amount').val();
                    let rootAccount = accounts[0];
-
                    // 보내는 사람의 계정을 언락
                    let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
                    if (isUnlock) {
@@ -573,6 +660,7 @@
                        }, function(err, res) {
                            let tranID = res;
                            if (!err) {
+                            console.log(`transacion pending... txid is ${res}.`);
                                 $.toast({
                                     heading: '전송 진행중',
                                     text: '전송이 진행 중입니다.',
@@ -613,7 +701,7 @@
                                                     });
                                         } else {
                                             console.error(err);
-                                            $.toast({
+                                                    $.toast({
                                                         heading: '전송 실패',
                                                         text: '전송에 실패하였습니다. 다시 시도해주세요.',
                                                         showHideTransition: 'slide',
@@ -627,7 +715,7 @@
 
                                      }
                                 });
-                               console.log(`transacion pending... txid is ${res}.`);
+                               
 
                            } else {
                                console.error(err);
