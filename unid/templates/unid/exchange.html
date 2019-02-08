@@ -108,7 +108,7 @@
     function showStatus() {
         $.get('https://api.coinone.co.kr/ticker?currency=all', function(data) {
 
-        var coinone_nid = parseFloat(data['eth']['last']);
+        var coinone_nid = parseFloat(data['eth']['last'])*0.01;
 
         let statusBalance =`
             <h3 id="nd_bal" align="right" size ="5"> </h3>

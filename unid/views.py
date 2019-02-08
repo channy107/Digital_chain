@@ -198,10 +198,10 @@ def contentsboard(request):
 @login_required
 def mywallet(request):
     walletInfo = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction')[:3]
-    walletInfo_pu = walletInFormation.objects.filter(fromAccount=request.session['user_name'] , type='purchase')[:3]
+    walletInfo_pu = walletInFormation.objects.filter(toAccount=request.session['user_name'],type='purchase')[:3]
     walletInfo_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange')[:3]
     walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction').count()
-    walletcount_pu = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='purchase').count()
+    walletcount_pu = walletInFormation.objects.filter(toAccount=request.session['user_name'],type='purchase').count()
     walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange').count()
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
@@ -275,9 +275,7 @@ def purchase(request):
         transactionData.type = str("purchase")
         transactionData.save()
 
-
-
-    return render(request, 'unid/purchase.html', {'mypage':mypage})
+    return render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)

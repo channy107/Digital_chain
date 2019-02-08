@@ -204,53 +204,53 @@
                                          afterHidden: function () {
                                              // 솔리디티에 transfer 함수를 호출한 결과로 반화되는 이벤트(=EvtTransfer)를 잡아서 처리
                                              // transfer 함수를 통해서 생성된 트랜잭션이 블록체인에 들어갔을 때 발생
-                                         
-                                         
-                                         }
-                                     });
-                                     console.log('성공');
-                                     nd.EvtTransfer().watch(function(err, evt) {
-                                        if (!err) {
-                                            // ajax를 통해서 서버로 DB insert를 요청
-                                            // jquery ajax 검색
-                                            $.ajax({
-                                                type:'POST',
-                                                url: '../purchase/',
-                                                data:{
-                                                csrfmiddlewaretoken: '{{ csrf_token }}',
-                                                p_from_account : unidAccount,
-                                                p_to_account : userAccount,
-                                                p_account_bal : nidAmount,
-                                                p_tran_id : tranID
-                                                },
-                                                success: function(data) {
-                                                }
-                                            });
+                                             console.log('성공');
+                                                nd.EvtTransfer().watch(function(err, evt) {
+                                                    if (!err) {
+                                                        // ajax를 통해서 서버로 DB insert를 요청
+                                                        // jquery ajax 검색
+                                                        $.ajax({
+                                                            type:'POST',
+                                                            url: '../purchase/',
+                                                            data:{
+                                                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                                                            p_from_account : unidAccount,
+                                                            p_to_account : userAccount,
+                                                            p_account_bal : nidAmount,
+                                                            p_tran_id : tranID
+                                                            },
+                                                            success: function(data) {
+                                                                console.log('DB성공');
+                                                            }
+                                                        });
 
-                                            //
-                                            console.log(evt);
-                                            $.toast({
-                                                heading: '구매 완료',
-                                                text: '토큰구매가 완료되었습니다.',
-                                                showHideTransition: 'slide',
-                                                icon: 'success',
-                                                afterHidden: function(){
-                                                    window.location.href = '/unid/mywallet';
-                                                }
-                                            });
-                                    } else {
-                                        console.error(err);
-                                            $.toast({
-                                            heading: '전송 실패',
-                                            text: '전송에 실패하였습니다. 다시 시도해주세요.',
-                                            showHideTransition: 'slide',
-                                            icon: 'warning',
-                                            afterHidden: function(){
-                                                window.location.href = '/unid/mywallet';
-                                                }
-                                            });
+                                                        //
+                                                        console.log(evt);
+                                                        $.toast({
+                                                            heading: '구매 완료',
+                                                            text: '토큰구매가 완료되었습니다.',
+                                                            showHideTransition: 'slide',
+                                                            icon: 'success',
+                                                            afterHidden: function(){
+                                                                window.location.href = '/unid/mywallet';
+                                                            }
+                                                        });
+                                                } else {
+                                                    console.error(err);
+                                                        $.toast({
+                                                        heading: '전송 실패',
+                                                        text: '전송에 실패하였습니다. 다시 시도해주세요.',
+                                                        showHideTransition: 'slide',
+                                                        icon: 'warning',
+                                                        afterHidden: function(){
+                                                            window.location.href = '/unid/mywallet';
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                         }
-                                    });
+                                     });
+
                              } else {
                                  console.error(err);
                              }
