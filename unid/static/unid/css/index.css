@@ -87,26 +87,32 @@
             left: 23%;
         }
         .reply {
-            margin: 20px 0 0 0;
             float: left;
+            margin: 0 0 11px 0;
         }
         .reply-picture {
-            margin: 0 20px 0 0;
+            margin: 0 10px 0 0;
             float: left;
         }
         .reply-id {
             float: left;
-            margin: 0 30px 0 0;
+            margin: 0px 17px 0 0;
+            font-size: 13px;
+            font-weight: 500;
         }
         .reply-date {
-            width: 500px;
+            width: 629px;
             font-size: 13px;
-            display: inline;
+            display: inline-block;
+            font-size: 10px;
+            float: right;
+            padding: 4px;
         }
         .reply-text {
             width: 620px;
             float: left;
-            margin: 10px 0 0 0;
+            /* margin: 10px 0 0 0; */
+            font-size: 12px;
         }
         .contents-kind {
             margin: 10px auto 20px auto;
@@ -236,9 +242,12 @@
 
         }
         .test {
-            margin: 0px 0 0 519px !important;
+            margin: 0px 0 0 425px !important;
         }
-        .contents-reply div {
+        .test1 {
+            margin: 0px 0 0 582px !important;
+        }
+        .icon-box{
             width: 50px;
             display:inline;
             margin: 0 10px 0 0;
