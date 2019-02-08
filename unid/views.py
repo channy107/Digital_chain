@@ -278,8 +278,16 @@ def purchase(request):
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id).values()
-    contents.hits = contents.hits + 1  # 조회수 증가
-    contents.save()
+    try:
+        request.session['post_id']
+    except KeyError as e:
+        request.session['post_id'] = id
+        contents.hits = contents.hits + 1  # 조회수 증가
+        contents.save()
+    if request.session['post_id'] != id:
+        request.session['post_id'] = id
+        contents.hits = contents.hits + 1  # 조회수 증가
+        contents.save()
 
     previewlist = []
     if previewInfo.objects.filter(contents_id=id).values():
@@ -1580,6 +1588,13 @@ def writereply(request):
 
 
 def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id. urls.py 에서도 path에 입력해줘야함.
+    if request.session['post_id']:
+        print(1)
+        board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
+        return render(request, 'unid/contentsdetail.html', {'board': board})
+    print(2)
+    request.session['post_id'] = id
+    print(3)
     board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
     board.hits = board.hits + 1    # 조회수 증가
     board.save()

@@ -101,12 +101,11 @@
             font-weight: 500;
         }
         .reply-date {
-            width: 629px;
-            font-size: 13px;
+            width: 452px;
             display: inline-block;
             font-size: 10px;
-            float: right;
-            padding: 4px;
+            float: left;
+            padding: 3px;
         }
         .reply-text {
             width: 620px;
