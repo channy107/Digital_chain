@@ -82,7 +82,7 @@ def mypage(request):
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
@@ -425,7 +425,7 @@ def main(request):
             'populated_video_lists': populated_video_lists
         })
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    mypage = myPageInfomation.objects.filter(email=request.session['user_email'])
     return render(request, 'unid/contentstran.html', {
                                                         'populated_informations': populated_informations,
 
@@ -438,7 +438,9 @@ def main(request):
                                                         'populated_fiction_lists': populated_fiction_lists,
                                                         'populated_fortest_lists': populated_fortest_lists,
                                                         'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage
+                                                        'mypage':mypage,
+
+
                                                     })
 
 
@@ -966,7 +968,8 @@ def createaccount(request):
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
         try:
-            IDX = myPageInfomation.objects.all().order_by('-pk')[0]['IDX']
+            IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
+            print(IDX)
         except TypeError as e:
             IDX = 0
 
