@@ -195,9 +195,9 @@
                 </li>
                 {% if user.email %}
                 <li class="nav-item dropdown">
-                    {% if user.userimage %}
+                    {% if mypage.userimage %}
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#" style="padding: 19px 0;">
-                        <img src="/{{ user.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
+                        <img src="/{{ mypage.userimage }}" style="border-radius:50%;" border="0" width="32" height="32">
                     </a>
                     {% else %}
                     <a class="nav-link dropdown-toggle" id="nav3" data-toggle="dropdown" href="#" style="padding: 19px 0;">

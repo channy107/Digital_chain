@@ -16,16 +16,16 @@
 
 
 <body>
-    {% if mypage.aaa %}
-    <div id="myinfo" style="background: url('/{{ mypage.aaa }}'); background-size: cover;">
+    {% if yourpage.aaa %}
+    <div id="myinfo" style="background: url('/{{ yourpage.aaa }}'); background-size: cover;">
     {% else %}
     <div id="myinfo" style="color: ; background-size: cover;">
     {% endif %}
         <div style="text-align:center; position:relative; padding-left: 1010px; margin-top:40px;"></div>
         <div id="profile-icon" style="margin-top:-25px" >
-            {% if mypage.userimage %}
+            {% if yourpage.userimage %}
             <div id="user_image_icon" style="text-align:center; padding-top: 55px;">
-                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
+                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ yourpage.userimage }}">
             </div>
             {% else %}
             <div style="text-align:center; padding-top:30px;">
@@ -34,9 +34,9 @@
             {% endif %}
         </div>
         <div id="user_profile">
-            <div style="text-align: center; font-size: 25px; font-weight:500;width:100%; height:45%; margin-top: 10px;">{{ mypage.name }}</div>
-            {% if mypage.profile %}
-            <div style="text-align: center; margin-top: 13px; font-size:13px">{{ mypage.profile }}</div>
+            <div style="text-align: center; font-size: 25px; font-weight:500;width:100%; height:45%; margin-top: 10px;">{{ yourpage.name }}</div>
+            {% if yourpage.profile %}
+            <div style="text-align: center; margin-top: 13px; font-size:13px">{{ yourpage.profile }}</div>
             {% else %}
             <div style="text-align: center; margin-top: 13px; font-size:13px">프로필을 등록해 주세요!</div>
             {% endif %}
@@ -55,8 +55,8 @@
     </div>
 
 
-    {% if mypage.aaa %}
-    <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
+    {% if yourpage.aaa %}
+    <div id="myinfo_edit_mode" style="background: url('/{{ yourpage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
     {% else %}
     <div id="myinfo_edit_mode" style="color: ; background-size: cover; background: rgba(0, 0, 0, 0.5));">
     {% endif %}
@@ -67,9 +67,9 @@
         </div>
         <form id="user_profile_edit_form" name="user_profile_edit_form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-            <div id="profile-icon_edit" style="margin-top:-25px; height: 100px; padding-top:30px;">
-            {% if mypage.userimage %}
-                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
+            <div id="profile-icon_edit" style="margin-top:-25px; height: 100px; padding-top:55px;">
+            {% if yourpage.userimage %}
+                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ yourpage.userimage }}">
             {% else %}
                 <img style="width:67px; height: 67px;text-align: center;" src="{% static 'unid/icon/profle-icon.png' %}">
             {% endif %}
@@ -80,11 +80,11 @@
             </div>
             <div id="user_profile_edit">
                 <div id="user_name_modifier" style="text-align: center;  width:100%; font-size: 25px; font-weight:500; margin-top:-18px;">
-                <input id="change_user_name" autocomplete="off" type="text" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: center; border: 1px solid white; height:45%; background-color: transparent;" name="name" value="{{ mypage.name }}">
+                <input id="change_user_name" autocomplete="off" type="text" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: center; border: 1px solid white; height:45%; background-color: transparent;" name="name" value="{{ yourpage.name }}">
             </div>
             <div id="alert" style="width:100px; font-size:15px; color: #ed1b25; display: inline; left:830px; bottom: 44px; height: 30px;"></div>
                 <div id="user_profile_modifier" style="text-align: center; width:100%; height: 45px; margin-top: 10px; font-size:13px">
-                    <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; color: white; text-shadow: 0.5px 0.5px 0.5px black;; border:1px solid white; background-color:transparent; height:25px; width: 300px;">
+                    <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ yourpage.profile }}" style="text-align:center; color: white; text-shadow: 0.5px 0.5px 0.5px black;; border:1px solid white; background-color:transparent; height:25px; width: 300px;">
                     <div class="col_red" id="body_byte3" style="">0</div>
                 </div>
             </div>

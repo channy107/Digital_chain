@@ -425,7 +425,8 @@ def main(request):
             'populated_video_lists': populated_video_lists
         })
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email'])
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    print(mypage)
     return render(request, 'unid/contentstran.html', {
                                                         'populated_informations': populated_informations,
 
@@ -482,10 +483,11 @@ def info_popular(request):
 
         if request.is_ajax():
             context = {'posts': posts,
-                       'page_num':page_num}
+                       'page_num':page_num,
+                       'mypage':mypgae}
             return render(request, 'unid/info_popular_ajax.html', context)
 
-        context = {'posts': posts}
+        context = {'posts': posts, 'mypage':mypage}
 
         return render(request, 'unid/info_popular.html', context)
 
@@ -507,16 +509,18 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num':page_num,
-                       'category':category}
+                       'category':category,
+                       'mypgae':mypage}
             return render(request, 'unid/infotag_ajax.html', context)
 
         context = {'allinfolists': allinfolists,
                    'category': category,
-                   'page_num': page_num}
+                   'page_num': page_num,
+                   'mypage': mypage}
 
         return render(request, 'unid/infotag.html', context)
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -532,7 +536,8 @@ def infotag(request, category):
 
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
-                       'page_num': page_num}
+                       'page_num': page_num,
+                       'mypage': mypage}
             return render(request, 'unid/infotag_ajax.html', context)
 
     context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'mypage': mypage}
@@ -563,7 +568,7 @@ def information(request):
 
         return render(request, 'unid/information.html', context)
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -706,28 +711,30 @@ def main_detail(request, id):
         return render(request, 'unid/main_detail.html', context)
 
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    context = {'posts': posts, 'replys': replys, 'likes': likes}
+    context = {'posts': posts, 'replys': replys, 'likes': likes, 'mypage': mypage}
     return render(request, 'unid/main_detail.html', context)
 
 def user_detail(request, id):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(IDX=id)
+        yourpage = myPageInfomation.objects.get(IDX=id)
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
-        contentsboard = uploadContents.objects.filter(writeremail_id=mypage.email)[:3]
-        articles = Post.objects.order_by('-posts_id').filter(user_id=mypage.email)[:3]
-        numbersOfArticles = len(Post.objects.filter(user_id=mypage.email))
-        numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=mypage.email))
-        numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=mypage.email))
-        numbersOfReply = len(replyForPosts.objects.filter(user_id=mypage.email))
-        myreward = walletInFormation.objects.filter(type='rewards', toAccount=mypage.email)
-        likeusers = LikeUsers.objects.filter(liked_users=mypage.email)
-        numbersOfLike = len(LikeUsers.objects.filter(liked_users=mypage.email))
+        contentsboard = uploadContents.objects.filter(writeremail_id=yourpage.email)[:3]
+        articles = Post.objects.order_by('-posts_id').filter(user_id=yourpage.email)[:3]
+        numbersOfArticles = len(Post.objects.filter(user_id=yourpage.email))
+        numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=yourpage.email))
+        numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=yourpage.email))
+        numbersOfReply = len(replyForPosts.objects.filter(user_id=yourpage.email))
+        myreward = walletInFormation.objects.filter(type='rewards', toAccount=yourpage.email)
+        likeusers = LikeUsers.objects.filter(liked_users=yourpage.email)
+        numbersOfLike = len(LikeUsers.objects.filter(liked_users=yourpage.email))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
-        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=mypage.email)
-        downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=mypage.email)[:3]
+        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=yourpage.email)
+        downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=yourpage.email)[:3]
         context = {'articles':articles,
                    'myreward':myreward,
+                   'yourpage':yourpage,
                    'likeusers':likeusers,
                    'numbersOfLike':numbersOfLike,
                    'mypage':mypage,
@@ -1612,11 +1619,11 @@ def searchcontents(request, category):
             contentsPost = paginator.page(paginator.num_pages)
             print(contentsPost)
         if request.is_ajax():
-            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
+            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage })
 
-        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
+        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
 
-    mypage = myPageInfomation.objects.filter(email=request.session['user_email']).values()[0]['email']
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     contentsPost = uploadContents.objects.order_by('-contents_id').filter(
                                                                 Q(category=category) & ~Q(isdelete="삭제")
                                                             )
@@ -1635,9 +1642,9 @@ def searchcontents(request, category):
         print(contentsPost)
 
     if request.is_ajax():
-        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
+        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
 
-    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
+    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
 
 
 
