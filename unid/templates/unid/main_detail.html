@@ -389,7 +389,16 @@ xpopup
                 </h2>
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <p align="center" size ="5">
-                    <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">   {{ posts.user_id }}&nbsp&nbsp  {{posts.created_at|timesince}}</p>
+                    {% if posts.user.userimage %}
+                        <img class="detail_img" src="/{{ posts.user.userimage }}" border="0" width="35" height="35">
+                    {% else %}
+                        <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">
+                    {% endif %}
+                    <a href="{% url 'user_detail' posts.user.IDX %}">
+                        {{ posts.user_id }}&nbsp&nbsp
+                    </a>
+                    {{posts.created_at|timesince}}
+                </p>
 
             </div>
         </div>

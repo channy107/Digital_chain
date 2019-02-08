@@ -11,6 +11,27 @@
 
 <script>
     jQuery(document).ready(function($){
+
+        $('#pwd').on('keyup', function(event){
+            if(event.which=='13'){
+                var pwd = $('#pwd').val();
+                console.log(pwd);
+                $.ajax ({
+                    type: 'POST',
+                    url: '../loginAdmin/',
+                    data: {
+                            pwd: pwd,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        alert(res.Ans);
+                        if(res.Ans == "환영합니다") {
+                            location="{% url 'unidAdmin' %}";
+                        }
+                    }
+                });
+            }
+        });
         $('#submit').on('click', function() {
             var pwd = $('#pwd').val();
             console.log(pwd);
@@ -29,6 +50,7 @@
                 }
             });
         });
+
 
     });
 
