@@ -108,7 +108,7 @@
     function showStatus() {
         $.get('https://api.coinone.co.kr/ticker?currency=all', function(data) {
 
-        var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
+        var coinone_nid = parseFloat(data['eth']['last']);
 
         let statusBalance =`
             <h3 id="nd_bal" align="right" size ="5"> </h3>
@@ -135,7 +135,7 @@
         let accounts = web3.eth.accounts;
         let account = "{{ request.session.user_account }}";
         let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-        let nid_balance = nd.balanceOf(account)* 0.000000000000000001;
+        let nid_balance = nd.balanceOf(account);
         let nid_price = nd.balanceOf(account) / coinone_nid;
         totalAmount += balance;
 

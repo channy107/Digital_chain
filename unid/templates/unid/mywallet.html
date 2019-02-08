@@ -138,128 +138,10 @@
               </div>
         </div> -->
 
-        <!--mypage.html로 이동-->
-         <!--history-->
-        <!--<div class="row">-->
-            <!--<div class="history">-->
-                <!--<div>-->
-                    <!--<span>컨텐츠 거래내역</span>-->
-                    <!--<span>6건</span>-->
-                <!--</div>-->
-                <!--<div>-->
-                    <!--<div class="history-total">-->
-                    <!--<div>-->
-                        <!--<span>total</span> <span>10.4nid</span>-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--<span>(+3.4)</span>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-            <!--</div>-->
-        <!--</div>-->
-
-         <!--history-detail-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--</br>-->
-        <!--</br>-->
-         <!--history-->
-
-        <!--mypage.html로 이동-->
-         <!--history-->
-        <!--<div class="row">-->
-            <!--<div class="history">-->
-                <!--<div>-->
-                    <!--<span>보상내역</span>-->
-                    <!--<span>6건</span>-->
-                <!--</div>-->
-                <!--<div>-->
-                    <!--<div class="history-total">-->
-                    <!--<div>-->
-                        <!--<span>total</span> <span>10.4nid</span>-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--<span>(+3.4)</span>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-            <!--</div>-->
-        <!--</div>-->
-
-         <!--history-detail-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div class="history-detail">-->
-                <!--2018.11.20   &nbsp&nbsp&nbsp-->
-                <!--<img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">-->
-                <!--3.4nid-->
-                <!--<span class="history-name" > 한양대 교양중 제일 재미있는 교양 추천의 보상</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--</br>-->
-        <!--</br>-->
-         <!--history-->
-
 
         <div class="row">
             <div class="history">
-                    <h6> 거래내역  <span>{{ count }}건</span></h6>
+                    <h6> 송금내역  <span>{{ count }}건</span></h6>
             </div>
         </div>
 
@@ -303,7 +185,92 @@
 
             </div>
         </div>
+        <br><br><br><br><br><br><br>
+        <div class="row">
+            <div class="history">
+                    <h6> 환전내역  <span>{{ count_ex }}건</span></h6>
+            </div>
+        </div>
 
+        <!-- history-detail -->
+        <div class="row">
+            <div class="history-detail">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">승인날짜</th>
+                          <th scope="col">환전금액</th>
+                          <th scope="col">거래아이디</th>
+                        </tr>
+                      </thead>
+                {% for item in list_ex %}
+                      <tbody>
+                        <tr>
+                          <th scope="row">{{item.transactiondate}}</th>
+                          <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
+                          <td>{{item.txid|truncatechars_html:20 }}</td>
+                        </tr>
+                      </tbody>
+                 {% endfor %}
+                    </table>
+
+                <!--{% for item in list %}-->
+                <!--{{item.transactiondate}} &nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.fromAccount}} </span>&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.toAccount}} </span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.balance}}nid  </span>-->
+                    <!--<span class="history-name"> {{item.txid}}</span>-->
+                    <!--<p><p>-->
+                <!--{% endfor %}-->
+
+            </div>
+        </div>
+        <br><br><br><br><br>
+        <div class="row">
+            <div class="history">
+                    <h6> 구매내역  <span>{{ count_pu }}건</span></h6>
+            </div>
+        </div>
+
+        <!-- history-detail -->
+        <div class="row">
+            <div class="history-detail">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">승인날짜</th>
+                          <th scope="col">구매금액</th>
+                          <th scope="col">거래아이디</th>
+                        </tr>
+                      </thead>
+                {% for item in list_pu %}
+                      <tbody>
+                        <tr>
+                          <th scope="row">{{item.transactiondate}}</th>
+                          <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
+                          <td>{{item.txid|truncatechars_html:20 }}</td>
+                        </tr>
+                      </tbody>
+                 {% endfor %}
+                    </table>
+
+                <!--{% for item in list %}-->
+                <!--{{item.transactiondate}} &nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.fromAccount}} </span>&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.toAccount}} </span> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp-->
+                    <!--<img src="{% static 'unid/icon/dollar.png' %}" border="0" width="18" height="18">-->
+                    <!--<span> {{item.balance}}nid  </span>-->
+                    <!--<span class="history-name"> {{item.txid}}</span>-->
+                    <!--<p><p>-->
+                <!--{% endfor %}-->
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -347,6 +314,8 @@
                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
                 <br>
                 <br>
+
+
                 <!-- 거래소 시세 정보 -->
                   <table border=1>
                       <tr>
@@ -520,9 +489,9 @@
                let accounts = web3.eth.accounts;
                let account = "{{ request.session.user_account }}";
                let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether")) ;
-               let nid_balance = nd.balanceOf(account) * 0.000000000000000001 ;
-               $('#bal').append(`${balance}eth`);
-               $('#nd_bal').append(`${nid_balance}nid`);
+               let nid_balance = nd.balanceOf(account);
+               $('#bal').append(`${balance} <span>eth</span>`);
+               $('#nd_bal').append(`${nid_balance} <span>nid</span>`);
                $('#pop').append(`${account}`);
            }
 
