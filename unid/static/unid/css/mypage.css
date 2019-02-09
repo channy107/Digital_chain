@@ -94,7 +94,7 @@ margin-left: 41%;
 }
 
 #user-info2.edit_mode{
-margin-top: -12px;
+
 }
 
 #container{
@@ -280,7 +280,7 @@ ul.tabs li.current:after{
   display: block;
   position: absolute;
   margin-top: 13px;
-  margin-left: -5px;
+  margin-left: -6px;
   border-bottom: 5px solid #f00;
 }
 

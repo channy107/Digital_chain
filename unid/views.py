@@ -82,7 +82,8 @@ def mypage(request):
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_name'])
+        contents_transfer_sell= walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_name'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
@@ -103,6 +104,7 @@ def mypage(request):
                    'downloads':downloads,
                    'replies':replies,
                    'contents_transfer':contents_transfer,
+                   'contents_transfer_sell':contents_transfer_sell,
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -277,7 +279,7 @@ def purchase(request):
 
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
-    replys = replysForContents.objects.filter(contents_id=id).values()
+    replys = replysForContents.objects.filter(contents_id=id)
     contents.hits = contents.hits + 1  # 조회수 증가
     contents.save()
 
