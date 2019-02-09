@@ -668,3 +668,19 @@
 .carousel-indicators li {
     background-color: rgb(195, 195, 195);
 }
+
+
+.service-ready {
+    text-align: center;
+    margin: 200px;
+}
+.service-ready-title{
+    font-size: 33px;
+    font-weight: bold;
+}
+.service-ready-text {
+    font-size: 22px;
+    width: 337px;
+    margin: 10px auto;
+
+}
