@@ -1673,9 +1673,8 @@ def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id.
 
 def searchcontents(request, category):
     try:
-        print("트라이1")
-        myPageInfomation.objects.filter(email=request.session['user_email']).values()
-    except KeyError as e:
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    except:
         print("익셉2")
         contentsPost = uploadContents.objects.order_by('-contents_id').filter(
                                                                 Q(category=category) & ~Q(isdelete="삭제")
@@ -1695,9 +1694,9 @@ def searchcontents(request, category):
             contentsPost = paginator.page(paginator.num_pages)
             print(contentsPost)
         if request.is_ajax():
-            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage })
+            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
 
-        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
+        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
 
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     contentsPost = uploadContents.objects.order_by('-contents_id').filter(

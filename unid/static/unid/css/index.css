@@ -114,13 +114,11 @@
             font-size: 12px;
         }
         .contents-kind {
-            margin: 10px auto 20px auto;
+            margin: 10px auto 7px auto;
             width: 110px;
-            background-color: red;
-            color: white;
             border-radius:20px;
-            backgraound-size: 100px;
             text-align: center;
+            background-color: white;
         }
         .nav-item{
             font-size: 1rem;
