@@ -494,7 +494,7 @@ def info_popular(request):
         if request.is_ajax():
             context = {'posts': posts,
                        'page_num':page_num,
-                       'mypage':mypgae}
+                       'mypage':mypage}
             return render(request, 'unid/info_popular_ajax.html', context)
 
         context = {'posts': posts, 'mypage':mypage}
@@ -637,9 +637,9 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
+    reward_day = now - timedelta(minutes=1)
     rewarded_day = reward_day - timedelta(days=1)
-    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
+    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
     # print(reward_values)
 
@@ -669,15 +669,15 @@ def writer_rewards():
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
+    reward_day = now - timedelta(minutes=1)
     rewarded_day = reward_day - timedelta(days=1)
-    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(aaa="success")
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_post_values = reward_post.values()
     # print(reward_post_values)
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
-        reward = LikeUsers.objects.filter(posts_id=post_id).exclude(bbb="success")
+        reward = LikeUsers.objects.filter(posts_id=post_id).exclude(rewards_success="success")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -702,14 +702,15 @@ def liked_users_reward():
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
             store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=likedusers, balance=0.2, txid=receipt, type="rewards", aaa="success")
             store.save()
-            writer_reward_success.aaa = "success"
+            writer_reward_success.rewards_success = "success"
             writer_reward_success.save()
-            reward_success.aaa = "success"
+            reward_success.rewards_success = "success"
             reward_success.save()
 
 
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
+    images = postImage.objects.filter(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
 
@@ -717,11 +718,11 @@ def main_detail(request, id):
         myPageInfomation.objects.filter(email=request.session['user_email']).values()
 
     except KeyError as e:
-        context = {'posts': posts, 'replys': replys, 'likes':likes}
+        context = {'posts': posts, 'replys': replys, 'likes':likes,'images':images}
         return render(request, 'unid/main_detail.html', context)
 
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    context = {'posts': posts, 'replys': replys, 'likes': likes, 'mypage': mypage}
+    context = {'posts': posts, 'replys': replys, 'likes': likes, 'mypage': mypage,'images':images}
     return render(request, 'unid/main_detail.html', context)
 
 def user_detail(request, id):
@@ -883,23 +884,54 @@ def mainreply(request):
 
 def main_upload(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        return render(request, 'unid/main_upload.html', {'mypage':mypage})
+            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+            return render(request, 'unid/main_upload.html', {'mypage':mypage})
     else:
+        try:
+            upload_files = request.FILES.getlist('user_files')
+        except MultiValueDictKeyError as e:
+            pass
+
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+
+        try:
+            print(os.getcwd())
+            os.mkdir("media/imageForInfo/" + today)
+        except FileExistsError as e:
+            pass
+
         sess = request.session['user_email']
         title = request.POST['title']
         category = request.POST['category']
         contents = request.POST['contents']
         tags = request.POST['tags']
-        upload_file = request.FILES['user_files']
-        with open("unid/static/unid/img" + '/' + upload_file.name, 'wb') as file:
-            for chunk in upload_file.chunks():
-                file.write(chunk)
+        image_list = []
+        for upload_file in upload_files:
+            filename = upload_file.name
+            image_list.append(filename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            info_dir = "media/imageForInfo/" + today + "/"
+            with open(info_dir + filename, 'wb') as file:
+                for chunk in upload_file.chunks():
+                    file.write(chunk)
 
         user = myPageInfomation.objects.get(email=sess)
 
-        info = Post(title=title, user=user, category=category, contents=contents, file=upload_file.name, tags=tags)
+        info = Post(title=title, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags)
         info.save()
+
+        idx = Post.objects.all().order_by('-posts_id')[0]
+        image_dir = "media/imageForInfo/" + today + "/"
+        imagelistlength = len(image_list)
+        for i in range(imagelistlength):
+            imageInfo = postImage(
+                posts_id=idx,
+                uploadfilename=image_list[i],
+                imagepath=image_dir + image_list[i],
+            )
+            imageInfo.save()
 
         url = '/unid'
         return HttpResponseRedirect(url)
