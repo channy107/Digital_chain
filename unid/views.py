@@ -1951,9 +1951,8 @@ from django.contrib import auth
 
 
 def commandMysql(request):
-    br = myPageInfomation.delete()
 
-    bbr = auth.user.objects.filter(username=yong0edu).delete()
+    bbr = uploadContents.objects.filter(contents_id=4).delete()
     return HttpResponse("성공쓰")
 
 
