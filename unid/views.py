@@ -281,7 +281,6 @@ def contentsdetail(request, id):
     replys = replysForContents.objects.filter(contents_id=id)
     contents.hits = contents.hits + 1  # 조회수 증가
     contents.save()
-    replys = replysForContents.objects.filter(contents_id=id).values()
     try:
         request.session['post_id']
     except KeyError as e:
