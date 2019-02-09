@@ -137,7 +137,7 @@
         let account = "{{ request.session.user_account }}";
         let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
         let nid_balance = nd.balanceOf(account);
-        let eth_price = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether")) * coinone_nid;
+        let eth_price = balance * coinone_nid;
         totalAmount += balance;
 
         $('#eth_bal').append(`${balance}eth`);
