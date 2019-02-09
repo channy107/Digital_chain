@@ -82,8 +82,8 @@ def mypage(request):
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_name'])
-        contents_transfer_sell= walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_name'])
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
+        contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_email'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
@@ -747,6 +747,7 @@ def user_detail(request, id):
         likeusers = LikeUsers.objects.filter(liked_users=yourpage.email)
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=yourpage.email))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
+        contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=yourpage.email)
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=yourpage.email)[:3]
         context = {'articles':articles,
@@ -764,7 +765,9 @@ def user_detail(request, id):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
-                   'contents_transfer':contents_transfer
+                   'contents_transfer':contents_transfer,
+                   'contents_transfer_sell':contents_transfer_sell,
+
                    }
         return render(request, 'unid/user_detail.html', context)
 
