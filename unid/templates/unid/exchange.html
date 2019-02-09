@@ -159,11 +159,14 @@
 
         // 송금 버튼을 클릭했을 때, 송금을 요청
         $('#btnSend').click(function() {
+            $.get('https://api.coinone.co.kr/ticker?currency=all', function(data) {
+
+            var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
             let accounts = web3.eth.accounts;
             let unidAccount = web3.eth.coinbase;
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
-            let nidAmount       = $('#amount').val()*1000;
+            let nidAmount       = $('#amount').val() * coinone_nid;
             let ethAmount  = $('#amount').val();
             let fromPasswordBase = 'pass0';
 
@@ -251,7 +254,7 @@
                      });
             }
           });
-
+         });  
     });
 
 

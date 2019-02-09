@@ -205,10 +205,6 @@ def mywallet(request):
     walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange').count()
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
-    # html = ''
-    # for info in walletInfo:
-    #     info.transactiondate = timezone.now()
-    #     html += str(info.transactiondate) + '<br>' + info.fromAccount + '<br>' +info.toAccount + '<br>'+ str(info.balance) + '<br>'+ info.txid
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage, 'list_pu':walletInfo_pu, 'list_ex':walletInfo_ex,'count_pu':walletcount_pu, 'count_ex':walletcount_ex})
 
 @login_required
