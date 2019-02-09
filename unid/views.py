@@ -279,6 +279,7 @@ def purchase(request):
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id)
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     contents.hits = contents.hits + 1  # 조회수 증가
     contents.save()
     try:
@@ -325,7 +326,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
+             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다", 'mypage': mypage
              }
         )
 
@@ -354,7 +355,8 @@ def contentsdetail(request, id):
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'files_infos': files_infos,
-             'nid_balance': nid_balance
+             'nid_balance': nid_balance,
+             'mypage': mypage,
              }
         )
 
