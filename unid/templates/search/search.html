@@ -26,9 +26,7 @@
                     <li>
                         ·         {{ result.object.created_at|timesince }}전
                     </li>
-                    <li>
-                        <span>{{ result.object.category }}</span>
-                    </li>
+                    <img src="/{{ result.object.cagegory_path }}" width="75" height="25">
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'main_detail' result.object.posts_id %}">

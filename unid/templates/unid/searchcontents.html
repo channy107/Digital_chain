@@ -91,7 +91,7 @@
                             <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
                         </li>
                         <li>
-                            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:65 }}</a>
+                            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro }}</a>
                         </li>
                     </ul>
                     <ul class="row-bottom">
@@ -112,7 +112,7 @@
                 {% endfor %}
             </div>
             <input id="page" type="hidden" value="2">
-            {% if contentsPost.paginator.count > 4 %}
+            {% if contentsPost.paginator.count > 2 %}
             <button id="callmorepost" class="form-control">
                 <i class="fas fa-chevron-down"></i>
             </button>

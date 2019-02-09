@@ -82,8 +82,8 @@ def mypage(request):
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
-        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_name'])
-        contents_transfer_sell= walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_name'])
+        contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
+        contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_email'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
@@ -421,8 +421,8 @@ def main(request):
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
     try:
-        myPageInfomation.objects.filter(email=request.session['user_email']).values()
-    except KeyError as e:
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+    except:
         return render(request, 'unid/contentstran.html', {
             'populated_informations': populated_informations,
 
@@ -743,6 +743,7 @@ def user_detail(request, id):
         likeusers = LikeUsers.objects.filter(liked_users=yourpage.email)
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=yourpage.email))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
+        contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction')
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=yourpage.email)
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=yourpage.email)[:3]
         context = {'articles':articles,
@@ -760,7 +761,9 @@ def user_detail(request, id):
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
-                   'contents_transfer':contents_transfer
+                   'contents_transfer':contents_transfer,
+                   'contents_transfer_sell':contents_transfer_sell,
+
                    }
         return render(request, 'unid/user_detail.html', context)
 
@@ -981,8 +984,18 @@ def createaccount(request):
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
             print(IDX)
         except TypeError as e:
+            print("errorpass")
             IDX = 0
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                joiningdate=datetime.now(),
+                pwd=lockpwd,
+                name=name,
+                account=account,
+                IDX=IDX + 1
+            )
+            url = '/unid'
 
+            return HttpResponseRedirect(url)
         myPageInfomation.objects.filter(email=request.session['user_email']).update(
                             joiningdate=datetime.now(),
                             pwd=lockpwd,
@@ -997,7 +1010,10 @@ def createaccount(request):
 @login_required
 def contentsupload(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        try:
+            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+        except:
+            return render(request, 'unid/contentsupload.html', {})
         return render(request, 'unid/contentsupload.html', {'mypage':mypage})
     else:  # submit으로 제출
         try:
@@ -1264,12 +1280,21 @@ def test_validfile(request):
     filehashdatas = []
     filesize = []
     already_uploaded_list = []
+    valid_extendname = ['.hwp', '.ppt', '.docx', '.pdf', '.xlsx', '.pptx']
+    print(3)
     contents_dir = "uploadfiles/" + number + "/"
     for upload_file in upload_files:  # 다중 파일 업로드
         # file_name = upload_file.name
         # number = str(random.random())
+        print(4)
         filename = upload_file.name
-        extendname = filename[filename.find(".", -4):]
+        extendname = filename[filename.find(".", -5):]
+
+        if not extendname.lower() in valid_extendname:
+            print(5)
+            res = {'Ans': extendname + '형식은 업로드 불가합니다.', 'noform':"noform"}
+            return_obj = JsonResponse(res)
+            return return_obj
         # real_filename = number + extendname
         # ftpfilelist.append(real_filename)
         uifilelist.append(filename)
@@ -1925,9 +1950,8 @@ from django.contrib import auth
 
 
 def commandMysql(request):
-    br = myPageInfomation.delete()
 
-    bbr = auth.user.objects.filter(username=yong0edu).delete()
+    bbr = uploadContents.objects.filter(contents_id=4).delete()
     return HttpResponse("성공쓰")
 
 
