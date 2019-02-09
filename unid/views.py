@@ -3,7 +3,6 @@ from _sha256 import sha256
 from datetime import datetime, time, timedelta
 from ftplib import FTP
 from PIL import Image
-from blaze.expr import lower
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
