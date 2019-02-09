@@ -637,7 +637,7 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(minutes=1)
+    reward_day = now - timedelta(days=1)
     rewarded_day = reward_day - timedelta(days=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
@@ -669,7 +669,7 @@ def writer_rewards():
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(minutes=1)
+    reward_day = now - timedelta(days=1)
     rewarded_day = reward_day - timedelta(days=1)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_post_values = reward_post.values()
