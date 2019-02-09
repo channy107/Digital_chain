@@ -279,9 +279,6 @@ def purchase(request):
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id)
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    contents.hits = contents.hits + 1  # 조회수 증가
-    contents.save()
     try:
         request.session['post_id']
     except KeyError as e:
@@ -326,7 +323,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다", 'mypage': mypage
+             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
              }
         )
 
@@ -343,7 +340,7 @@ def contentsdetail(request, id):
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'nid_balance': nid_balance,
-             "downloadid": downloadid, 'files_infos': files_infos, 'mypage':mypage
+             "downloadid": downloadid, 'files_infos': files_infos
              }
         )
 
@@ -356,7 +353,6 @@ def contentsdetail(request, id):
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'files_infos': files_infos,
              'nid_balance': nid_balance,
-             'mypage': mypage,
              }
         )
 
@@ -381,7 +377,7 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': buyeraccount, 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -1656,21 +1652,6 @@ def writereply(request):
     return JsonResponse(res)
 
 
-def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id. urls.py 에서도 path에 입력해줘야함.
-    if request.session['post_id']:
-        print(1)
-        board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
-        return render(request, 'unid/contentsdetail.html', {'board': board})
-    print(2)
-    request.session['post_id'] = id
-    print(3)
-    board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
-    board.hits = board.hits + 1    # 조회수 증가
-    board.save()
-    # id 에 해당하는 정보들을 html에 넘겨줘서 사용
-    # viewwork.html 에서 {{ board.memo }} 로 내용물 확인 가능
-    return render(request, 'unid/contentsdetail.html', {'board': board})
-
 
 def searchcontents(request, category):
     try:
@@ -1761,51 +1742,12 @@ def unidAdmin(request):
         if request.session['Unid_admin']:
             rpc_url = "http://222.239.231.252:9545"
             w3 = Web3(HTTPProvider(rpc_url))
-            nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
-            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
-                {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                    {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                                               {"name": "_rewards", "type": "int256"},
-                                               {"name": "_usercount", "type": "int256"}], "name": "userreward",
-                 "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
-                {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
-                 "type": "function"},
-                {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_to", "type": "address"}, {"name": "_value", "type": "int256"}], "name": "transfer",
-                                                                                    "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
-                 "type": "function"}, {
-                    "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
-                               {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
-                    "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
-                                                                                                "inputs": [
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "from",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "to",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": False,
-                                                                                                     "name": "value",
-                                                                                                     "type": "int256"}],
-                                                                                                "name": "EvtTransfer",
-                                                                                                "type": "event"}])
+            nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
             admin_account = w3.eth.coinbase
+            kk = Web3.toChecksumAddress("0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f")
+            kk_balance = ncc.functions.balanceOf(kk).call()
             admin_balance = ncc.functions.balanceOf(admin_account).call()
             allUsers = myPageInfomation.objects.all()
             allBlackList = unidBlackList.objects.all()
@@ -1816,6 +1758,8 @@ def unidAdmin(request):
             allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
 
             return render(request, 'unid/Unid_admin.html', {
+                'kk': kk,
+                'kk_b':kk_balance,
                                                             'admin_balance': admin_balance,
                                                             'admin_account': admin_account,
                                                             'allUsers': allUsers,
@@ -1848,10 +1792,11 @@ def warninguser(request):
             user=warningUser,
             reason=request.POST['reason'],
             aaa=number,
+            bbb="경고"
         )
         br.save()
         print(3)
-        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고") ).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(bbb="경고") ).values())
         print(4)
         print(warningCount)
         if warningCount >= 3:
@@ -1876,11 +1821,12 @@ def warninguser(request):
             user=warningUser,
             reason=request.POST['reason'],
             aaa = number,
+            bbb = "경고"
         )
 
 
         br.save()
-        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고")).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(bbb="경고")).values())
         if warningCount >= 3:
             br = unidBlackList(
                 user=warningUser,
@@ -1903,7 +1849,7 @@ def noProblem(request):
     posts_id = request.POST['id']
     number = request.POST['number']
 
-    br = opinions.objects.filter(IDX=number).update(result="이상없음")
+    br = opinions.objects.filter(IDX=number).update(bbb="이상없음")
 
     res={'Ans':'처리되었습니다.'}
     return JsonResponse(res)

@@ -517,9 +517,9 @@ xpopup
                         <a href="{% url 'user_detail' contents.writeremail.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if contents.writeremail.userimage %}
-                                <img src="/{{ contents.writeremail.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ contents.writeremail.email }}
+                                <img src="/{{ contents.writeremail.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ contents.writeremail.name }}
                                 {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.email }}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.name }}
                                 {% endif %}
                             </p>
                         </a>
