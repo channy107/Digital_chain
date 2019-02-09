@@ -36,7 +36,7 @@
                 <div class="list-group">
                     <a href="../info_popular/" class="list-group-item">#인기</a>
                     <a href="../infotag/학교정보" class="list-group-item">#학교정보</a>
-                    <a href="../infotag/학교주변리뷰" class="list-group-item">#학교주변리뷰</a>
+                    <a href="../infotag/주변리뷰" class="list-group-item">#주변리뷰</a>
                     <a href="../infotag/취업정보" class="list-group-item">#취업정보</a>
                     <a href="../infotag/질문" class="list-group-item">#질문</a>
 
@@ -72,15 +72,7 @@
                             ·         {{ info.created_at|timesince }}전
                         </li>
                         <li>
-                            {% if info.category == "학교정보" %}
-                                <span>{{ info.category }}</span>
-                            {% elif info.category == "학교주변리뷰" %}
-                                <span>{{ info.category }}</span>
-                            {% elif info.category == "취업정보" %}
-                                <span>{{ info.category }}</span>
-                            {% else %}
-                                <span>{{ info.category }}</span>
-                            {% endif %}
+                            <img src="/{{ info.category_path }}" width="75" height="25">
                         </li>
                     </ul>
                     <div class="row-picture">

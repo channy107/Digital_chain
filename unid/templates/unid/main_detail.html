@@ -381,20 +381,20 @@ xpopup
         </div> <!-- cd-popup -->
         <div class="row">
             <div class="main-info">
-                <div class="contents-kind">
-                    {{posts.category}}
+                <div class="category">
+                    <img src="/{{ posts.category_path }}" width="75" height="25">
                 </div>
                 <h2 align="center">
                     <b> {{posts.title}}</b>
                 </h2>
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <p align="center" size ="5">
-                    {% if posts.user.userimage %}
-                        <img class="detail_img" src="/{{ posts.user.userimage }}" border="0" width="35" height="35">
-                    {% else %}
-                        <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">
-                    {% endif %}
                     <a href="{% url 'user_detail' posts.user.IDX %}">
+                        {% if posts.user.userimage %}
+                            <img class="detail_img" src="/{{ posts.user.userimage }}" border="0" width="35" height="35" style="border-radius: 25px;">
+                        {% else %}
+                            <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">
+                        {% endif %}
                         {{ posts.user_id }}&nbsp&nbsp
                     </a>
                     {{posts.created_at|timesince}}
@@ -408,19 +408,10 @@ xpopup
         <div class="row">
 
             <div class="main-detail">
-                <img class="detail-img" src="{% static 'unid/img/'%}{{posts.file}}" alt="{{posts.file}}" width="600px" height="600px">
-
-                <p>컨텐츠 정보</p>
-                <p>저자 : {{ posts.user_id }}</p>
-
-                <p>저작시기 : {{ posts.created_at }}</p>
-
-
-                <p>본문내용: {{ posts.contents }}</p>
-
-                <p>비고: {{ posts.reference }}</p>
-
-
+                {% for image in images %}
+                <img class="detail-img" src="/{{image.imagepath}}"  width="600px" height="600px">
+                {% endfor %}
+                <p>{{ posts.contents }}</p>
             </div>
         </div>
 
