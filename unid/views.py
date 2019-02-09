@@ -925,7 +925,7 @@ def main_upload(request):
 
         user = myPageInfomation.objects.get(email=sess)
 
-        info = Post(title=title, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags)
+        info = Post(title=title, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
         info.save()
 
         idx = Post.objects.all().order_by('-posts_id')[0]
