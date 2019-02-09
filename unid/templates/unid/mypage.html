@@ -145,7 +145,7 @@
                             <li>
                                 ·         {{ article.created_at|timesince }}전
                             </li>
-                                <img src="{% static 'unid/icon/tag_schoolinfo.png' %}" width="64.7px" height="21.7px" >
+                                <img src="/{{ article.category_path }}" width="64.7px" height="21.7px" >
                         </ul>
                         <div class="row-picture">
                             <a href="{% url 'main_detail' article.posts_id %}">
