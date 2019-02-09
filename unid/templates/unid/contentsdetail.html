@@ -514,13 +514,15 @@ xpopup
                 </div>
                 <div class="infobox"  align="center">
                     <div class="writerinfo">
-                        <p align="center" size="5">
-                            {% if contents.writeremail.userimage %}
-                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.email }}
-                            {% else %}
-                            <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.email }}
-                            {% endif %}
-                        </p>
+                        <a href="{% url 'user_detail' contents.writeremail.IDX %}">
+                            <p align="center" size="5" style="color: black;">
+                                {% if contents.writeremail.userimage %}
+                                <img src="/{{ contents.writeremail.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ contents.writeremail.email }}
+                                {% else %}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.email }}
+                                {% endif %}
+                            </p>
+                        </a>
                     </div>
                     <div class="dateinfo">
                         {{ contents.created|timesince }}전
@@ -782,10 +784,14 @@ xpopup
                 {% for reply in replys %}
                 <div class="reply">
                     <div class="reply-picture">
-                        <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
+                        {% if reply.writeremail.userimage %}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;"></a>
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30"></a>
+                        {% endif %}
                     </div>
                     <div class="reply-id">
-                        {{ reply.writeremail_id }}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">{{ reply.writeremail_id }}</a>
                     </div>
                     <div class="reply-date">
                         {{ reply.created }}

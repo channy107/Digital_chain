@@ -71,7 +71,7 @@
         </div>
         <form id="user_profile_edit_form" name="user_profile_edit_form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-            <div id="profile-icon_edit" style="margin-top:-22px; height: 100px; padding-top:30px;">
+            <div id="profile-icon_edit" style="margin-top:-23px; height: 100px; padding-top:30px;">
             {% if mypage.userimage %}
                 <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             {% else %}
@@ -83,16 +83,16 @@
                 <input class="aaa" id="user_image_upload" type="file" name="user_image_upload" style="cursor:pointer; width:20px; height:20px; position: relative; right: 24px; top: 5px;opacity: 0;" title="사진변경">
             </div>
             <div id="user_profile_edit">
-                <div id="user_name_modifier" style="text-align: center;  width:100%; font-size: 25px; font-weight:500; margin-top:-18px;">
-                    <input id="change_user_name" autocomplete="off" type="text" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: center; border: 1px solid white; height:45%; background-color: transparent;" name="name" value="{{ mypage.name }}">
-                    <div id="alert" style="width:150px; text-align:left; font-size:15px; color: #ed1b25; position:relative; left:700px; bottom: 30px; height: 30px;"></div>
+                <div id="user_name_modifier" style="display: grid; grid-template-columns: 1fr 1fr; text-align: center;  width:400px; font-size: 25px; font-weight:500; margin: 0 auto; height: 40px; padding-left: 100px; margin-top: -20px;">
+                    <input id="change_user_name" autocomplete="off" type="text" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: center; border: 1px solid white; height:100%; background-color: transparent;" name="name" value="{{ mypage.name }}">
+                    <div id="alert" style="width:150px; text-align:left; font-size:15px; color: #ed1b25; padding-top: 7px; padding-left: 15px;"></div>
                 </div>
-                <div id="user_profile_modifier" style="text-align: center; width:100%; height: 45px; margin-top: -21px; font-size:13px">
-                    <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; color: white; text-shadow: 0.5px 0.5px 0.5px black;; border:1px solid white; text-shadow: 0.5px 0.5px 0.1px black;background-color:transparent; height:25px; width: 300px;">
-                    <div class="col_red" id="body_byte3" style="position:relative; width: 100px; left:720px; bottom:20px;"></div>
+                <div id="user_profile_modifier" style="display: grid; grid-template-columns: 1fr 1fr; text-align: center; width:350px; margin: 0 auto; height: 28px; padding-left: 25px;margin-top: 4px; font-size:13px">
+                    <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; color: white; text-shadow: 0.5px 0.5px 0.5px black;; border:1px solid white; text-shadow: 0.5px 0.5px 0.1px black;background-color:transparent; height:100%; width: 300px;">
+                    <div class="col_red" id="body_byte3" style="padding-top: 5px; padding-left: 15px;"></div>
                 </div>
             </div>
-            <div id="user-info2" class="edit_mode">
+            <div id="user-info2" class="edit_mode" style="margin-top: 9px;">
                 <div id="joining-date" style="width:118%;">
                     <p style="text-align: center; display:inline;"><img style="width:20px;" src="{% static 'unid/icon/ui icons-29.png' %}"> {{ joining }}가입</p>
                 </div>
@@ -113,9 +113,10 @@
     </div>
     <div id="container">
         <ul class="tabs" id="tabs" style="margin-left:50px; margin-right:50px; padding-top:40px; font-size: 18px; font-weight: 500; border-bottom: 1px solid #c1c1c1; padding-bottom:5px;">
-            <li class="tab-link current" id="my_act1" data-tab="tab-1">나의 활동</li> &nbsp&nbsp
-            <li class="tab-link" id="my_act2" data-tab="tab-2">나의 자료</li> &nbsp&nbsp
-            <li class="tab-link" id="my_act3" data-tab="tab-3">나의 보상</li>
+            <li class="tab-link current" id="my_act1" data-tab="tab-1">게시글</li> &nbsp&nbsp
+            <li class="tab-link" id="my_act2" data-tab="tab-2" style="padding-left:15px;">콘텐츠</li> &nbsp&nbsp
+            <li class="tab-link" id="my_act3" data-tab="tab-3" style="padding-left:21px;">콘텐츠거래</li> &nbsp&nbsp
+            <li class="tab-link" id="my_act4" data-tab="tab-4" style="padding-left:10px;">보상</li>
             <div id="wallet">
                 <a href="../mywallet" style="color:black;"><img style="width:30px;" src="{% static 'unid/icon/wallet-for-mypage.png' %}">지갑</a>
             </div>
@@ -359,8 +360,37 @@
                 <div id="text_message">다운로드한 콘텐츠가 없습니다. 콘텐츠을 구매해보세요!</div>
                 {% endif %}
             </div>
+        </div>
+        <div id="tab-3" class="tab-content">
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
-                <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 거래 내역</div>
+                <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 판매 내역</div>
+                <div class="row_for_table" style="width:95%; ">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" id="col" style="width:140px;">승인날짜</th>
+                                <th scope="col" id="col" style="width:450px;">콘텐츠</th>
+                                <th scope="col" id="col" style="">저자</th>
+                                <th scope="col" id="col" style="">금액</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if contents_transfer_sell %}
+                                {% for content_transfer_sell in contents_transfer_sell %}
+                                <tr>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer_sell.transactiondate }}</th>
+                                    <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.aaa }}</td>
+                                    <td style="text-align: center;">{{ content_transfer_sell.toAccount }}</td>
+                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="content_column" style="margin-left: 50px; min-height:250px;">
+                <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 구매 내역</div>
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
@@ -377,7 +407,7 @@
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer.transactiondate }}</th>
                                     <td style="text-align: center; font-weight:500;">{{ content_transfer.aaa }}</td>
-                                    <td style="text-align: center;"><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{ content_transfer.toAccount }}</td>
+                                    <td style="text-align: center;">{{ content_transfer.toAccount }}</td>
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
                                 {% endfor %}
@@ -387,7 +417,7 @@
                 </div>
             </div>
         </div>
-        <div id="tab-3" class="tab-content">
+        <div id="tab-4" class="tab-content">
             <div id="content_column">
                 <div id="title_of_contents">정보공유 보상 내역</div>
                 <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfArticles }}건</div>
