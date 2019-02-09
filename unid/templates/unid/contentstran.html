@@ -99,7 +99,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #레포트
+                                <img src="/media/레포트.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -136,7 +136,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #강의자료
+                                <img src="/media/강의자료.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -173,7 +173,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #강의노트
+                                <img src="/media/강의노트.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -210,7 +210,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #시험자료
+                                <img src="/media/시험자료.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -247,7 +247,7 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #동영상
+                                <img src="/media/동영상.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
@@ -284,11 +284,122 @@
                                 인기컨텐츠
                             </div>
                             <div class="contents-popular-kind">
-                                #자소서
+                                <img src="/media/자소서.png" width="75" height="25">
                             </div>
                         </div>
                         <div class="contents-popular-contents">
                             {% for list in populated_fiction_lists %}
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
+                                </div>
+                                {% if list.imagepath %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
+                                </a>
+                                {% else %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
+                                </a>
+                                {% endif %}
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
+                                </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>
+                            <div class="contents-popular-title">
+                                인기컨텐츠
+                            </div>
+                            <div class="contents-popular-kind">
+                                <img src="/media/이력서.png" width="75" height="25">
+                            </div>
+                        </div>
+                        <div class="contents-popular-contents">
+                            {% for list in populated_resume_lists %}
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
+                                </div>
+                                {% if list.imagepath %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
+                                </a>
+                                {% else %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
+                                </a>
+                                {% endif %}
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
+                                </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>
+                            <div class="contents-popular-title">
+                                인기컨텐츠
+                            </div>
+                            <div class="contents-popular-kind">
+                                <img src="/media/PPT.png" width="75" height="25">
+                            </div>
+                        </div>
+                        <div class="contents-popular-contents">
+                            {% for list in populated_PPT_lists %}
+                            <div class="contents-popular-posting">
+                                <div class="desc-1">
+                                    <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
+                                </div>
+                                {% if list.imagepath %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/{{ list.imagepath }}" border="0" width="110" height="157">
+                                </a>
+                                {% else %}
+                                <a href="{% url 'contentsdetail' list.contents_id %}">
+                                    <img src="/media/defaultthumbnail.png" border="0" width="110" height="157">
+                                </a>
+                                {% endif %}
+                                <div class="contents-price">
+                                    <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="15" height="15">  {{ list.price }}
+                                </div>
+                                <div class="contents-download">
+                                    <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ list.downloadcount }}
+                                </div>
+                                <div class="contents-popular-posting-date">{{ list.writeremail.user }}</div>
+                                <div class="contents-popular-posting-date">{{ list.created|timesince }}전</div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div>
+                            <div class="contents-popular-title">
+                                인기컨텐츠
+                            </div>
+                            <div class="contents-popular-kind">
+                                <img src="/media/논문.png" width="75" height="25">
+                            </div>
+                        </div>
+                        <div class="contents-popular-contents">
+                            {% for list in populated_paper_lists %}
                             <div class="contents-popular-posting">
                                 <div class="desc-1">
                                     <a href="{% url 'contentsdetail' list.contents_id %}"/>{{ list.title|truncatechars_html:20 }}
