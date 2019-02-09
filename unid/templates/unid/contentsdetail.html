@@ -797,13 +797,13 @@ xpopup
                 <div class="reply">
                     <div class="reply-picture">
                         {% if reply.writeremail.userimage %}
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;"></a>
+                        <a href="{% url 'user_detail' contents.writeremail.IDX %}"><img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;"></a>
                         {% else %}
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30"></a>
+                        <a href="{% url 'user_detail' contents.writeremail.IDX %}"><img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30"></a>
                         {% endif %}
                     </div>
                     <div class="reply-id">
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">{{ reply.writeremail_id }}</a>
+                        <a href="{% url 'user_detail' contents.writeremail.IDX %}" style="color:black">{{ reply.writeremail_id }}</a>
                     </div>
                     <div class="reply-date">
                         {{ reply.created }}
