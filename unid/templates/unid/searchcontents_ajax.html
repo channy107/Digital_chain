@@ -19,53 +19,41 @@
                 </li>
             </a>
             <li>
-                · {{ contents.created|timesince }}전
+                ·         {{ contents.created|timesince }}전
             </li>
-            <li>
-                {% if contents.category == "레포트" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "강의노트" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "시험자료" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "동영상" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "자소서" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "이력서" %}
-                <span>{{ contents.category }}</span>
-                {% elif contents.category == "PPT" %}
-                <span>{{ contents.category }}</span>
-                {% else %}
-                <span>{{ contents.category }}</span>
-                {% endif %}
-            </li>
+            <img src="/{{ contents.cagegory_path }}" width="75" height="25">
         </ul>
-        <div class="row-picture">
-            <a href="{% url 'contentsdetail' contents.contents_id %}">
-                {% if contents.imagepath %}
-                <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
-                {% else %}
-                <img src="/media/defaultthumbnail.png" width="99px" height="75px" style="border-radius: 3px;">
-                {% endif %}
-            </a>
-        </div>
-        <ul class="row-middle">
-            <li>
-                <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
-            </li>
-            <li>
-                <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro|truncatechars_html:80 }}</a>
-            </li>
-        </ul>
-        <ul class="row-bottom">
-            <li>
-                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
-            </li>
-            <li>
-                <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
-            </li>
-        </ul>
+    <div class="row-picture">
+        <a href="{% url 'contentsdetail' contents.contents_id %}">
+            {% if contents.imagepath %}
+            <img src="/{{ contents.imagepath }}" width="99px" height="75px" style="border-radius: 3px;">
+            {% else %}
+            <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+            {% endif %}
+        </a>
     </div>
-    {% endfor %}
+    <ul class="row-middle">
+        <li>
+            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.title }}</a>
+        </li>
+        <li>
+            <a href="{% url 'contentsdetail' contents.contents_id %}">{{ contents.intro }}</a>
+        </li>
+    </ul>
+    <ul class="row-bottom">
+        <li>
+            <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ contents.price }}
+        </li>
+        <li>
+            <img src="{% static 'unid/icon/wordballoon-icon.png' %}"> {{ contents.downloadcount }}
+        </li>
+        <li>
+            <img src="{% static 'unid/icon/icons-조회수.png' %}" width="15" height="10" style="width:15; height:10;"> {{ contents.hits }}
+        </li>
+        <li>
+            <img src="{% static 'unid/icon/download_number.png' %}" border="0" width="15" height="15">  {{ contents.downloadcount }}
+        </li>
+    </ul>
+</div>
+{% endfor %}
 

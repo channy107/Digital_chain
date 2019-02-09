@@ -12,3 +12,4 @@
 {{ object.created }}
 {{ object.contents_id }}
 {{ object.imagepath }}
+{{ object.cagegory_path }}
