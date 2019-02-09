@@ -375,13 +375,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if contents_transfer_sell %}
-                                {% for content_transfer_sell in contents_transfer_sell %}
+                            {% if contents_transfer %}
+                                {% for content_transfer in contents_transfer %}
                                 <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer_sell.transactiondate }}</th>
-                                    <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.aaa }}</td>
-                                    <td style="text-align: center;">{{ content_transfer_sell.toAccount }}</td>
-                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer.transactiondate }}</th>
+                                    <td style="text-align: center; font-weight:500;">{{ content_transfer.aaa }}</td>
+                                    <td style="text-align: center;">{{ content_transfer.toAccount }}</td>
+                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
                                 {% endfor %}
                             {% endif %}
@@ -402,13 +402,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if contents_transfer %}
-                                {% for content_transfer in contents_transfer %}
+                            {% if contents_transfer_sell %}
+                                {% for content_transfer_sell in contents_transfer_sell %}
                                 <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer.transactiondate }}</th>
-                                    <td style="text-align: center; font-weight:500;">{{ content_transfer.aaa }}</td>
-                                    <td style="text-align: center;">{{ content_transfer.toAccount }}</td>
-                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer_sell.transactiondate }}</th>
+                                    <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.aaa }}</td>
+                                    <td style="text-align: center;">{{ content_transfer_sell.toAccount }}</td>
+                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
                                 </tr>
                                 {% endfor %}
                             {% endif %}
