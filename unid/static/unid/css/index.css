@@ -240,16 +240,24 @@
             display: inline;
 
         }
-        .test {
-            margin: 0px 0 0 425px !important;
-        }
-        .test1 {
-            margin: 0px 0 0 582px !important;
-        }
+
         .icon-box{
             width: 50px;
             display:inline;
             margin: 0 10px 0 0;
+        }
+        .icon-boxs {
+            width: 570px;
+            float: left;
 
+        }
+        .carousel-indicators .active {
+            background-color: #878585;
+        }
 
+        .carousel-indicators {
+            bottom: 30px;
+        }
+        .carousel-indicators li {
+            background-color: rgb(195, 195, 195);
         }
