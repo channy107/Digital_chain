@@ -408,19 +408,10 @@ xpopup
         <div class="row">
 
             <div class="main-detail">
-                <img class="detail-img" src="{% static 'unid/img/'%}{{posts.file}}" alt="{{posts.file}}" width="600px" height="600px">
-
-                <p>컨텐츠 정보</p>
-                <p>저자 : {{ posts.user_id }}</p>
-
-                <p>저작시기 : {{ posts.created_at }}</p>
-
-
-                <p>본문내용: {{ posts.contents }}</p>
-
-                <p>비고: {{ posts.reference }}</p>
-
-
+                {% for image in images %}
+                <img class="detail-img" src="/{{image.imagepath}}"  width="600px" height="600px">
+                {% endfor %}
+                <p>{{ posts.contents }}</p>
             </div>
         </div>
 

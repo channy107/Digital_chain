@@ -7,7 +7,7 @@
 <head>
     <link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
     <link href="{% static 'unid/css/contentsupload.css' %}" rel="stylesheet">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -114,7 +114,7 @@ xpopup
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(94, 110, 141, 0.9);
+  background-color: #5959597d;
   opacity: 0;
   visibility: hidden;
   -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
@@ -1118,12 +1118,11 @@ xpopup
             var account = "{{ request.session.user_account }}";
             console.log(account);
 
-           // var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
-           // console.log(gas);
-           // var gasPrice = web3.eth.gasPrice.toNumber();
-           // console.log(gasPrice);
-           // var transactionFees = gas * gasPrice * 0.0000000000000000001;
-          //  console.log(transactionFees);
+            //var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
+            //var gasPrice = web3.eth.gasPrice.toNumber();
+            //console.log(gasPrice);
+            //var transactionFees = gas * gasPrice * 0.0000000000000000001;
+            //console.log(transactionFees);
 
             console.log(3);
             $('.cd-popup').addClass('is-visible');
@@ -1138,7 +1137,7 @@ xpopup
                 $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
             };
             $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
-           // $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
+            //$('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
 
         });
 
