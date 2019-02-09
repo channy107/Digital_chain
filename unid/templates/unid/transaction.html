@@ -194,7 +194,7 @@
                       <tr>
                         <th scope="row">2019년 2월 7일</th>
                         <td>인준희</td>
-                        <td><div id="address-clip">0x730278bf59F66a55E0B1A4A37A0F4827720059B3</div></td>
+                        <td><div id="address-clip1"></div></td>
                         <td><button type="button" class="btn btn-dark" id="clip1">복사</button></td>
                       </tr>
                     </tbody>
@@ -213,7 +213,7 @@
                       <tr>
                         <th scope="row">2019년 2월 7일</th>
                         <td>양홍주</td>
-                        <td><div id="address-clip">0x465f0e1c50bcf162530baf9272ddea6955c52ac8</div></td>
+                        <td><div id="address-clip2"></div></td>
                         <td><button type="button" class="btn btn-dark" id="clip2">복사</button></td>
                       </tr>
                     </tbody>
@@ -232,7 +232,7 @@
                       <tr>
                         <th scope="row">2019년 2월 7일</th>
                         <td>임헌찬</td>
-                        <td><div id="address-clip">0xf55bB3D69Eb7D589b30ea5b72B77b1dBA6A3453C</div></td>
+                        <td><div id="address-clip3"></div></td>
                         <td><button type="button" class="btn btn-dark" id="clip3">복사</button></td>
                       </tr>
                     </tbody>
@@ -251,7 +251,7 @@
                       <tr>
                         <th scope="row">2019년 2월 7일</th>
                         <td>정용은</td>
-                        <td><div id="address-clip">0xa20c296790e91bc50c571856b563e8f2c8d5a8db</div></td>
+                        <td><div id="address-clip4"></div></td>
                         <td><button type="button" class="btn btn-dark" id="clip4">복사</button></td>
                       </tr>
                     </tbody>
@@ -543,10 +543,22 @@
 
         <script> // clipboard copy
 
-        let clipboard1 = "0x730278bf59F66a55E0B1A4A37A0F4827720059B3";
-        let clipboard2 = "0x465f0e1c50bcf162530baf9272ddea6955c52ac8";
-        let clipboard3 = "0xf55bB3D69Eb7D589b30ea5b72B77b1dBA6A3453C";
-        let clipboard4 = "0xa20c296790e91bc50c571856b563e8f2c8d5a8db";
+        let clipboard1 = "0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f";
+        let clipboard2 = "0x9d5a110dE1E9F61712656009A15206AC3a1333cF";
+        let clipboard3 = "0x2EE3598eC0172a57Fd50cF68debFFFdbAB53162e";
+        let clipboard4 = "0x24ca244b602861a72277f111aa6deb597f292aca";
+
+        $('#address-clip1').empty();
+        $('#address-clip1').append(clipboard1);
+
+        $('#address-clip2').empty();
+        $('#address-clip2').append(clipboard2);
+
+        $('#address-clip3').empty();
+        $('#address-clip3').append(clipboard3);
+
+        $('#address-clip4').empty();
+        $('#address-clip4').append(clipboard4);
 
         function copyToClipboard(val) {
         var t = document.createElement("textarea");
