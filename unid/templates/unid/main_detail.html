@@ -389,7 +389,11 @@ xpopup
                 </h2>
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <p align="center" size ="5">
+                    {% if posts.user.name == mypage.name %}
+                    <a href="/unid/mypage">
+                    {% else %}
                     <a href="{% url 'user_detail' posts.user.IDX %}">
+                    {% endif %}
                         {% if posts.user.userimage %}
                             <img class="detail_img" src="/{{ posts.user.userimage }}" border="0" width="35" height="35" style="border-radius: 25px;">
                         {% else %}

@@ -6,7 +6,11 @@
     {% for contents in contentsPost %}
     <div class="popular-row">
         <ul class="row-top">
+            {% if contents.writeremail.name == mypage.name %}
+            <a href="/unid/mypage">
+            {% else %}
             <a href="{% url 'user_detail' contents.writeremail.IDX %}">
+            {% endif %}
                 <li>
                     {% if contents.writeremail.userimage %}
                     <img src="/{{ contents.user.userimage }}">

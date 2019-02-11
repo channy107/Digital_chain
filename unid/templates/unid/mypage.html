@@ -166,10 +166,10 @@
                         </ul>
                         <ul class="row-bottom">
                             <li>
-                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.like_count }}
+                                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.like_count }}
                             </li>
                             <li>
-                                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.rewards }}
+                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.rewards }}
                             </li>
                             <li>
                                 <img src="{% static 'unid/icon/wordballoon-icon.png' %}" width="25px" height="16.7px"> {{ article.rewards }}
@@ -364,6 +364,10 @@
         <div id="tab-3" class="tab-content">
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 판매 내역</div>
+                <div id="number_of_something">{{ numbersOfsell }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span style="color: #2fcc71;">{{ totalForContentsSelling }}</span>
+                </div>
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
@@ -384,6 +388,8 @@
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
                                 {% endfor %}
+                            {% else%}
+                                <div id="text_message">아직 판매한 콘텐츠가 없습니다.</div>
                             {% endif %}
                         </tbody>
                     </table>
@@ -391,6 +397,7 @@
             </div>
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 구매 내역</div>
+                <div id="number_of_something">{{ numbersOfbuy }}건</div>
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
@@ -411,6 +418,8 @@
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
                                 </tr>
                                 {% endfor %}
+                            {% else %}
+                                <div id="text_message">아직 구매한 콘텐츠가 없습니다.</div>
                             {% endif %}
                         </tbody>
                     </table>
@@ -419,49 +428,59 @@
         </div>
         <div id="tab-4" class="tab-content">
             <div id="content_column">
-                <div id="title_of_contents">정보공유 보상 내역</div>
-                <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfArticles }}건</div>
-                <br>
-                <br>
-                <br>
-                {% if articles %}
-                <div class="row_for_table" style="width:95%; ">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" id="col" style="width:140px;">게시날짜</th>
-                                <th scope="col" id="col" style="width:150px;">보상여부</th>
-                                <th scope="col" id="col" style="width:150px">금액</th>
-                                <th scope="col" id="col" style="">게시글</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if articles %}
-                                {% for article in articles %}
+                {% if rewardedArticles != null %}
+                <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
+                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                </div>
+                    <div class="row_for_table" style="width:95%; ">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ article.created_at }}</th>
+                                    <th scope="col" id="col" style="width:140px;">게시일</th>
+                                    <th scope="col" id="col" style="width:140px;">보상예정일</th>
+                                    <th scope="col" id="col" style="width:150px">금액</th>
+                                    <th scope="col" id="col" style="">게시글</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rewardedArticle in rewardedArticles %}
+                                <tr>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.created_at }}</th>
+                                    {% if rewardedArticle.rewards_success == success %}
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.reward_date }}</th>
+                                    {% else %}
                                     <td style="text-align: center; font-weight:500;">
-                                        {% if article.aaa != success %}
                                         <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                        {% else %}
-                                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">진행중
-                                        {% endif %}
                                     </td>
-                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18">{{ article.bbb }}</td>
-                                    <td style="text-align: center;">{{ article.title }}</td>
+                                    {% endif %}
+                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18">{{ rewardedArticle.writer_rewards }}</td>
+                                    <td style="text-align: center;">{{ rewardedArticle.title }}</td>
                                 </tr>
                                 {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
                 {% else %}
-                <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
+                    <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                    <div id="number_of_something" style="padding-left: 25px;"> 0 건</div>
+                    <br>
+                    <br>
+                    <br>
+                        <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
+            <br>
+            <br>
             <div id="content_column">
-                <div id="title_of_contents">보팅 보상 내역</div>
+                <div id="title_of_contents" style="margin-bottom:30px;">보팅 보상 내역</div>
                 <div id="number_of_something">{{ numbersOfLike }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
+                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                </div>
                 <br>
                 <br>
                 <br>
@@ -470,29 +489,27 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" id="col" style="width:140px;">게시날짜</th>
-                                <th scope="col" id="col" style="width:150px;">보상여부</th>
+                                <th scope="col" id="col" style="width:140px;">게시일</th>
+                                <th scope="col" id="col" style="width:140px;">보상예정일</th>
                                 <th scope="col" id="col" style="width:150px">금액</th>
                                 <th scope="col" id="col" style="">게시글</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% if likeusers %}
-                                {% for like in likeusers %}
-                                <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
-                                    <td style="text-align: center; font-weight:500;">
-                                        {% if like.aaa != success %}
-                                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                        {% else %}
-                                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">진행중
-                                        {% endif %}
-                                    </td>
-                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
-                                    <td style="text-align: center;">{{ like.posts_id.title }}</td>
-                                </tr>
-                                {% endfor %}
-                            {% endif %}
+                            {% for like in likeusers %}
+                            <tr>
+                                <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
+                                <td style="text-align: center; font-weight:400; font-size:13.1px;">
+                                    {% if like.aaa != success %}
+                                    <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
+                                    {% else %}
+                                    {{ like.posts_id.reward_date }}
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
+                                <td style="text-align: center;">{{ like.posts_id.title }}</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -558,6 +575,15 @@
         var offset = $("#tab-1" + current).offset();
         $('html, body').animate({scrollTop : offset.top}, 400);
     }
+
+
+    var calculate = document.getElementById('calculate').value
+    var result = 0
+        for (x=0; calculate; result =+ calculate)
+        {
+            $('#cal_for_rewards').document.write(result.toString());
+        }
+
 
 
 

@@ -12,7 +12,11 @@ button.votings-{{page_num}} {
     {% for info in allinfolists %}
     <div class="popular-row">
         <ul class="row-top">
+            {% if info.user.name == mypage.name %}
+            <a href="/unid/mypage">
+            {% else %}
             <a href="{% url 'user_detail' info.user.IDX %}">
+            {% endif %}
                 <li>
                     {% if info.user.userimage %}
                     <img src="/{{ info.user.userimage }}">

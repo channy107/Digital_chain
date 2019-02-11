@@ -179,6 +179,7 @@ class Post(models.Model):
     writer_rewards = models.CharField(max_length=100, blank=True, null=True)
     category_path = models.CharField(max_length=250, blank=True, null=True)
     isdelete = models.CharField(max_length=250, blank=True, null=True)
+    reward_date = models.DateTimeField(blank=True, null=True)
 
 class postImage(models.Model):
     IDX = models.AutoField(primary_key=True)

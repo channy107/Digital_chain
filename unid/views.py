@@ -75,14 +75,28 @@ def mypage(request):
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
         articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])[:3]
+        for article in articles:
+            if article.like_count:
+                rewardedArticles = Post.objects.filter(user_id=request.session['user_email'])[:3]
+                rewardDate = article.created_at + timedelta(days=7)
+                print(rewardDate)
+                numbersOfrewardedArticles = len(rewardedArticles)
+            else:
+                print()
         numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
         numbersOfReply = len(replyForPosts.objects.filter(user_id=request.session['user_email']))
+        numbersOfsell = len(walletInFormation.objects.filter(type='contentsTrasaction', toAccount=request.session['user_email']))
+        numbersOfbuy = len(walletInFormation.objects.filter(type='contentsTrasaction', fromAccount=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
         numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
+        totalForContentsSelling = 0
+        for i in contents_transfer:
+            calculate = i.balance
+            totalForContentsSelling += calculate
         contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_email'])
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
@@ -99,12 +113,18 @@ def mypage(request):
                    'numbersOfArticles':numbersOfArticles,
                    'numbersOfcontents':numbersOfcontents,
                    'numbersOfDownloads':numbersOfDownloads,
+                   'numbersOfsell':numbersOfsell,
+                   'numbersOfbuy':numbersOfbuy,
                    'numbersOfReply':numbersOfReply,
                    'contentsboard':contentsboard,
                    'downloads':downloads,
                    'replies':replies,
                    'contents_transfer':contents_transfer,
                    'contents_transfer_sell':contents_transfer_sell,
+                   'rewardedArticles':rewardedArticles,
+                   'rewardDate':rewardDate,
+                   'numbersOfrewardedArticles':numbersOfrewardedArticles,
+                   'totalForContentsSelling':totalForContentsSelling,
                    }
         return render(request, 'unid/mypage.html', context)
 
@@ -834,7 +854,7 @@ def voting(request):
 
         posts = Post.objects.get(posts_id=posts_id)
         posts.like_count = like_count
-        posts.bbb = int(like_count) * 8/100
+        posts.writer_rewards = int(like_count) * 8/100
         posts.rewards = rewards
         count.votingcount = int(voting_count) + 1
         posts.save()
@@ -900,6 +920,7 @@ def main_upload(request):
 
         now = datetime.now()
         today = now.strftime('%Y-%m-%d')
+        reward_date = now + timedelta(days=7)
 
         try:
             print(os.getcwd())
@@ -925,7 +946,7 @@ def main_upload(request):
 
         user = myPageInfomation.objects.get(email=sess)
 
-        info = Post(title=title, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+        info = Post(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
         info.save()
 
         idx = Post.objects.all().order_by('-posts_id')[0]
