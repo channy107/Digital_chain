@@ -314,16 +314,18 @@
                     {% for download in downloads %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if download.contents_id.writeremail.userimage %}
-                                <img src="/{{ download.contents_id.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ download.contents_id.writeremail.name }}
-                            </li>
+                            <a href="{% url 'user_detail' download.contents_id.writeremail.IDX %}">
+                                <li>
+                                    {% if download.contents_id.writeremail.userimage %}
+                                    <img src="/{{ download.contents_id.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ download.contents_id.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ download.contents_id.created|timesince }}전
                             </li>
