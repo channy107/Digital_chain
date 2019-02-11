@@ -11,8 +11,9 @@
             </div>
             <hr>
             <div class = "search-category">
-                정보공유
+                정보공유           {% if  {{ page.object_list|slice:"1" }}.writeremail_id
             </div>
+
             {% for result in page.object_list %}
             {% if result.object.user_id %}
             <div class="popular-row">
@@ -48,6 +49,8 @@
                 </ul>
             </div>
             {% endif %}
+            {% empty %}
+            검색 결과
             {% endfor %}
             <hr>
             <div class = "search-category">
@@ -65,13 +68,12 @@
                         {% endif %}
                     </li>
                     <li>
-                        {{ result.object.writeremail.email}}
+                        {{ result.object.writeremail.name }}
                     </li>
                     <li>
                         ·         {{ result.object.created|timesince }}전
                     </li>
-                    <li>
-                    </li>
+                    <img src="/{{ result.object.cagegory_path }}" width="60" height="20">
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'contentsdetail' result.object.contents_id %}">
@@ -117,18 +119,12 @@
 
 
 </body>
-
-</html>
 <script>
-    console.log("{{ query }}");
-    console.log("{{ form }}");
-    console.log("{{ page }}");
-    console.log("{{ paginator }}");
-    console.log("{{ suggestion }}");
     console.log("{{ page.object_list }}");
-
-
+    console.log(" {{ page.object_list.first }}");
 
 
 </script>
+</html>
+
 {% endblock %}

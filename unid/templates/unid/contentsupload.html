@@ -1153,7 +1153,7 @@ xpopup
             console.log(contentsprice);
             let upload_files = $('#user_files').get(0).files
             $('#popupinfo').empty();
-            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>작성자 : </li> <li class='popupinformations'>" + "{{ request.session.user_email }}" + "</li> </ul><br><br>");
+            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>작성자 : </li> <li class='popupinformations'>" + "{{ request.session.user_name }}" + "</li> </ul><br><br>");
             $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>파일명 : </li> ");
             for(var i=0; i<upload_files.length; i++) {
                 $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");

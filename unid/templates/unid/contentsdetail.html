@@ -517,9 +517,9 @@ xpopup
                         <a href="{% url 'user_detail' contents.writeremail.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if contents.writeremail.userimage %}
-                                <img src="/{{ contents.writeremail.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ contents.writeremail.email }}
+                                <img src="/{{ contents.writeremail.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ contents.writeremail.name }}
                                 {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.email }}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ contents.writeremail.name }}
                                 {% endif %}
                             </p>
                         </a>
@@ -745,7 +745,7 @@ xpopup
                     <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">
                 </div>
                 {% else %}
-                <div class="icon-box" >
+                <div class="icon-box" style="position: relative;left: 160px;">
                     <a href="">
                         <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     </a>

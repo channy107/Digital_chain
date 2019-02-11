@@ -9,7 +9,7 @@ from unid import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('unid/', include('unid.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^search/', include('haystack.urls')),

@@ -57,6 +57,11 @@ def logged_in(sender, **kwargs):
 
     request.session['user_email'] = member.email
     request.session['user_name'] = member.name
+    try:
+        member.aaa
+    except:
+        pass
+    request.session['user_image'] = member.aaa
 user_logged_in.connect(logged_in, sender=User)
 
 
@@ -213,7 +218,7 @@ def privacy(request):
 
 def contentsboard(request):
     contentsboard = uploadContents.objects.all()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     context = {'contentsboard': contentsboard, 'mypage':mypage}
     return render(request, 'unid/contentsboard.html', context)
 
@@ -225,14 +230,14 @@ def mywallet(request):
     walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction').count()
     walletcount_pu = walletInFormation.objects.filter(toAccount=request.session['user_name'],type='purchase').count()
     walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange').count()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
 
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage, 'list_pu':walletInfo_pu, 'list_ex':walletInfo_ex,'count_pu':walletcount_pu, 'count_ex':walletcount_ex})
 
 @login_required
 def transaction(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/transaction.html', {'mypage':mypage})
     else:
         from_account = request.POST['from_account']
@@ -254,7 +259,7 @@ def transaction(request):
 @login_required
 def exchange(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/exchange.html', {'mypage':mypage})
     else:
         from_account = request.POST['e_from_account']
@@ -276,7 +281,7 @@ def exchange(request):
 @login_required
 def purchase(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/purchase.html', {'mypage':mypage})
     else:
         from_account = request.POST['p_from_account']
@@ -292,16 +297,13 @@ def purchase(request):
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
         transactionData.save()
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
 
     return render(request, 'unid/purchase.html', {})
 
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id)
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    contents.hits = contents.hits + 1  # 조회수 증가
-    contents.save()
     try:
         request.session['post_id']
     except KeyError as e:
@@ -346,7 +348,7 @@ def contentsdetail(request, id):
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
-             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다", 'mypage': mypage
+             'files_infos': files_infos, 'nid_balance': "로그인이 필요합니다"
              }
         )
 
@@ -356,14 +358,14 @@ def contentsdetail(request, id):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
         # title = uploadContents.objects.get(contents_id=id).title + ".zip"
         downloadid = str(random.random())
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(
             request,
             'unid/contentsdetail.html',
             {'contents': contents, 'replys': replys, 'previewlist': previewlist,
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'nid_balance': nid_balance,
-             "downloadid": downloadid, 'files_infos': files_infos, 'mypage':mypage
+             "downloadid": downloadid, 'files_infos': files_infos
              }
         )
 
@@ -376,7 +378,6 @@ def contentsdetail(request, id):
              'first_preview': first_preview, 'second_preview': second_preview, 'third_preview': third_preview,
              'files_infos': files_infos,
              'nid_balance': nid_balance,
-             'mypage': mypage,
              }
         )
 
@@ -401,7 +402,7 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': buyeraccount, 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -441,46 +442,24 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
-    try:
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    except:
-        return render(request, 'unid/contentstran.html', {
-            'populated_informations': populated_informations,
 
-            'populated_reports_lists': populated_reports_lists,
-            'populated_forlecture_lists': populated_forlecture_lists,
-            'populated_note_lists': populated_note_lists,
-            'populated_paper_lists': populated_paper_lists,
-            'populated_PPT_lists': populated_PPT_lists,
-            'populated_resume_lists': populated_resume_lists,
-            'populated_fiction_lists': populated_fiction_lists,
-            'populated_fortest_lists': populated_fortest_lists,
-            'populated_video_lists': populated_video_lists
-        })
-
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    print(mypage)
     return render(request, 'unid/contentstran.html', {
-                                                        'populated_informations': populated_informations,
-
-                                                        'populated_reports_lists': populated_reports_lists,
-                                                        'populated_forlecture_lists': populated_forlecture_lists,
-                                                        'populated_note_lists':populated_note_lists,
-                                                        'populated_paper_lists': populated_paper_lists,
-                                                        'populated_PPT_lists': populated_PPT_lists,
-                                                        'populated_resume_lists': populated_resume_lists,
-                                                        'populated_fiction_lists': populated_fiction_lists,
-                                                        'populated_fortest_lists': populated_fortest_lists,
-                                                        'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage,
-
-
-                                                    })
+                                                            'populated_informations': populated_informations,
+                                                            'populated_reports_lists': populated_reports_lists,
+                                                            'populated_forlecture_lists': populated_forlecture_lists,
+                                                            'populated_note_lists': populated_note_lists,
+                                                            'populated_paper_lists': populated_paper_lists,
+                                                            'populated_PPT_lists': populated_PPT_lists,
+                                                            'populated_resume_lists': populated_resume_lists,
+                                                            'populated_fiction_lists': populated_fiction_lists,
+                                                            'populated_fortest_lists': populated_fortest_lists,
+                                                            'populated_video_lists': populated_video_lists
+                                                        })
 
 
 def info_popular(request):
     if request.session.keys():
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         posts = Post.objects.order_by('-like_count', '-created_at')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
@@ -549,11 +528,11 @@ def infotag(request, category):
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
-                   'mypage': mypage}
+                   }
 
         return render(request, 'unid/infotag.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -570,10 +549,10 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
-                       'mypage': mypage}
+                       }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'mypage': mypage}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count}
 
     return render(request, 'unid/infotag.html', context)
 
@@ -601,7 +580,7 @@ def information(request):
 
         return render(request, 'unid/information.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -744,14 +723,14 @@ def main_detail(request, id):
         context = {'posts': posts, 'replys': replys, 'likes':likes,'images':images}
         return render(request, 'unid/main_detail.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    context = {'posts': posts, 'replys': replys, 'likes': likes, 'mypage': mypage,'images':images}
+
+    context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images}
     return render(request, 'unid/main_detail.html', context)
 
 def user_detail(request, id):
     if request.method == 'GET':
         yourpage = myPageInfomation.objects.get(IDX=id)
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=yourpage.email)[:3]
@@ -910,7 +889,7 @@ def mainreply(request):
 
 def main_upload(request):
     if request.method == 'GET':
-            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
             return render(request, 'unid/main_upload.html', {'mypage':mypage})
     else:
         try:
@@ -1032,10 +1011,6 @@ def createaccount(request):
 @login_required
 def contentsupload(request):
     if request.method == 'GET':
-        try:
-            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        except:
-            return render(request, 'unid/contentsupload.html', {})
         return render(request, 'unid/contentsupload.html', {'mypage':mypage})
     else:  # submit으로 제출
         try:
@@ -1677,50 +1652,8 @@ def writereply(request):
     return JsonResponse(res)
 
 
-def postview(request, id):  # GET 방식으로 입력박을 시 넘어오는 id. urls.py 에서도 path에 입력해줘야함.
-    if request.session['post_id']:
-        print(1)
-        board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
-        return render(request, 'unid/contentsdetail.html', {'board': board})
-    print(2)
-    request.session['post_id'] = id
-    print(3)
-    board = uploadContents.objects.get(contents_id=id)  # id에 해당하는 정보들
-    board.hits = board.hits + 1    # 조회수 증가
-    board.save()
-    # id 에 해당하는 정보들을 html에 넘겨줘서 사용
-    # viewwork.html 에서 {{ board.memo }} 로 내용물 확인 가능
-    return render(request, 'unid/contentsdetail.html', {'board': board})
-
 
 def searchcontents(request, category):
-    try:
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    except:
-        print("익셉2")
-        contentsPost = uploadContents.objects.order_by('-contents_id').filter(
-                                                                Q(category=category) & ~Q(isdelete="삭제")
-                                                            )
-        print(3)
-        paginator = Paginator(contentsPost,5)
-        print(paginator)
-        page_num = request.POST.get('page')
-        print(page_num)
-        try:
-            contentsPost = paginator.page(page_num)
-            print(contentsPost)
-        except PageNotAnInteger:
-            contentsPost = paginator.page(1)
-            print(contentsPost)
-        except EmptyPage:
-            contentsPost = paginator.page(paginator.num_pages)
-            print(contentsPost)
-        if request.is_ajax():
-            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
-
-        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
-
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     contentsPost = uploadContents.objects.order_by('-contents_id').filter(
                                                                 Q(category=category) & ~Q(isdelete="삭제")
                                                             )
@@ -1739,9 +1672,9 @@ def searchcontents(request, category):
         print(contentsPost)
 
     if request.is_ajax():
-        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
+        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
 
-    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
+    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
 
 
 
@@ -1782,51 +1715,12 @@ def unidAdmin(request):
         if request.session['Unid_admin']:
             rpc_url = "http://222.239.231.252:9545"
             w3 = Web3(HTTPProvider(rpc_url))
-            nidCoinContract_address = Web3.toChecksumAddress("0x6b118d2f3bf867b187bbde7b13b04b65a0f44569")
-            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
-                {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
-                 "payable": False, "stateMutability": "view", "type": "function"},
-                {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                    {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                                               {"name": "_rewards", "type": "int256"},
-                                               {"name": "_usercount", "type": "int256"}], "name": "userreward",
-                 "outputs": [], "payable": False, "stateMutability": "nonpayable", "type": "function"},
-                {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
-                 "type": "function"},
-                {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
-                 "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                    {"name": "_to", "type": "address"}, {"name": "_value", "type": "int256"}], "name": "transfer",
-                                                                                    "outputs": [], "payable": False,
-                                                                                    "stateMutability": "nonpayable",
-                                                                                    "type": "function"},
-                {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
-                 "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
-                 "type": "function"}, {
-                    "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
-                               {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
-                    "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
-                                                                                                "inputs": [
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "from",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": True,
-                                                                                                     "name": "to",
-                                                                                                     "type": "address"},
-                                                                                                    {"indexed": False,
-                                                                                                     "name": "value",
-                                                                                                     "type": "int256"}],
-                                                                                                "name": "EvtTransfer",
-                                                                                                "type": "event"}])
+            nidCoinContract_address = Web3.toChecksumAddress("0x08b131616ee311d8c3fd1e87945c597769a86797")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
             admin_account = w3.eth.coinbase
+            kk = Web3.toChecksumAddress("0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f")
+            kk_balance = ncc.functions.balanceOf(kk).call()
             admin_balance = ncc.functions.balanceOf(admin_account).call()
             allUsers = myPageInfomation.objects.all()
             allBlackList = unidBlackList.objects.all()
@@ -1837,6 +1731,8 @@ def unidAdmin(request):
             allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
 
             return render(request, 'unid/Unid_admin.html', {
+                'kk': kk,
+                'kk_b':kk_balance,
                                                             'admin_balance': admin_balance,
                                                             'admin_account': admin_account,
                                                             'allUsers': allUsers,
@@ -1869,10 +1765,11 @@ def warninguser(request):
             user=warningUser,
             reason=request.POST['reason'],
             aaa=number,
+            bbb="경고"
         )
         br.save()
         print(3)
-        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고") ).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(bbb="경고") ).values())
         print(4)
         print(warningCount)
         if warningCount >= 3:
@@ -1897,11 +1794,12 @@ def warninguser(request):
             user=warningUser,
             reason=request.POST['reason'],
             aaa = number,
+            bbb = "경고"
         )
 
 
         br.save()
-        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(result="경고")).values())
+        warningCount = len(blackReasonForBan.objects.filter( Q(user_id=warningUser.email) & Q(bbb="경고")).values())
         if warningCount >= 3:
             br = unidBlackList(
                 user=warningUser,
@@ -1924,7 +1822,7 @@ def noProblem(request):
     posts_id = request.POST['id']
     number = request.POST['number']
 
-    br = opinions.objects.filter(IDX=number).update(result="이상없음")
+    br = opinions.objects.filter(IDX=number).update(bbb="이상없음")
 
     res={'Ans':'처리되었습니다.'}
     return JsonResponse(res)
