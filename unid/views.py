@@ -57,6 +57,11 @@ def logged_in(sender, **kwargs):
 
     request.session['user_email'] = member.email
     request.session['user_name'] = member.name
+    try:
+        member.aaa
+    except:
+        pass
+    request.session['user_image'] = member.aaa
 user_logged_in.connect(logged_in, sender=User)
 
 
@@ -193,7 +198,7 @@ def privacy(request):
 
 def contentsboard(request):
     contentsboard = uploadContents.objects.all()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     context = {'contentsboard': contentsboard, 'mypage':mypage}
     return render(request, 'unid/contentsboard.html', context)
 
@@ -205,14 +210,14 @@ def mywallet(request):
     walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction').count()
     walletcount_pu = walletInFormation.objects.filter(toAccount=request.session['user_name'],type='purchase').count()
     walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange').count()
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
 
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage, 'list_pu':walletInfo_pu, 'list_ex':walletInfo_ex,'count_pu':walletcount_pu, 'count_ex':walletcount_ex})
 
 @login_required
 def transaction(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/transaction.html', {'mypage':mypage})
     else:
         from_account = request.POST['from_account']
@@ -234,7 +239,7 @@ def transaction(request):
 @login_required
 def exchange(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/exchange.html', {'mypage':mypage})
     else:
         from_account = request.POST['e_from_account']
@@ -256,7 +261,7 @@ def exchange(request):
 @login_required
 def purchase(request):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(request, 'unid/purchase.html', {'mypage':mypage})
     else:
         from_account = request.POST['p_from_account']
@@ -272,7 +277,7 @@ def purchase(request):
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
         transactionData.save()
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
 
     return render(request, 'unid/purchase.html', {})
 
@@ -333,7 +338,7 @@ def contentsdetail(request, id):
         # contents_id = uploadContents.objects.get(contents_id=id).contents_id
         # title = uploadContents.objects.get(contents_id=id).title + ".zip"
         downloadid = str(random.random())
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         return render(
             request,
             'unid/contentsdetail.html',
@@ -417,46 +422,24 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
-    try:
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    except:
-        return render(request, 'unid/contentstran.html', {
-            'populated_informations': populated_informations,
 
-            'populated_reports_lists': populated_reports_lists,
-            'populated_forlecture_lists': populated_forlecture_lists,
-            'populated_note_lists': populated_note_lists,
-            'populated_paper_lists': populated_paper_lists,
-            'populated_PPT_lists': populated_PPT_lists,
-            'populated_resume_lists': populated_resume_lists,
-            'populated_fiction_lists': populated_fiction_lists,
-            'populated_fortest_lists': populated_fortest_lists,
-            'populated_video_lists': populated_video_lists
-        })
-
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    print(mypage)
     return render(request, 'unid/contentstran.html', {
-                                                        'populated_informations': populated_informations,
-
-                                                        'populated_reports_lists': populated_reports_lists,
-                                                        'populated_forlecture_lists': populated_forlecture_lists,
-                                                        'populated_note_lists':populated_note_lists,
-                                                        'populated_paper_lists': populated_paper_lists,
-                                                        'populated_PPT_lists': populated_PPT_lists,
-                                                        'populated_resume_lists': populated_resume_lists,
-                                                        'populated_fiction_lists': populated_fiction_lists,
-                                                        'populated_fortest_lists': populated_fortest_lists,
-                                                        'populated_video_lists': populated_video_lists,
-                                                        'mypage':mypage,
-
-
-                                                    })
+                                                            'populated_informations': populated_informations,
+                                                            'populated_reports_lists': populated_reports_lists,
+                                                            'populated_forlecture_lists': populated_forlecture_lists,
+                                                            'populated_note_lists': populated_note_lists,
+                                                            'populated_paper_lists': populated_paper_lists,
+                                                            'populated_PPT_lists': populated_PPT_lists,
+                                                            'populated_resume_lists': populated_resume_lists,
+                                                            'populated_fiction_lists': populated_fiction_lists,
+                                                            'populated_fortest_lists': populated_fortest_lists,
+                                                            'populated_video_lists': populated_video_lists
+                                                        })
 
 
 def info_popular(request):
     if request.session.keys():
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         posts = Post.objects.order_by('-like_count', '-created_at')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
@@ -525,11 +508,11 @@ def infotag(request, category):
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
-                   'mypage': mypage}
+                   }
 
         return render(request, 'unid/infotag.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -546,10 +529,10 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
-                       'mypage': mypage}
+                       }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'mypage': mypage}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count}
 
     return render(request, 'unid/infotag.html', context)
 
@@ -577,7 +560,7 @@ def information(request):
 
         return render(request, 'unid/information.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
     posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
@@ -720,14 +703,14 @@ def main_detail(request, id):
         context = {'posts': posts, 'replys': replys, 'likes':likes,'images':images}
         return render(request, 'unid/main_detail.html', context)
 
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    context = {'posts': posts, 'replys': replys, 'likes': likes, 'mypage': mypage,'images':images}
+
+    context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images}
     return render(request, 'unid/main_detail.html', context)
 
 def user_detail(request, id):
     if request.method == 'GET':
         yourpage = myPageInfomation.objects.get(IDX=id)
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
         joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=yourpage.email)[:3]
@@ -886,7 +869,7 @@ def mainreply(request):
 
 def main_upload(request):
     if request.method == 'GET':
-            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
+
             return render(request, 'unid/main_upload.html', {'mypage':mypage})
     else:
         try:
@@ -1007,10 +990,6 @@ def createaccount(request):
 @login_required
 def contentsupload(request):
     if request.method == 'GET':
-        try:
-            mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        except:
-            return render(request, 'unid/contentsupload.html', {})
         return render(request, 'unid/contentsupload.html', {'mypage':mypage})
     else:  # submit으로 제출
         try:
@@ -1654,33 +1633,6 @@ def writereply(request):
 
 
 def searchcontents(request, category):
-    try:
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-    except:
-        print("익셉2")
-        contentsPost = uploadContents.objects.order_by('-contents_id').filter(
-                                                                Q(category=category) & ~Q(isdelete="삭제")
-                                                            )
-        print(3)
-        paginator = Paginator(contentsPost,5)
-        print(paginator)
-        page_num = request.POST.get('page')
-        print(page_num)
-        try:
-            contentsPost = paginator.page(page_num)
-            print(contentsPost)
-        except PageNotAnInteger:
-            contentsPost = paginator.page(1)
-            print(contentsPost)
-        except EmptyPage:
-            contentsPost = paginator.page(paginator.num_pages)
-            print(contentsPost)
-        if request.is_ajax():
-            return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
-
-        return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
-
-    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
     contentsPost = uploadContents.objects.order_by('-contents_id').filter(
                                                                 Q(category=category) & ~Q(isdelete="삭제")
                                                             )
@@ -1699,9 +1651,9 @@ def searchcontents(request, category):
         print(contentsPost)
 
     if request.is_ajax():
-        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
+        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
 
-    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'mypage': mypage})
+    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
 
 
 
