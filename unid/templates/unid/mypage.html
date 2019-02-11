@@ -60,7 +60,7 @@
 
 
     {% if mypage.aaa %}
-    <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
+    <div id="myinfo_edit_mode" style="background-image: url('/{{ mypage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
     {% else %}
     <div id="myinfo_edit_mode" style="color: ; background-size: cover; background: rgba(0, 0, 0, 0.5));">
     {% endif %}
@@ -73,7 +73,7 @@
         {% csrf_token %}
             <div id="profile-icon_edit" style="margin-top:-23px; height: 100px; padding-top:30px;">
             {% if mypage.userimage %}
-                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
+                <img id="img" style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             {% else %}
                 <img style="width:67px; height: 67px;text-align: center;" src="{% static 'unid/icon/profle-icon.png' %}">
             {% endif %}
@@ -771,6 +771,63 @@
                 $('.content_column').scrollIntoView();
             }
         });
+
+        // 프로필 이미지 미리보기
+
+        var sel_file;
+        $(document).ready(function (){
+            $("#user_image_upload").on("change", handleImgFileSelect);
+        });
+
+        function handleImgFileSelect(e){
+            var files = e.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(f){
+                if(!f.type.match("image.*")) {
+                    alert("이미지만 업로드가 가능합니다.");
+                    return;
+                }
+
+                sel_file = f;
+
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $("#img").attr("src", e.target.result);
+                }
+                reader.readAsDataURL(f);
+            });
+        };
+
+        // 배경화면 이미지 미리보기
+
+        var back_file;
+        $(document).ready(function (){
+            $("#background").on("change", handleImgFileSelect2);
+        });
+
+        function handleImgFileSelect2(p){
+            var files = p.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(c){
+                if(!c.type.match("image.*")) {
+                    alert("이미지만 업로드가 가능합니다.");
+                    return;
+                }
+
+                back_file = c;
+
+                var reader = new FileReader();
+                reader.onload = function(p){
+                    <!--$("#myinfo_edit_mode").attr("style","background-image:url('/"+p.target.result+"')");-->
+                    var imageUrl = p.target.result
+                    $('#myinfo_edit_mode').css('background-image', 'url(' + imageUrl + ')');
+
+                }
+                reader.readAsDataURL(c);
+            });
+        };
     });
     /* var kk = "{{ replies }}" ;
     console.log(kk); */
