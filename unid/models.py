@@ -180,6 +180,10 @@ class Post(models.Model):
     category_path = models.CharField(max_length=250, blank=True, null=True)
     isdelete = models.CharField(max_length=250, blank=True, null=True)
     reward_date = models.DateTimeField(blank=True, null=True)
+    replymentcount = models.IntegerField(null=True)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
 
 class postImage(models.Model):
     IDX = models.AutoField(primary_key=True)

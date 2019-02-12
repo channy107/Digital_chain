@@ -883,8 +883,22 @@ def mainreply(request):
                            )
 
     br.save()
+    board = Post.objects.get(posts_id=request.POST['id'])
+    replycount = board.replymentcount
+    if replycount:
+        board.replymentcount = board.replymentcount + 1
+        board.save()
+    else:
+        board.replymentcount = 1
+        board.save()
 
-    res = {"Ans": "댓글 작성이 완료되었습니다."}
+    created_at = replyForPosts.objects.order_by('-posts_id').filter(posts_id=id).values()[0]['created_at']
+
+    res = {"Ans": "댓글 작성이 완료되었습니다.",
+           "user": user.email,
+           "created_at": created_at,
+           "replytext": request.POST['reply']
+           }
     return JsonResponse(res)
 
 def main_upload(request):
