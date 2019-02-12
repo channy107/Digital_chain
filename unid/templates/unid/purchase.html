@@ -74,8 +74,13 @@
         }
     </script>
 
+<script> // back 버튼 방지
+    history.pushState(null, document.title, location.href);
+    window.addEventListener('popstate', function(event) {
+        history.pushState(null, document.title, location.href); 
+    });
 
-
+</script>
 
 <script>
     var WEB3 = require('web3');
@@ -583,15 +588,6 @@
                       }
                   }
           </script>
-
-<!-- <script>
-
-let test = $('#coinone_NID').val();
-console.log(test)
-
-</script> -->
-
-
 
 </body>
 

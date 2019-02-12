@@ -327,6 +327,7 @@ xpopup
     font-weight: bold;
     float: right;
 }
+
 #link {color: #E45635;display:block;font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;text-align:center; text-decoration: none;}
 #link:hover {color: #CCCCCC}
 
@@ -507,10 +508,10 @@ xpopup
             <div class="form-group">
                 <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
                 <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;"value="파일 첨부"readonly/>
+                <input class="form-control col-sm-2 files-button buttonColor" style="text-align:center;"value="파일 첨부"readonly/>
                 <ul class="str_ul">
                     <li class="tip_str">
-                    .hwp, .ppt(x), .docx, .xlsx, .pdf 형식의 파일만 가능합니다.
+                    .hwp, .ppt(x), .doc(x), .xlsx, .pdf 형식의 파일만 가능합니다.
                     </li>
                     <li class="tip_str">
                     이미 등록된 콘텐츠는 업로드하실 수 없습니다.(최대 5개)
@@ -522,8 +523,8 @@ xpopup
             <div class="form-group">
                 <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
                 <input class="form-control col-sm-7 files2"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button1" type="button" id="reupload" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
-                <input class="form-control col-sm-1 files-button1" type="button" id="uploadbutton" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="중복검사" readonly/>
+                <input class="form-control col-sm-2 files-button1 buttonColor pointeffect" type="button" id="reupload" value="다시 올리기"readonly/>
+                <input class="form-control col-sm-1 files-button1 buttonColor pointeffect" type="button" id="uploadbutton" value="중복검사" readonly/>
                 <input class="form-control col-sm-1 files-button1" type="button" id="after_test" name="after_test" style="background-color: green;color: white;text-align:center;cursor: pointer;" readonly/>
                 <ul class="str_ul">
                     <li class="tip_str" style="color: #E64C3C;" id="before_confirm" name="before_confirm">
@@ -551,7 +552,7 @@ xpopup
                 <div class="form-group">
                     <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;" value="파일 첨부"readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
                         .jpg, .png 형식의 파일만 가능합니다.
@@ -565,7 +566,7 @@ xpopup
                 <div class="form-group">
                     <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: #E64C3C;color: white;text-align:center;cursor: pointer;" value="다시 올리기"readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
                 </div>
             </div>
             <div class="form-group">
@@ -726,7 +727,7 @@ xpopup
                                 </textarea>
                                 <ul class="cd-buttons">
                                     <li><input class="cd-popup-no form-control pointeffect" type="button"  style="background-color: #B2B2B2; color: white;" value="동의하지않습니다." /></li>
-                                    <li><input class="cd-popup-yes1 form-control" type="button" style="background-color: #E64C3C; color: white;" value="동의합니다." disabled/></li>
+                                    <li><input class="cd-popup-yes1 form-control beforeScroll" type="button" value="동의합니다." disabled/></li>
                                 </ul>
                             </div>
                         </div> <!-- cd-popup-container -->
@@ -734,7 +735,7 @@ xpopup
                 </div>
             </div>
             <div class="form-group" align="center">
-                <input type="button" class="cd-popup-trigger form-control col-sm-2 pointeffect" name="enrollcontents" id="enrollcontents" style="background-color: #E64C3C; float: inherit;" value="콘텐츠 등록" readonly/>
+                <input type="button" class="cd-popup-trigger form-control col-sm-2 buttonColor pointeffect" name="enrollcontents" id="enrollcontents" style="float: inherit;" value="콘텐츠 등록" readonly/>
             </div>
             <div class="cd-popup" role="alert">
                 <div class="cd-popup-container">
@@ -825,6 +826,8 @@ xpopup
             if($('.contracttext').scrollTop() >= 700) {
                 $('.cd-popup-yes1').addClass('pointeffect');
                 $('.cd-popup-yes1').removeAttr("disabled");
+                $('.cd-popup-yes1').removeClass("beforeScroll");
+                $('.cd-popup-yes1').addClass("buttonColor");
             }
         });
         $('.cons').on('click', function(event){
@@ -883,7 +886,7 @@ xpopup
             console.log($('#user_preview_files').get(0).files);
             var fileee = $('#user_preview_files').get(0).files[0]['name'];
             var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
-            const extendArray = ['.jpg', '.png'];
+            const extendArray = ['.jpg', '.png', '.jpeg];
             console.log(fileee);
             for (var i = 0; i < upload_files.length; i++) {
                 kkk = $('#user_preview_files').get(0).files[i]['name'];
@@ -1179,10 +1182,22 @@ xpopup
             }
 
         });
-         $('.cd-popup-yes').on('click', function() {
+         $('.cd-popup-yes').on('click', function(event) {
              $('.cd-popup').removeClass('is-visible');
              $('.cd-popup3').addClass('is-visible');
-         });
+             $('#nav1').click(function () {return false;});
+             $('#nav2').click(function () {return false;});
+             $('#nav4').click(function () {return false;});
+             $('#nav3').click(function () {return false;});
+             $('.navbar-brand').click(function () {return false;});
+            if (event.which=='8') {
+
+                alert('업로드 중에는 뒤로 돌아가실 수 없습니다.')
+
+                return false;
+            }
+        });
+
     });
 
 </script>

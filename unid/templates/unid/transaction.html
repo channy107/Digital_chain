@@ -190,73 +190,17 @@
                         <th scope="col"></th>
                       </tr>
                     </thead>
+                    {% for item in list %}
                     <tbody>
                       <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>인준희</td>
-                        <td><div id="address-clip1"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip1">복사</button></td>
+                        <th scope="row">{{item.transactiondate}}</th>
+                        <td>{{item.toAccount}}</td>
+                        <td><div id="address-clip"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip">복사</button></td>
                       </tr>
                     </tbody>
+                    {% endfor %}
                   </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>양홍주</td>
-                        <td><div id="address-clip2"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip2">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>임헌찬</td>
-                        <td><div id="address-clip3"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip3">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>정용은</td>
-                        <td><div id="address-clip4"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip4">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
              <div class="modal-footer">
              </div>
          </div>
@@ -543,22 +487,12 @@
 
         <script> // clipboard copy
 
-        let clipboard1 = "0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f";
-        let clipboard2 = "0x9d5a110dE1E9F61712656009A15206AC3a1333cF";
-        let clipboard3 = "0x2EE3598eC0172a57Fd50cF68debFFFdbAB53162e";
-        let clipboard4 = "0x24ca244b602861a72277f111aa6deb597f292aca";
+        let clipboard = "{{ request.session.user_account }}";
 
-        $('#address-clip1').empty();
-        $('#address-clip1').append(clipboard1);
 
-        $('#address-clip2').empty();
-        $('#address-clip2').append(clipboard2);
+        $('#address-clip').empty();
+        $('#address-clip').append(clipboard);
 
-        $('#address-clip3').empty();
-        $('#address-clip3').append(clipboard3);
-
-        $('#address-clip4').empty();
-        $('#address-clip4').append(clipboard4);
 
         function copyToClipboard(val) {
         var t = document.createElement("textarea");
@@ -570,24 +504,20 @@
         }
 
 
-        $('#clip1').click(function() {
-        copyToClipboard(`${clipboard1}`);
+        $('#clip').click(function() {
+        copyToClipboard(`${clipboard}`);
         alert('주소가 복사되었습니다.');
         });
-        $('#clip2').click(function() {
-        copyToClipboard(`${clipboard2}`);
-        alert('주소가 복사되었습니다.');
-        });
-        $('#clip3').click(function() {
-        copyToClipboard(`${clipboard3}`);
-        alert('주소가 복사되었습니다.');
-        });
-        $('#clip4').click(function() {
-        copyToClipboard(`${clipboard4}`);
-        alert('주소가 복사되었습니다.');
-        });
+
         </script>
 
+<script> // back 버튼 방지
+            history.pushState(null, document.title, location.href);
+            window.addEventListener('popstate', function(event) {
+                history.pushState(null, document.title, location.href); 
+            });
+
+</script>
 
 <script>   // 니드 코인 솔리디티 코드
            var WEB3 = require('web3');

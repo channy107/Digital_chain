@@ -165,9 +165,9 @@
                  <span class="icon"><i class="fa fa-search"></i></span>
                  <form method="get" action="/search/" class="autocomplete-me" autocomplete="off">
                      {% if query %}
-                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown" data-toggle="dropdown" value="{{ query }}" placeholder="Search..." autocomplete="off" />
+                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown reject" data-toggle="dropdown" value="{{ query }}" placeholder="Search..." autocomplete="off" />
                      {% else %}
-                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown" data-toggle="dropdown" placeholder="Search..." autocomplete="off" />
+                     <input type="text" name="q" id="id_q" class="autocomplete-me dropdown reject" data-toggle="dropdown" placeholder="Search..." autocomplete="off" />
                      {% endif %}
                      <ul id="id_models" style="display: none;">
                          <li>
@@ -207,7 +207,7 @@
                     {% endif %}
                     </a>
                     <div class="dropdown-menu" id="dropdown">
-                        <a class="dropdown-item twinkle-grey" href="#">{{ mypage.name }}님</a>
+                        <a class="dropdown-item twinkle-grey" href="#">{{ request.session.user_name }}님</a>
                         <hr>
                         <a class="dropdown-item twinkle-grey" href="/unid/mypage" id="go-mypage">마이페이지</a>
                         <a class="dropdown-item twinkle-grey" href="/unid/mywallet" id="go-mywallet">내지갑</a>
@@ -281,4 +281,5 @@
         <span>Copyright by Unid. All rights reserved. Since 2019</span>
     </div>
 </footer>
+
 </html>

@@ -40,16 +40,34 @@
                     <option title="Combo 5">기타</option>
                 </select>
             </div>
+             <div id="user_image_before">
 
-             <div id="user_file_before">
-                <div id="user_file_over">
-                    <input type="file"  id="user_files" name="user_files" class="user_files" title="파일찾기" multiple/>
-                </div>
-            </div>
+                    <input type="file"  id="user_file" name="user_files" class="user_file" title="파일찾기" multiple/>
             <div class="form-group">
-                <label for="inputfiles" class="col-sm-2" id="inputfiles">파일 업로드</label>
-                <input class="form-control col-sm-8 files1"  style="background-color: white;" id="inputfiles" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button" style="background-color: red;color: white;text-align:center;"value="파일 첨부"readonly/>
+                <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;"value="파일 첨부"readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str">
+                     .jpg, .png 형식의 파일만 가능합니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                    </li>
+                </ul>
+            </div>
+            </div>
+            <div id="user_image_after">
+
+            <div class="form-group">
+                <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_after" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: #E64C3C;color: white;text-align:center;" value="다시 올리기" readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str">
+                     .jpg, .png 형식의 파일만 가능합니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                    </li>
+                </ul>
+            </div>
             </div>
             <div class="text-group">
                 <label for="inputtext">본문 내용</label>
@@ -58,15 +76,13 @@
                     <li class="byte_str"><span class="col_red" id="body_byte">0</span>자</li>
                 </ul>
             </div>
-
-
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
-                <input class="form-control col-sm-6 input-lg shortput" id="inputags" name="tags" type="text" placeholder="예) #대기업, #취업, #성공적"/>
+                <input class="form-control col-sm-6 input-lg shortput" id="inputags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
 
                 <ul class="str_ul">
                     <li class="tip_str">
-                    태그를 입력해주세요. 쉼표로 구분(,) 최대 3개
+                    태그를 입력해주세요.
                     </li>
                 </ul>
             </div>
@@ -83,9 +99,9 @@
                         </div>
 
                         <ul class="cd-buttons">
+                            <li><a href="#0" class="cd-popup-no">No</a></li>
                             {% comment %} <li><button type="submit" class="cd-popup-yes">Yes</button></li> {% endcomment %}
                             <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
-                            <li><a href="#0" class="cd-popup-no">No</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
@@ -93,8 +109,7 @@
 
             </div>
          </form>
-
-
+</div>
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
@@ -128,6 +143,24 @@
                 $('.cd-popup').removeClass('is-visible');
             }
 
+        });
+
+        $('#user_file').on('change', function(){
+            let upload_files = $('#user_file').get(0).files
+            var fileee = $('#user_file').get(0).files[0]['name'];
+            console.log(fileee);
+            if ( upload_files.length > 5 ) {
+                alert("최대 5개까지만 등록할 수 있습니다.");
+            } else {
+                $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_image_before").hide();
+                $("#user_image_after").show();
+            }
+        });
+
+        $('#reupload_preview').on('click', function(){
+            $("#user_image_after").hide();
+            $("#user_image_before").show();
         });
 
     });
