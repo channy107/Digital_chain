@@ -61,7 +61,7 @@ def logged_in(sender, **kwargs):
         member.aaa
     except:
         pass
-    request.session['user_image'] = member.aaa
+    request.session['user_image'] = member.userimage
 user_logged_in.connect(logged_in, sender=User)
 
 
@@ -155,7 +155,8 @@ def mypage(request):
 
             myPageInfomation.objects.filter(email=request.session['user_email']).update(
             aaa = "media/imagesForUserProfile" + "/" + background.name)
-
+            member = myPageInfomation.objects.get(email=request.session['user_email'])
+            request.session['user_image'] = member.userimage
 
         # user_profiles = myPageInfomation.objects.values('name')
         # # if user_profiles:
@@ -307,13 +308,17 @@ def purchase(request):
 def contentsdetail(request, id):
     contents = uploadContents.objects.get(contents_id=id)
     replys = replysForContents.objects.filter(contents_id=id)
+    print(contents.writeremail)
     try:
         request.session['post_id']
     except KeyError as e:
         request.session['post_id'] = id
-        contents.hits = contents.hits + 1  # 조회수 증가
-        contents.save()
-    if request.session['post_id'] != id:
+        if contents.writeremail == request.session['user_email']:
+            pass
+        else:
+            contents.hits = contents.hits + 1  # 조회수 증가
+            contents.save()
+    if request.session['post_id'] != id and contents.writeremail != request.session['user_email']:
         request.session['post_id'] = id
         contents.hits = contents.hits + 1  # 조회수 증가
         contents.save()
@@ -1294,7 +1299,7 @@ def test_validfile(request):
     filehashdatas = []
     filesize = []
     already_uploaded_list = []
-    valid_extendname = ['.hwp', '.ppt', '.docx', '.pdf', '.xlsx', '.pptx']
+    valid_extendname = ['.hwp', '.ppt', '.docx', '.doc', '.pdf', '.xlsx', '.pptx']
     print(3)
     contents_dir = "uploadfiles/" + number + "/"
     for upload_file in upload_files:  # 다중 파일 업로드
@@ -1736,8 +1741,6 @@ def unidAdmin(request):
             ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
 
             admin_account = w3.eth.coinbase
-            kk = Web3.toChecksumAddress("0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f")
-            kk_balance = ncc.functions.balanceOf(kk).call()
             admin_balance = ncc.functions.balanceOf(admin_account).call()
             allUsers = myPageInfomation.objects.all()
             allBlackList = unidBlackList.objects.all()
@@ -1748,8 +1751,7 @@ def unidAdmin(request):
             allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
 
             return render(request, 'unid/Unid_admin.html', {
-                'kk': kk,
-                'kk_b':kk_balance,
+                                                            'allMoneyTrade': allMoneyTrade,
                                                             'admin_balance': admin_balance,
                                                             'admin_account': admin_account,
                                                             'allUsers': allUsers,

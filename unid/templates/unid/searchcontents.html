@@ -134,7 +134,14 @@
 <script>
 
     jQuery(document).ready(function($){
+        $('#nav1').unbind("click");
+        $('#nav2').unbind("click");
+        $('#nav4').unbind("click");
+        $('#nav3').unbind("click");
+        $('#id_q').unbind("click");
+        $('.navbar-brand').unbind("click");
         $('#nav2').addClass('visible-place');
+        $('#id_q').attr('disabled');
 
 
         $('#callmorepost').click(function(){
