@@ -456,7 +456,7 @@
                 <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
                 <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
                 <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
-                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
+                    <span id="cal_for_rewards" style="color: #2fcc71;">1000</span>
                     <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
                 </div>
                     <div class="row_for_table" style="width:95%; ">
@@ -546,6 +546,16 @@
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+
+    $("#change_user_name").keypress(function(e) {
+
+        if (e.keyCode == 13){
+            checkForm();
+        }
+    });
+
+
+
     function checkForm() {
         var form = document.user_profile_edit_form;
         var nickname = document.user_profile_edit_form.name;
@@ -721,20 +731,14 @@
                         $("#alert").css("color", "green");
                         //아이디가 존할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
                         $("#change_user_name").css("border", "2px solid green")
-                        $("#change_user_name").keyup(function(e){
-                            if(e.keyCode == 13){
-                            document.getElementById('user_profile_edit_form').submit();
-                            }
-                        });
-                        $("#change_user_profile").keyup(function(e){
-                            if(e.keyCode == 13){
-                            document.getElementById('user_profile_edit_form').submit();
-                            }
-                        });
+
                     }
                 },
             });
         });
+
+
+
 
         $('#change_user_name').on('keyup', function(){
             // 남은 글자 수를 구한다.
