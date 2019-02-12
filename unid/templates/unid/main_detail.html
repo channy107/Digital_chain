@@ -333,77 +333,31 @@ xpopup
 <div class="container1">
     <!-- contents InFo -->
     <div class="rows">
-        {% if request.session.user_email == contents.writeremail_id %}
-        <div class="test">
-            <button type="button" class="postdelete">삭제</button>
-        </div>
-        <div class="cd-popup1" role="alert">
-            <div class="cd-popup-container1">
-                <div class="popuprow1">
-                    <h4>게시글을 삭제하시겠습니까?</h4>
-                </div>
-
-                <ul class="cd-buttons">
-                    <li><a href="#0" class="cd-popup-no">No</a></li>
-                    <li><a href="#0" class="cd-popup-delete-yes">Yes</a></li>
-                </ul>
-                <a href="#0" class="cd-popup-close img-replace"></a>
-            </div> <!-- cd-popup-container -->
-        </div> <!-- cd-popup -->
-        {% endif %}
-        <div class="opinion">
-            <input type="button" value="의견보내기">
-        </div>
-        <div class="cd-popup2" role="alert">
-            <div class="cd-popup-container2">
-                <div class="popuprow1">
-                    <h4>이 게시물에 대한 의견 보내기</h4>
-                    회원님의 소중한 의견은 Unid에서 문제를 파악하는데 사용됩니다.
-                </div>
-                <div class="popupcategory">
-                    <label for="inputcategory" class="col-sm-3" >카테고리</label>
-                    <select class="form-control col-sm-7" id="inputcategory" name="category">
-                        <option title="Combo 1">음란물</option>
-                        <option title="Combo 2">혐오발언</option>
-                        <option title="Combo 3">폭력</option>
-                        <option title="Combo 4">허위정보</option>
-                        <option title="Combo 5">저작권 위반</option>
-                        <option title="Combo 5">기타</option>
-                    </select>
-                    <input type="text" class="col-sm-11 form-control" id="exception" placeholder="의견을 입력해주세요">
-                </div>
-                <ul class="cd-buttons">
-                    <li><a href="#0" class="cd-popup-no">돌아가기</a></li>
-                    <li><a href="#0" class="cd-popup-postopinion">보내기</a></li>
-                </ul>
-                <a href="#0" class="cd-popup-close img-replace"></a>
-            </div> <!-- cd-popup-container -->
-        </div> <!-- cd-popup -->
         <div class="row">
-            <div class="main-info">
-                <div class="category">
+            <div class="contents-info1">
+                <div class="contents-kind">
                     <img src="/{{ posts.category_path }}" width="75" height="25">
                 </div>
-                <h2 align="center">
-                    <b> {{posts.title}}</b>
-                </h2>
+                <div align="center" class="contents-title">
+                    {{posts.title}}
+                </div>
                 <hr size="10" align="center" width=20% noshade="noshade" />
-                <p align="center" size ="5">
-                    {% if posts.user.name == mypage.name %}
-                    <a href="/unid/mypage">
-                    {% else %}
-                    <a href="{% url 'user_detail' posts.user.IDX %}">
-                    {% endif %}
-                        {% if posts.user.userimage %}
-                            <img class="detail_img" src="/{{ posts.user.userimage }}" border="0" width="35" height="35" style="border-radius: 25px;">
-                        {% else %}
-                            <img class="detail_img" src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="35" height="35">
-                        {% endif %}
-                        {{ posts.user_id }}&nbsp&nbsp
-                    </a>
-                    {{posts.created_at|timesince}}
-                </p>
-
+                <div class="infobox"  align="center">
+                    <div class="writerinfo">
+                        <a href="{% url 'user_detail' posts.user.IDX %}">
+                            <p align="center" size="5" style="color: black;">
+                                {% if posts.user.userimage %}
+                                <img src="/{{ contents.user.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.user.name }}
+                                {% else %}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ post.user.name }}
+                                {% endif %}
+                            </p>
+                        </a>
+                    </div>
+                    <div class="dateinfo">
+                        {{ posts.created_at |timesince }}전
+                    </div>
+                </div>
             </div>
         </div>
         <!-- preview -->
@@ -419,68 +373,165 @@ xpopup
             </div>
         </div>
 
-
-
         <div class="row">
             <div class="contents-tag">
                 <div>
                     <img src="{% static 'unid/icon/tag-icon.png' %}" border="0" width="20" height="20">
                     <span>{{ posts.tags }}</span>
                 </div>
-
             </div>
-
         </div>
 
         <!-- replyment -->
         <div class="row">
             <div class="contents-reply">
-                <div class="detail-like">
-                <span class="main-voting"><button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}"><img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"></button><span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}</span></span>
-
-            <a class="nav-links dropdown-toggle" id="like-list" data-toggle="dropdown">
-
-            <div class="dropdown-menu">
-                {% for like in likes %}
-                <a class="dropdown-item">{{like.liked_users}}</a>
-                {% endfor %}
-            </div>
-
-             <span class="main-voting">
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20"> <span class="rewards" id="reward-{{posts.posts_id}}">{{posts.rewards}}</span></span>
-
-                <img class="detail-reply-img" src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">4</a>
-                 </div>
-                <hr size="5" align="left" width=670px noshade="noshade" style="color: #b3afaf54;"/>
-                <div class="reply-list">
-                    {% for reply in replys %}
-                    <div class="reply">
-                        <div class="reply-picture">
-                            <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="32" height="59">
-                        </div>
-                        <div class="reply-id">
-                            <span>{{ reply.user }}</span>
-                        </div>
-                        <div class="reply-date">
-                            <span>{{ reply.created_at }}</span>
-                        </div>
-                        <div class="reply-text">
-                            {{ reply.replytext }}
-                        </div>
+                <div class="icon-boxs">
+                    <div class="icon-box">
+                        <span class="main-voting">
+                            <button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">                              </button>
+                            <span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}
+                            </span>
+                        </span>
                     </div>
-                    {% endfor %}
+
+                <div class="icon-box">
+                    <a class="nav-links dropdown-toggle" id="like-list" data-toggle="dropdown">
+                    </a>
+
+                    <div class="dropdown-menu">
+                        {% for like in likes %}
+                        <a class="dropdown-item">
+                            {{like.liked_users}}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            <div class="icon-box">
+             <span class="main-voting">
+                 <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="20" height="20">
+                 <span class="rewards" id="reward-{{posts.posts_id}}">{{posts.rewards}}
+                 </span>
+             </span>
+             <span class="main-voting">
+                <span class="main-voting">
+                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">{{posts.replymentcount}}</span></span>
+             </span>
+
+            </div>
+            </div>
+            {% if request.session.user_email == posts.user_id %}
+                <div class="test icon-box">
+                    <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
+                    <a href="{% url 'postmodify' contents.contents_id %}">
+                        <img src="{% static 'unid/icon/icons-수정.png' %}" width="75" height="30" >
+                    </a>
+                    <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">
+                </div>
+                {% else %}
+                <div class="icon-box" style="position: relative;left: 160px;">
+                    <a href="">
+                        <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="cd-popup2" role="alert">
+                    <div class="cd-popup-container2">
+                        <div class="popuprow1">
+                            <h4>이 게시물에 대한 의견 보내기</h4>
+                            회원님의 소중한 의견은 Unid에서 문제를 파악하는데 사용됩니다.
+                        </div>
+                        <div class="popupcategory">
+                            <label for="inputcategory" class="col-sm-3" >카테고리</label>
+                            <select class="form-control col-sm-7" id="inputcategory" name="category">
+                                <option title="Combo 1">음란물</option>
+                                <option title="Combo 2">혐오발언</option>
+                                <option title="Combo 3">폭력</option>
+                                <option title="Combo 4">허위정보</option>
+                                <option title="Combo 5">저작권 위반</option>
+                                <option title="Combo 5">기타</option>
+                            </select>
+                            <input type="text" class="col-sm-11 form-control" id="exception" placeholder="의견을 입력해주세요">
+                        </div>
+                        <ul class="cd-buttons">
+                            <li class="pointeffect"><a href="#0" class="cd-popup-no111">돌아가기</a></li>
+                            <li class="pointeffect"><a href="#0" class="cd-popup-postopinion">보내기</a></li>
+                        </ul>
+                        <a href="#0" class="cd-popup-close img-replace"></a>
+                    </div> <!-- cd-popup-container -->
+                </div> <!-- cd-popup -->
+
+                <div class="cd-popup1" role="alert">
+                    <div class="cd-popup-container1">
+                        <div class="popuprow1">
+                            <h4>게시글을 삭제하시겠습니까?</h4>
+                        </div>
+
+                        <ul class="cd-buttons">
+                            <li><a href="#0" class="cd-popup-no">No</a></li>
+                            <li><a href="#0" class="cd-popup-delete-yes">Yes</a></li>
+                        </ul>
+                        <a href="#0" class="cd-popup-close img-replace"></a>
+                    </div> <!-- cd-popup-container -->
                 </div>
             </div>
         </div>
+                <!-- cd-popup -->
+         <div class="row">
+            <div class="reply-list">
+                {% for reply in replys %}
+                <div class="reply">
+                    <div class="reply-picture">
+                        {% if reply.user.name == mypage.name %}
+                        <a href="/unid/mypage">
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.user.IDX %}">
+                        {% endif %}
+                            {% if reply.user.userimage %}
+                                <img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
+                            {% else %}
+                                <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="reply-id">
+                        {% if reply.user.name == mypage.name %}
+                        <a href="/unid/mypage" style="color:black">
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
+                        {% endif %}
+                            {{ reply.user_id }}
+                        </a>
+                    </div>
+                    <div class="reply-date">
+                        {{ reply.created_at }}
+                    </div>
+                    <div class="reply-text">
+                        {{ reply.replytext }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
         <div class="row">
+            {% if request.session.user_email %}
+            <form class="input-reply">
+                <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="댓글을 남겨보세요!"></textarea>
+                <input type="button" class="form-control col-sm-2 replybutton pointeffect" value="댓글작성" id="inputreply" repletstyle="margin:0 0 0 600px;">
+            </form>
+            {% else %}
             <form class="input-reply">
                 <textarea rows="5" cols="90" class="form-control" id="inputreplytext" placeholder="유니드계정으로 로그인하고 댓글을 입력해보세요!"></textarea>
-
-                <input type="button" class="form-control col-sm-2 replybutton" value="댓글작성" id="inputMainreply" repletstyle="margin:0 0 0 600px;">
+                <a href="/unid/login">
+                    <input type="button" class="form-control col-sm-2 replybutton pointeffect" value="로그인" id="inputreply" repletstyle="margin:0 0 0 600px;">
+                </a>
             </form>
+            {% endif %}
         </div>
     </div>
 </div>
+
 
 
 
@@ -706,9 +757,15 @@ xpopup
             }
 
         });
-        $('#inputMainreply').on('click', function() {
+        $('#inputreply').on('click', function() {
+            var isUser = "{{ request.session.user_email }}";
+            if ( !isUser ) {
+                alert("로그인이 필요합니다");
+                location="{% url 'login' %}"
+            }
             var reply = $('#inputreplytext').val();
             var posts_id = {{ posts.posts_id }};
+            console.log(posts_id)
             $.ajax({
                 type: 'POST',
                 url: '../mainreply/',
@@ -719,44 +776,32 @@ xpopup
                     },
                 success : function(res) {
                     alert(res.Ans);
-                    location="{% url 'main_detail' posts.posts_id %}"
+                    var user= res.user;
+                    var created_at = res.created_at;
+                    var replytext= res.replytext;
+                    $('#inputreplytext').val("");
+                    $('.reply-list').append(`
+                                       <div class="reply">
+                                            <div class="reply-picture">
+                                                <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
+                                            </div>
+                                            <div class="reply-id">
+                                                ${user}
+                                            </div>
+                                            <div class="reply-date">
+                                                ${created_at}
+                                            </div>
+                                            <div class="reply-text">
+                                                ${replytext}
+                                            </div>
+                                        </div>
+                                `);
+
                 }
             });
         });
 
     });
-
-    var WEB3 = require('web3');
-    var web3 = new WEB3();
-    web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-
-    var contentsmasterContract = web3.eth.contract([{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
-
-
-    let cc = contentsmasterContract.at( "0xbf5f1204ba8ee3bc0096459e9b80099d4fee2a7a" );
-
-    var contentsContract = web3.eth.contract([{"constant":false,"inputs":[],"name":"countUp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getDownloadCount","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsPrice","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"price","type":"uint32"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"count","type":"uint32"}],"name":"EventCountUp","type":"event"}]);
-
-    $(function() {
-        $('#enrollyes').click(function() {
-            let contentsprice = $('#inputprice').val();
-            let contentsname = $('#user_files').val();
-            cc.addContents (
-                contentsname,
-                contentsprice,
-                { from: web3.eth.coinbase, gas: 1000000 },
-                function(err, res) {
-                    if (!err) {
-                        console.log(res);
-                    } else {
-                        console.error(err);
-                    }
-                }
-            );
-        });
-    });
-
 </script>
-
 {% endblock %}
 
