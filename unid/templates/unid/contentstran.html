@@ -32,7 +32,11 @@
             {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
+                    {% if list.user.name == mypage.name %}
+                    <a href="/unid/mypage">
+                    {% else %}
                     <a href="{% url 'user_detail' list.user.IDX %}">
+                    {% endif %}
                         <li>
                             {% if list.user.userimage %}
                             <img src="/{{ list.user.userimage }}">

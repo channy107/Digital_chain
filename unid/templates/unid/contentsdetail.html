@@ -798,14 +798,26 @@ xpopup
                 {% for reply in replys %}
                 <div class="reply">
                     <div class="reply-picture">
-                        {% if reply.writeremail.userimage %}
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;"></a>
+                        {% if reply.writeremail.name == mypage.name %}
+                        <a href="/unid/mypage">
                         {% else %}
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}"><img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30"></a>
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}">
                         {% endif %}
+                            {% if reply.writeremail.userimage %}
+                                <img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
+                            {% else %}
+                                <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
+                            {% endif %}
+                        </a>
                     </div>
                     <div class="reply-id">
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">{{ reply.writeremail_id }}</a>
+                        {% if reply.writeremail.name == mypage.name %}
+                        <a href="/unid/mypage" style="color:black">
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
+                        {% endif %}
+                            {{ reply.writeremail_id }}
+                        </a>
                     </div>
                     <div class="reply-date">
                         {{ reply.created }}

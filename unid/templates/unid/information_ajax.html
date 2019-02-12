@@ -12,7 +12,11 @@ button.votings-{{page_num}} {
     {% for info in posts %}
     <div class="popular-row">
         <ul class="row-top">
+            {% if info.user.name == mypage.name %}
+            <a href="/unid/mypage">
+            {% else %}
             <a href="{% url 'user_detail' info.user.IDX %}">
+            {% endif %}
                 <li>
                     {% if info.user.userimage %}
                     <img src="/{{ info.user.userimage }}">
@@ -58,7 +62,7 @@ button.votings-{{page_num}} {
             </li>
             <li>
                 <span class="main-voting">
-                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">4</span></span>
+                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">{{info.replymentcount}}</span></span>
             </li>
         </ul>
     </div>

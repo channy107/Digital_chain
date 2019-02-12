@@ -12,25 +12,37 @@ button.votings-{{page_num}} {
 {% for info in posts %}
      <div class="popular-row">
           <ul class="row-top">
-                  <a href="{% url 'user_detail' info.user.IDX %}">
-                        <li>
-                            {% if info.user.userimage %}
-                            <img src="/{{ info.user.userimage }}">
-                            {% else %}
-                            <img src="{% static 'unid/icon/profle-icon.png' %}">
-                            {% endif %}
-                        </li>
-                        <li>
-                            {{ info.user.email }}
-                        </li>
-                  </a>
-                        <li>
-                            ·         {{ info.created_at|timesince }}전
-                        </li>
-                        <li>
-                            <img src="/{{ info.category_path }}" width="75" height="25">
-                        </li>
-                    </ul>
+              {% if info.user.name == mypage.name %}
+              <a href="/unid/mypage">
+              {% else %}
+              <a href="{% url 'user_detail' info.user.IDX %}">
+              {% endif %}
+                    <li>
+                        {% if info.user.userimage %}
+                        <img src="/{{ info.user.userimage }}">
+                        {% else %}
+                        <img src="{% static 'unid/icon/profle-icon.png' %}">
+                        {% endif %}
+                    </li>
+                    <li>
+                    {{ info.user.email }}
+                    </li>
+              </a>
+                    <li>
+                        ·         {{ info.created_at|timesince }}전
+                    </li>
+                    <li>
+                        {% if info.category == "학교정보" %}
+                            <span>{{ info.category }}</span>
+                        {% elif info.category == "학교주변리뷰" %}
+                            <span>{{ info.category }}</span>
+                        {% elif info.category == "취업정보" %}
+                            <span>{{ info.category }}</span>
+                        {% else %}
+                            <span>{{ info.category }}</span>
+                        {% endif %}
+                    </li>
+                </ul>
                     <div class="row-picture">
                         <a href="{% url 'main_detail' info.posts_id %}">
                             {% if info.file_path %}
@@ -58,7 +70,7 @@ button.votings-{{page_num}} {
                     </li>
                     <li>
                         <span class="main-voting">
-                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">4</span></span>
+                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">{{info.replymentcount}}</span></span>
                     </li>
                     </ul>
                 </div>

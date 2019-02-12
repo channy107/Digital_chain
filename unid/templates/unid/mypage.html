@@ -60,7 +60,7 @@
 
 
     {% if mypage.aaa %}
-    <div id="myinfo_edit_mode" style="background: url('/{{ mypage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
+    <div id="myinfo_edit_mode" style="background-image: url('/{{ mypage.aaa }}'); background: rgba(0, 0, 0, 0.5)); background-size: cover;">
     {% else %}
     <div id="myinfo_edit_mode" style="color: ; background-size: cover; background: rgba(0, 0, 0, 0.5));">
     {% endif %}
@@ -73,7 +73,7 @@
         {% csrf_token %}
             <div id="profile-icon_edit" style="margin-top:-23px; height: 100px; padding-top:30px;">
             {% if mypage.userimage %}
-                <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
+                <img id="img" style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             {% else %}
                 <img style="width:67px; height: 67px;text-align: center;" src="{% static 'unid/icon/profle-icon.png' %}">
             {% endif %}
@@ -132,16 +132,22 @@
                     {% for article in articles %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if article.user.userimage %}
-                                <img src="/{{ article.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ article.user.name }}
-                            </li>
+                            {% if article.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' article.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if article.user.userimage %}
+                                    <img src="/{{ article.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ article.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ article.created_at|timesince }}전
                             </li>
@@ -166,10 +172,10 @@
                         </ul>
                         <ul class="row-bottom">
                             <li>
-                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.like_count }}
+                                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.like_count }}
                             </li>
                             <li>
-                                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.rewards }}
+                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.rewards }}
                             </li>
                             <li>
                                 <img src="{% static 'unid/icon/wordballoon-icon.png' %}" width="25px" height="16.7px"> {{ article.rewards }}
@@ -197,16 +203,22 @@
                     {% for reply in replies %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if reply.user.userimage %}
-                                <img src="/{{ reply.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ reply.user.name }}
-                            </li>
+                            {% if reply.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' reply.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if reply.user.userimage %}
+                                    <img src="/{{ reply.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ reply.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ reply.posts_id.created_at|timesince }}전
                             </li>
@@ -258,16 +270,22 @@
                     {% for content in contentsboard %}
                     <div class="popular-row" >
                         <ul class="row-top">
-                            <li>
-                                {% if content.writeremail.userimage %}
-                                <img src="/{{ content.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ content.writeremail.name }}
-                            </li>
+                            {% if content.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' content.writeremail.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if content.writeremail.userimage %}
+                                    <img src="/{{ content.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ content.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ content.created|timesince }}전
                             </li>
@@ -314,16 +332,22 @@
                     {% for download in downloads %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if download.contents_id.writeremail.userimage %}
-                                <img src="/{{ download.contents_id.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ download.contents_id.writeremail.name }}
-                            </li>
+                            {% if download.contents_id.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' download.contents_id.writeremail.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if download.contents_id.writeremail.userimage %}
+                                    <img src="/{{ download.contents_id.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ download.contents_id.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ download.contents_id.created|timesince }}전
                             </li>
@@ -364,6 +388,10 @@
         <div id="tab-3" class="tab-content">
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 판매 내역</div>
+                <div id="number_of_something">{{ numbersOfsell }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span style="color: #2fcc71;">{{ totalForContentsSelling }}</span>
+                </div>
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
@@ -384,6 +412,8 @@
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
                                 {% endfor %}
+                            {% else%}
+                                <div id="text_message">아직 판매한 콘텐츠가 없습니다.</div>
                             {% endif %}
                         </tbody>
                     </table>
@@ -391,6 +421,7 @@
             </div>
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 구매 내역</div>
+                <div id="number_of_something">{{ numbersOfbuy }}건</div>
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
@@ -411,6 +442,8 @@
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
                                 </tr>
                                 {% endfor %}
+                            {% else %}
+                                <div id="text_message">아직 구매한 콘텐츠가 없습니다.</div>
                             {% endif %}
                         </tbody>
                     </table>
@@ -419,49 +452,59 @@
         </div>
         <div id="tab-4" class="tab-content">
             <div id="content_column">
-                <div id="title_of_contents">정보공유 보상 내역</div>
-                <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfArticles }}건</div>
-                <br>
-                <br>
-                <br>
-                {% if articles %}
-                <div class="row_for_table" style="width:95%; ">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" id="col" style="width:140px;">게시날짜</th>
-                                <th scope="col" id="col" style="width:150px;">보상여부</th>
-                                <th scope="col" id="col" style="width:150px">금액</th>
-                                <th scope="col" id="col" style="">게시글</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if articles %}
-                                {% for article in articles %}
+                {% if rewardedArticles != null %}
+                <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
+                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                </div>
+                    <div class="row_for_table" style="width:95%; ">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ article.created_at }}</th>
+                                    <th scope="col" id="col" style="width:140px;">게시일</th>
+                                    <th scope="col" id="col" style="width:140px;">보상예정일</th>
+                                    <th scope="col" id="col" style="width:150px">금액</th>
+                                    <th scope="col" id="col" style="">게시글</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rewardedArticle in rewardedArticles %}
+                                <tr>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.created_at }}</th>
+                                    {% if rewardedArticle.rewards_success == success %}
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.reward_date }}</th>
+                                    {% else %}
                                     <td style="text-align: center; font-weight:500;">
-                                        {% if article.aaa != success %}
                                         <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                        {% else %}
-                                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">진행중
-                                        {% endif %}
                                     </td>
-                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18">{{ article.bbb }}</td>
-                                    <td style="text-align: center;">{{ article.title }}</td>
+                                    {% endif %}
+                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18">{{ rewardedArticle.writer_rewards }}</td>
+                                    <td style="text-align: center;">{{ rewardedArticle.title }}</td>
                                 </tr>
                                 {% endfor %}
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
                 {% else %}
-                <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
+                    <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                    <div id="number_of_something" style="padding-left: 25px;"> 0 건</div>
+                    <br>
+                    <br>
+                    <br>
+                        <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
+            <br>
+            <br>
             <div id="content_column">
-                <div id="title_of_contents">보팅 보상 내역</div>
+                <div id="title_of_contents" style="margin-bottom:30px;">보팅 보상 내역</div>
                 <div id="number_of_something">{{ numbersOfLike }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
+                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                </div>
                 <br>
                 <br>
                 <br>
@@ -470,29 +513,27 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col" id="col" style="width:140px;">게시날짜</th>
-                                <th scope="col" id="col" style="width:150px;">보상여부</th>
+                                <th scope="col" id="col" style="width:140px;">게시일</th>
+                                <th scope="col" id="col" style="width:140px;">보상예정일</th>
                                 <th scope="col" id="col" style="width:150px">금액</th>
                                 <th scope="col" id="col" style="">게시글</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% if likeusers %}
-                                {% for like in likeusers %}
-                                <tr>
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
-                                    <td style="text-align: center; font-weight:500;">
-                                        {% if like.aaa != success %}
-                                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                        {% else %}
-                                        <img src="{% static 'unid/icon/warning.png' %}" border="0" width="20" height="20">진행중
-                                        {% endif %}
-                                    </td>
-                                    <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
-                                    <td style="text-align: center;">{{ like.posts_id.title }}</td>
-                                </tr>
-                                {% endfor %}
-                            {% endif %}
+                            {% for like in likeusers %}
+                            <tr>
+                                <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
+                                <td style="text-align: center; font-weight:400; font-size:13.1px;">
+                                    {% if like.aaa != success %}
+                                    <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
+                                    {% else %}
+                                    {{ like.posts_id.reward_date }}
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
+                                <td style="text-align: center;">{{ like.posts_id.title }}</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -514,6 +555,27 @@
             return false;
         }
 
+        var blank_pattern = /^\s+|\s+$/g;
+        if(nickname.value.replace( blank_pattern,'') == ""){
+            alert("공백만 입력되었습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
+        var blank_pattern2 = /[\s]/g;
+        if(blank_pattern2.test(nickname.value) == true){
+            alert("공백은 사용할 수 없습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
+        var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+        if(special_pattern.test(nickname.value) == true){
+            alert("특수문자는 입력할 수 없습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
 
         var profile = document.user_profile_edit_form.profile;
         if(profile.value ==''){
@@ -529,6 +591,8 @@
             nickname.focus();
             return false;
         }
+
+
 
         var form = document.user_profile_edit_form;
         if(form.name){
@@ -558,6 +622,15 @@
         var offset = $("#tab-1" + current).offset();
         $('html, body').animate({scrollTop : offset.top}, 400);
     }
+
+
+    var calculate = document.getElementById('calculate').value
+    var result = 0
+        for (x=0; calculate; result =+ calculate)
+        {
+            $('#cal_for_rewards').document.write(result.toString());
+        }
+
 
 
 
@@ -743,6 +816,63 @@
                 $('.content_column').scrollIntoView();
             }
         });
+
+        // 프로필 이미지 미리보기
+
+        var sel_file;
+        $(document).ready(function (){
+            $("#user_image_upload").on("change", handleImgFileSelect);
+        });
+
+        function handleImgFileSelect(e){
+            var files = e.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(f){
+                if(!f.type.match("image.*")) {
+                    alert("이미지만 업로드가 가능합니다.");
+                    return;
+                }
+
+                sel_file = f;
+
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $("#img").attr("src", e.target.result);
+                }
+                reader.readAsDataURL(f);
+            });
+        };
+
+        // 배경화면 이미지 미리보기
+
+        var back_file;
+        $(document).ready(function (){
+            $("#background").on("change", handleImgFileSelect2);
+        });
+
+        function handleImgFileSelect2(p){
+            var files = p.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(c){
+                if(!c.type.match("image.*")) {
+                    alert("이미지만 업로드가 가능합니다.");
+                    return;
+                }
+
+                back_file = c;
+
+                var reader = new FileReader();
+                reader.onload = function(p){
+                    <!--$("#myinfo_edit_mode").attr("style","background-image:url('/"+p.target.result+"')");-->
+                    var imageUrl = p.target.result
+                    $('#myinfo_edit_mode').css('background-image', 'url(' + imageUrl + ')');
+
+                }
+                reader.readAsDataURL(c);
+            });
+        };
     });
     /* var kk = "{{ replies }}" ;
     console.log(kk); */

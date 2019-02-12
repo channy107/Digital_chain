@@ -34,6 +34,7 @@
                 </div>
                 <div class="list-group">
                     <a href="../information/" class="list-group-item">#최신</a>
+                    <a href="../info_popular/" class="list-group-item">#인기</a>
                     <a href="../infotag/학교정보" class="list-group-item">#학교정보</a>
                     <a href="../infotag/주변리뷰" class="list-group-item">#주변리뷰</a>
                     <a href="../infotag/취업정보" class="list-group-item">#취업정보</a>
@@ -49,14 +50,20 @@
                             인기 글
                         </div>
                         <div class="write-button">
+                            <a href="../main_upload/">
                             <img src="{% static 'unid/icon/icons-글쓰기.png' %}" width="90" height="30">
+                            </a>
                         </div>
                     </div>
                     <hr>
                     {% for info in posts %}
                     <div class="popular-row">
                         <ul class="row-top">
+                            {% if info.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
                             <a href="{% url 'user_detail' info.user.IDX %}">
+                            {% endif %}
                                 <li>
                                     {% if info.user.userimage %}
                                     <img src="/{{ info.user.userimage }}">
@@ -102,7 +109,7 @@
                     </li>
                     <li>
                         <span class="main-voting">
-                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">4</span></span>
+                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20"><span class="reply-count">{{info.replymentcount}}</span></span>
                     </li>
                     </ul>
                 </div>
