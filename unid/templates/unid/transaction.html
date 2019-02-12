@@ -588,6 +588,13 @@
         });
         </script>
 
+<script> // back 버튼 방지
+            history.pushState(null, document.title, location.href);
+            window.addEventListener('popstate', function(event) {
+                history.pushState(null, document.title, location.href); 
+            });
+
+</script>
 
 <script>   // 니드 코인 솔리디티 코드
            var WEB3 = require('web3');
