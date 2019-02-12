@@ -739,13 +739,10 @@ xpopup
                     </div>
                 </div>
                 {% if request.session.user_email == contents.writeremail_id %}
-                <div class="icon-box" style="position: relative;left: 160px;">
+                <div class="test icon-box">
                     <a href="">
                         <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     </a>
-                </div>
-                <div class="test icon-box">
-                    <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     <a href="{% url 'postmodify' contents.contents_id %}">
                         <img src="{% static 'unid/icon/icons-수정.png' %}" width="75" height="30" >
                     </a>
