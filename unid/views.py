@@ -402,7 +402,7 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(selleraccount, price).transact({'from': buyeraccount, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
