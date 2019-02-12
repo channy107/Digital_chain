@@ -127,16 +127,22 @@
                     {% for article in articles %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if article.user.userimage %}
-                                <img src="/{{ article.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ article.user.name }}
-                            </li>
+                            {% if article.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' article.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if article.user.userimage %}
+                                    <img src="/{{ article.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ article.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ article.created_at|timesince }}전
                             </li>
@@ -186,16 +192,22 @@
                     {% for reply in replies %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if reply.user.userimage %}
-                                <img src="/{{ reply.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ reply.user.name }}
-                            </li>
+                            {% if reply.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' reply.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if reply.user.userimage %}
+                                    <img src="/{{ reply.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ reply.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ reply.posts_id.created_at|timesince }}전
                             </li>
@@ -247,16 +259,22 @@
                     {% for content in contentsboard %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if content.writeremail.userimage %}
-                                <img src="/{{ content.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ content.writeremail.name }}
-                            </li>
+                            {% if content.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' content.writeremail.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if content.writeremail.userimage %}
+                                    <img src="/{{ content.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ content.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ content.created|timesince }}전
                             </li>
@@ -303,16 +321,22 @@
                     {% for download in downloads %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if download.contents_id.writeremail.userimage %}
-                                <img src="/{{ download.contents_id.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ download.contents_id.writeremail.name }}
-                            </li>
+                            {% if download.contents_id.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' download.contents_id.writeremail.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if download.contents_id.writeremail.userimage %}
+                                    <img src="/{{ download.contents_id.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ download.contents_id.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ download.contents_id.created|timesince }}전
                             </li>

@@ -36,6 +36,15 @@
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     clear:right;
 }
+.buttonColor {
+    background-color: #E64C3C !important;
+    color: white;
+    text-align: center;
+}
+.beforeScroll {
+    background-color: #B2B2B2 !important;
+    color: white;
+}
 .text-group {
     clear: both;
     height: 200px;

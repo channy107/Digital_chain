@@ -190,73 +190,17 @@
                         <th scope="col"></th>
                       </tr>
                     </thead>
+                    {% for item in list %}
                     <tbody>
                       <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>인준희</td>
-                        <td><div id="address-clip1"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip1">복사</button></td>
+                        <th scope="row">{{item.transactiondate}}</th>
+                        <td>{{item.toAccount}}</td>
+                        <td><div id="address-clip"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip">복사</button></td>
                       </tr>
                     </tbody>
+                    {% endfor %}
                   </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>양홍주</td>
-                        <td><div id="address-clip2"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip2">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>임헌찬</td>
-                        <td><div id="address-clip3"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip3">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">전송시간</th>
-                        <th scope="col">유저</th>
-                        <th scope="col">전송주소</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">2019년 2월 7일</th>
-                        <td>정용은</td>
-                        <td><div id="address-clip4"></div></td>
-                        <td><button type="button" class="btn btn-dark" id="clip4">복사</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
              <div class="modal-footer">
              </div>
          </div>
@@ -543,22 +487,12 @@
 
         <script> // clipboard copy
 
-        let clipboard1 = "0x2D794C8F880b2a1ccccb97CcC9Fa7Fa18d15Ec9f";
-        let clipboard2 = "0x9d5a110dE1E9F61712656009A15206AC3a1333cF";
-        let clipboard3 = "0x2EE3598eC0172a57Fd50cF68debFFFdbAB53162e";
-        let clipboard4 = "0x24ca244b602861a72277f111aa6deb597f292aca";
+        let clipboard = "{{ request.session.user_account }}";
 
-        $('#address-clip1').empty();
-        $('#address-clip1').append(clipboard1);
 
-        $('#address-clip2').empty();
-        $('#address-clip2').append(clipboard2);
+        $('#address-clip').empty();
+        $('#address-clip').append(clipboard);
 
-        $('#address-clip3').empty();
-        $('#address-clip3').append(clipboard3);
-
-        $('#address-clip4').empty();
-        $('#address-clip4').append(clipboard4);
 
         function copyToClipboard(val) {
         var t = document.createElement("textarea");
@@ -570,24 +504,20 @@
         }
 
 
-        $('#clip1').click(function() {
-        copyToClipboard(`${clipboard1}`);
+        $('#clip').click(function() {
+        copyToClipboard(`${clipboard}`);
         alert('주소가 복사되었습니다.');
         });
-        $('#clip2').click(function() {
-        copyToClipboard(`${clipboard2}`);
-        alert('주소가 복사되었습니다.');
-        });
-        $('#clip3').click(function() {
-        copyToClipboard(`${clipboard3}`);
-        alert('주소가 복사되었습니다.');
-        });
-        $('#clip4').click(function() {
-        copyToClipboard(`${clipboard4}`);
-        alert('주소가 복사되었습니다.');
-        });
+
         </script>
 
+<script> // back 버튼 방지
+            history.pushState(null, document.title, location.href);
+            window.addEventListener('popstate', function(event) {
+                history.pushState(null, document.title, location.href); 
+            });
+
+</script>
 
 <script>   // 니드 코인 솔리디티 코드
            var WEB3 = require('web3');
@@ -595,14 +525,14 @@
            //web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:9545")); //openeg webserver
 
-           var _supply = 10000;
-           var _name = "NidCoin";
+           var _supply = 100000000000000000000000000;
+           var _name = "nidcoin";
            var _symbol = "nid";
-           var _decimals = 0;
-           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
+           var _decimals = 18;
+           var nidcoinContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]);
 
            //var nd = nidcoinContract.at( "0x265d5023608bafaedf804fd6c33dd68b77d49e4b" );
-           var nd = nidcoinContract.at( "0x08b131616ee311d8c3fd1e87945c597769a86797" );  //openeg geth deploy nidcoin
+           var nd = nidcoinContract.at( "0x956199801a6c15687641ba8b357c91ee8dea3f68" );  //openeg geth deploy nidcoin
 
            // 계정 정보를 조회해서 보내는 사람과 받는 사람 선택창에 설정
            function setAccountsList() {
@@ -666,8 +596,8 @@
                    // 보내는 사람의 계정을 언락
                    let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
                    if (isUnlock) {
-                       nd.transfer(toAccount, amount,{
-                           from   : fromAccount,
+                       nd.transfer(fromAccount, toAccount, amount,{
+                           from   : rootAccount,
                            gas: 2000000
                        }, function(err, res) {
                            let tranID = res;

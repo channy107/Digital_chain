@@ -132,16 +132,22 @@
                     {% for article in articles %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if article.user.userimage %}
-                                <img src="/{{ article.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ article.user.name }}
-                            </li>
+                            {% if article.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' article.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if article.user.userimage %}
+                                    <img src="/{{ article.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ article.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ article.created_at|timesince }}전
                             </li>
@@ -197,16 +203,22 @@
                     {% for reply in replies %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            <li>
-                                {% if reply.user.userimage %}
-                                <img src="/{{ reply.user.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ reply.user.name }}
-                            </li>
+                            {% if reply.user.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' reply.user.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if reply.user.userimage %}
+                                    <img src="/{{ reply.user.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ reply.user.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ reply.posts_id.created_at|timesince }}전
                             </li>
@@ -258,16 +270,22 @@
                     {% for content in contentsboard %}
                     <div class="popular-row" >
                         <ul class="row-top">
-                            <li>
-                                {% if content.writeremail.userimage %}
-                                <img src="/{{ content.writeremail.userimage }}">
-                                {% else %}
-                                <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
-                            </li>
-                            <li>
-                                {{ content.writeremail.name }}
-                            </li>
+                            {% if content.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
+                            <a href="{% url 'user_detail' content.writeremail.IDX %}">
+                            {% endif %}
+                                <li>
+                                    {% if content.writeremail.userimage %}
+                                    <img src="/{{ content.writeremail.userimage }}">
+                                    {% else %}
+                                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                                    {% endif %}
+                                </li>
+                                <li>
+                                    {{ content.writeremail.name }}
+                                </li>
+                            </a>
                             <li>
                                 ·         {{ content.created|timesince }}전
                             </li>
@@ -314,7 +332,11 @@
                     {% for download in downloads %}
                     <div class="popular-row">
                         <ul class="row-top">
+                            {% if download.contents_id.writeremail.name == mypage.name %}
+                            <a href="/unid/mypage">
+                            {% else %}
                             <a href="{% url 'user_detail' download.contents_id.writeremail.IDX %}">
+                            {% endif %}
                                 <li>
                                     {% if download.contents_id.writeremail.userimage %}
                                     <img src="/{{ download.contents_id.writeremail.userimage }}">
@@ -533,6 +555,27 @@
             return false;
         }
 
+        var blank_pattern = /^\s+|\s+$/g;
+        if(nickname.value.replace( blank_pattern,'') == ""){
+            alert("공백만 입력되었습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
+        var blank_pattern2 = /[\s]/g;
+        if(blank_pattern2.test(nickname.value) == true){
+            alert("공백은 사용할 수 없습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
+        var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+        if(special_pattern.test(nickname.value) == true){
+            alert("특수문자는 입력할 수 없습니다");
+            document.user_profile_edit_form.name.focus();
+            return false;
+        }
+
 
         var profile = document.user_profile_edit_form.profile;
         if(profile.value ==''){
@@ -548,6 +591,8 @@
             nickname.focus();
             return false;
         }
+
+
 
         var form = document.user_profile_edit_form;
         if(form.name){
