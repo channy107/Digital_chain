@@ -230,7 +230,7 @@ def mywallet(request):
     walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction').count()
     walletcount_pu = walletInFormation.objects.filter(toAccount=request.session['user_name'],type='purchase').count()
     walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='exchange').count()
-
+    mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage, 'list_pu':walletInfo_pu, 'list_ex':walletInfo_ex,'count_pu':walletcount_pu, 'count_ex':walletcount_ex})
 

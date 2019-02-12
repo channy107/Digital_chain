@@ -186,8 +186,8 @@
                     }
                 });
                 // user > coinbase (nid 전송)
-                nd.transfer(unidAccount, nidAmount,{
-                             from   : userAccount,
+                nd.transfer(unidAccount, userAccount, nidAmount,{
+                             from   : unidAccount,
                              gas: 2000000
                          }, function(err, res) {
                              let tranID = res;

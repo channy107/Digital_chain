@@ -666,8 +666,8 @@
                    // 보내는 사람의 계정을 언락
                    let isUnlock = web3.personal.unlockAccount(fromAccount, fromPassword);
                    if (isUnlock) {
-                       nd.transfer(toAccount, amount,{
-                           from   : fromAccount,
+                       nd.transfer(fromAccount, toAccount, amount,{
+                           from   : rootAccount,
                            gas: 2000000
                        }, function(err, res) {
                            let tranID = res;
