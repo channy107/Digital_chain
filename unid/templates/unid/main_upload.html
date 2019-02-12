@@ -50,7 +50,7 @@
                 <ul class="str_ul">
                     <li class="tip_str">
                      .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.
                     </li>
                 </ul>
             </div>
@@ -64,7 +64,7 @@
                 <ul class="str_ul">
                     <li class="tip_str">
                      .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.
                     </li>
                 </ul>
             </div>
@@ -73,7 +73,7 @@
                 <label for="inputtext">본문 내용</label>
                 <textarea rows="5" class="form-control" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
                 <ul class="str_ul textformtip">
-                    <li class="byte_str"><span class="col_red" id="body_byte">0</span>자</li>
+                    <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
                 </ul>
             </div>
             <div class="form-group">
@@ -148,9 +148,22 @@
         $('#user_file').on('change', function(){
             let upload_files = $('#user_file').get(0).files
             var fileee = $('#user_file').get(0).files[0]['name'];
-            console.log(fileee);
-            if ( upload_files.length > 5 ) {
-                alert("최대 5개까지만 등록할 수 있습니다.");
+            var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
+            console.log(fileee)
+            console.log(extendname)
+            const extendArray = ['.jpg', '.png', '.jpeg'];
+
+            for (var i = 0; i < upload_files.length; i++) {
+                kkk = $('#user_file').get(0).files[i]['name'];
+                extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
+                if ( !extendArray.includes(extendname.toLowerCase()) ) {
+                    alert(extendname + "형식은 업로드 할 수 없습니다.");
+                    return false;
+                }
+            }
+
+            if ( upload_files.length > 10 ) {
+                alert("최대 10개까지만 등록할 수 있습니다.");
             } else {
                 $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
                 $("#user_image_before").hide();
@@ -162,6 +175,69 @@
             $("#user_image_after").hide();
             $("#user_image_before").show();
         });
+
+        $('#inputtitle').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte').html(totalByte + "/30");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 30) {
+                alert(30 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 30);
+                console.log(str2);
+                $('#inputtitle').val(str2);
+                console.log($('#inputtitle').val());
+            }
+        });
+
+        $('#inputtext').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte3').html(totalByte + "/10000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 10000) {
+                alert(10000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 10000);
+                $('#inputtext').val(str2);
+            }
+        });
+
+
 
     });
 
