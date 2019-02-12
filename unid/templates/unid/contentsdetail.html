@@ -660,7 +660,9 @@ xpopup
                     {% if request.session.user_email == contents.writeremail_id %}
                     {% else %}
                     {% if downloadid %}
-                    <a href="../download?id={{ contents.contents_id }}"> 파일 다운로드 </a>                              <!--★★★★★★★★★★★★ㅍ-->
+                    <a href="../download?id={{ contents.contents_id }}">
+                        <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
+                    </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
                     <button type="button" class="cd-popup-trigger" id='enrollcontents' class="pointeffect">
                         <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
@@ -737,6 +739,11 @@ xpopup
                     </div>
                 </div>
                 {% if request.session.user_email == contents.writeremail_id %}
+                <div class="icon-box" style="position: relative;left: 160px;">
+                    <a href="">
+                        <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
+                    </a>
+                </div>
                 <div class="test icon-box">
                     <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     <a href="{% url 'postmodify' contents.contents_id %}">
@@ -745,11 +752,6 @@ xpopup
                     <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">
                 </div>
                 {% else %}
-                <div class="icon-box" style="position: relative;left: 160px;">
-                    <a href="">
-                        <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
-                    </a>
-                </div>
                 {% endif %}
                 <div class="cd-popup2" role="alert">
                     <div class="cd-popup-container2">
@@ -840,6 +842,12 @@ xpopup
 <script>
 
     jQuery(document).ready(function($){
+        $('#nav1').unbind("click");
+        $('#nav2').unbind("click");
+        $('#nav4').unbind("click");
+        $('#nav3').unbind("click");
+        $('#id_q').unbind("click");
+        $('.navbar-brand').unbind("click");
         $('#nav2').addClass('visible-place');
 
         $('.postdelete').on('click', function(event) {
@@ -1057,6 +1065,17 @@ xpopup
             console.log(writeremail);
             $('.cd-popup').removeClass('is-visible');
             $('.cd-popup3').addClass('is-visible');
+            $('#nav1').click(function () {return false;});
+            $('#nav2').click(function () {return false;});
+            $('#nav4').click(function () {return false;});
+            $('#nav3').click(function () {return false;});
+            $('.navbar-brand').click(function () {return false;});
+            if (event.which=='8') {
+
+                alert('콘텐츠 구매 중에는 뒤로 돌아가실 수 없습니다.')
+
+                return false;
+            }
             $.ajax({
                 type: 'POST',
                 url: "../moneytrade/",

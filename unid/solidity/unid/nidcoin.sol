@@ -32,13 +32,13 @@ contract nidcoin {
 
 	// 송금
 	// 함수를 호출한 계정에서 _to 계정으로 _value 만큼의 nid를 전송
-	function transfer(address _to, int256 _value) public {
+	function transfer(address _from, address _to, int256 _value) public {
 		// 검증을 통한 부정 방지
 		if (_value < 0) revert("마이너스는 송금할 수 없습니다.");
-		if (balanceOf[msg.sender] < _value) revert("잔액 보다 많은 금액은 송금할 수 없습니다.");
-		balanceOf[msg.sender] -= _value;
+		if (balanceOf[_from] < _value) revert("잔액 보다 많은 금액은 송금할 수 없습니다.");
+		balanceOf[_from] -= _value;
 		balanceOf[_to] += _value;
-		emit EvtTransfer(msg.sender, _to, _value);
+		emit EvtTransfer(_from, _to, _value);
     }
     
     function getBalance (address account) public returns (int256) {

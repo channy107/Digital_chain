@@ -11,9 +11,8 @@
             </div>
             <hr>
             <div class = "search-category">
-                정보공유           {% if  {{ page.object_list|slice:"1" }}.writeremail_id
+                정보공유
             </div>
-
             {% for result in page.object_list %}
             {% if result.object.user_id %}
             <div class="popular-row">
@@ -50,8 +49,9 @@
             </div>
             {% endif %}
             {% empty %}
-            검색 결과
+            검색 결과가 없습니다
             {% endfor %}
+
             <hr>
             <div class = "search-category">
                 콘텐츠 거래
@@ -108,7 +108,10 @@
                 </ul>
             </div>
             {% endif %}
+            {% empty %}
+            검색 결과가 없습니다
             {% endfor %}
+
         </div>
     </div>
 </div>
@@ -121,7 +124,8 @@
 </body>
 <script>
     console.log("{{ page.object_list }}");
-    console.log(" {{ page.object_list.first }}");
+    console.log("{{ page.object_list.SearchResult }}");
+    console.log("{{ page.object_list|slice:'1' }}");
 
 
 </script>
