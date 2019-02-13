@@ -961,7 +961,7 @@ def main_upload(request):
             )
             imageInfo.save()
 
-        url = '/unid'
+        url = '/unid/information/'
         return HttpResponseRedirect(url)
 
 
@@ -1374,6 +1374,71 @@ def test_validfile(request):
 
         return_obj = JsonResponse(res)
         return return_obj
+
+@login_required
+def infomodify(request, id):
+    if request.method == 'GET':
+        posts = Post.objects.get(posts_id=id)
+
+        return render(request, 'unid/infomodify.html', {'posts':posts})
+    else:
+        try:
+            upload_files = request.FILES.getlist('user_files')
+        except MultiValueDictKeyError as e:
+            pass
+
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        reward_date = now + timedelta(days=7)
+
+        try:
+            print(os.getcwd())
+            os.mkdir("media/imageForInfo/" + today)
+        except FileExistsError as e:
+            pass
+
+        sess = request.session['user_email']
+        title = request.POST['title']
+        category = request.POST['category']
+        contents = request.POST['contents']
+        tags = request.POST['tags']
+        image_list = []
+        for upload_file in upload_files:
+            filename = upload_file.name
+            image_list.append(filename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            info_dir = "media/imageForInfo/" + today + "/"
+            with open(info_dir + filename, 'wb') as file:
+                for chunk in upload_file.chunks():
+                    file.write(chunk)
+
+        user = myPageInfomation.objects.get(email=sess)
+
+        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+
+
+
+        images = postImage.objects.filter(posts_id=id)
+
+        for delete in images:
+            delete.delete()
+
+        idx = Post.objects.get(posts_id=id)
+        image_dir = "media/imageForInfo/" + today + "/"
+        imagelistlength = len(image_list)
+
+        for i in range(imagelistlength):
+            imageInfo = postImage(
+                posts_id=idx,
+                uploadfilename=image_list[i],
+                imagepath=image_dir + image_list[i],
+            )
+            imageInfo.save()
+
+        url = '/unid/information/'
+        return HttpResponseRedirect(url)
+
 
 @login_required
 def postmodify(request, id):

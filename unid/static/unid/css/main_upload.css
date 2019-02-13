@@ -19,11 +19,21 @@ content: none;
     margin: 0 0 20px 0;
 }
 
+
 #user_image_after {
     display: none;
     position: relative;
     margin: 0 0 20px 0;
     margin-top: 46px;
+}
+
+.form-group-text{
+    height : 300px;
+    padding: 0 20px;
+}
+
+#inputtext {
+    margin-bottom : 20px;
 }
 
 }
