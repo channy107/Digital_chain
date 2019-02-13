@@ -574,7 +574,7 @@
     }
 
 .carousel {
-    margin: 0 !important;
+    margin: 0 auto !important;
 }
 .contents-price {
     display: inline;

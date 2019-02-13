@@ -60,7 +60,6 @@ class uploadContents(models.Model):
     txid = models.CharField(max_length=250, blank=True, null=True)
     replymentcount = models.IntegerField(null=True)
     cagegory_path = models.CharField(max_length=250, blank=True, null=True)
-    ddd = models.CharField(max_length=250, blank=True, null=True)
 
 class downloadContents(models.Model):
     IDX = models.AutoField(primary_key=True)
@@ -70,7 +69,15 @@ class downloadContents(models.Model):
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
-
+class tagsInfo(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    contents_id = models.ForeignKey(uploadContents, on_delete=models.CASCADE)
+    tagname = models.CharField(max_length=50, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
+    filesize = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
 class contentsInfo(models.Model):
     IDX = models.AutoField(primary_key=True)
     contents_id = models.ForeignKey(uploadContents, on_delete=models.CASCADE)
