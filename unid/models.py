@@ -1,8 +1,9 @@
+from allauth.socialaccount.fields import JSONField
 from django.db import models
 from django import forms
 from datetime import datetime
 
-from social_django.fields import JSONField
+
 from unidweb import settings
 
 
@@ -117,6 +118,10 @@ class Post(models.Model):
     isdelete = models.CharField(max_length=250, blank=True, null=True)
     reward_date = models.DateTimeField(blank=True, null=True)
     replymentcount = models.IntegerField(default=0, null=True)
+    like_user_set = models.ManyToManyField(myPageInfomation,
+                                           blank=True,
+                                           related_name='like_user_set',
+                                           through='LikeUsers')
     aaa = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
@@ -216,13 +221,18 @@ class postImage(models.Model):
 
 class LikeUsers(models.Model):
     IDX = models.AutoField(primary_key=True)
-    liked_users = models.CharField(max_length=100)
+    liked_users = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
     posts_id = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
     rewards_success = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        unique_together = (
+            ('liked_users', 'posts_id')
+        )
 
 class replyForPosts(models.Model):
     IDX = models.AutoField(primary_key=True)
