@@ -945,6 +945,23 @@ def mainreply(request):
            }
     return JsonResponse(res)
 def zzz(request):
+    # # 저장 또는 발행하기 버튼을 누른 경우 (POST)
+    if request.method == "POST":
+    #     # 두 경우 모두, 일단 DB에 새로 생성된 Post를 저장한다
+        post = Post.objects.create(
+            author="sssss",
+            title=request.POST.get('title'),
+            delta_content=request.POST.get('answer_delta'),
+        )
+    #     # post를 save한 경우 (save - default published=False)
+        if request.POST.get('action') == "save":
+            return redirect('unid:zzz')
+    #     # post를 publish한 경우 (published=True)
+    #     elif request.POST.get('action') == 'publish':
+    #         post.publish()
+    #         return redirect('quill:published_list')
+    # # 처음 글쓰기 페이지로 온 경우 (GET)
+    # return render(request, 'quill/post_form.html')
 
     return render(request, 'unid/zzzz.html', {})
 def main_upload(request):
@@ -1043,7 +1060,7 @@ def createaccount(request):
         lockpwd = sha256(password.encode('utf-8'))
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
-            print(IDX)
+            print("이거시" + IDX)
         except TypeError as e:
             print("errorpass")
             IDX = 0

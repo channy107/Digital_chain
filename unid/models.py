@@ -2,7 +2,9 @@ from django.db import models
 from django import forms
 from datetime import datetime
 
+from social_django.fields import JSONField
 from unidweb import settings
+
 
 
 class myPageInfomation(models.Model):
@@ -27,6 +29,18 @@ class myPageInfomation(models.Model):
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
     ddd = models.CharField(max_length=250, blank=True, null=True)
+
+class richtextTest(models.Model):
+    author = models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
+    delta_content = JSONField(blank=True, null=True)
+    published = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.title
+    def publish(self):
+        self.published = True
 
 class Note(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
