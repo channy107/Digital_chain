@@ -107,6 +107,10 @@ border: none;
 cursor : pointer;
 }
 
+#votings {
+    margin-left : 5px;
+}
+
 .scroll {
 margin:10px;
 text-align: center;

@@ -29,6 +29,7 @@ urlpatterns = [
     path('createaccount/', views.createaccount, name='createaccount'),
     path('contentsupload/', views.contentsupload, name='contentsupload'),
     path('postmodify/<int:id>', views.postmodify, name='postmodify'),
+    path('infomodify/<int:id>', views.infomodify, name='infomodify'),
     path('postdelete/', views.postdelete, name='postdelete'),
     path('mypage/', views.mypage, name='mypage'),
     path('user_detail/<int:id>', views.user_detail, name='user_detail'),
