@@ -947,15 +947,17 @@ def mainreply(request):
 def zzz(request):
     # # 저장 또는 발행하기 버튼을 누른 경우 (POST)
     if request.method == "POST":
+        print("시작")
     #     # 두 경우 모두, 일단 DB에 새로 생성된 Post를 저장한다
         post = Post.objects.create(
-            author="sssss",
             title=request.POST.get('title'),
             delta_content=request.POST.get('answer_delta'),
         )
+        print("1")
     #     # post를 save한 경우 (save - default published=False)
         if request.POST.get('action') == "save":
-            return redirect('unid:zzz')
+            url = '/unid/zzz/'
+            return HttpResponseRedirect(url)
     #     # post를 publish한 경우 (published=True)
     #     elif request.POST.get('action') == 'publish':
     #         post.publish()
