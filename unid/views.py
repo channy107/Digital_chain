@@ -310,37 +310,69 @@ def contentsdetail(request, id):
     replys = replysForContents.objects.filter(contents_id=id)
     print(contents.writeremail)
     try:
-        request.session['post_id']
+        print("세션 유무 확인")
+        request.session['user_email']
+        print(request.session['user_email'])
+        print("세션 있음")
+        if request.session['user_email'] != contents.writeremail.email:
+            print("세션이 글쓴이랑 달라")
+            try:
+                print("게시글 정보 세션 유무 확인")
+                if request.session['post_id']:
+                    pass
+            except KeyError as e:
+                print("글쓴이랑 다른데 게시글정보세션이 없어")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
+            print("글쓴이랑 다른데 게시글 정보 세션이 있어")
+            if request.session['post_id'] != id:
+                print("글쓴이랑 다르고 정보세션이 있는데 정보세션이 현 게시글과 달라")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
     except KeyError as e:
-        request.session['post_id'] = id
-        if contents.writeremail == request.session['user_email']:
-            pass
-        else:
+        print("세션 없음")
+        # 세션이 없으면 request.session['post_id'] 가 일치하는지 않하는지만
+        try:
+            if request.session['post_id'] == id:
+                print("세션은 없는데 포스트 아이디가 게시글이랑 같으면")
+                pass
+            else:
+                print("세션 없고 포스트아이디가 게시글이랑 달라")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
+        except KeyError as e:
+            print("세션도 없고 게시글 정보 세션 없음")
+            request.session['post_id'] = id
             contents.hits = contents.hits + 1  # 조회수 증가
             contents.save()
-    if request.session['post_id'] != id and contents.writeremail != request.session['user_email']:
-        request.session['post_id'] = id
-        contents.hits = contents.hits + 1  # 조회수 증가
-        contents.save()
-
+    print("끝")
     previewlist = []
     if previewInfo.objects.filter(contents_id=id).values():
         for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
             previewimage = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
             previewlist.append(previewimage)
-        first_preview = previewlist[0]
-        try:
+
+        if len(previewlist) == 2:
+            first_preview =  previewlist[0]
             second_preview = previewlist[1]
-        except IndexError as e:
-            second_preview = ""
-        try:
+            third_preview = "media/default.png"
+        elif len(previewlist) == 3:
+            first_preview = previewlist[0]
+            second_preview = previewlist[1]
             third_preview = previewlist[2]
-        except IndexError as e:
-            third_preview = ""
+        elif len(previewlist) == 1:
+            first_preview = previewlist[0]
+            second_preview = "media/default.png"
+            third_preview = "media/default.png"
     else:
-        first_preview = 'media/default.png'
-        second_preview = 'media/default.png'
-        third_preview = 'media/default.png'
+        first_preview = "media/default.png"
+        second_preview = "media/default.png"
+        third_preview = "media/default.png"
+
+
     files_infos = contentsInfo.objects.filter(contents_id=id).values()
 
     rpc_url = "http://222.239.231.252:9545"
@@ -1194,7 +1226,8 @@ def contentsupload(request):
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 downloadcount=0,
                 replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png'
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
             )
             br.save()
         except IndexError as e:
@@ -1213,7 +1246,8 @@ def contentsupload(request):
                 reference=request.POST['reference'],
                 downloadcount=0,
                 replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png'
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
             )
             br.save()
         uifilelist = request.POST['uifilelist'].split(',')
@@ -1773,10 +1807,10 @@ def searchcontents(request, category):
     # allcontentslists = uploadContents.objects.order_by('-contents_id').filter(
     #                                         Q(category=category) & ~Q(isdelete="삭제")
     #                                     )
-    return render(
-        request, 'unid/searchcontents.html',
-        {'contentslists': allcontentslists}
-    )
+    # return render(
+    #     request, 'unid/searchcontents.html',
+    #     {'contentslists': allcontentslists}
+    # )
 
 @login_required
 def opinion(request):

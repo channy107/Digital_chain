@@ -21,12 +21,12 @@
                         <img src="{% static 'unid/icon/profle-icon.png' %}">
                     </li>
                     <li>
-                        {{ result.object.user.email}}
+                        {{ result.object.user.name }}
                     </li>
                     <li>
                         ·         {{ result.object.created_at|timesince }}전
                     </li>
-                    <img src="/{{ result.object.cagegory_path }}" width="75" height="25">
+                    <img src="/{{ result.object.category_path }}" width="75" height="25">
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'main_detail' result.object.posts_id %}">
