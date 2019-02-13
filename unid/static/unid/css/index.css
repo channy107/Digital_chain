@@ -266,7 +266,7 @@
             width: 730px;
         }
         .picture-box {
-            width: 840px;
+            margin: 0 auto;
         }
         .preview {
             display: inline-block;

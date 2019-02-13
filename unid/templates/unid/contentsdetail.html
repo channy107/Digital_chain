@@ -555,29 +555,31 @@ xpopup
         <!-- preview -->
         <div class="row">
             <div class="picture-box">
-                {% if first_preview %}
-                {% if first_preview != "media/default.png" %}
-                <div class="preview pointeffect" id="preview1" name="1">
-                    <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="200" height="285">
-                </div>
-                {% endif %}
-                {% if second_preview %}
-                {% if second_preview != "media/default.png" %}
-                <div class="preview pointeffect" id="preview2" name="2">
-                    <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="200" height="285">
-                </div>
-                {% endif %}
-                {% endif %}
-                {% if third_preview %}
-                {% if third_preview != "media/default.png" %}
-                <div class="preview pointeffect" id="preview3" name="3">
-                    <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="200" height="285">
-                </div>
-                {% endif %}
-                {% endif %}
-                {% else %}
+                <div>
+                    {% if first_preview %}
+                    {% if first_preview != "media/default.png" %}
+                    <div class="preview pointeffect" id="preview1" name="1">
+                        <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="200" height="285">
+                    </div>
+                    {% endif %}
+                    {% if second_preview %}
+                    {% if second_preview != "media/default.png" %}
+                    <div class="preview pointeffect" id="preview2" name="2">
+                        <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="200" height="285">
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% if third_preview %}
+                    {% if third_preview != "media/default.png" %}
+                    <div class="preview pointeffect" id="preview3" name="3">
+                        <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="200" height="285">
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% else %}
 
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="cd-popup4" role="alert">
@@ -708,7 +710,7 @@ xpopup
                     </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
                     <button type="button" class="cd-popup-trigger" id='enrollcontents' class="pointeffect">
-                        <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
+                        콘텐츠 구매
                     </button>
                     <div class="cd-popup" role="alert">
                         <div class="cd-popup-container">

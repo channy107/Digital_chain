@@ -437,12 +437,13 @@ def moneytrade(request):
     buyerinfo = myPageInfomation.objects.get(email=request.session['user_email'])
     buyeraccount = Web3.toChecksumAddress(buyerinfo.account)
     buyerpwd = request.POST['pwd']
+
     print(buyerpwd)
     print(selleraccount)
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -455,10 +456,11 @@ def moneytrade(request):
 
     )
     br.save()
-
+    buyeraccount1 = myPageInfomation.objects.get(email=request.session['user_email'])
+    selleraccount1 = myPageInfomation.objects.get(email=writeremail)
     wif = walletInFormation (
-                            fromAccount=buyerinfo.email,
-                            toAccount=sellerinfo.email,
+                            fromAccount=buyeraccount1,
+                            toAccount=selleraccount1,
                             balance= price,
                             type="contentsTrasaction",
                             txid=receipt,
@@ -478,7 +480,7 @@ def main(request):
     populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의노트"))[0:6]
     populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="시험자료"))[0:6]
     populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="동영상"))[0:6]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="자소서"))[0:6]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="자기소개서"))[0:6]
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
@@ -1282,7 +1284,7 @@ def contentsupload(request):
         for i in range(len(filehashdatas)):
             # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
             tx_hash = cmc.functions.addContents(request.session['user_email'], filehashdatas[i]).transact(
-                {"from": w3.eth.accounts[0], "gas": 1000000})
+                {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
             transactionHashList.append(receipt)
 
