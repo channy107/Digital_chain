@@ -10,6 +10,31 @@
     <link href="{% static 'unid/css/main_upload.css' %}" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+          var quill = new Quill('#editor', {
+            modules: {
+               toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ['bold', 'italic', 'underline', 'strike'],
+                      ['image', 'code-block']
+                    ]
+                  },
+                  placeholder: '내용을 입력해주세요',
+            theme: 'snow'
+          });
+
+          var form = document.querySelector('form')
+          form.onsubmit = function() {
+                    //console.log(quill.getContents());
+                    //console.log(quill.root.innerHTML);
+           var answer_delta = document.querySelector('input[name="answer_delta"]');
+           console.log(answer_delta);
+           answer_delta.value = JSON.stringify(quill.getContents());
+                    //return false;
+                }
+    </script>
 </head>
 
 <body>
@@ -70,13 +95,24 @@
                 </ul>
             </div>
             </div>
-            <div class="form-group-text">
-                <label for="inputtext" class="col-sm-2">본문 내용</label>
-                <textarea rows="10" class="form-control col-sm-10" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
-                <ul class="str_ul textformtip">
-                    <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
-                </ul>
-            </div>
+            <form action="" method="post">
+                <div class="form-content">
+                    {% csrf_token %}
+                    <label for="title">답변: </label>
+                    <input class="title-input" name="title" type="text">
+                    <input name="answer_delta" type="hidden">
+                    <!--quill editor 영-->
+                    <div id="editor-container" class="container"></div>
+                </div>
+                <input class="btn btn-save" type="submit" name="action" value="save">
+                <input class="btn btn-submit" type="submit" name="action" value="publish">
+            </form>
+
+
+
+
+
+
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
                 <input class="form-control col-sm-6 input-lg shortput" id="inputags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
@@ -112,6 +148,29 @@
          </form>
 </div>
 </body>
+<script>
+      var quill = new Quill('#editor', {
+        modules: {
+           toolbar: [
+                  [{ header: [1, 2, false] }],
+                  ['bold', 'italic', 'underline', 'strike'],
+                  ['image', 'code-block']
+                ]
+              },
+              placeholder: '내용을 입력해주세요',
+        theme: 'snow'
+      });
+
+      var form = document.querySelector('form')
+      form.onsubmit = function() {
+                //console.log(quill.getContents());
+                //console.log(quill.root.innerHTML);
+       var answer_delta = document.querySelector('input[name="answer_delta"]');
+       console.log(answer_delta);
+       answer_delta.value = JSON.stringify(quill.getContents());
+                //return false;
+            }
+</script>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     jQuery(document).ready(function($){

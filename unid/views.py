@@ -17,7 +17,7 @@ from haystack.query import SearchQuerySet, EmptySearchQuerySet
 from haystack.views import SearchView
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -458,6 +458,7 @@ def moneytrade(request):
     br.save()
     buyeraccount1 = myPageInfomation.objects.get(email=request.session['user_email'])
     selleraccount1 = myPageInfomation.objects.get(email=writeremail)
+    contentsId = uploadContents.objects.get(contents_id=request.POST['id'])
     wif = walletInFormation (
                             fromAccount=buyeraccount1,
                             toAccount=selleraccount1,
@@ -465,8 +466,9 @@ def moneytrade(request):
                             type="contentsTrasaction",
                             txid=receipt,
                             transactiondate=timezone.now(),
-                            aaa=title
-    )
+                            aaa=title,
+                            contents_id=contentsId,
+                        )
     wif.save()
 
 
@@ -942,7 +944,9 @@ def mainreply(request):
            "replytext": request.POST['reply']
            }
     return JsonResponse(res)
+def zzz(request):
 
+    return render(request, 'unid/zzzz.html', {})
 def main_upload(request):
     if request.method == 'GET':
 
