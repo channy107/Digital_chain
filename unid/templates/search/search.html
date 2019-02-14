@@ -13,51 +13,54 @@
             <div class = "search-category">
                 정보공유
             </div>
-            {% for result in page.object_list %}
-            {% if result.object.user_id %}
-            <div class="popular-row">
-                <ul class="row-top">
-                    <li>
-                        <img src="{% static 'unid/icon/profle-icon.png' %}">
-                    </li>
-                    <li>
-                        {{ result.object.user.email}}
-                    </li>
-                    <li>
-                        ·         {{ result.object.created_at|timesince }}전
-                    </li>
-                    <img src="/{{ result.object.cagegory_path }}" width="75" height="25">
-                </ul>
-                <div class="row-picture">
-                    <a href="{% url 'main_detail' result.object.posts_id %}">
-                        <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
-                    </a>
+            <div class="resultOfSearch1">
+                {% for result in page.object_list %}
+                {% if result.object.user_id %}
+                <input type="text" style="display: none;" val="asdsad" class="confirm-empty1">
+                <div class="popular-row">
+                    <ul class="row-top">
+                        <li>
+                            <img src="{% static 'unid/icon/profle-icon.png' %}">
+                        </li>
+                        <li>
+                            {{ result.object.user.name }}
+                        </li>
+                        <li>
+                            ·         {{ result.object.created_at|timesince }}전
+                        </li>
+                        <img src="/{{ result.object.category_path }}" width="75" height="25">
+                    </ul>
+                    <div class="row-picture">
+                        <a href="{% url 'main_detail' result.object.posts_id %}">
+                            <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
+                        </a>
+                    </div>
+                    <ul class="row-middle">
+                        <li>
+                            <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.title with query css_class "bg-warning" %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.contents with query css_class "bg-warning" max_length 73 %}</a>
+                        </li>
+                    </ul>
+                    <ul class="row-bottom">
+                        <li>
+                            <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ result.object.like_count }}
+                        </li>
+                    </ul>
                 </div>
-                <ul class="row-middle">
-                    <li>
-                        <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.title with query css_class "bg-warning" %}</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'main_detail' result.object.posts_id %}">{% highlight result.object.contents with query css_class "bg-warning" max_length 73 %}</a>
-                    </li>
-                </ul>
-                <ul class="row-bottom">
-                    <li>
-                        <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ result.object.like_count }}
-                    </li>
-                </ul>
+                {% endif %}
+                {% endfor %}
             </div>
-            {% endif %}
-            {% empty %}
-            검색 결과가 없습니다
-            {% endfor %}
 
             <hr>
             <div class = "search-category">
                 콘텐츠 거래
             </div>
+            <div class="resultOfSearch2">
             {% for result in page.object_list %}
             {% if result.object.writeremail_id %}
+            <input type="text" style="display: none;" val="asdsad" class="confirm-empty2">
             <div class="popular-row">
                 <ul class="row-top">
                     <li>
@@ -108,10 +111,7 @@
                 </ul>
             </div>
             {% endif %}
-            {% empty %}
-            검색 결과가 없습니다
             {% endfor %}
-
         </div>
     </div>
 </div>
@@ -123,9 +123,24 @@
 
 </body>
 <script>
+    if(document.getElementById('confirm-empty')){
+        alert('되라');
+    }
+
     console.log("{{ page.object_list }}");
     console.log("{{ page.object_list.SearchResult }}");
     console.log("{{ page.object_list|slice:'1' }}");
+    console.log("{{ count }}");
+    console.log($('.confirm-empty').val());
+    jQuery(document).ready(function($){
+        if (!$('.confirm-empty1').length) {
+            $('.resultOfSearch1').append("검색 결과가 없습니다.");
+        }
+        if (!$('.confirm-empty2').length) {
+            $('.resultOfSearch2').append("검색 결과가 없습니다.");
+        }
+    });
+
 
 
 </script>

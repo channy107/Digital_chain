@@ -99,7 +99,7 @@ header h1 {
 xpopup
 
 -------------------------------- */
-.cd-popup, .cd-popup1, .cd-popup2{
+.cd-popup, .cd-popup1, .cd-popup2, .cd-popup4{
   position: fixed;
   left: 0;
   top: 0;
@@ -113,7 +113,11 @@ xpopup
   transition: opacity 0.3s 0s, visibility 0s 0.3s;
   z-index: 1;
 }
-.cd-popup.is-visible, .cd-popup1.is-visible, .cd-popup2.is-visible {
+.zzz {
+
+
+}
+.cd-popup.is-visible, .cd-popup1.is-visible, .cd-popup2.is-visible, .cd-popup4.is-visible {
   opacity: 1;
   visibility: visible;
   -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
@@ -142,7 +146,7 @@ xpopup
   -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
   transition: opacity 0.3s 0s, visibility 0s 0s;
 }
-.cd-popup-container3 {
+.cd-popup-container3, .cd-popup-container4 {
   position: relative;
   width: 35%;
   max-width: 500px;
@@ -164,6 +168,13 @@ xpopup
   -moz-transition-duration: 0.3s;
   transition-duration: 0.3s;
   padding: 30px;
+}
+
+.cd-popup-preview {
+    width: 100%;
+    max-width: 660px;
+    margin: 7.5em auto;
+    height: 848.4px;
 }
 .cd-popup-container2 {
   position: relative;
@@ -237,15 +248,15 @@ xpopup
   transition-duration: 0.3s;
   padding: 30px;
 }
-.cd-popup-container p, .cd-popup-container1 p, .cd-popup-container2 p{
+.cd-popup-container p, .cd-popup-container1 p, .cd-popup-container2 p .cd-popup-container4 p{
   padding: 3em 1em;
 }
-.cd-popup-container .cd-buttons:after, .cd-popup-container1 .cd-buttons:after, .cd-popup-container2 .cd-buttons:after {
+.cd-popup-container .cd-buttons:after, .cd-popup-container1 .cd-buttons:after, .cd-popup-container2 .cd-buttons:after, .cd-popup-container4 .cd-buttons:after {
   content: "";
   display: table;
   clear: both;
 }
-.cd-popup-container .cd-buttons li, .cd-popup-container1 .cd-buttons li, .cd-popup-container2 .cd-buttons li {
+.cd-popup-container .cd-buttons li, .cd-popup-container1 .cd-buttons li, .cd-popup-container2 .cd-buttons li, .cd-popup-container4 .cd-buttons li {
   float: left;
   width: 50%;
   padding: 5px 20px 10px 20px;
@@ -495,10 +506,11 @@ xpopup
     margin: 10px 0 15px 0;
     font-weight: bold;
 }
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 349px) {
   .cd-popup-container, .cd-popup-container1, .cd-popup-container2, .cd-popup-container3 {
-    margin: 10% auto;
+    margin: 13rem auto;
   }
+
 
 </style>
 <div class="container1">
@@ -541,39 +553,26 @@ xpopup
             </div>
         </div>
         <!-- preview -->
-        <div class="row" style = "width: 630px;">
-            <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    {% if second_preview %}
-                    {% if second_preview != "media/default.png" %}
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    {% endif %}
-                    {% if third_preview %}
-                    {% if third_preview != "media/default.png" %}
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                    {% endif %}
-                    {% endif %}
-                    {% endif %}
-                </ol>
-                <div class="carousel-inner" role="listbox">
+        <div class="row">
+            <div class="picture-box">
+                <div>
                     {% if first_preview %}
                     {% if first_preview != "media/default.png" %}
-                    <div class="carousel-item active">
-                        <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="600" height="848">
+                    <div class="preview pointeffect" id="preview1" name="1">
+                        <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="200" height="285">
                     </div>
                     {% endif %}
                     {% if second_preview %}
                     {% if second_preview != "media/default.png" %}
-                    <div class="carousel-item">
-                        <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="600" height="848">
+                    <div class="preview pointeffect" id="preview2" name="2">
+                        <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="200" height="285">
                     </div>
                     {% endif %}
                     {% endif %}
                     {% if third_preview %}
                     {% if third_preview != "media/default.png" %}
-                    <div class="carousel-item">
-                        <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="600" height="848">
+                    <div class="preview pointeffect" id="preview3" name="3">
+                        <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="200" height="285">
                     </div>
                     {% endif %}
                     {% endif %}
@@ -581,24 +580,70 @@ xpopup
 
                     {% endif %}
                 </div>
-                {% if second_preview %}
-                {% if second_preview != "media/default.png" %}
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style="height: 850px;">
-                    <span style="font-size: 3em; color: #dad8d8;">
-                        <i class="fas fa-angle-left"></i>
-                    </span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" style="height: 850px;">
-                    <span style="font-size: 3em; color: #dad8d8;">
-                        <i class="fas fa-angle-right"></i>
-                    </span>
-                    <span class="sr-only">Next</span>
-                </a>
-                {% endif %}
-                {% endif %}
             </div>
         </div>
+        <div class="cd-popup4" role="alert">
+            <div class="cd-popup-container4 cd-popup-preview">
+                <div>
+                    <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active" id="preview-button1"></li>
+                            {% if second_preview %}
+                            {% if second_preview != "media/default.png" %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1" id="preview-button2"></li>
+                            {% endif %}
+                            {% if third_preview %}
+                            {% if third_preview != "media/default.png" %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="2" id="preview-button3"></li>
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                            {% if first_preview %}
+                            {% if first_preview != "media/default.png" %}
+                            <div class="carousel-item active" id="view-preview1">
+                                <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="600" height="780">
+                            </div>
+                            {% endif %}
+                            {% if second_preview %}
+                            {% if second_preview != "media/default.png" %}
+                            <div class="carousel-item" id="view-preview2">
+                                <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="600" height="780">
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                            {% if third_preview %}
+                            {% if third_preview != "media/default.png" %}
+                            <div class="carousel-item" id="view-preview3">
+                                <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="600" height="780">
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                            {% else %}
+
+                            {% endif %}
+                        </div>
+                        {% if second_preview %}
+                        {% if second_preview != "media/default.png" %}
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev" style="height: 850px;">
+                            <span style="font-size: 3em; color: #dad8d8;">
+                                <i class="fas fa-angle-left"></i>
+                            </span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next" style="height: 850px;">
+                            <span style="font-size: 3em; color: #dad8d8;">
+                                <i class="fas fa-angle-right"></i>
+                            </span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div> <!-- cd-popup-container -->
+        </div> <!-- cd-popup -->
         <!-- detail of contents -->
         <div class="row">
             <div class="contents-detail">
@@ -665,7 +710,7 @@ xpopup
                     </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
                     <button type="button" class="cd-popup-trigger" id='enrollcontents' class="pointeffect">
-                        <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
+                        콘텐츠 구매
                     </button>
                     <div class="cd-popup" role="alert">
                         <div class="cd-popup-container">
@@ -724,7 +769,11 @@ xpopup
         <!-- replyment -->
         <div class="row">
             <div class="contents-reply">
-                <div class="icon-boxs">
+                {% if request.session.user_email == contents.writeremail_id %}
+                <div class="icon-boxs afterLogin">
+                {% else %}
+                <div class="icon-boxs beforeLogin">
+                {% endif %}
                     <div class="icon-box">
                         <img src="{% static 'unid/icon/wordballoon-icon.png' %}" border="0" width="20" height="20">
                         {{ contents.replymentcount }}
@@ -740,15 +789,17 @@ xpopup
                 </div>
                 {% if request.session.user_email == contents.writeremail_id %}
                 <div class="test icon-box">
-                    <a href="">
-                        <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
-                    </a>
                     <a href="{% url 'postmodify' contents.contents_id %}">
                         <img src="{% static 'unid/icon/icons-수정.png' %}" width="75" height="30" >
                     </a>
                     <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">
                 </div>
                 {% else %}
+                <div class="test icon-box">
+                    <a href="">
+                        <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
+                    </a>
+                </div>
                 {% endif %}
                 <div class="cd-popup2" role="alert">
                     <div class="cd-popup-container2">
@@ -813,7 +864,7 @@ xpopup
                         {% else %}
                         <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
                         {% endif %}
-                            {{ reply.writeremail_id }}
+                            {{ reply.writeremail.name }}
                         </a>
                     </div>
                     <div class="reply-date">
@@ -894,7 +945,26 @@ xpopup
             }
 
         });
+        $('.preview').on('click', function() {
+            var id = $(this).attr('name');
 
+            $('.cd-popup4').addClass('is-visible');
+        })
+
+        //close popup
+        $('.cd-popup4').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup4') || $(event.target).is('.cd-popup-no111')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup4').removeClass('is-visible');
+            }
+
+        });
         //open popup
         $('.opinion').on('click', function(event){
             event.preventDefault();

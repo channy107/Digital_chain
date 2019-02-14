@@ -395,7 +395,7 @@
 .information-popular-row .popular-rows .popular-rows-title {
     color : #333333;
     font-weight: 500;
-    font-size: 14.1px;
+    font-size: 17.1px;
     margin: 0 0 20px 0;
 }
 .information-popular-row .popular-rows .popular-row {
@@ -574,7 +574,7 @@
     }
 
 .carousel {
-    margin: 0 !important;
+    margin: 0 auto !important;
 }
 .contents-price {
     display: inline;
@@ -654,7 +654,8 @@
 }
 .search-category {
     margin: 0 0 15px;
-
+    font-size: 16px;
+    font-weight: 500;
 
 }
 

@@ -17,7 +17,7 @@ from haystack.query import SearchQuerySet, EmptySearchQuerySet
 from haystack.views import SearchView
 from web3 import Web3, HTTPProvider
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 import json
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -361,37 +361,69 @@ def contentsdetail(request, id):
     replys = replysForContents.objects.filter(contents_id=id)
     print(contents.writeremail)
     try:
-        request.session['post_id']
+        print("세션 유무 확인")
+        request.session['user_email']
+        print(request.session['user_email'])
+        print("세션 있음")
+        if request.session['user_email'] != contents.writeremail.email:
+            print("세션이 글쓴이랑 달라")
+            try:
+                print("게시글 정보 세션 유무 확인")
+                if request.session['post_id']:
+                    pass
+            except KeyError as e:
+                print("글쓴이랑 다른데 게시글정보세션이 없어")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
+            print("글쓴이랑 다른데 게시글 정보 세션이 있어")
+            if request.session['post_id'] != id:
+                print("글쓴이랑 다르고 정보세션이 있는데 정보세션이 현 게시글과 달라")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
     except KeyError as e:
-        request.session['post_id'] = id
-        if contents.writeremail == request.session['user_email']:
-            pass
-        else:
+        print("세션 없음")
+        # 세션이 없으면 request.session['post_id'] 가 일치하는지 않하는지만
+        try:
+            if request.session['post_id'] == id:
+                print("세션은 없는데 포스트 아이디가 게시글이랑 같으면")
+                pass
+            else:
+                print("세션 없고 포스트아이디가 게시글이랑 달라")
+                request.session['post_id'] = id
+                contents.hits = contents.hits + 1  # 조회수 증가
+                contents.save()
+        except KeyError as e:
+            print("세션도 없고 게시글 정보 세션 없음")
+            request.session['post_id'] = id
             contents.hits = contents.hits + 1  # 조회수 증가
             contents.save()
-    if request.session['post_id'] != id and contents.writeremail != request.session['user_email']:
-        request.session['post_id'] = id
-        contents.hits = contents.hits + 1  # 조회수 증가
-        contents.save()
-
+    print("끝")
     previewlist = []
     if previewInfo.objects.filter(contents_id=id).values():
         for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
             previewimage = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
             previewlist.append(previewimage)
-        first_preview = previewlist[0]
-        try:
+
+        if len(previewlist) == 2:
+            first_preview =  previewlist[0]
             second_preview = previewlist[1]
-        except IndexError as e:
-            second_preview = ""
-        try:
+            third_preview = "media/default.png"
+        elif len(previewlist) == 3:
+            first_preview = previewlist[0]
+            second_preview = previewlist[1]
             third_preview = previewlist[2]
-        except IndexError as e:
-            third_preview = ""
+        elif len(previewlist) == 1:
+            first_preview = previewlist[0]
+            second_preview = "media/default.png"
+            third_preview = "media/default.png"
     else:
-        first_preview = 'media/default.png'
-        second_preview = 'media/default.png'
-        third_preview = 'media/default.png'
+        first_preview = "media/default.png"
+        second_preview = "media/default.png"
+        third_preview = "media/default.png"
+
+
     files_infos = contentsInfo.objects.filter(contents_id=id).values()
 
     rpc_url = "http://222.239.231.252:8220"
@@ -456,12 +488,13 @@ def moneytrade(request):
     buyerinfo = myPageInfomation.objects.get(email=request.session['user_email'])
     buyeraccount = Web3.toChecksumAddress(buyerinfo.account)
     buyerpwd = request.POST['pwd']
+
     print(buyerpwd)
     print(selleraccount)
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -474,16 +507,19 @@ def moneytrade(request):
 
     )
     br.save()
-
+    buyeraccount1 = myPageInfomation.objects.get(email=request.session['user_email'])
+    selleraccount1 = myPageInfomation.objects.get(email=writeremail)
+    contentsId = uploadContents.objects.get(contents_id=request.POST['id'])
     wif = walletInFormation (
-                            fromAccount=buyerinfo.email,
-                            toAccount=sellerinfo.email,
+                            fromAccount=buyeraccount1,
+                            toAccount=selleraccount1,
                             balance= price,
                             type="contentsTrasaction",
                             txid=receipt,
                             transactiondate=timezone.now(),
-                            aaa=title
-    )
+                            aaa=title,
+                            contents_id=contentsId,
+                        )
     wif.save()
 
 
@@ -497,7 +533,7 @@ def main(request):
     populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의노트"))[0:6]
     populated_fortest_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="시험자료"))[0:6]
     populated_video_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="동영상"))[0:6]
-    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="자소서"))[0:6]
+    populated_fiction_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="자기소개서"))[0:6]
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
@@ -959,7 +995,28 @@ def mainreply(request):
            "replytext": request.POST['reply']
            }
     return JsonResponse(res)
+def zzz(request):
+    # # 저장 또는 발행하기 버튼을 누른 경우 (POST)
+    if request.method == "POST":
+        print("시작")
+    #     # 두 경우 모두, 일단 DB에 새로 생성된 Post를 저장한다
+        post = Post.objects.create(
+            title=request.POST.get('title'),
+            delta_content=request.POST.get('answer_delta'),
+        )
+        print("1")
+    #     # post를 save한 경우 (save - default published=False)
+        if request.POST.get('action') == "save":
+            url = '/unid/zzz/'
+            return HttpResponseRedirect(url)
+    #     # post를 publish한 경우 (published=True)
+    #     elif request.POST.get('action') == 'publish':
+    #         post.publish()
+    #         return redirect('quill:published_list')
+    # # 처음 글쓰기 페이지로 온 경우 (GET)
+    # return render(request, 'quill/post_form.html')
 
+    return render(request, 'unid/zzzz.html', {})
 def main_upload(request):
     if request.method == 'GET':
 
@@ -1012,7 +1069,7 @@ def main_upload(request):
             )
             imageInfo.save()
 
-        url = '/unid'
+        url = '/unid/information/'
         return HttpResponseRedirect(url)
 
 
@@ -1056,7 +1113,7 @@ def createaccount(request):
         lockpwd = sha256(password.encode('utf-8'))
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
-            print(IDX)
+            print("이거시" + IDX)
         except TypeError as e:
             print("errorpass")
             IDX = 0
@@ -1245,7 +1302,8 @@ def contentsupload(request):
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
                 downloadcount=0,
                 replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png'
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
             )
             br.save()
         except IndexError as e:
@@ -1264,7 +1322,8 @@ def contentsupload(request):
                 reference=request.POST['reference'],
                 downloadcount=0,
                 replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png'
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
             )
             br.save()
         uifilelist = request.POST['uifilelist'].split(',')
@@ -1299,7 +1358,7 @@ def contentsupload(request):
         for i in range(len(filehashdatas)):
             # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
             tx_hash = cmc.functions.addContents(request.session['user_email'], filehashdatas[i]).transact(
-                {"from": w3.eth.accounts[0], "gas": 1000000})
+                {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
             transactionHashList.append(receipt)
 
@@ -1425,6 +1484,71 @@ def test_validfile(request):
 
         return_obj = JsonResponse(res)
         return return_obj
+
+@login_required
+def infomodify(request, id):
+    if request.method == 'GET':
+        posts = Post.objects.get(posts_id=id)
+
+        return render(request, 'unid/infomodify.html', {'posts':posts})
+    else:
+        try:
+            upload_files = request.FILES.getlist('user_files')
+        except MultiValueDictKeyError as e:
+            pass
+
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        reward_date = now + timedelta(days=7)
+
+        try:
+            print(os.getcwd())
+            os.mkdir("media/imageForInfo/" + today)
+        except FileExistsError as e:
+            pass
+
+        sess = request.session['user_email']
+        title = request.POST['title']
+        category = request.POST['category']
+        contents = request.POST['contents']
+        tags = request.POST['tags']
+        image_list = []
+        for upload_file in upload_files:
+            filename = upload_file.name
+            image_list.append(filename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            info_dir = "media/imageForInfo/" + today + "/"
+            with open(info_dir + filename, 'wb') as file:
+                for chunk in upload_file.chunks():
+                    file.write(chunk)
+
+        user = myPageInfomation.objects.get(email=sess)
+
+        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+
+
+
+        images = postImage.objects.filter(posts_id=id)
+
+        for delete in images:
+            delete.delete()
+
+        idx = Post.objects.get(posts_id=id)
+        image_dir = "media/imageForInfo/" + today + "/"
+        imagelistlength = len(image_list)
+
+        for i in range(imagelistlength):
+            imageInfo = postImage(
+                posts_id=idx,
+                uploadfilename=image_list[i],
+                imagepath=image_dir + image_list[i],
+            )
+            imageInfo.save()
+
+        url = '/unid/information/'
+        return HttpResponseRedirect(url)
+
 
 @login_required
 def postmodify(request, id):

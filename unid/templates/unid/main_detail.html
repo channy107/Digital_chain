@@ -423,7 +423,7 @@ xpopup
             {% if request.session.user_email == posts.user_id %}
                 <div class="test icon-box">
                     <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
-                    <a href="{% url 'postmodify' contents.contents_id %}">
+                    <a href="{% url 'infomodify' posts.posts_id %}">
                         <img src="{% static 'unid/icon/icons-수정.png' %}" width="75" height="30" >
                     </a>
                     <img src="{% static 'unid/icon/icons-삭제.png' %}" width="75" height="30" class="postdelete pointeffect">

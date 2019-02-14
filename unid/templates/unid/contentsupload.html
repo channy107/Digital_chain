@@ -464,12 +464,15 @@ xpopup
     margin: 10px 0 15px 0;
     font-weight: bold;
 }
-@media only screen and (min-width: 1170px) {
+@media only screen and (min-width: 349px) {
   .cd-popup-container {
-    margin: 10% auto;
+    margin: 15rem auto;
   }
   .cd-popup-container1 {
-    margin: 10% auto;
+    margin: 11rem auto;
+  }
+  .cd-popup-container3 {
+    margin: 17rem auto;
   }
 
 
@@ -886,7 +889,7 @@ xpopup
             console.log($('#user_preview_files').get(0).files);
             var fileee = $('#user_preview_files').get(0).files[0]['name'];
             var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
-            const extendArray = ['.jpg', '.png', '.jpeg];
+            const extendArray = ['.jpg', '.png', '.jpeg'];
             console.log(fileee);
             for (var i = 0; i < upload_files.length; i++) {
                 kkk = $('#user_preview_files').get(0).files[i]['name'];

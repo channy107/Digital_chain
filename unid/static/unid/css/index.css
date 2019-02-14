@@ -259,3 +259,20 @@
         .carousel-indicators li {
             background-color: rgb(195, 195, 195);
         }
+        .afterLogin {
+            width: 665px;
+        }
+        .beforeLogin {
+            width: 730px;
+        }
+        .picture-box {
+            margin: 0 auto;
+        }
+        .preview {
+            display: inline-block;
+            float: left;
+            width: 270px;
+        }
+        .preview img {
+            margin: 0 auto;
+        }
