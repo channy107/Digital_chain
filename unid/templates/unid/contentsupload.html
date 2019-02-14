@@ -1129,11 +1129,11 @@ xpopup
 
             var WEB3 = require('web3');
             var web3 = new WEB3();
-            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:9545"));
+            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8220"));
             var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
 
             console.log(1);
-            let cmc = contentsmasterContract.at("0xbacd33ac5ac0b4472fecb1c092777fdfba797499");
+            let cmc = contentsmasterContract.at("0x318970434dad6697677992794a62737dc15f1bb5");
             console.log(2);
 
 
