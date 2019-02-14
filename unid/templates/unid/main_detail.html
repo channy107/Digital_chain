@@ -6,6 +6,16 @@
 <link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
 <link href="{% static 'unid/css/main_detail.css' %}" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
+<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<!-- Theme included stylesheets -->
+<link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+<!-- Core build with no theme, formatting, non-essential modules -->
+<link href="//cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+<script src="//cdn.quilljs.com/1.3.6/quill.core.js"></script>
 
 <style>
 ul {
@@ -363,15 +373,11 @@ xpopup
         <!-- preview -->
 
         <!-- detail of contents -->
-        <div class="row">
+        <form action="" method="post">
+            <div id="quill-editor" aria-readonly="true">
 
-            <div class="main-detail">
-                {% for image in images %}
-                <img class="detail-img" src="/{{image.imagepath}}"  width="600px" height="600px">
-                {% endfor %}
-                <p>{{ posts.contents }}</p>
             </div>
-        </div>
+        </form>
 
         <div class="row">
             <div class="contents-tag">
@@ -534,9 +540,103 @@ xpopup
 
 
 
-
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 <script>
+    var toolbarOptions = [      // toggled buttons
+      ['image'],                                 // remove formatting button
+    ];
+    var editor = new Quill('#quill-editor', {
+        bounds: '#quill-editor',
+        modules: {
+          toolbar: toolbarOptions
+        },
+        readOnly: true,
+        placeholder: 'Free Write...',
+    });
+
+    // quill editor add image handler
+    editor.getModule('toolbar').addHandler('image', () => {
+      selectLocalImage();
+    });
+
+      /**
+       * Step1. select local image
+       *
+       */
+    function selectLocalImage() {
+        let input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('name', 'richimage');
+        input.click();
+
+        input.onchange = () => {
+            // 파일선택창에서 선택한 첫번째 파일
+            let file = input.files[0];
+            if (/^image\//.test(file.type)) {
+            //     saveToServer();
+                form_data = new FormData();
+                console.log(file);
+                form_data.append('richimage', file);
+                console.log(form_data);
+                $.ajax({
+                    type: 'POST',
+                    url: "../uploadImage/",
+                    processData: false,
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    data: form_data,
+                    success: function(res) {
+                        console.log(333);
+                        // this is callback data: url
+                        //let url = xhr.responseText;
+                        //console.log(444);
+                        //insertToEditor(url);
+                        console.log(res.status);
+                        // this is callback data: url
+                        console.log(res.status);
+                        console.log(res.responseText);
+                        insertToEditor(res.responseText);
+                    }
+                });
+            } else {
+                console.log("셀렉로클이미지5");
+                console.warn('You could only upload images.');
+            }
+         };
+    }
+
+    function insertToEditor(url) {
+        console.log("인선트투에디터");
+        // push image url to rich editor.
+        let range = editor.getSelection();
+        console.log(range)
+        editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
+    }
+
+    var form = document.querySelector('form')
+
+        form.onsubmit = function() {
+
+            //console.log(quill.getContents());
+
+            //console.log(quill.root.innerHTML);
+
+
+
+            var answer_delta = document.querySelector('input[name="answer_delta"]');
+
+            answer_delta.value = JSON.stringify(editor.getContents());
+
+
+
+            //return false;
+
+
+
+        }
+        editor.setContents(JSON.parse("{{ k.delta_content | escapejs }}"));
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
         $(".votings").click(function() {

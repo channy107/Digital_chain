@@ -759,16 +759,8 @@ def main_detail(request, id):
     images = postImage.objects.filter(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
-
-    try:
-        myPageInfomation.objects.filter(email=request.session['user_email']).values()
-
-    except KeyError as e:
-        context = {'posts': posts, 'replys': replys, 'likes':likes,'images':images}
-        return render(request, 'unid/main_detail.html', context)
-
-
-    context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images}
+    k = richtextTest.objects.get(id=23)
+    context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
     return render(request, 'unid/main_detail.html', context)
 
 def user_detail(request, id):
@@ -948,29 +940,61 @@ def zzz(request):
     # # 저장 또는 발행하기 버튼을 누른 경우 (POST)
     if request.method == "POST":
         print("시작")
-    #     # 두 경우 모두, 일단 DB에 새로 생성된 Post를 저장한다
-        post = Post.objects.create(
+        print(request.POST.get('title'))
+        print(request.POST.get('answer_delta'))
+        post = richtextTest.objects.create(
             title=request.POST.get('title'),
             delta_content=request.POST.get('answer_delta'),
         )
         print("1")
-    #     # post를 save한 경우 (save - default published=False)
         if request.POST.get('action') == "save":
+            print("2")
             url = '/unid/zzz/'
             return HttpResponseRedirect(url)
-    #     # post를 publish한 경우 (published=True)
-    #     elif request.POST.get('action') == 'publish':
-    #         post.publish()
-    #         return redirect('quill:published_list')
-    # # 처음 글쓰기 페이지로 온 경우 (GET)
-    # return render(request, 'quill/post_form.html')
 
     return render(request, 'unid/zzzz.html', {})
+
+@csrf_exempt
+def uploadImage(request):
+    print(request)
+    upload_images = request.FILES.get('richimage')
+    print(1)
+    print(upload_images)
+    now = datetime.now()
+    today = now.strftime('%Y-%m-%d')
+    try:
+        print(os.getcwd())
+        os.mkdir("media/" + today)
+    except FileExistsError as e:
+        pass
+    print(2)
+
+
+    print(os.getcwd())
+    contents_dir = "media/" + today + "/"
+    # 해당 날짜의 디렉토리
+    with open(contents_dir + upload_images.name, 'wb') as file:  # 저장경로
+        for chunk in upload_images.chunks():
+            file.write(chunk)
+    res = { 'status': 200, 'responseText':'/media/'+today + '/' + upload_images.name }
+    return JsonResponse(res)
+
+
+
+
+
+
+def kkk(request):
+    k = richtextTest.objects.get(id=23)
+
+    return render(request, 'unid/ddd.html', {'k': k})
 def main_upload(request):
     if request.method == 'GET':
 
             return render(request, 'unid/main_upload.html', {'mypage':mypage})
     else:
+
+
         try:
             upload_files = request.FILES.getlist('user_files')
         except MultiValueDictKeyError as e:

@@ -787,7 +787,9 @@ xpopup
         $('#nav1').removeClass('visible-place');
         $('#uploadbutton').on('click', function() {
             var form = $('form')[1];
+            console.log(form);
             var formData = new FormData(form);
+            console.log(formData);
                 $.ajax({
                     type: 'POST',
                     url: "../test_validfile/",
