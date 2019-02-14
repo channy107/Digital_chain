@@ -1,5 +1,6 @@
 body{
     background-color: #f2f2f2;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -12,6 +13,7 @@ margin-top: 14px;
 box-shadow: 0px 0px 0px 2px #e6e6e6;
 color: white;
 text-shadow: 0.5px 0.5px 0.1px black;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -20,32 +22,38 @@ background: #a3e2ab;
 background-size: cover;
 margin: 0 auto;
 height: 300px;
-margin-top: 19px;
+margin-top: 14px;
 box-shadow: 0px 0px 0px 2px #e6e6e6;
 color: white;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 
 #user_profile{
 list-style: none;
 height:80px;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #user_image_upload.aaa::-webkit-file-upload-button {
   visibility: hidden;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .aaa::-webkit-file-upload-button {
   visibility: hidden;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 #myinfo_edit_mode{
 display:none;
 text-shadow: 0.5px 0.5px 0.1px black;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 form{
     text-align:center;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -55,6 +63,7 @@ form{
     background-color: transparent;
     width: 200px;
     height: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -65,6 +74,7 @@ form{
     background-color: transparent;
     width: 200px;
     height: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #change_user_name.has-success{
@@ -73,6 +83,7 @@ form{
     background-color: transparent;
     width: 200px;
     height: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -80,6 +91,7 @@ form{
 ul{
 list-style: none;
 padding-left:0px;
+font-family: 'Noto Sans KR', sans-serif;
 
 }
 
@@ -95,10 +107,11 @@ font-size: 11px;
 text-shadow: 0.5px 0.5px 0.5px black;
 color:  white;
 margin-left: 41%;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #user-info2.edit_mode{
-
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #container{
@@ -108,6 +121,7 @@ margin-left: 41%;
     min-height: 700px;
     box-shadow: 0px 0px 0px 2px #e6e6e6;
     margin-top: 50px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -121,6 +135,7 @@ font-size: larger;
 font-weight: bold;
 border-bottom: 1px solid #c1c1c1;
 padding-bottom:5px;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -133,6 +148,7 @@ border-bottom: 2px solid #e0e0e0;
 margin: 0 auto;
 width:1100px;
 height:2 -P 60220px;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -146,24 +162,29 @@ height:2 -P 60220px;
     text-align: center;
     padding:2px;
     font-size:small;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #logo{
 margin: 0 auto;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #description{
 margin bottom
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #logInLinks{
 display: block;
 margin: 0 auto;
 width: 80%
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #signup{
 display: inline-block;
+font-family: 'Noto Sans KR', sans-serif;
 }
 
 #text{
@@ -175,6 +196,7 @@ display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 #submit{
@@ -186,23 +208,27 @@ display: inline-block;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 #submit:hover {
   background-color: #45a049;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 #text {
   border-radius: 5px;
   background-color: #f2f2f2;
   padding: 20px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 #title_of_contents{
     text-align: left;
     font-size:medium;
     float: left;
-    width: 13%;
+    width: 14%;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #number_of_something{
@@ -211,6 +237,7 @@ display: inline-block;
     float:left;
     width: 8%;
     margin-top: 3px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -218,35 +245,42 @@ display: inline-block;
     margin-left:50px;
     min-height: 250px;
     margin-top: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #text_message{
     margin-top: 30px;
     font-size: small;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #col{
     text-align: center;
     font-size:small;
     font-weight: 400;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
 #reply{
     margin-left:50px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #uploads{
     margin-left:50px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
 #downloads{
     margin-left:50px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 #contents_transfer{
     margin-left:50px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -258,23 +292,27 @@ display: inline-block;
     float: right;
     margin-top: 10px;
     padding-left: 20px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 ul.tabs{
   margin: 0px;
   padding: 0px;
   list-style: none;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 ul.tabs li{
   background: none;
   display: inline-block;
   padding: 10px 15px;
   cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 ul.tabs li.current{
   background: ;
   position: relative;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 ul.tabs li.current:after{
@@ -286,6 +324,7 @@ ul.tabs li.current:after{
   margin-top: 13px;
   margin-left: -6px;
   border-bottom: 5px solid #f00;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -293,10 +332,12 @@ ul.tabs li.current:after{
   display: none;
   background: ;
   padding: 15px;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .tab-content.current{
   display: inherit;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -309,6 +350,7 @@ a {
     text-decoration: none;
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 
@@ -318,41 +360,48 @@ a {
     width: 944px;
     height: 150px;
     background-color: white;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .row-picture {
     display: inline-block;
     width: 99px;
     height: 75px;
     float: left;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) {
     padding: 0;
     height: 30px;
     width: 950px;
     margin: 0 0 5px 0;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) li {
     list-style: none;
     display: inline-block;
     padding: 0;
     text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) li:nth-child(1) img{
     width: 30px;
     height: 30px;
     border-radius: 25px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) li:nth-child(2) {
     font-size: 13.1px;
     font-weight: bold;
     color: #333333;
     margin: 0 10px 0 5px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) li:nth-child(3) {
     font-size: 11px;
     font-weight: 400;
     color: #666666;
     margin: 0 20px 0 5px;
+    font-family: 'Noto Sans KR', sans-serif;
 
 }
 .popular-row ul:nth-child(1) li:nth-child(4) {
@@ -365,6 +414,7 @@ a {
     height: 22px;
     padding: 2px;
     background-color: red;
+    font-family: 'Noto Sans KR', sans-serif;
 
 }
 
@@ -374,37 +424,43 @@ a {
     height: 50px;
     display: inline-block;
     margin: 0 0 0 15px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(3) li {
     list-style: none;
     width: 830px;
-
+font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(3) li:nth-child(1) {
     list-style: none;
     width: 830px;
     height: 20px;
     margin: 0 0 9px 0;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(3) li:nth-child(1) a {
     color: #333333;
     font-size: 16px;
     font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(3) li:nth-child(2) {
     height: 40px;
     width: 830px;
     line-height: 16px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(3) li:nth-child(2) a {
     color: #4d4d4d;
     font-size: 14px;
     font-weight: 400;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(1) li {
     list-style: none;
     display: inline;
     padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .popular-row ul:nth-child(4) {
@@ -414,6 +470,7 @@ a {
     display: inline-block;
     padding: 0;
     padding-left: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 .popular-row ul:nth-child(4) li{
     list-style: none;
@@ -422,15 +479,19 @@ a {
     font-size: 13px;
     color:#333333;
     font-weight: 400;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .popular-row .row-bottom img {
     width: 15px;
     height: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
 
 }
 
-
+tr{
+font-family: 'Noto Sans KR', sans-serif;
+}
 
 
 
