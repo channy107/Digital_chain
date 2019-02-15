@@ -130,20 +130,20 @@
                     {% for article in articles %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            {% if article.user.name == mypage.name %}
+                            {% if article.email.name == mypage.name %}
                             <a href="/unid/mypage">
                             {% else %}
-                            <a href="{% url 'user_detail' article.user.IDX %}">
+                            <a href="{% url 'user_detail' article.email.IDX %}">
                             {% endif %}
                                 <li>
                                     {% if article.user.userimage %}
-                                    <img src="/{{ article.user.userimage }}">
+                                    <img src="/{{ article.email.userimage }}">
                                     {% else %}
                                     <img src="{% static 'unid/icon/profle-icon.png' %}">
                                     {% endif %}
                                 </li>
                                 <li>
-                                    {{ article.user.name }}
+                                    {{ article.email.name }}
                                 </li>
                             </a>
                             <li>
@@ -202,20 +202,20 @@
                     {% for reply in replies %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            {% if reply.user.name == mypage.name %}
+                            {% if reply.email.name == mypage.name %}
                             <a href="/unid/mypage">
                             {% else %}
-                            <a href="{% url 'user_detail' reply.user.IDX %}">
+                            <a href="{% url 'user_detail' reply.email.IDX %}">
                             {% endif %}
                                 <li>
-                                    {% if reply.user.userimage %}
-                                    <img src="/{{ reply.user.userimage }}">
+                                    {% if reply.email.userimage %}
+                                    <img src="/{{ reply.email.userimage }}">
                                     {% else %}
                                     <img src="{% static 'unid/icon/profle-icon.png' %}">
                                     {% endif %}
                                 </li>
                                 <li>
-                                    {{ reply.user.name }}
+                                    {{ reply.email.name }}
                                 </li>
                             </a>
                             <li>

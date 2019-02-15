@@ -354,7 +354,15 @@ xpopup
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <div class="infobox"  align="center">
                     <div class="writerinfo">
-
+                        <a href="{% url 'user_detail' posts.email.IDX %}">
+                            <p align="center" size="5" style="color: black;">
+                                {% if posts.email.userimage %}
+                                <img src="/{{ contents.user.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
+                                {% else %}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ post.email.name }}
+                                {% endif %}
+                            </p>
+                        </a>
                     </div>
                     <div class="dateinfo">
                         {{ posts.created_at |timesince }}전
@@ -419,7 +427,7 @@ xpopup
 
             </div>
             </div>
-            {% if request.session.user_email == posts.user_id %}
+            {% if request.session.user_email == posts.email_id %}
                 <div class="test icon-box">
                     <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     <a href="{% url 'infomodify' posts.posts_id %}">
@@ -477,7 +485,42 @@ xpopup
             </div>
         </div>
                 <!-- cd-popup -->
-
+         <div class="row">
+            <div class="reply-list">
+                {% for reply in replys %}
+                <div class="reply">
+                    <div class="reply-picture">
+                        {% if reply.email.name == mypage.name %}
+                        <a href="/unid/mypage">
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.email.IDX %}">
+                        {% endif %}
+                            {% if reply.mail.userimage %}
+                                <img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
+                            {% else %}
+                                <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="reply-id">
+                        {% if reply.email.name == mypage.name %}
+                        <a href="/unid/mypage" style="color:black">
+                        {% else %}
+                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
+                        {% endif %}
+                            {{ reply.user_id }}
+                        </a>
+                    </div>
+                    <div class="reply-date">
+                        {{ reply.created_at }}
+                    </div>
+                    <div class="reply-text">
+                        {{ reply.replytext }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
         <div class="row">
             {% if request.session.user_email %}
             <form class="input-reply">
