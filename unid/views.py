@@ -1070,15 +1070,20 @@ def main_upload(request):
     else:
 
         sess = request.session['user_email']
+        print(1)
         title = request.POST['title']
+        print(2)
         category = request.POST['category']
+        print(3)
         tags = request.POST['tags']
+        print(request.POST['firstimage'])
         image_path = request.POST['firstimage']
-        image_list = []
+        print(image_path)
         # reward_date = now + timedelta(days=7)
         email = myPageInfomation.objects.get(email=sess)
         users = request.user
-
+        print(4)
+        print(request.POST.get('answer_delta'))
         info = Post(
             title=title,
             # reward_date=reward_date,
@@ -1090,7 +1095,7 @@ def main_upload(request):
             tags=tags,
             category_path="media/" +request.POST['category']+'.png')
         info.save()
-
+        print(5)
         url = '/unid/information/'
         return HttpResponseRedirect(url)
 
