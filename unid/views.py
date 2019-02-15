@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
+from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 import time
 from django.views.decorators.http import require_POST
@@ -1013,7 +1014,6 @@ def zzz(request):
     if request.method == "POST":
         print("시작")
         print(request.POST.get('title'))
-        print(request.POST.get('answer_delta'))
         post = richtextTest.objects.create(
             title=request.POST.get('title'),
             delta_content=request.POST.get('answer_delta'),
@@ -1028,7 +1028,6 @@ def zzz(request):
 
 @csrf_exempt
 def uploadImage(request):
-    print(request)
     upload_images = request.FILES.get('richimage')
     print(1)
     print(upload_images)
@@ -1040,15 +1039,19 @@ def uploadImage(request):
     except FileExistsError as e:
         pass
     print(2)
-
-
     print(os.getcwd())
     contents_dir = "media/" + today + "/"
     # 해당 날짜의 디렉토리
     with open(contents_dir + upload_images.name, 'wb') as file:  # 저장경로
         for chunk in upload_images.chunks():
             file.write(chunk)
-    res = { 'status': 200, 'responseText':'/media/'+today + '/' + upload_images.name }
+
+    file_path = '/media/'+today + '/' + upload_images.name
+    # br = PostImage (
+    #
+    #
+    # )
+    res = { 'status': 200, 'responseText':file_path }
     return JsonResponse(res)
 
 
@@ -1063,56 +1066,30 @@ def kkk(request):
 def main_upload(request):
     if request.method == 'GET':
 
-            return render(request, 'unid/main_upload.html', {'mypage':mypage})
+        return render(request, 'unid/main_upload.html')
     else:
-
-
-        try:
-            upload_files = request.FILES.getlist('user_files')
-        except MultiValueDictKeyError as e:
-            pass
-
-        now = datetime.now()
-        today = now.strftime('%Y-%m-%d')
-        reward_date = now + timedelta(days=7)
-
-        try:
-            print(os.getcwd())
-            os.mkdir("media/imageForInfo/" + today)
-        except FileExistsError as e:
-            pass
 
         sess = request.session['user_email']
         title = request.POST['title']
         category = request.POST['category']
-        contents = request.POST['contents']
         tags = request.POST['tags']
+        image_path = request.POST['firstimage']
         image_list = []
-        for upload_file in upload_files:
-            filename = upload_file.name
-            image_list.append(filename)
-            now = datetime.now()
-            today = now.strftime('%Y-%m-%d')
-            info_dir = "media/imageForInfo/" + today + "/"
-            with open(info_dir + filename, 'wb') as file:
-                for chunk in upload_file.chunks():
-                    file.write(chunk)
+        # reward_date = now + timedelta(days=7)
+        email = myPageInfomation.objects.get(email=sess)
+        users = request.user
 
-        user = myPageInfomation.objects.get(email=sess)
-
-        info = Post(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+        info = Post(
+            title=title,
+            # reward_date=reward_date,
+            user=users,
+            email=email,
+            category=category,
+            contents=request.POST.get('answer_delta'),
+            image_path= image_path,
+            tags=tags,
+            category_path="media/" +request.POST['category']+'.png')
         info.save()
-
-        idx = Post.objects.all().order_by('-posts_id')[0]
-        image_dir = "media/imageForInfo/" + today + "/"
-        imagelistlength = len(image_list)
-        for i in range(imagelistlength):
-            imageInfo = postImage(
-                posts_id=idx,
-                uploadfilename=image_list[i],
-                imagepath=image_dir + image_list[i],
-            )
-            imageInfo.save()
 
         url = '/unid/information/'
         return HttpResponseRedirect(url)
