@@ -55,6 +55,7 @@
                 </select>
             </div>
             <input name="answer_delta" type="hidden">
+            <input name="answer_delta_text" id="answer_delta_text" type="hidden">
             <div id="quill-editor" aria-readonly="false">
                 <p>Hello World!</p>
                 <p>Some initial <strong>bold</strong> text</p>
@@ -84,7 +85,7 @@
 
                         <ul class="cd-buttons">
                             <li><a href="#0" class="cd-popup-no">No</a></li>
-                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
+                            <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="richTextSubmin() ">Yes</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
@@ -189,18 +190,20 @@
       console.log(form);
       console.log(document.querySelector('input[name="answer_delta"]'));
       console.log(document.querySelector('input[name="answer_delta"]').value);
-      form.onsubmit = function() {
-          //console.log(quill.getContents());
-          //console.log(quill.root.innerHTML);
+          function richTextSubmin() {
+              //console.log(quill.getContents());
+              //console.log(quill.root.innerHTML);
 
 
+                answer_delta_text
+              var answer_delta = document.querySelector('input[name="answer_delta"]');
+              answer_delta.value = JSON.stringify(editor.getContents());
 
-          var answer_delta = document.querySelector('input[name="answer_delta"]');
-          answer_delta.value = JSON.stringify(editor.getContents());
-
-
-          alert(answer_delta.value)
-      }
+              document.getElementById("answer_delta_text").value = editor.getText();
+              alert(answer_delta.value);
+              alert(answer_delta_text.value);
+              document.getElementById('myform').submit()
+          }
 
 jQuery(document).ready(function($){
     $('#nav1').addClass('visible-place');

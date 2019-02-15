@@ -105,7 +105,7 @@ class Post(models.Model):
     email = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE, null=True)
     image_path = models.CharField(max_length=250, null=True)
     title = models.CharField(max_length=100)
-    # contents = JSONField(blank=True, null=True)
+    contents = JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
     category = models.CharField(max_length=50)

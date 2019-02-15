@@ -832,7 +832,7 @@ def main_detail(request, id):
     images = postImage.objects.filter(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
-    k = richtextTest.objects.get(id=23)
+    k = Post.objects.get(posts_id=38)
     context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
     return render(request, 'unid/main_detail.html', context)
 
@@ -1082,7 +1082,7 @@ def main_upload(request):
         # reward_date = now + timedelta(days=7)
         email = myPageInfomation.objects.get(email=sess)
         users = request.user
-        print(4)
+        print(request.POST['answer_delta_text'])
         print(request.POST.get('answer_delta'))
         info = Post(
             title=title,
@@ -1093,7 +1093,10 @@ def main_upload(request):
             contents=request.POST.get('answer_delta'),
             image_path= image_path,
             tags=tags,
-            category_path="media/" +request.POST['category']+'.png')
+            category_path="media/" +request.POST['category']+'.png',
+            aaa=request.POST['answer_delta_text'],
+        )
+
         info.save()
         print(5)
         url = '/unid/information/'
@@ -2091,7 +2094,7 @@ from django.contrib import auth
 
 def commandMysql(request):
 
-    bbr = Post.objects.all().delete()
+    bbr = myPageInfomation.objects.filter(IDX=4).delete()
     return HttpResponse("성공쓰")
 
 
