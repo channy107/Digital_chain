@@ -577,8 +577,7 @@
         var form = document.getElementById("change_user_name").value;
         var nickname = document.user_profile_edit_form.name;
 
-        if (!form)
-        {
+        if (!form){
             document.getElementById("change_user_name").style.border="2px solid #ed1b25";
             document.getElementById("alert").innerHTML="닉네임을 입력하세요";
             document.getElementById("alert").style.color="#ed1b25";
@@ -594,6 +593,7 @@
         if(special_pattern.test(form) == true){
             document.getElementById("change_user_name").style.border="2px solid #ed1b25";
             document.getElementById("alert").innerHTML="특수문자는 사용할 수 없습니다.";
+            console.log(document.getElementById("alert").innerHTML);
             document.getElementById("alert").style.color="#ed1b25";
             return false;
         }
@@ -628,36 +628,20 @@
             document.getElementById("alert").innerHTML="사용가능";
             document.getElementById("alert").style.color="green";
         }
-
-        var k = document.getElementById("alert").html;
-            console.log(k);
-        if (k == "닉네임중복"){
-            document.getElementById("change_user_name").style.border="2px solid #black";
-            alert("닉네임중복");
-            console.log(k);
-            return false;
-        }
-
-    }
-
-    function pwCheck(){
-        var focus1 = document.writeform
-        if(!focus1.pwd.value){
-            focus1.pwd.focus();
-            return false;
-        }
     }
 
     function submitzzz() {
-        if (checkForm() == false) {
-            alert("닉네임을 입력하세요");
-            return false;
-        }
         var k = document.getElementById("alert");
         if (k.innerHTML == "닉네임중복"){
             alert("닉네임중복");
             return false;
         }
+
+        if (checkForm() == false) {
+            alert("닉네임을 입력하세요");
+            return false;
+        }
+
 
         document.getElementById('user_profile_edit_form').submit();
     }
@@ -673,83 +657,7 @@
 
 
 
-
-
-
-        <!--if(!nickname.value){-->
-            <!--alert("닉네임을 입력하세요");-->
-            <!--document.user_profile_edit_form.name.focus();-->
-            <!--return false;-->
-        <!--}-->
-
-        <!--var blank_pattern = /^\s+|\s+$/g;-->
-        <!--if(nickname.value.replace( blank_pattern,'') == ""){-->
-            <!--alert("공백만 입력되었습니다");-->
-            <!--document.user_profile_edit_form.name.focus();-->
-            <!--return false;-->
-        <!--}-->
-
-        <!--var blank_pattern2 = /[\s]/g;-->
-        <!--if(blank_pattern2.test(nickname.value) == true){-->
-            <!--alert("공백은 사용할 수 없습니다");-->
-            <!--document.user_profile_edit_form.name.focus();-->
-            <!--return false;-->
-        <!--}-->
-        <!--else{-->
-            <!--document.getElementById("user_profile_edit_form").style.border="2px solid green";-->
-            <!--document.getElementById("alert").innerHTML="사용가능";-->
-            <!--document.getElementById("alert").style.color="green";-->
-        <!--}-->
-
-        <!--var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;-->
-        <!--if(special_pattern.test(nickname.value) == true){-->
-            <!--alert("특수문자는 입력할 수 없습니다");-->
-            <!--document.user_profile_edit_form.name.focus();-->
-            <!--return false;-->
-        <!--}-->
-
-
-        <!--var profile = document.user_profile_edit_form.profile;-->
-        <!--if(profile.value ==''){-->
-            <!--alert("프로필을 작성해주세요");-->
-            <!--profile.focus();-->
-            <!--return false;-->
-        <!--}-->
-
-        <!--var k = $('#alert').text();-->
-        <!--console.log(alert);-->
-        <!--if (k == "닉네임중복"){-->
-            <!--alert("중복된 닉네임입니다.");-->
-            <!--nickname.focus();-->
-            <!--return false;-->
-        <!--}-->
-
-
-
-        <!--var form = document.user_profile_edit_form;-->
-        <!--if(form.name){-->
-            <!--document.getElementById('user_profile_edit_form').submit();-->
-        <!--}-->
-    <!--}-->
-
-
-
-
-    <!--var moveId = document.getElementById('my_articles')-->
-    <!--moveId.onlick = function() {-->
-        <!--var offset = $("#tab-1" + current).offset();-->
-        <!--$('html, body').animate({scrollTop : offset.top}, 400);-->
-    <!--}-->
-
-
-
-
-
-
-
     jQuery(document).ready(function($){
-        console.log("{{ MoreArticles.paginator.count }}");
-        console.log("되긴하지?");
         $('ul.tabs li').click(function(){
             var tab_id = $(this).attr('data-tab');
             $('ul.tabs li').removeClass('current');
@@ -796,11 +704,11 @@
 
 
 
-        $("#change_user_name").on('keyup', function(event) {
+        $("#change_user_name").on('keyup', function() {
 
             //userid 를 param.
             var user_name =  $("#change_user_name").val();
-            var alert = "닉네임중복";
+            var duplicated = "닉네임중복";
             var alert1 = "사용가능";
             var alert2 = "닉네임을 입력해주세요";
             $.ajax({
@@ -810,39 +718,14 @@
                 url: "../user_name_verification/",
                 success : function(res) {
                     if (res.Ans == 1) {
-                        console.log("1일때임");
-
-
-                        $("#alert").html(alert);
+                        $("#alert").html(duplicated);
                         $("#alert").css("color","#ed1b25");
                         $("#change_user_name").css("border", "2px solid #ed1b25")
-                        $("#change_user_name").focus();
-                        $("#user_profile_edit_form").on("click.user_profile_edit_form", function(e){
-                            e.alert("닉네임중복");
-                            return false;
-                        });
-
-
-                    }
-                    <!--else if (res.Ans == 2) {-->
-                        <!--console.log("2일때임");-->
-                        <!--$("#alert").html(alert2);-->
-                        <!--$("#alert").css("color","#ed1b25");-->
-                        <!--$("#change_user_name").css("border", "2px solid #ed1b25")-->
-                        <!--$("#change_user_name").focus();-->
-                    <!--}-->
-
-                    <!--else {-->
-                        <!--console.log("0일때임");-->
-                        <!--$("#alert").html(alert1);-->
-                        <!--$("#alert").css("color", "green");-->
-                        <!--$("#change_user_name").css("border", "2px solid green")-->
-
-                    <!--}-->
-                },
+                        $("#change_user_name").focus()
+                    };
+                }
             });
         });
-
 
 
 
@@ -850,7 +733,7 @@
             // 남은 글자 수를 구한다.
             var strValue = $(this).val();
             var strLen = strValue.length;
-            console.log(strLen);
+            //console.log(strLen);
             var totalByte = 0;
 
             var len = 0;
@@ -866,7 +749,7 @@
                     totalByte++;
                 }
             }
-            console.log(totalByte);
+            //console.log(totalByte);
             // 넘어가는 글자는 자른다.
             if (totalByte > 10) {
                 alert(10 + "자를 초과 입력 할 수 없습니다.");
@@ -879,7 +762,7 @@
             // 남은 글자 수를 구한다.
             var strValue = $(this).val();
             var strLen = strValue.length;
-            console.log(strLen);
+            //console.log(strLen);
             var totalByte = 0;
 
             var len = 0;
@@ -896,7 +779,7 @@
                 }
                 $('#body_byte3').html(totalByte + "/100");
             }
-            console.log(totalByte);
+            //console.log(totalByte);
             // 넘어가는 글자는 자른다.
             if (totalByte > 100) {
                 alert(100 + "자를 초과 입력 할 수 없습니다.");

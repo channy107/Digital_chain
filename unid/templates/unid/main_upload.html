@@ -148,8 +148,8 @@
                   console.log(form_data);
                   $.ajax({
                       type: 'POST',
-                      url: "../uploadImage/",
-                       processData: false,
+                      url: "/unid/uploadImage/",
+                      processData: false,
                       contentType: false,
                       enctype: 'multipart/form-data',
                       data: form_data,
@@ -161,6 +161,10 @@
                           console.log(res.status);
                           console.log(res.responseText);
                           insertToEditor(res.responseText);
+                          if (!$('.image_box').length) {
+                              $('#myform').append(" <input type=text class='image_box' name='firstimage' style='display: none;' value='" + res.responseText + "'> ")
+                          }
+
                       }
                   });
               } else {

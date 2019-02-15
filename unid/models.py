@@ -127,7 +127,6 @@ class Post(models.Model):
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
-
 class previewInfo(models.Model):
     IDX = models.AutoField(primary_key=True)
     contents_id = models.ForeignKey(uploadContents, on_delete=models.CASCADE)

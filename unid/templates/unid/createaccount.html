@@ -148,15 +148,16 @@
     }
 
     function submitzzz() {
-        if (writeCheck() == false) {
-            alert("닉네임을 입력하세요");
-            return false;
-        }
         var k = document.getElementById("alert");
         if (k.innerHTML == "닉네임중복"){
             alert("닉네임중복");
             return false;
         }
+        if (writeCheck() == false) {
+            alert("닉네임을 입력하세요");
+            return false;
+        }
+
         if (pwCheck() == false) {
             alert("비밀번호를 입력해주세요");
             return false;
@@ -185,7 +186,6 @@
                         $("#alert").css("color","#ed1b25");
                         $("#form-control").css("border", "2px solid #ed1b25")
                         $("#form-control").focus();
-                        return false;
                     }
                 },
             });
