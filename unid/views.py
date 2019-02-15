@@ -81,31 +81,31 @@ def mypage(request):
         joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
-        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])
+        articles = Post.objects.order_by('-posts_id').filter(email_id=request.session['user_email'])
         for article in articles:
             if article.like_count:
-                rewardedArticles = Post.objects.filter(user_id=request.session['user_email'])[:3]
+                rewardedArticles = Post.objects.filter(email_id=request.session['user_email'])[:3]
                 rewardDate = article.created_at + timedelta(days=7)
                 print(rewardDate)
                 numbersOfrewardedArticles = len(rewardedArticles)
             else:
                 print()
-        numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
+        numbersOfArticles = len(Post.objects.filter(email_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
-        numbersOfReply = len(replyForPosts.objects.filter(user_id=request.session['user_email']))
+        numbersOfReply = len(replyForPosts.objects.filter(email_id=request.session['user_email']))
         numbersOfsell = len(walletInFormation.objects.filter(type='contentsTrasaction', toAccount=request.session['user_email']))
         numbersOfbuy = len(walletInFormation.objects.filter(type='contentsTrasaction', fromAccount=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
-        likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
-        numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
+        likeusers = LikeUsers.objects.filter(email_id=request.session['user_email'])
+        numbersOfLike = len(LikeUsers.objects.filter(email_id=request.session['user_email']))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
         totalForContentsSelling = 0
         for i in contents_transfer:
             calculate = i.balance
             totalForContentsSelling += calculate
         contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_email'])
-        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
+        replies = replyForPosts.objects.order_by('-IDX').filter(email_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
         try:
@@ -729,7 +729,7 @@ def logout(request):
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
-    list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
+    list = LikeUsers.objects.filter(posts_id=posts_id, email=sess)
     count = myPageInfomation.objects.get(email=sess)
     voting_count = count.votingcount
     list = list.values()
@@ -949,8 +949,9 @@ def voting(request):
         count.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
+        user = request.user
 
-        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, liked_users=liked_users)
+        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, user=user, email=liked_users)
 
         for delete in voting_delete:
             delete.delete()
@@ -965,8 +966,9 @@ def voting(request):
         posts.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
+        user = request.user
 
-        like = LikeUsers(posts_id=posts_id, liked_users=liked_users)
+        like = LikeUsers(posts_id=posts_id,user=user , email=liked_users)
 
         like.save()
     else :
