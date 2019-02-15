@@ -729,6 +729,7 @@ def logout(request):
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
+
     list = LikeUsers.objects.filter(posts_id=posts_id, email=sess)
     count = myPageInfomation.objects.get(email=sess)
     voting_count = count.votingcount
@@ -949,9 +950,10 @@ def voting(request):
         count.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
+        email = myPageInfomation.objects.get(email=liked_users)
         user = request.user
 
-        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, user=user, email=liked_users)
+        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, liked_users=user, email=email)
 
         for delete in voting_delete:
             delete.delete()
@@ -966,9 +968,9 @@ def voting(request):
         posts.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
+        email = myPageInfomation.objects.get(email=liked_users)
         user = request.user
-
-        like = LikeUsers(posts_id=posts_id,user=user , email=liked_users)
+        like = LikeUsers(posts_id=posts_id, liked_users=user, email=email)
 
         like.save()
     else :
@@ -987,21 +989,21 @@ def mainreply(request):
 
     id =Post.objects.get(posts_id=request.POST['id'])
     sess = request.session['user_email']
-    user = myPageInfomation.objects.get(email=sess)
+    user = request.user
+    email = myPageInfomation.objects.get(email=sess)
     br = replyForPosts(posts_id=id,
                            user=user,
+                           email=email,
                            replytext=request.POST['reply']
                            )
 
     br.save()
     board = Post.objects.get(posts_id=request.POST['id'])
     replycount = board.replymentcount
-    if replycount:
-        board.replymentcount = board.replymentcount + 1
-        board.save()
-    else:
-        board.replymentcount = 1
-        board.save()
+
+    board.replymentcount = board.replymentcount + 1
+    board.save()
+
 
     created_at = replyForPosts.objects.order_by('-posts_id').filter(posts_id=id).values()[0]['created_at']
 

@@ -357,9 +357,9 @@ xpopup
                         <a href="{% url 'user_detail' posts.email.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if posts.email.userimage %}
-                                <img src="/{{ contents.user.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
+                                <img src="/{{ contents.email.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
                                 {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ post.email.name }}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ posts.email.name }}
                                 {% endif %}
                             </p>
                         </a>
