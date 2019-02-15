@@ -33,7 +33,7 @@
         </div>
         <div id="text">
             <p style="width: 240px; margin-left: 22px; margin-bottom: 30px;">사용자 아이디와 니드코인 사용을 위한 전자지갑 비밀번호를 입력해주세요!</p>
-            <form class="form-horizontal" id="form-control-container" name="writeform" method="post" enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+            <form class="form-horizontal" id="form-control-container" name="writeform" method="post"  enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
                 {% csrf_token %}
                 {% if request.session %}
                 <p>
@@ -46,16 +46,16 @@
                     <label for="name">닉네임</label>
                 </p>
                 <p>
-                    <input type="text" class="input_CC" id="form-control" name="name" autocomplete="off" placeholder="닉네임을 입력하세요">
+                    <input type="text" class="input_CC" id="form-control" Oninput="writeCheck()" style="outline: none;" name="name" autocomplete="off" placeholder="닉네임을 입력하세요">
                 </p>
                 <p id="alert" style="margin-top:-27px; height: 30px; text-align: center;"></p>
                 <p style="text-align:center;">
                     <label for="pwd">비밀번호</label>
                 </p>
                 <p>
-                    <input type="password" class="input_CC" id="pwd" name="pwd" placeholder="Enter password">
+                    <input type="password" class="input_CC" id="pwd" name="pwd" Oninput="pwCheck()" placeholder="Enter password">
                 </p>
-                <button type="button" class="btn btn-default" Onclick="writeCheck()" style="background-color: red; color: white;">Submit</button>
+                <button type="button" class="btn btn-default" Onclick="submitzzz()" id="button1" style="background: red; color: white;">Submit</button>
                 {% endif %}
             </form>
 
@@ -67,32 +67,102 @@
     </div>
 </body>
 <script>
+
+
+
+
     function writeCheck() {
-        var form = document.writeform;
-        if (!form.name.value)
+        var form = document.getElementById("form-control").value;
+        var focus1 = document.writeform
+
+
+        if (!form)
         {
-            alert("닉네임을 적어주세요");
-            form.name.focus();
+            document.getElementById("form-control").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="닉네임을 입력하세요";
+            document.getElementById("alert").style.color="#ed1b25";
             return false;
         }
-        var form = document.writeform;
-        if (!form.pwd.value)
-        {
-            alert("비밀번호를 적어주세요");
-            form.pwd.focus();
+        else{
+            document.getElementById("form-control").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+        if(special_pattern.test(form) == true){
+            document.getElementById("form-control").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="특수문자는 사용할 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
             return false;
         }
-        var k = $('#alert').text();
-        console.log(alert);
+        else{
+            document.getElementById("form-control").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var blank_pattern2 = /[\s]/g;
+        if(blank_pattern2.test(form) == true){
+            document.getElementById("form-control").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="공백은 사용하실 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
+            return false;
+        }
+        else{
+            document.getElementById("form-control").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var blank_pattern = /^\s+|\s+$/g;
+        if(form.replace( blank_pattern,'') == ""){
+            document.getElementById("form-control").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="공백은 사용하실 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
+            return false;
+        }
+        else{
+            document.getElementById("form-control").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var k = document.getElementById("alert").html;
+            console.log(k);
         if (k == "닉네임중복"){
-            alert("중복된 아이디입니다.");
-            form.name.focus();
+            document.getElementById("form-control").style.border="2px solid #black";
+            alert("닉네임중복");
+            console.log(k);
             return false;
         }
 
-        if(form.name){
-        document.getElementById('form-control-container').submit();
+    }
+
+    function pwCheck(){
+        var focus1 = document.writeform
+        if(!focus1.pwd.value){
+            focus1.pwd.focus();
+            return false;
         }
+    }
+
+    function submitzzz() {
+        var k = document.getElementById("alert");
+        if (k.innerHTML == "닉네임중복"){
+            alert("닉네임중복");
+            return false;
+        }
+        if (writeCheck() == false) {
+            alert("닉네임을 입력하세요");
+            return false;
+        }
+
+        if (pwCheck() == false) {
+            alert("비밀번호를 입력해주세요");
+            return false;
+        }
+        document.getElementById('form-control-container').submit();
     }
 
     $(document).ready(function(){
@@ -102,6 +172,7 @@
             var user_name =  $("#form-control").val();
             var alert = "닉네임중복";
             var alert1 = "사용가능";
+            var alert2 = "닉네임을 입력해주세요";
 
             $.ajax({
                 type : 'POST',
@@ -111,30 +182,15 @@
                 success : function(res) {
                     if (res.Ans == 1) {
 
-                        $("#alert").html(alert);
+                        $("#alert").html("닉네임중복");
                         $("#alert").css("color","#ed1b25");
-
-                        //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                        <!--$("#form-control").addClass("has-error")-->
-                        <!--$("#form-control").removeClass("has-success")-->
                         $("#form-control").css("border", "2px solid #ed1b25")
                         $("#form-control").focus();
-                        $("#edit_icon_div").css("opacity","0");
-
-
-                    } else {
-                        <!--alert("사용가능한 아이디입니다.");-->
-                        $("#alert").html(alert1);
-                        $("#alert").css("color", "green");
-                        //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                        $("#form-control").css("border", "2px solid green")
-                        $("#form-control").keyup(function(e){if(e.keyCode == 13)  document.getElementById('user_profile_edit_form').submit(); });
-                        <!--$("#pwd").focus();-->
-                        //아이디가 중복하지 않으면  idck = 1
                     }
                 },
             });
         });
+
         $('#form-control').on('keyup', function(){
             // 남은 글자 수를 구한다.
             var strValue = $(this).val();

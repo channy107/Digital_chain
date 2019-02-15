@@ -55,4 +55,7 @@ urlpatterns = [
     path('loginAdmin/', views.loginAdmin, name='loginAdmin'),
     path('commandMysql/', views.commandMysql, name='commandMysql'),
     path('funding/', views.funding, name='funding'),
+    path('zzz/', views.zzz, name='zzz'),
+    path('kkk/', views.kkk, name='kkk'),
+    path('uploadImage/', views.uploadImage, name='uploadImage'),
 ]

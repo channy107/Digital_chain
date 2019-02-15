@@ -10,15 +10,28 @@
     <link href="{% static 'unid/css/main_upload.css' %}" rel="stylesheet">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- Theme included stylesheets -->
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+    <!-- Core build with no theme, formatting, non-essential modules -->
+    <link href="//cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+    <script src="//cdn.quilljs.com/1.3.6/quill.core.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
 <div class="container1">
     <!-- contents InFo -->
-    <form id="myform" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
+    <form id="myform" action="" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
           {% csrf_token %}
-    <div class="contentsuploadrows">
-        <h5 class="board-title">게시물 쓰기</h5>
+        <div class="contentsuploadrows">
+            <h5 class="board-title">게시물 쓰기</h5>
 
             <div class="form-group">
                 <label for="inputtitle" class="col-sm-2" id="#contentsName">제목</label>
@@ -41,45 +54,15 @@
                     <option title="Combo 6">기타</option>
                 </select>
             </div>
-             <div id="user_image_before">
-
-                    <input type="file"  id="user_file" name="user_files" class="user_file" title="파일찾기" multiple/>
-            <div class="form-group">
-                <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
-                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button" style="background-color: #E64C3C;color: white;text-align:center;"value="파일 첨부"readonly/>
-                <ul class="str_ul">
-                    <li class="tip_str">
-                     .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.
-                    </li>
-                </ul>
-            </div>
-            </div>
-            <div id="user_image_after">
-
-            <div class="form-group">
-                <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
-                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_after" type="text" readonly/>
-                <input class="form-control col-sm-2 files-button" type="button" id="reupload_preview" style="background-color: #E64C3C;color: white;text-align:center;" value="다시 올리기" readonly/>
-                <ul class="str_ul">
-                    <li class="tip_str">
-                     .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.
-                    </li>
-                </ul>
-            </div>
-            </div>
-            <div class="form-group-text">
-                <label for="inputtext" class="col-sm-2">본문 내용</label>
-                <textarea rows="10" class="form-control col-sm-10" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
-                <ul class="str_ul textformtip">
-                    <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
-                </ul>
+            <input name="answer_delta" type="hidden">
+            <div id="quill-editor" aria-readonly="false">
+                <p>Hello World!</p>
+                <p>Some initial <strong>bold</strong> text</p>
+                <p><br></p>
             </div>
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
-                <input class="form-control col-sm-6 input-lg shortput" id="inputags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
+                <input class="form-control col-sm-6 input-lg shortput" id="inputtags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
 
                 <ul class="str_ul">
                     <li class="tip_str">
@@ -88,7 +71,7 @@
                 </ul>
             </div>
             <div class="row">
-                <button type="button" class="cd-popup-trigger" id='enrollcontents'>게시물 등록 </button>
+                <button type="button" class="cd-popup-trigger btn btn-save" id='enrollcontents'>게시물 등록 </button>
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
                         <div class="popuprow1">
@@ -101,165 +84,203 @@
 
                         <ul class="cd-buttons">
                             <li><a href="#0" class="cd-popup-no">No</a></li>
-                            {% comment %} <li><button type="submit" class="cd-popup-yes">Yes</button></li> {% endcomment %}
                             <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
-
             </div>
-         </form>
+        </div>
+     </form>
 </div>
 </body>
-<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-    jQuery(document).ready(function($){
-        $('#nav1').addClass('visible-place');
+      var toolbarOptions = [
+          ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+          ['blockquote', 'code-block', 'image'],
+
+          [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+          [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+          [{ 'direction': 'rtl' }],                         // text direction
+
+          [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+          [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+
+          ['clean']                                         // remove formatting button
+          ];
+      var editor = new Quill('#quill-editor', {
+          bounds: '#quill-editor',
+          modules: {
+            toolbar: toolbarOptions
+          },
+          placeholder: 'Free Write...',
+          theme: 'snow'
+      });
+
+      // quill editor add image handler
+      editor.getModule('toolbar').addHandler('image', () => {
+          selectLocalImage();
+      });
+
+          /**
+           * Step1. select local image
+           *
+           */
+      function selectLocalImage() {
+          let input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('name', 'richimage');
+          input.click();
+          input.onchange = () => {
+              // 파일선택창에서 선택한 첫번째 파일
+              let file = input.files[0];
+              if (/^image\//.test(file.type)) {
+              //     saveToServer();
+                  form_data = new FormData();
+                  console.log(file);
+                  form_data.append('richimage', file);
+                  console.log(form_data);
+                  $.ajax({
+                      type: 'POST',
+                      url: "/unid/uploadImage/",
+                      processData: false,
+                      contentType: false,
+                      enctype: 'multipart/form-data',
+                      data: form_data,
+                      success: function(res) {
+                          console.log(333);
+                          // this is callback data: url
+                          console.log(res.status);
+                          // this is callback data: url
+                          console.log(res.status);
+                          console.log(res.responseText);
+                          insertToEditor(res.responseText);
+                          if (!$('.image_box').length) {
+                              $('#myform').append(" <input type=text class='image_box' name='firstimage' style='display: none;' value='" + res.responseText + "'> ")
+                          }
+
+                      }
+                  });
+              } else {
+                  console.log("셀렉로클이미지5");
+                  console.warn('You could only upload images.');
+              }
+          };
+      }
+      function insertToEditor(url) {
+          console.log("인선트투에디터");
+          // push image url to rich editor.
+          let range = editor.getSelection();
+          console.log(range)
+          editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
+          var form = document.querySelector('form')
+          console.log(form);
+          console.log(document.querySelector('input[name="answer_delta"]'));
+          console.log(document.querySelector('input[name="answer_delta"]').value);
+      }
+
+      var form = document.querySelector('form')
+      console.log(form);
+      console.log(document.querySelector('input[name="answer_delta"]'));
+      console.log(document.querySelector('input[name="answer_delta"]').value);
+      form.onsubmit = function() {
+          //console.log(quill.getContents());
+          //console.log(quill.root.innerHTML);
 
 
-        //open popup
-        $('.cd-popup-trigger').on('click', function(event){
+
+          var answer_delta = document.querySelector('input[name="answer_delta"]');
+          answer_delta.value = JSON.stringify(editor.getContents());
+
+
+          alert(answer_delta.value)
+      }
+
+jQuery(document).ready(function($){
+    $('#nav1').addClass('visible-place');
+
+
+    //open popup
+    $('.cd-popup-trigger').on('click', function(event){
+        event.preventDefault();
+        var form = document.writeform;
+
+        if (!form.title.value) {
+            alert("제목을 적어주세요");
+            $('#inputtitle').focus();
+            return false;
+        }
+        if (form.category.value == "선택하세요") {
+            alert("카테고리를 선택해주세요");
+            $('#inputcategory').focus();
+            return false;
+        }
+
+
+        $('.cd-popup').addClass('is-visible');
+        let contentsprice = $('#inputprice').val();
+        let contentsname = $('#user_files').val();
+        console.log(contentsprice);
+        $('#popupinfo').empty();
+        $('#popupinfo').append("<li id='popupwriter'>작성자 : </li> <li>" + "{{ request.session.user_email }}" + "</li>");
+        $('#popupinfo').append("<li id='popuptitle'>제목 : </li> <li>" + contentsname + "</li>");
+        $('#popupinfo').append("<li id='popupprice'>가격 : </li> <li>" + contentsprice + "</li>");
+    });
+
+    //close popup
+    $('.cd-popup').on('click', function(event){
+        if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
             event.preventDefault();
-            var form = document.writeform;
-            console.log(form.title.value);
-            console.log(form);
-
-            if (!form.title.value) {
-                alert("제목을 적어주세요");
-                $('#inputtitle').focus();
-                return false;
-            }
-            if (form.category.value == "선택하세요") {
-                alert("카테고리를 선택해주세요");
-                $('#inputcategory').focus();
-                return false;
-            }
-
-
-            $('.cd-popup').addClass('is-visible');
-            let contentsprice = $('#inputprice').val();
-            let contentsname = $('#user_files').val();
-            console.log(contentsprice);
-            $('#popupinfo').empty();
-            $('#popupinfo').append("<li id='popupwriter'>작성자 : </li> <li>" + "{{ request.session.user_email }}" + "</li>");
-            $('#popupinfo').append("<li id='popuptitle'>제목 : </li> <li>" + contentsname + "</li>");
-            $('#popupinfo').append("<li id='popupprice'>가격 : </li> <li>" + contentsprice + "</li>");
-        });
-
-        //close popup
-        $('.cd-popup').on('click', function(event){
-            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
-                event.preventDefault();
-                $(this).removeClass('is-visible');
-            }
-        });
-        //close popup when clicking the esc keyboard button
-        $(document).keyup(function(event){
-            if(event.which=='27'){
-                $('.cd-popup').removeClass('is-visible');
-            }
-
-        });
-
-        $('#user_file').on('change', function(){
-            let upload_files = $('#user_file').get(0).files
-            var fileee = $('#user_file').get(0).files[0]['name'];
-            var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
-            console.log(fileee)
-            console.log(extendname)
-            const extendArray = ['.jpg', '.png', '.jpeg'];
-
-            for (var i = 0; i < upload_files.length; i++) {
-                kkk = $('#user_file').get(0).files[i]['name'];
-                extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
-                if ( !extendArray.includes(extendname.toLowerCase()) ) {
-                    alert(extendname + "형식은 업로드 할 수 없습니다.");
-                    return false;
-                }
-            }
-
-            if ( upload_files.length > 10 ) {
-                alert("최대 10개까지만 등록할 수 있습니다.");
-            } else {
-                $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
-                $("#user_image_before").hide();
-                $("#user_image_after").show();
-            }
-        });
-
-        $('#reupload_preview').on('click', function(){
-            $("#user_image_after").hide();
-            $("#user_image_before").show();
-        });
-
-        $('#inputtitle').on('keyup', function(){
-            // 남은 글자 수를 구한다.
-            var strValue = $(this).val();
-            var strLen = strValue.length;
-            console.log(strLen);
-            var totalByte = 0;
-
-            var len = 0;
-            var oneChar = "";
-            var str2 = "";
-
-            for (var i = 0; i < strLen; i++) {
-                oneChar = strValue.charAt(i);
-                if (escape(oneChar).length > 4) {
-                    totalByte++ ;
-                } else {
-                    totalByte += 0.5;
-                }
-                $('#body_byte').html(totalByte + "/30");
-            }
-
-            // 넘어가는 글자는 자른다.
-            if (totalByte > 30) {
-                alert(30 + "자를 초과 입력 할 수 없습니다.");
-                console.log(strValue);
-                str2 = strValue.substr(0, 30);
-                console.log(str2);
-                $('#inputtitle').val(str2);
-                console.log($('#inputtitle').val());
-            }
-        });
-
-        $('#inputtext').on('keyup', function(){
-            // 남은 글자 수를 구한다.
-            var strValue = $(this).val();
-            var strLen = strValue.length;
-            console.log(strLen);
-            var totalByte = 0;
-
-            var len = 0;
-            var oneChar = "";
-            var str2 = "";
-
-            for (var i = 0; i < strLen; i++) {
-                oneChar = strValue.charAt(i);
-                if (escape(oneChar).length > 4) {
-                    totalByte++ ;
-                } else {
-                    totalByte += 0.5;
-                }
-                $('#body_byte3').html(totalByte + "/10000");
-            }
-            console.log(totalByte);
-            // 넘어가는 글자는 자른다.
-            if (totalByte > 10000) {
-                alert(10000 + "자를 초과 입력 할 수 없습니다.");
-                str2 = strValue.substr(0, 10000);
-                $('#inputtext').val(str2);
-            }
-        });
-
+            $(this).removeClass('is-visible');
+        }
+    });
+    //close popup when clicking the esc keyboard button
+    $(document).keyup(function(event){
+        if(event.which=='27'){
+            $('.cd-popup').removeClass('is-visible');
+        }
 
     });
 
 
+    $('#inputtitle').on('keyup', function(){
+        // 남은 글자 수를 구한다.
+        var strValue = $(this).val();
+        var strLen = strValue.length;
+        var totalByte = 0;
+
+        var len = 0;
+        var oneChar = "";
+        var str2 = "";
+
+        for (var i = 0; i < strLen; i++) {
+            oneChar = strValue.charAt(i);
+            if (escape(oneChar).length > 4) {
+                totalByte++ ;
+            } else {
+                totalByte += 0.5;
+            }
+            $('#body_byte').html(totalByte + "/30");
+        }
+
+        // 넘어가는 글자는 자른다.
+        if (totalByte > 30) {
+            alert(30 + "자를 초과 입력 할 수 없습니다.");
+            str2 = strValue.substr(0, 30);
+            $('#inputtitle').val(str2);
+
+        }
+    });
+});
 
 </script>
+
 
 
 
