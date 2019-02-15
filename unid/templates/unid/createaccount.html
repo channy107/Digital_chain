@@ -55,7 +55,7 @@
                 <p>
                     <input type="password" class="input_CC" id="pwd" name="pwd" Oninput="pwCheck()" placeholder="Enter password">
                 </p>
-                <button type="button" class="btn btn-default" Onclick="submitzzz()" style="background-color: red; color: white;">Submit</button>
+                <button type="button" class="btn btn-default" Onclick="submitzzz()" id="button1" style="background: red; color: white;">Submit</button>
                 {% endif %}
             </form>
 
@@ -74,7 +74,7 @@
     function writeCheck() {
         var form = document.getElementById("form-control").value;
         var focus1 = document.writeform
-        var k = $('#alert').text();
+
 
         if (!form)
         {
@@ -128,17 +128,15 @@
             document.getElementById("alert").style.color="green";
         }
 
-        var k = $('#alert').text();
+        var k = document.getElementById("alert").html;
+            console.log(k);
         if (k == "닉네임중복"){
-            document.getElementById("form-control").style.border="2px solid #ed1b25";
-            alert("중복된 아이디입니다.");
+            document.getElementById("form-control").style.border="2px solid #black";
+            alert("닉네임중복");
+            console.log(k);
             return false;
         }
-        else{
-            document.getElementById("form-control").style.border="2px solid green";
-            document.getElementById("alert").innerHTML="사용가능";
-            document.getElementById("alert").style.color="green";
-        }
+
     }
 
     function pwCheck(){
@@ -152,6 +150,11 @@
     function submitzzz() {
         if (writeCheck() == false) {
             alert("닉네임을 입력하세요");
+            return false;
+        }
+        var k = document.getElementById("alert");
+        if (k.innerHTML == "닉네임중복"){
+            alert("닉네임중복");
             return false;
         }
         if (pwCheck() == false) {
@@ -178,23 +181,16 @@
                 success : function(res) {
                     if (res.Ans == 1) {
 
-                        $("#alert").html(alert);
+                        $("#alert").html("닉네임중복");
                         $("#alert").css("color","#ed1b25");
-
                         $("#form-control").css("border", "2px solid #ed1b25")
                         $("#form-control").focus();
                         return false;
-
                     }
                 },
             });
         });
-        $("#form-control-container").keypress(function(e) {
 
-            if (e.keyCode == 13){
-                writeCheck();
-            }
-        });
         $('#form-control').on('keyup', function(){
             // 남은 글자 수를 구한다.
             var strValue = $(this).val();

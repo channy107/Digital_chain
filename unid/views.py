@@ -108,32 +108,53 @@ def mypage(request):
         replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
-
-        context = {'articles': articles,
-                   'myreward': myreward,
-                   'likeusers': likeusers,
-                   'numbersOfLike': numbersOfLike,
-                   'mypage': mypage,
-                   'joiningdate': joiningdate,
-                   'joining': joining,
-                   'numbersOfArticles': numbersOfArticles,
-                   'numbersOfcontents': numbersOfcontents,
-                   'numbersOfDownloads': numbersOfDownloads,
-                   'numbersOfsell': numbersOfsell,
-                   'numbersOfbuy': numbersOfbuy,
-                   'numbersOfReply': numbersOfReply,
-                   'contentsboard': contentsboard,
-                   'downloads': downloads,
-                   'replies': replies,
-                   'contents_transfer': contents_transfer,
-                   'contents_transfer_sell': contents_transfer_sell,
-                   'rewardedArticles': rewardedArticles,
-                   'rewardDate': rewardDate,
-                   'numbersOfrewardedArticles': numbersOfrewardedArticles,
-                   'totalForContentsSelling': totalForContentsSelling,
-                   }
-        return render(request, 'unid/mypage.html', context)
-
+        try:
+            context = {'articles': articles,
+                       'myreward': myreward,
+                       'likeusers': likeusers,
+                       'numbersOfLike': numbersOfLike,
+                       'mypage': mypage,
+                       'joiningdate': joiningdate,
+                       'joining': joining,
+                       'numbersOfArticles': numbersOfArticles,
+                       'numbersOfcontents': numbersOfcontents,
+                       'numbersOfDownloads': numbersOfDownloads,
+                       'numbersOfsell': numbersOfsell,
+                       'numbersOfbuy': numbersOfbuy,
+                       'numbersOfReply': numbersOfReply,
+                       'contentsboard': contentsboard,
+                       'downloads': downloads,
+                       'replies': replies,
+                       'contents_transfer': contents_transfer,
+                       'contents_transfer_sell': contents_transfer_sell,
+                       'rewardedArticles': rewardedArticles,
+                       'rewardDate': rewardDate,
+                       'numbersOfrewardedArticles': numbersOfrewardedArticles,
+                       'totalForContentsSelling': totalForContentsSelling,
+                       }
+            return render(request, 'unid/mypage.html', context)
+        except:
+            context = {'articles': articles,
+                       'myreward': myreward,
+                       'likeusers': likeusers,
+                       'numbersOfLike': numbersOfLike,
+                       'mypage': mypage,
+                       'joiningdate': joiningdate,
+                       'joining': joining,
+                       'numbersOfArticles': numbersOfArticles,
+                       'numbersOfcontents': numbersOfcontents,
+                       'numbersOfDownloads': numbersOfDownloads,
+                       'numbersOfsell': numbersOfsell,
+                       'numbersOfbuy': numbersOfbuy,
+                       'numbersOfReply': numbersOfReply,
+                       'contentsboard': contentsboard,
+                       'downloads': downloads,
+                       'replies': replies,
+                       'contents_transfer': contents_transfer,
+                       'contents_transfer_sell': contents_transfer_sell,
+                       'totalForContentsSelling': totalForContentsSelling,
+                       }
+            return render(request, 'unid/mypage.html', context)
 
 
 
@@ -2065,7 +2086,7 @@ from django.contrib import auth
 
 def commandMysql(request):
 
-    bbr = walletInFormation.objects.all().delete()
+    bbr = myPageInfomation.objects.filter().delete()
     return HttpResponse("성공쓰")
 
 

@@ -9,8 +9,6 @@
 
 <head>
 <link href="{% static 'unid/css/mypage.css' %}" rel="stylesheet">
-<!--<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">-->
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
 <script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
 </head>
 
@@ -65,7 +63,7 @@
     <div id="myinfo_edit_mode" style="color: ; background-size: cover; background: rgba(0, 0, 0, 0.5));">
     {% endif %}
         <div id="edit_icon_div" style="text-align:center; position: relative; padding-left:952px;">
-            <a id="edit_icon" onclick="checkForm();">
+            <a id="edit_icon" onclick="submitzzz();">
                 <img style="color: ##525f82; width:83px; margin-top:40px; margin-bottom:0px; margin-right:40px; cursor: pointer;" src="{% static 'unid/icon/ui icons-33.png' %}">
             </a>
         </div>
@@ -75,17 +73,17 @@
             {% if mypage.userimage %}
                 <img id="img" style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             {% else %}
-                <img style="width:67px; height: 67px;text-align: center;" src="{% static 'unid/icon/profle-icon.png' %}">
+                <img id="img" name="default_profile_img" style="width:67px; height: 67px;text-align: center; border-radius:50%;" src="{% static 'unid/icon/profle-icon.png' %}">
             {% endif %}
             </div>
-            <div id="user_image_edit" style="width: 80px; position: relative; bottom: 76px; left: 50%;">
+            <div id="user_image_edit" style="width: 80px; position: relative; bottom: 75px; left: 49.8%;">
                 <img class="a" src="{% static 'unid/icon/ui icons-32.png' %}" width="20" height="20" style="cursor:pointer;"/>
                 <input class="aaa" id="user_image_upload" type="file" name="user_image_upload" style="cursor:pointer; width:20px; height:20px; position: relative; right: 24px; top: 5px;opacity: 0;" title="사진변경">
             </div>
             <div id="user_profile_edit">
-                <div id="user_name_modifier" style="display: grid; grid-template-columns: 1fr 1fr; text-align: center;  width:400px; font-size: 25px; font-weight:500; margin: 0 auto; height: 40px; padding-left: 100px; margin-top: -20px;">
-                    <input id="change_user_name" autocomplete="off" type="text" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: center; border: 1px solid white; height:100%; background-color: transparent;" name="name" value="{{ mypage.name }}">
-                    <div id="alert" style="width:150px; text-align:left; font-size:15px; color: #ed1b25; padding-top: 7px; padding-left: 15px;"></div>
+                <div id="user_name_modifier" style="display: grid; grid-template-columns: 1fr 1fr; text-align: center;  width:400px; font-size: 25px; font-weight:500; margin: 0 auto; height: 40px; padding-left: 100px; margin-top: -19px;">
+                    <input id="change_user_name" autocomplete="off" type="text" oninput="checkForm()" style="outline: none; color: white; text-shadow: 0.5px 0.5px 0.5px black; text-align: font-size: 25px; font-weight:500; center; border: 1px solid white; height:90%; background-color: transparent;" name="name" value="{{ mypage.name }}">
+                    <div id="alert" style="width:300px; text-align:left; font-size:15px; color: #ed1b25; padding-top: 7px; padding-left: 15px;"></div>
                 </div>
                 <div id="user_profile_modifier" style="display: grid; grid-template-columns: 1fr 1fr; text-align: center; width:350px; margin: 0 auto; height: 28px; padding-left: 25px;margin-top: 4px; font-size:13px">
                     <input id="change_user_profile" autocomplete="off" type="text" name="profile" value="{{ mypage.profile }}" style="text-align:center; color: white; text-shadow: 0.5px 0.5px 0.5px black;; border:1px solid white; text-shadow: 0.5px 0.5px 0.1px black;background-color:transparent; height:100%; width: 300px;">
@@ -151,7 +149,7 @@
                             <li>
                                 ·         {{ article.created_at|timesince }}전
                             </li>
-                                <img src="/{{ article.category_path }}" width="64.7px" height="21.7px" >
+                                <img src="/{{ article.category_path }}" width="64.7px" height="21.7px" />
                         </ul>
                         <div class="row-picture">
                             <a href="{% url 'main_detail' article.posts_id %}">
@@ -183,15 +181,16 @@
                         </ul>
                     </div>
                     {% endfor %}
+                    <input id="page" type="hidden" value="2">
+                    {% if articles.paginator.count > 2 %}
+                    <button id="callmorepost" class="form-control">
+                    <i class="fas fa-chevron-down"></i>
+                    </button>
+                    {% endif %}
                 {% else %}
                 <div id="text_message">등록된 글이 없습니다. 글을 등록해보세요!</div>
                 {% endif %}
-                <input id="page" type="hidden" value="2">
-                {% if posts.paginator.count > 4 %}
-                <button id="callmorepost" class="form-control">
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                {% endif %}
+
             </div>
             <div id="content_column" style="min-height:250px;">
                 <div id="title_of_contents">최근 댓글 내역</div>
@@ -389,69 +388,89 @@
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 판매 내역</div>
                 <div id="number_of_something">{{ numbersOfsell }}건</div>
-                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 589px;">total:
                     <span style="color: #2fcc71;">{{ totalForContentsSelling }}</span>
                 </div>
-                <div class="row_for_table" style="width:95%; ">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" id="col" style="width:140px;">승인날짜</th>
-                                <th scope="col" id="col" style="width:450px;">콘텐츠</th>
-                                <th scope="col" id="col" style="">저자</th>
-                                <th scope="col" id="col" style="">금액</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if contents_transfer %}
-                                {% for content_transfer in contents_transfer %}
+                <br>
+                <br>
+                <br>
+                {% if contents_transfer %}
+                    {% for content_transfer in contents_transfer %}
+                    <div class="row_for_table" style="width:95%; ">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" id="col" style="width:140px;">승인날짜</th>
+                                    <th scope="col" id="col" style="width:450px;">콘텐츠</th>
+                                    <th scope="col" id="col" style="width:140px;">저자</th>
+                                    <th scope="col" id="col" style="">금액</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer.transactiondate }}</th>
-                                    <td style="text-align: center; font-weight:500;">{{ content_transfer.aaa }}</td>
-                                    <td style="text-align: center;">{{ content_transfer.toAccount }}</td>
+                                    <td style="text-align: center; font-weight:500;">{{ content_transfer.contents_id.title }}</td>
+                                    {% if content_transfer.toAccount.name == mypage.name %}
+                                        <a href="/unid/mypage">
+                                    {% else %}
+                                        <a href="{% url 'user_detail' content_transfer.toAccount.IDX %}">
+                                    {% endif %}
+                                            <td style="text-align: center;">{{ content_transfer.toAccount.name }}</td>
+                                        </a>
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
-                                {% endfor %}
-                            {% else%}
-                                <div id="text_message">아직 판매한 콘텐츠가 없습니다.</div>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                {% else%}
+                    <div id="text_message">아직 판매한 콘텐츠가 없습니다.</div>
+                {% endif %}
             </div>
-            <div id="content_column" style="margin-left: 50px; min-height:250px;">
+            <div id="content_column" style="margin-left: 50px; min-height:250px; font-family: 'Noto Sans KR', sans-serif;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 구매 내역</div>
                 <div id="number_of_something">{{ numbersOfbuy }}건</div>
-                <div class="row_for_table" style="width:95%; ">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" id="col" style="width:140px;">승인날짜</th>
-                                <th scope="col" id="col" style="width:450px;">콘텐츠</th>
-                                <th scope="col" id="col" style="">저자</th>
-                                <th scope="col" id="col" style="">금액</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if contents_transfer_sell %}
-                                {% for content_transfer_sell in contents_transfer_sell %}
+                <br>
+                <br>
+                <br>
+                {% if contents_transfer_sell %}
+                    {% for content_transfer_sell in contents_transfer_sell %}
+                    <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" id="col" style="width:140px;">승인날짜</th>
+                                    <th scope="col" id="col" style="width:450px;">콘텐츠</th>
+                                    <th scope="col" id="col" style="width:140px;">저자</th>
+                                    <th scope="col" id="col" style="">금액</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer_sell.transactiondate }}</th>
-                                    <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.aaa }}</td>
-                                    <td style="text-align: center;">{{ content_transfer_sell.toAccount }}</td>
+                                    <a href="{% url 'contentsdetail' content_transfer_sell.contents_id.contents_id %}">
+                                        <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.contents_id.title }}</td>
+                                    </a>
+                                    {% if content_transfer_sell.toAccount.name == mypage.name %}
+                                        <a href="/unid/mypage">
+                                    {% else %}
+                                        <a href="{% url 'user_detail' content_transfer_sell.toAccount.IDX %}">
+                                    {% endif %}
+                                            <td style="text-align: center;">{{ content_transfer_sell.toAccount.name }}</td>
+                                        </a>
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
                                 </tr>
-                                {% endfor %}
-                            {% else %}
-                                <div id="text_message">아직 구매한 콘텐츠가 없습니다.</div>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div id="text_message">아직 구매한 콘텐츠가 없습니다.</div>
+                {% endif %}
             </div>
         </div>
         <div id="tab-4" class="tab-content">
-            <div id="content_column">
+            <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
                 {% if rewardedArticles != null %}
                 <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
                 <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
@@ -459,10 +478,10 @@
                     <span id="cal_for_rewards" style="color: #2fcc71;">1000</span>
                     <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
                 </div>
-                    <div class="row_for_table" style="width:95%; ">
+                    <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
                         <table class="table">
                             <thead>
-                                <tr>
+                                <tr style="font-family: 'Noto Sans KR', sans-serif;">
                                     <th scope="col" id="col" style="width:140px;">게시일</th>
                                     <th scope="col" id="col" style="width:140px;">보상예정일</th>
                                     <th scope="col" id="col" style="width:150px">금액</th>
@@ -496,9 +515,7 @@
                         <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
-            <br>
-            <br>
-            <div id="content_column">
+            <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
                 <div id="title_of_contents" style="margin-bottom:30px;">보팅 보상 내역</div>
                 <div id="number_of_something">{{ numbersOfLike }}건</div>
                 <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
@@ -512,7 +529,7 @@
                 <div class="row_for_table" style="width:95%; ">
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr style="font-family: 'Noto Sans KR', sans-serif;">
                                 <th scope="col" id="col" style="width:140px;">게시일</th>
                                 <th scope="col" id="col" style="width:140px;">보상예정일</th>
                                 <th scope="col" id="col" style="width:150px">금액</th>
@@ -523,15 +540,15 @@
                             {% for like in likeusers %}
                             <tr>
                                 <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
-                                <td style="text-align: center; font-weight:400; font-size:13.1px;">
+                                <td style="text-align: center; font-weight:400; font-size:13.1px; font-family: 'Noto Sans KR', sans-serif;">
                                     {% if like.aaa != success %}
                                     <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
                                     {% else %}
                                     {{ like.posts_id.reward_date }}
                                     {% endif %}
                                 </td>
-                                <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
-                                <td style="text-align: center;">{{ like.posts_id.title }}</td>
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;">{{ like.posts_id.title }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -550,101 +567,189 @@
     $("#change_user_name").keypress(function(e) {
 
         if (e.keyCode == 13){
-            checkForm();
+            submitzzz();
         }
     });
 
 
 
     function checkForm() {
-        var form = document.user_profile_edit_form;
+        var form = document.getElementById("change_user_name").value;
         var nickname = document.user_profile_edit_form.name;
-        if(!nickname.value){
-            alert("닉네임을 입력하세요");
-            document.user_profile_edit_form.name.focus();
+
+        if (!form)
+        {
+            document.getElementById("change_user_name").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="닉네임을 입력하세요";
+            document.getElementById("alert").style.color="#ed1b25";
             return false;
         }
-
-        var blank_pattern = /^\s+|\s+$/g;
-        if(nickname.value.replace( blank_pattern,'') == ""){
-            alert("공백만 입력되었습니다");
-            document.user_profile_edit_form.name.focus();
-            return false;
-        }
-
-        var blank_pattern2 = /[\s]/g;
-        if(blank_pattern2.test(nickname.value) == true){
-            alert("공백은 사용할 수 없습니다");
-            document.user_profile_edit_form.name.focus();
-            return false;
+        else{
+            document.getElementById("change_user_name").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
         }
 
         var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-        if(special_pattern.test(nickname.value) == true){
-            alert("특수문자는 입력할 수 없습니다");
-            document.user_profile_edit_form.name.focus();
+        if(special_pattern.test(form) == true){
+            document.getElementById("change_user_name").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="특수문자는 사용할 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
             return false;
         }
-
-
-        var profile = document.user_profile_edit_form.profile;
-        if(profile.value ==''){
-            alert("프로필을 작성해주세요");
-            profile.focus();
-            return false;
+        else{
+            document.getElementById("change_user_name").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
         }
 
-        var k = $('#alert').text();
-        console.log(alert);
+        var blank_pattern2 = /[\s]/g;
+        if(blank_pattern2.test(form) == true){
+            document.getElementById("change_user_name").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="공백은 사용하실 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
+            return false;
+        }
+        else{
+            document.getElementById("change_user_name").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var blank_pattern = /^\s+|\s+$/g;
+        if(form.replace( blank_pattern,'') == ""){
+            document.getElementById("change_user_name").style.border="2px solid #ed1b25";
+            document.getElementById("alert").innerHTML="공백은 사용하실 수 없습니다.";
+            document.getElementById("alert").style.color="#ed1b25";
+            return false;
+        }
+        else{
+            document.getElementById("change_user_name").style.border="2px solid green";
+            document.getElementById("alert").innerHTML="사용가능";
+            document.getElementById("alert").style.color="green";
+        }
+
+        var k = document.getElementById("alert").html;
+            console.log(k);
         if (k == "닉네임중복"){
-            alert("중복된 닉네임입니다.");
-            nickname.focus();
+            document.getElementById("change_user_name").style.border="2px solid #black";
+            alert("닉네임중복");
+            console.log(k);
             return false;
         }
 
-
-
-        var form = document.user_profile_edit_form;
-        if(form.name){
-            document.getElementById('user_profile_edit_form').submit();
-        }
-    }
-    var calculate = document.getElementById('calculate')
-    calculate = function calculate() {
-        var valueforvoting = document.getElementById('calculate').value
-        console.log(valueforvoting);
-        var sumofreward = valueforvoting * 0.08
-        var total = eval(sumofreward)
-        if (valueforvoting==null) {
-            document.getElementById("calculate").hide;
-            document.getElementById("calculate").text="0";
-        }
-        else {
-            document.getElementById("calculate").hide;
-            document.getElementById("calculate").text(total);
-        }
-        console.log(total);
     }
 
+    function pwCheck(){
+        var focus1 = document.writeform
+        if(!focus1.pwd.value){
+            focus1.pwd.focus();
+            return false;
+        }
+    }
 
-    var moveId = document.getElementById('my_articles')
-    moveId.onlick = function() {
-        var offset = $("#tab-1" + current).offset();
-        $('html, body').animate({scrollTop : offset.top}, 400);
+    function submitzzz() {
+        if (checkForm() == false) {
+            alert("닉네임을 입력하세요");
+            return false;
+        }
+        var k = document.getElementById("alert");
+        if (k.innerHTML == "닉네임중복"){
+            alert("닉네임중복");
+            return false;
+        }
+
+        document.getElementById('user_profile_edit_form').submit();
     }
 
 
-    var calculate = document.getElementById('calculate').value
-    var result = 0
-        for (x=0; calculate; result =+ calculate)
-        {
-            $('#cal_for_rewards').document.write(result.toString());
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--if(!nickname.value){-->
+            <!--alert("닉네임을 입력하세요");-->
+            <!--document.user_profile_edit_form.name.focus();-->
+            <!--return false;-->
+        <!--}-->
+
+        <!--var blank_pattern = /^\s+|\s+$/g;-->
+        <!--if(nickname.value.replace( blank_pattern,'') == ""){-->
+            <!--alert("공백만 입력되었습니다");-->
+            <!--document.user_profile_edit_form.name.focus();-->
+            <!--return false;-->
+        <!--}-->
+
+        <!--var blank_pattern2 = /[\s]/g;-->
+        <!--if(blank_pattern2.test(nickname.value) == true){-->
+            <!--alert("공백은 사용할 수 없습니다");-->
+            <!--document.user_profile_edit_form.name.focus();-->
+            <!--return false;-->
+        <!--}-->
+        <!--else{-->
+            <!--document.getElementById("user_profile_edit_form").style.border="2px solid green";-->
+            <!--document.getElementById("alert").innerHTML="사용가능";-->
+            <!--document.getElementById("alert").style.color="green";-->
+        <!--}-->
+
+        <!--var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;-->
+        <!--if(special_pattern.test(nickname.value) == true){-->
+            <!--alert("특수문자는 입력할 수 없습니다");-->
+            <!--document.user_profile_edit_form.name.focus();-->
+            <!--return false;-->
+        <!--}-->
+
+
+        <!--var profile = document.user_profile_edit_form.profile;-->
+        <!--if(profile.value ==''){-->
+            <!--alert("프로필을 작성해주세요");-->
+            <!--profile.focus();-->
+            <!--return false;-->
+        <!--}-->
+
+        <!--var k = $('#alert').text();-->
+        <!--console.log(alert);-->
+        <!--if (k == "닉네임중복"){-->
+            <!--alert("중복된 닉네임입니다.");-->
+            <!--nickname.focus();-->
+            <!--return false;-->
+        <!--}-->
+
+
+
+        <!--var form = document.user_profile_edit_form;-->
+        <!--if(form.name){-->
+            <!--document.getElementById('user_profile_edit_form').submit();-->
+        <!--}-->
+    <!--}-->
+
+
+
+
+    <!--var moveId = document.getElementById('my_articles')-->
+    <!--moveId.onlick = function() {-->
+        <!--var offset = $("#tab-1" + current).offset();-->
+        <!--$('html, body').animate({scrollTop : offset.top}, 400);-->
+    <!--}-->
+
+
+
 
 
 
 
     jQuery(document).ready(function($){
+        console.log("{{ MoreArticles.paginator.count }}");
+        console.log("되긴하지?");
         $('ul.tabs li').click(function(){
             var tab_id = $(this).attr('data-tab');
             $('ul.tabs li').removeClass('current');
@@ -691,7 +796,7 @@
 
 
 
-        $("#change_user_name").on('keyup', function() {
+        $("#change_user_name").on('keyup', function(event) {
 
             //userid 를 param.
             var user_name =  $("#change_user_name").val();
@@ -707,32 +812,33 @@
                     if (res.Ans == 1) {
                         console.log("1일때임");
 
+
                         $("#alert").html(alert);
                         $("#alert").css("color","#ed1b25");
-
-                    //아이디가 존재할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                        <!--$("#change_user_name").addClass("has-error")-->
-                        <!--$("#change_user_name").removeClass("has-success")-->
                         $("#change_user_name").css("border", "2px solid #ed1b25")
                         $("#change_user_name").focus();
-                    }
-                    else if (res.Ans == 2) {
-                        console.log("2일때임");
-                        $("#alert").html(alert2);
-                        $("#alert").css("color","#ed1b25");
-                        $("#change_user_name").css("border", "2px solid #ed1b25")
-                        $("#change_user_name").focus();
-                    }
+                        $("#user_profile_edit_form").on("click.user_profile_edit_form", function(e){
+                            e.alert("닉네임중복");
+                            return false;
+                        });
 
-                    else {
-                        console.log("0일때임");
-                        <!--alert("사용가능한 아이디입니다.");-->
-                        $("#alert").html(alert1);
-                        $("#alert").css("color", "green");
-                        //아이디가 존할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                        $("#change_user_name").css("border", "2px solid green")
 
                     }
+                    <!--else if (res.Ans == 2) {-->
+                        <!--console.log("2일때임");-->
+                        <!--$("#alert").html(alert2);-->
+                        <!--$("#alert").css("color","#ed1b25");-->
+                        <!--$("#change_user_name").css("border", "2px solid #ed1b25")-->
+                        <!--$("#change_user_name").focus();-->
+                    <!--}-->
+
+                    <!--else {-->
+                        <!--console.log("0일때임");-->
+                        <!--$("#alert").html(alert1);-->
+                        <!--$("#alert").css("color", "green");-->
+                        <!--$("#change_user_name").css("border", "2px solid green")-->
+
+                    <!--}-->
                 },
             });
         });
@@ -877,6 +983,42 @@
                 reader.readAsDataURL(c);
             });
         };
+
+        <!--$('#callmorepost').click(function(){-->
+            <!--var page = $("#page").val();-->
+            <!--var end_page = {{ articles.paginator.num_pages }};-->
+            <!--console.log(end_page);-->
+            <!--if(page > end_page) {-->
+                <!--return;-->
+            <!--}-->
+            <!--callMorePostAjax(page);-->
+            <!--$("#page").val(parseInt(page)+1);-->
+        <!--});-->
+
+        <!--function callMorePostAjax(page) {-->
+            <!--var end_page = {{ articles.paginator.num_pages }};-->
+            <!--if(page > end_page) {-->
+                <!--return;-->
+            <!--}-->
+
+            <!--$.ajax({-->
+                <!--type : "POST",-->
+                <!--url : "../paginator_for_articles/",-->
+                <!--data : {-->
+                    <!--"page" : page,-->
+                    <!--"csrfmiddlewaretoken" : "{{ csrf_token }}"-->
+                <!--},-->
+                <!--success : addMoreArticlesAjax,-->
+                <!--dataType : "html",-->
+                <!--error : function(request, status, error){-->
+                    <!--alert('오류발생');-->
+                <!--},-->
+            <!--});-->
+        <!--}-->
+
+        <!--function addMoreArticlesAjax(data, textStatus, jqXHR) {-->
+            <!--$(".popular-row").append(data);-->
+        <!--}-->
     });
     /* var kk = "{{ replies }}" ;
     console.log(kk); */
