@@ -71,7 +71,16 @@ display: block;
 .cd-nugget-info .cd-nugget-info-arrow {
 fill: #5e6e8d;
 }
-
+.ql-toolbar {
+    width: 960px;
+    margin: 0 auto;
+    border-radius: .25rem;
+}
+.ql-container {
+    width: 840px;
+    margin: 0 auto 40px !important;
+    border-radius: .25rem;
+}
 /* --------------------------------
 
 Main components
