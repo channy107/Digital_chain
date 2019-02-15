@@ -101,7 +101,8 @@ class contentsInfo(models.Model):
 
 class Post(models.Model):
     posts_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    email = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE, null=True)
     file = models.FileField(max_length=1000, null=True)
     file_path = models.CharField(max_length=300)
     title = models.CharField(max_length=100)
@@ -118,7 +119,7 @@ class Post(models.Model):
     isdelete = models.CharField(max_length=250, blank=True, null=True)
     reward_date = models.DateTimeField(blank=True, null=True)
     replymentcount = models.IntegerField(default=0, null=True)
-    like_user_set = models.ManyToManyField(myPageInfomation,
+    like_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                            blank=True,
                                            related_name='like_user_set',
                                            through='LikeUsers')
@@ -221,7 +222,8 @@ class postImage(models.Model):
 
 class LikeUsers(models.Model):
     IDX = models.AutoField(primary_key=True)
-    liked_users = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    liked_users = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    email = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE, null=True)
     posts_id = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, null=True)
@@ -237,7 +239,8 @@ class LikeUsers(models.Model):
 class replyForPosts(models.Model):
     IDX = models.AutoField(primary_key=True)
     posts_id = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    email = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     replytext = models.CharField(max_length=1000, blank=True, null=True)
