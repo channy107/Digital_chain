@@ -170,7 +170,7 @@
 
             var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
             let accounts = web3.eth.accounts;
-            let unidAccount = web3.eth.coinbase;
+            let unidAccount = "0xd9ee4d08a86b430544254ff95e32aa6fcc1d3163";
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
             let nidAmount       = $('#amount').val();
@@ -352,9 +352,9 @@
                                    <!--<p>-->
                                         <!--<span>예상수수료</span> <span>0.0043 eth</span>-->
                                    <!--</p>-->
-                                   <p>
+                                   <!-- <p>
                                         <span>구매 총액</span> <div id="exchange-expect"></div>
-                                   </p>
+                                   </p> -->
                                    <p>
                                   <div class="form-group">
                                     <label for="fromPassword">프라이빗 키</label>
