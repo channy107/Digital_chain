@@ -28,10 +28,10 @@
 <body>
 <div class="container1">
     <!-- contents InFo -->
-    <form id="myform" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
+    <form id="myform" action="" class="form-horizontal" name=writeform method='POST' enctype="multipart/form-data">
           {% csrf_token %}
-    <div class="contentsuploadrows">
-        <h5 class="board-title">게시물 쓰기</h5>
+        <div class="contentsuploadrows">
+            <h5 class="board-title">게시물 쓰기</h5>
 
             <div class="form-group">
                 <label for="inputtitle" class="col-sm-2" id="#contentsName">제목</label>
@@ -62,7 +62,7 @@
             </div>
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
-                <input class="form-control col-sm-6 input-lg shortput" id="inputags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
+                <input class="form-control col-sm-6 input-lg shortput" id="inputtags" name="tags" type="text" placeholder="예) #대기업 #취업 #성공적"/>
 
                 <ul class="str_ul">
                     <li class="tip_str">
@@ -84,14 +84,14 @@
 
                         <ul class="cd-buttons">
                             <li><a href="#0" class="cd-popup-no">No</a></li>
-                            {% comment %} <li><button type="submit" class="cd-popup-yes">Yes</button></li> {% endcomment %}
                             <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">Yes</a></li>
                         </ul>
                         <a href="#0" class="cd-popup-close img-replace"></a>
                     </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
             </div>
-         </form>
+        </div>
+     </form>
 </div>
 </body>
 <script>
@@ -179,14 +179,27 @@
           let range = editor.getSelection();
           console.log(range)
           editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
+          var form = document.querySelector('form')
+          console.log(form);
+          console.log(document.querySelector('input[name="answer_delta"]'));
+          console.log(document.querySelector('input[name="answer_delta"]').value);
       }
 
       var form = document.querySelector('form')
+      console.log(form);
+      console.log(document.querySelector('input[name="answer_delta"]'));
+      console.log(document.querySelector('input[name="answer_delta"]').value);
       form.onsubmit = function() {
           //console.log(quill.getContents());
           //console.log(quill.root.innerHTML);
+
+
+
           var answer_delta = document.querySelector('input[name="answer_delta"]');
           answer_delta.value = JSON.stringify(editor.getContents());
+
+
+          alert(answer_delta.value)
       }
 
 jQuery(document).ready(function($){
@@ -197,8 +210,6 @@ jQuery(document).ready(function($){
     $('.cd-popup-trigger').on('click', function(event){
         event.preventDefault();
         var form = document.writeform;
-        console.log(form.title.value);
-        console.log(form);
 
         if (!form.title.value) {
             alert("제목을 적어주세요");
@@ -237,42 +248,11 @@ jQuery(document).ready(function($){
 
     });
 
-    $('#user_file').on('change', function(){
-        let upload_files = $('#user_file').get(0).files
-        var fileee = $('#user_file').get(0).files[0]['name'];
-        var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
-        console.log(fileee)
-        console.log(extendname)
-        const extendArray = ['.jpg', '.png', '.jpeg'];
-
-        for (var i = 0; i < upload_files.length; i++) {
-            kkk = $('#user_file').get(0).files[i]['name'];
-            extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
-            if ( !extendArray.includes(extendname.toLowerCase()) ) {
-                alert(extendname + "형식은 업로드 할 수 없습니다.");
-                return false;
-            }
-        }
-
-        if ( upload_files.length > 10 ) {
-            alert("최대 10개까지만 등록할 수 있습니다.");
-        } else {
-            $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
-            $("#user_image_before").hide();
-            $("#user_image_after").show();
-        }
-    });
-
-    $('#reupload_preview').on('click', function(){
-        $("#user_image_after").hide();
-        $("#user_image_before").show();
-    });
 
     $('#inputtitle').on('keyup', function(){
         // 남은 글자 수를 구한다.
         var strValue = $(this).val();
         var strLen = strValue.length;
-        console.log(strLen);
         var totalByte = 0;
 
         var len = 0;
@@ -292,44 +272,11 @@ jQuery(document).ready(function($){
         // 넘어가는 글자는 자른다.
         if (totalByte > 30) {
             alert(30 + "자를 초과 입력 할 수 없습니다.");
-            console.log(strValue);
             str2 = strValue.substr(0, 30);
-            console.log(str2);
             $('#inputtitle').val(str2);
-            console.log($('#inputtitle').val());
+
         }
     });
-
-    $('#inputtext').on('keyup', function(){
-        // 남은 글자 수를 구한다.
-        var strValue = $(this).val();
-        var strLen = strValue.length;
-        console.log(strLen);
-        var totalByte = 0;
-
-        var len = 0;
-        var oneChar = "";
-        var str2 = "";
-
-        for (var i = 0; i < strLen; i++) {
-            oneChar = strValue.charAt(i);
-            if (escape(oneChar).length > 4) {
-                totalByte++ ;
-            } else {
-                totalByte += 0.5;
-            }
-            $('#body_byte3').html(totalByte + "/10000");
-        }
-        console.log(totalByte);
-        // 넘어가는 글자는 자른다.
-        if (totalByte > 10000) {
-            alert(10000 + "자를 초과 입력 할 수 없습니다.");
-            str2 = strValue.substr(0, 10000);
-            $('#inputtext').val(str2);
-        }
-    });
-
-
 });
 
 </script>

@@ -2091,7 +2091,7 @@ from django.contrib import auth
 
 def commandMysql(request):
 
-    bbr = myPageInfomation.objects.filter().delete()
+    bbr = Post.objects.all().delete()
     return HttpResponse("성공쓰")
 
 
