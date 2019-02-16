@@ -45,10 +45,11 @@ color: transparent;
 white-space: nowrap;
 }
 
-#votingafter1 {
+#votingbefore1 {
     display:none;
 }
-#votingbefore2 {
+
+#votingafter2 {
     display:none;
 }
 .category {

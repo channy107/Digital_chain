@@ -739,14 +739,18 @@ def vote(request):
 
     if list:
         if voting_count < 0:
-            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            res = {"Ans": "보팅을 모두 소진하셨습니다.",
+                   "count": voting_count}
         else:
-            res = {"Ans": "보팅을 취소했습니다."}
+            res = {"Ans": "보팅을 취소했습니다.",
+                   "count": voting_count}
     else:
         if voting_count == 0:
-            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            res = {"Ans": "보팅을 모두 소진하셨습니다.",
+                   "count": voting_count}
         else:
-            res = {"Ans": "보팅을 완료했습니다."}
+            res = {"Ans": "보팅을 완료했습니다.",
+                   "count": voting_count}
 
     return JsonResponse(res)
 

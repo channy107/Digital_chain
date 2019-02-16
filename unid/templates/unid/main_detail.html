@@ -395,20 +395,22 @@ xpopup
                     <div class="icon-box">
                         <span class="main-voting">
 
-                            {% if request.session.user_email == posts.email_id %}
-                                {% if posts.rewards_success == "success" %}
-                                    <img src="{% static 'unid/icon/votingbefore.png' %}" id="rewardafter" border="0" width="20" height="20">
-                                {% elif user in info.like_user_set.all %}
-                                     <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
-                                        <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter1" border="0" width="20" height="20">
-                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore1" border="0" width="20" height="20">
-                                    </button>
+                            {% if request.session.user_email %}
+                                {% if posts.rewards_success != "success" %}
+                                    {% if user in posts.like_user_set.all %}
+                                         <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                            <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter1" border="0" width="20" height="20">
+                                            <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore1" border="0" width="20" height="20">
+                                        </button>
 
+                                    {% else %}
+                                        <button class="votings2" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                            <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter2" border="0" width="20" height="20">
+                                            <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore2" border="0" width="20" height="20">
+                                         </button>
+                                    {% endif %}
                                 {% else %}
-                                    <button class="votings2" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
-                                        <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter2" border="0" width="20" height="20">
-                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore2" border="0" width="20" height="20">
-                                     </button>
+                                    <img src="{% static 'unid/icon/rewardafter.png' %}" id="rewardafter" border="0" width="20" height="20">
                                 {% endif %}
 
                             {% else %}
@@ -593,6 +595,7 @@ xpopup
                 var votinged = "";
 
 
+
                 if (!like_users) {
                     alert('로그인을 해주세요');
                 }
@@ -606,8 +609,7 @@ xpopup
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     success: function(res) {
-                        alert(res.Ans);
-
+                        console.log(res.count)
                         if (res.Ans == "보팅을 취소했습니다.") {
 
                             if (voting_count >= 10) {
@@ -622,6 +624,9 @@ xpopup
                                 }
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
+
+                            alert("남은 보팅수는 10 입니다")
+
 
                             } else {
                                 like_count = like_count - parseInt(1);
@@ -639,7 +644,12 @@ xpopup
                                 rewards = rewards.toFixed(1);
                                 $("#reward-" + pk).text(rewards);
                                 $("#count").text(voting_count);
+                                counts = res.count + parseInt(1)
+                                alert("남은 보팅수는" + counts + "입니다")
+
+
                             }
+
 
                         } else if (res.Ans == "보팅을 완료했습니다.") {
 
@@ -657,6 +667,8 @@ xpopup
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
                             $("#count").text(voting_count);
+                            counts = res.count - parseInt(1)
+                            alert("남은 보팅수는" + counts + "입니다.")
                             }
 
                          else {
@@ -694,6 +706,7 @@ xpopup
                 var votinged = "";
 
 
+
                 if (!like_users) {
                     alert('로그인을 해주세요');
                 }
@@ -707,8 +720,7 @@ xpopup
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     success: function(res) {
-                        alert(res.Ans);
-
+                        console.log(res.count)
                         if (res.Ans == "보팅을 취소했습니다.") {
 
                             if (voting_count >= 10) {
@@ -723,6 +735,9 @@ xpopup
                                 }
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
+
+                            alert("남은 보팅수는 10 입니다")
+
 
                             } else {
                                 like_count = like_count - parseInt(1);
@@ -740,7 +755,12 @@ xpopup
                                 rewards = rewards.toFixed(1);
                                 $("#reward-" + pk).text(rewards);
                                 $("#count").text(voting_count);
+                                counts = res.count + parseInt(1)
+                                alert("남은 보팅수는" + counts + "입니다")
+
+
                             }
+
 
                         } else if (res.Ans == "보팅을 완료했습니다.") {
 
@@ -758,6 +778,8 @@ xpopup
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
                             $("#count").text(voting_count);
+                            counts = res.count - parseInt(1)
+                            alert("남은 보팅수는" + counts + "입니다.")
                             }
 
                          else {
@@ -785,6 +807,7 @@ xpopup
                     }
                 });
             });
+
 
         $('.postdelete').on('click', function(event) {
             event.preventDefault();
