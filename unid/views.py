@@ -645,6 +645,7 @@ def infotag(request, category):
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
+                   'category': category,
                    }
 
         return render(request, 'unid/infotag.html', context)
@@ -666,10 +667,11 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
+                       'category': category,
                        }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category,}
 
     return render(request, 'unid/infotag.html', context)
 

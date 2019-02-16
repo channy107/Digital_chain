@@ -394,9 +394,33 @@ xpopup
                 <div class="icon-boxs">
                     <div class="icon-box">
                         <span class="main-voting">
-                            <button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
-                                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
-                            </button>
+
+                            {% if request.session.user_email == posts.email_id %}
+                                {% if posts.rewards_success == "success" %}
+                                    <img src="{% static 'unid/icon/votingbefore.png' %}" id="rewardafter" border="0" width="20" height="20">
+                                {% elif user in info.like_user_set.all %}
+                                     <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                        <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter1" border="0" width="20" height="20">
+                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore1" border="0" width="20" height="20">
+                                    </button>
+
+                                {% else %}
+                                    <button class="votings2" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                        <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter2" border="0" width="20" height="20">
+                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore2" border="0" width="20" height="20">
+                                     </button>
+                                {% endif %}
+
+                            {% else %}
+                                {% if posts.rewards_success == "success" %}
+                                    <img src="{% static 'unid/icon/votingbefore.png' %}" id="rewardafter" border="0" width="20" height="20">
+                                {% else %}
+                                    <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingafter" border="0" width="20" height="20"></button>
+                                {% endif %}
+                            {% endif %}
+
+
                             <span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}
                             </span>
                         </span>
@@ -508,7 +532,7 @@ xpopup
                         {% else %}
                         <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
                         {% endif %}
-                            {{ reply.user_id }}
+                            {{ reply.email_id }}
                         </a>
                     </div>
                     <div class="reply-date">
@@ -560,7 +584,7 @@ xpopup
     editor.setContents(JSON.parse("{{ posts.contents | escapejs }}"));
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
-        $(".votings").click(function() {
+        $(".votings1").click(function() {
                 var pk = {{posts.posts_id}};
                 var like_count = parseInt($('#voting-' + pk).text());
                 var rewards = parseFloat($('#reward-' + pk).text());
@@ -589,7 +613,8 @@ xpopup
                             if (voting_count >= 10) {
                                 like_count = like_count - parseInt(1);
                                 votinged = "좋아요취소";
-
+                                $("#votingafter1").hide();
+                                $("#votingbefore1").show();
                                 $('#voting-' + pk).text(like_count);
 
                                 if (like_count % 1 == 0) {
@@ -603,7 +628,8 @@ xpopup
                                 voting_count = voting_count + parseInt(1);
 
                                 votinged = "좋아요취소";
-
+                                $("#votingafter1").hide();
+                                $("#votingbefore1").show();
 
                                 $('#voting-' + pk).text(like_count);
 
@@ -621,7 +647,109 @@ xpopup
                             voting_count = voting_count - parseInt(1);
 
                             votinged = "좋아요";
+                            $("#votingbefore1").hide();
+                            $("#votingafter1").show();
+                            $('#voting-' + pk).text(like_count);
 
+                            if (like_count % 1 == 0) {
+                                rewards = rewards + parseFloat(0.1);
+                            }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+                            $("#count").text(voting_count);
+                            }
+
+                         else {
+                            votinged = "카운팅소진";
+                         }
+
+
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "../voting/",
+                            data: {
+                                posts_id: pk,
+                                like_count: like_count,
+                                rewards: rewards,
+                                liked_users: like_users,
+                                votinged: votinged,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(res) {
+
+                            }
+                        });
+
+                    }
+                });
+            });
+
+        $(".votings2").click(function() {
+                var pk = {{posts.posts_id}};
+                var like_count = parseInt($('#voting-' + pk).text());
+                var rewards = parseFloat($('#reward-' + pk).text());
+                var like_users = "{{request.session.user_email}}";
+                var voting_count = parseInt($('#count').text());
+                var votinged = "";
+
+
+                if (!like_users) {
+                    alert('로그인을 해주세요');
+                }
+
+
+                $.ajax ({
+                    type: 'POST',
+                    url: "../vote/",
+                    data: {
+                        posts_id: pk,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        alert(res.Ans);
+
+                        if (res.Ans == "보팅을 취소했습니다.") {
+
+                            if (voting_count >= 10) {
+                                like_count = like_count - parseInt(1);
+                                votinged = "좋아요취소";
+                                $("#votingafter2").hide();
+                                $("#votingbefore2").show();
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                rewards = rewards - parseFloat(0.1);
+                                }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+
+                            } else {
+                                like_count = like_count - parseInt(1);
+                                voting_count = voting_count + parseInt(1);
+
+                                votinged = "좋아요취소";
+                                $("#votingafter2").hide();
+                                $("#votingbefore2").show();
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                    rewards = rewards - parseFloat(0.1);
+                                    }
+                                rewards = rewards.toFixed(1);
+                                $("#reward-" + pk).text(rewards);
+                                $("#count").text(voting_count);
+                            }
+
+                        } else if (res.Ans == "보팅을 완료했습니다.") {
+
+                            like_count = like_count + parseInt(1);
+                            voting_count = voting_count - parseInt(1);
+
+                            votinged = "좋아요";
+                            $("#votingbefore2").hide();
+                            $("#votingafter2").show();
                             $('#voting-' + pk).text(like_count);
 
                             if (like_count % 1 == 0) {
