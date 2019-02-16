@@ -675,6 +675,7 @@ def infotag(request, category):
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
+                   'category': category,
                    }
 
         return render(request, 'unid/infotag.html', context)
@@ -696,10 +697,11 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
+                       'category': category,
                        }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category,}
 
     return render(request, 'unid/infotag.html', context)
 
@@ -767,14 +769,18 @@ def vote(request):
 
     if list:
         if voting_count < 0:
-            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            res = {"Ans": "보팅을 모두 소진하셨습니다.",
+                   "count": voting_count}
         else:
-            res = {"Ans": "보팅을 취소했습니다."}
+            res = {"Ans": "보팅을 취소했습니다.",
+                   "count": voting_count}
     else:
         if voting_count == 0:
-            res = {"Ans": "보팅을 모두 소진하셨습니다."}
+            res = {"Ans": "보팅을 모두 소진하셨습니다.",
+                   "count": voting_count}
         else:
-            res = {"Ans": "보팅을 완료했습니다."}
+            res = {"Ans": "보팅을 완료했습니다.",
+                   "count": voting_count}
 
     return JsonResponse(res)
 
