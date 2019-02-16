@@ -81,7 +81,7 @@ def mypage(request):
         joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
-        articles = Post.objects.order_by('-posts_id').filter(user_id=request.session['user_email'])
+        articles = Post.objects.order_by('-posts_id').filter(email_id=request.session['user_email'])
         for article in articles:
             if article.like_count:
                 rewardedArticles = Post.objects.filter(user_id=request.session['user_email'])[:3]
