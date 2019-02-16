@@ -84,28 +84,28 @@ def mypage(request):
         articles = Post.objects.order_by('-posts_id').filter(email_id=request.session['user_email'])
         for article in articles:
             if article.like_count:
-                rewardedArticles = Post.objects.filter(user_id=request.session['user_email'])[:3]
+                rewardedArticles = Post.objects.filter(email_id=request.session['user_email'])[:3]
                 rewardDate = article.created_at + timedelta(days=7)
                 print(rewardDate)
                 numbersOfrewardedArticles = len(rewardedArticles)
             else:
                 print()
-        numbersOfArticles = len(Post.objects.filter(user_id=request.session['user_email']))
+        numbersOfArticles = len(Post.objects.filter(email_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
-        numbersOfReply = len(replyForPosts.objects.filter(user_id=request.session['user_email']))
+        numbersOfReply = len(replyForPosts.objects.filter(email_id=request.session['user_email']))
         numbersOfsell = len(walletInFormation.objects.filter(type='contentsTrasaction', toAccount=request.session['user_email']))
         numbersOfbuy = len(walletInFormation.objects.filter(type='contentsTrasaction', fromAccount=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
-        likeusers = LikeUsers.objects.filter(liked_users=request.session['user_email'])
-        numbersOfLike = len(LikeUsers.objects.filter(liked_users=request.session['user_email']))
+        likeusers = LikeUsers.objects.filter(email_id=request.session['user_email'])
+        numbersOfLike = len(LikeUsers.objects.filter(email_id=request.session['user_email']))
         contents_transfer = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', toAccount=request.session['user_email'])
         totalForContentsSelling = 0
         for i in contents_transfer:
             calculate = i.balance
             totalForContentsSelling += calculate
         contents_transfer_sell = walletInFormation.objects.order_by('-IDX').filter(type='contentsTrasaction', fromAccount=request.session['user_email'])
-        replies = replyForPosts.objects.order_by('-IDX').filter(user_id=request.session['user_email'])
+        replies = replyForPosts.objects.order_by('-IDX').filter(email_id=request.session['user_email'])
         downloads = downloadContents.objects.order_by('-IDX').filter(downloader_email_id=request.session['user_email'])[:3]
 
         try:
@@ -729,7 +729,8 @@ def logout(request):
 def vote(request):
     sess = request.session['user_email']
     posts_id = request.POST['posts_id']
-    list = LikeUsers.objects.filter(posts_id=posts_id, liked_users=sess)
+
+    list = LikeUsers.objects.filter(posts_id=posts_id, email=sess)
     count = myPageInfomation.objects.get(email=sess)
     voting_count = count.votingcount
     list = list.values()
@@ -832,7 +833,7 @@ def main_detail(request, id):
     images = postImage.objects.filter(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id).values()
     likes = LikeUsers.objects.filter(posts_id=id)
-    k = richtextTest.objects.get(id=23)
+    k = Post.objects.get(posts_id=38)
     context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
     return render(request, 'unid/main_detail.html', context)
 
@@ -949,8 +950,10 @@ def voting(request):
         count.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
+        email = myPageInfomation.objects.get(email=liked_users)
+        user = request.user
 
-        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, liked_users=liked_users)
+        voting_delete = LikeUsers.objects.filter(posts_id=posts_id, liked_users=user, email=email)
 
         for delete in voting_delete:
             delete.delete()
@@ -965,8 +968,9 @@ def voting(request):
         posts.save()
 
         posts_id = Post.objects.get(posts_id=posts_id)
-
-        like = LikeUsers(posts_id=posts_id, liked_users=liked_users)
+        email = myPageInfomation.objects.get(email=liked_users)
+        user = request.user
+        like = LikeUsers(posts_id=posts_id, liked_users=user, email=email)
 
         like.save()
     else :
@@ -985,21 +989,21 @@ def mainreply(request):
 
     id =Post.objects.get(posts_id=request.POST['id'])
     sess = request.session['user_email']
-    user = myPageInfomation.objects.get(email=sess)
+    user = request.user
+    email = myPageInfomation.objects.get(email=sess)
     br = replyForPosts(posts_id=id,
                            user=user,
+                           email=email,
                            replytext=request.POST['reply']
                            )
 
     br.save()
     board = Post.objects.get(posts_id=request.POST['id'])
     replycount = board.replymentcount
-    if replycount:
-        board.replymentcount = board.replymentcount + 1
-        board.save()
-    else:
-        board.replymentcount = 1
-        board.save()
+
+    board.replymentcount = board.replymentcount + 1
+    board.save()
+
 
     created_at = replyForPosts.objects.order_by('-posts_id').filter(posts_id=id).values()[0]['created_at']
 
@@ -1070,15 +1074,20 @@ def main_upload(request):
     else:
 
         sess = request.session['user_email']
+        print(1)
         title = request.POST['title']
+        print(2)
         category = request.POST['category']
+        print(3)
         tags = request.POST['tags']
+        print(request.POST['firstimage'])
         image_path = request.POST['firstimage']
-        image_list = []
+        print(image_path)
         # reward_date = now + timedelta(days=7)
         email = myPageInfomation.objects.get(email=sess)
         users = request.user
-
+        print(request.POST['answer_delta_text'])
+        print(request.POST.get('answer_delta'))
         info = Post(
             title=title,
             # reward_date=reward_date,
@@ -1088,9 +1097,12 @@ def main_upload(request):
             contents=request.POST.get('answer_delta'),
             image_path= image_path,
             tags=tags,
-            category_path="media/" +request.POST['category']+'.png')
-        info.save()
+            category_path="media/" +request.POST['category']+'.png',
+            aaa=request.POST['answer_delta_text'],
+        )
 
+        info.save()
+        print(5)
         url = '/unid/information/'
         return HttpResponseRedirect(url)
 
@@ -2086,7 +2098,7 @@ from django.contrib import auth
 
 def commandMysql(request):
 
-    bbr = myPageInfomation.objects.filter().delete()
+    bbr = myPageInfomation.objects.filter(IDX=4).delete()
     return HttpResponse("성공쓰")
 
 

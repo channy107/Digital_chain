@@ -354,12 +354,12 @@ xpopup
                 <hr size="10" align="center" width=20% noshade="noshade" />
                 <div class="infobox"  align="center">
                     <div class="writerinfo">
-                        <a href="{% url 'user_detail' posts.user.IDX %}">
+                        <a href="{% url 'user_detail' posts.email.IDX %}">
                             <p align="center" size="5" style="color: black;">
-                                {% if posts.user.userimage %}
-                                <img src="/{{ contents.user.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.user.name }}
+                                {% if posts.email.userimage %}
+                                <img src="/{{ contents.email.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
                                 {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ post.user.name }}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ posts.email.name }}
                                 {% endif %}
                             </p>
                         </a>
@@ -395,7 +395,8 @@ xpopup
                     <div class="icon-box">
                         <span class="main-voting">
                             <button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
-                                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">                              </button>
+                                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">
+                            </button>
                             <span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}
                             </span>
                         </span>
@@ -426,7 +427,7 @@ xpopup
 
             </div>
             </div>
-            {% if request.session.user_email == posts.user_id %}
+            {% if request.session.user_email == posts.email_id %}
                 <div class="test icon-box">
                     <img src="{% static 'unid/icon/icons-의견보내기.png' %}" width="90" height="30" class="pointeffect opinion">
                     <a href="{% url 'infomodify' posts.posts_id %}">
@@ -489,12 +490,12 @@ xpopup
                 {% for reply in replys %}
                 <div class="reply">
                     <div class="reply-picture">
-                        {% if reply.user.name == mypage.name %}
+                        {% if reply.email.name == mypage.name %}
                         <a href="/unid/mypage">
                         {% else %}
-                        <a href="{% url 'user_detail' reply.user.IDX %}">
+                        <a href="{% url 'user_detail' reply.email.IDX %}">
                         {% endif %}
-                            {% if reply.user.userimage %}
+                            {% if reply.mail.userimage %}
                                 <img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
                             {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
@@ -502,7 +503,7 @@ xpopup
                         </a>
                     </div>
                     <div class="reply-id">
-                        {% if reply.user.name == mypage.name %}
+                        {% if reply.email.name == mypage.name %}
                         <a href="/unid/mypage" style="color:black">
                         {% else %}
                         <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
@@ -556,87 +557,7 @@ xpopup
         placeholder: 'Free Write...',
     });
 
-    // quill editor add image handler
-    editor.getModule('toolbar').addHandler('image', () => {
-      selectLocalImage();
-    });
-
-      /**
-       * Step1. select local image
-       *
-       */
-    function selectLocalImage() {
-        let input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('name', 'richimage');
-        input.click();
-
-        input.onchange = () => {
-            // 파일선택창에서 선택한 첫번째 파일
-            let file = input.files[0];
-            if (/^image\//.test(file.type)) {
-            //     saveToServer();
-                form_data = new FormData();
-                console.log(file);
-                form_data.append('richimage', file);
-                console.log(form_data);
-                $.ajax({
-                    type: 'POST',
-                    url: "../uploadImage/",
-                    processData: false,
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    data: form_data,
-                    success: function(res) {
-                        console.log(333);
-                        // this is callback data: url
-                        //let url = xhr.responseText;
-                        //console.log(444);
-                        //insertToEditor(url);
-                        console.log(res.status);
-                        // this is callback data: url
-                        console.log(res.status);
-                        console.log(res.responseText);
-                        insertToEditor(res.responseText);
-                    }
-                });
-            } else {
-                console.log("셀렉로클이미지5");
-                console.warn('You could only upload images.');
-            }
-         };
-    }
-
-    function insertToEditor(url) {
-        console.log("인선트투에디터");
-        // push image url to rich editor.
-        let range = editor.getSelection();
-        console.log(range)
-        editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
-    }
-
-    var form = document.querySelector('form')
-
-        form.onsubmit = function() {
-
-            //console.log(quill.getContents());
-
-            //console.log(quill.root.innerHTML);
-
-
-
-            var answer_delta = document.querySelector('input[name="answer_delta"]');
-
-            answer_delta.value = JSON.stringify(editor.getContents());
-
-
-
-            //return false;
-
-
-
-        }
-        editor.setContents(JSON.parse("{{ k.delta_content | escapejs }}"));
+    editor.setContents(JSON.parse("{{ posts.contents | escapejs }}"));
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
         $(".votings").click(function() {
