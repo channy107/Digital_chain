@@ -808,11 +808,11 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(miutes=30)
+    reward_day = now - timedelta(minutes=30)
     rewarded_day = reward_day - timedelta(days=7)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
-
+    print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -855,11 +855,11 @@ def writer_rewards():
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(miutes=30)
+    reward_day = now - timedelta(minutes=30)
     rewarded_day = reward_day - timedelta(days=7)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
     reward_post_values = reward_post.values()
-
+    print(reward_post_values)
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
