@@ -182,7 +182,6 @@ def mypage(request):
                        'myreward': myreward,
                        'likeusers': likeusers,
                        'numbersOfLike': numbersOfLike,
-                       # 'totalRewards': totalRewards,
                        'joiningdate': joiningdate,
                        'joining': joining,
                        'numbersOfArticles': numbersOfArticles,
