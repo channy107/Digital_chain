@@ -79,6 +79,36 @@
             </tbody>
         </table>
     </div>
+    <div class="admin-row" data-role='collapsible'>
+        <div class="unid-user-title speadButton spreadTable" name="T1">
+            <h2>광고 업로드</h2>
+            <p>유일한 수입원.</p>
+        </div>
+        <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
+            <div id="user_preview_file_before">
+                <div id="user_file_over">
+                    <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
+                </div>
+                <div class="form-group">
+                    <label for="input_previewfiles_before" class="col-sm-2">광고 업로드</label>
+                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
+                    <ul class="str_ul">
+                        <li class="tip_str">
+                        .jpg, .png 형식의 파일만 가능합니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="user_preview_file_after">
+                <div class="form-group">
+                    <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
+                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
+                </div>
+            </div>
+        </form>
     <div class="admin-row">
         <div class="unid-opininon-title speadButton spreadTable" name="T2">
             <h2>OPINIONS( {{ allOpinions|length }} )</h2>
@@ -281,6 +311,43 @@
 <script>
 
     jQuery(document).ready(function($){
+        $('#user_preview_files').on('change', function(){
+            let upload_files = $('#user_preview_files').get(0).files
+            console.log($('#user_preview_files').get(0).files.length);
+            console.log($('#user_preview_files').get(0).files);
+            var fileee = $('#user_preview_files').get(0).files[0]['name'];
+            var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
+            const extendArray = ['.jpg', '.png', '.jpeg'];
+            console.log(fileee);
+            for (var i = 0; i < upload_files.length; i++) {
+                kkk = $('#user_preview_files').get(0).files[i]['name'];
+                console.log(kkk);
+                extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
+                console.log(extendname);
+                if ( !extendArray.includes(extendname.toLowerCase()) ) {
+                    alert(extendname + "형식은 업로드 할 수 없습니다.");
+                    return false;
+                }
+
+           };
+            console.log(1);
+            console.log(fileee.substring(fileee.lastIndexOf('.'),fileee.length ));
+            console.log(fileee.lastIndexOf('.'));
+            console.log(extendname);
+            console.log(fileee);
+            if ( upload_files.length > 3 ) {
+                alert("최대 3개까지만 등록할 수 있습니다.");
+            } else {
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_preview_file_before").hide();
+                $("#user_preview_file_after").show();
+            }
+        });
+
+        $('#reupload_preview').on('click', function(){
+            $("#user_preview_file_after").hide();
+            $("#user_preview_file_before").show();
+        });
         $(document).on('click', '.deletePost', function(){
             console.log(1);
             id = $(this).attr('name').substr(0,3);

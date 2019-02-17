@@ -22,3 +22,37 @@
 a {
     color: black;
 }
+
+.user_preview_files {
+    position: relative;
+    left: 690px;
+    top: 35px;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    }
+
+#user_preview_file_after, #user_preview_file_after1, #user_preview_file_after2 {
+    display: none;
+    position: relative;
+    top: 30px;
+    margin: 0 0 40px 0;
+}
+
+.user_files {
+    position: relative;
+    left: 690px;
+    top: 35px;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    }
+.buttonColor {
+    background-color: #E64C3C !important;
+    color: white;
+    text-align: center;
+}
+.files-button {
+    position: relative;
+    left: 635px;
+}

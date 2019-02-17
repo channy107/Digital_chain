@@ -457,7 +457,7 @@ def contentsdetail(request, id):
         for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
             previewimage = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
             previewlist.append(previewimage)
-
+        print(previewlist)
         if len(previewlist) == 2:
             first_preview =  previewlist[0]
             second_preview = previewlist[1]
@@ -470,6 +470,7 @@ def contentsdetail(request, id):
             first_preview = previewlist[0]
             second_preview = "media/default.png"
             third_preview = "media/default.png"
+        print(second_preview)
     else:
         first_preview = "media/default.png"
         second_preview = "media/default.png"
@@ -546,7 +547,7 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price*1000000000000000000).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -793,8 +794,8 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(days=7)
-    rewarded_day = reward_day - timedelta(hours=1)
+    reward_day = now - timedelta(hours=1)
+    rewarded_day = reward_day - timedelta(days=7)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
 
@@ -837,10 +838,12 @@ def writer_rewards():
 
         store.save()
 
+
+
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(days=7)
-    rewarded_day = reward_day - timedelta(hours=1)
+    reward_day = now - timedelta(hours=1)
+    rewarded_day = reward_day - timedelta(days=7)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_post_values = reward_post.values()
     # print(reward_post_values)
@@ -889,6 +892,7 @@ def liked_users_reward():
             writer_reward_success.save()
             reward_success.rewards_success = "success"
             reward_success.save()
+
 
 
 def main_detail(request, id):

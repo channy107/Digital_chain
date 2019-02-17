@@ -64,6 +64,7 @@ CRONJOBS = [
     ('* * * * *', 'unid.views.liked_users_reward')
 ]
 
+
 WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh_index')
 
 HAYSTACK_CONNECTIONS = {
