@@ -793,10 +793,11 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
-    rewarded_day = reward_day - timedelta(days=1)
+    reward_day = now - timedelta(days=7)
+    rewarded_day = reward_day - timedelta(hours=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
+
     # print(reward_values)
 
     for i in range(len(reward_values)):
@@ -807,32 +808,46 @@ def writer_rewards():
 );
         post_id = reward_values[i]['posts_id']
         rewards = reward_values[i]['rewards']
-        writer = reward_values[i]['user_id']
+        writer = reward_values[i]['email_id']
+        # print(rewards)
+        # print(writer)
+
         writer_info = myPageInfomation.objects.get(email=writer)
-        writeraccount = writer_info.account
-        writeraccount = Web3.toChecksumAddress(writeraccount)
-        reward_nwei = int(rewards*10) * 100000000000000000
-        print(reward_nwei)
+
+        writeraccounts = writer_info.account
+        writername = writer_info.name
+        coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
+        writeraccount = Web3.toChecksumAddress(writeraccounts)
+        reward_nwei = int(rewards*100) * 10000000000000000
+
+        # print(rewards)
+        # print(reward_nwei)
+        # print(coinbase)
+        unidadmin = myPageInfomation.objects.get(account=coinbase)
+        # print(unidadmin)
+
+
         unidaccountpwd = "pass0"
-        w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
-        tx_hash=ncc.functions.writerreward(w3.eth.coinbase, writeraccount, reward_nwei).transact({'from': w3.eth.coinbase, 'gas': 2000000})
+        w3.personal.unlockAccount(coinbase, unidaccountpwd, 0)
+        tx_hash=ncc.functions.writerreward(coinbase, writeraccount, reward_nwei).transact({'from': coinbase, 'gas': 2000000})
 
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
-        store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=writer, balance=rewards, txid=receipt, type="rewards", aaa="success")
+        store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=rewards, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
 
         store.save()
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
-    rewarded_day = reward_day - timedelta(days=1)
+    reward_day = now - timedelta(days=7)
+    rewarded_day = reward_day - timedelta(hours=1)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_post_values = reward_post.values()
     # print(reward_post_values)
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
+        # print(userreward)
         reward = LikeUsers.objects.filter(posts_id=post_id).exclude(rewards_success="success")
         reward_values = reward.values()
         # print(reward_values)
@@ -842,21 +857,33 @@ def liked_users_reward():
             nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
             ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}]
                                   );
-            likedusers = reward_values[i]['liked_users']
+            likedusers = reward_values[i]['email_id']
+            post_id = reward_values[i]['posts_id_id']
+            # print(post_id)
+            # print(likedusers)
             usercount = reward.count()
+            # print(usercount)
             user_info = myPageInfomation.objects.get(email=likedusers)
             writer_reward_success = Post.objects.get(posts_id=post_id)
-            reward_success = LikeUsers.objects.get(posts_id=post_id, liked_users=likedusers)
+            reward_success = LikeUsers.objects.get(posts_id=post_id, email=likedusers)
+            username = user_info.name
+            # print(username)
             useraccount = user_info.account
+            # print(useraccount)
+            coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
+            unidadmin = myPageInfomation.objects.get(account=coinbase)
+
             likedusersaccount = Web3.toChecksumAddress(useraccount)
-            user_reward = int(0.2*10) *10000000000000000
-            print(user_reward)
+            # print(likedusersaccount)
+            user_reward = int(0.02*100) * 10000000000000000
+
+            # print(user_reward)
             unidaccountpwd = "pass0"
-            w3.personal.unlockAccount(w3.eth.coinbase, unidaccountpwd, 0)
-            tx_hash = ncc.functions.writerreward(w3.eth.coinbase, likedusersaccount, user_reward).transact(
-                {'from': w3.eth.coinbase, 'gas': 2000000})
+            w3.personal.unlockAccount(coinbase, unidaccountpwd, 0)
+            tx_hash = ncc.functions.writerreward(coinbase, likedusersaccount, user_reward).transact(
+                {'from': coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-            store = walletInFormation(transactiondate=now, fromAccount=w3.eth.coinbase, toAccount=likedusers, balance=0.2, txid=receipt, type="rewards", aaa="success")
+            store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=user_info, user=username, balance=0.2, txid=receipt, type="rewards",posts_id_id = post_id ,bbb="success")
             store.save()
             writer_reward_success.rewards_success = "success"
             writer_reward_success.save()
@@ -1116,8 +1143,14 @@ def main_upload(request):
         category = request.POST['category']
         print(3)
         tags = request.POST['tags']
-        print(request.POST['firstimage'])
-        image_path = request.POST['firstimage']
+        try:
+            image_path = request.POST['firstimage']
+        except:
+            image_path = "/media/defaultthumbnail.png"
+
+
+
+
         print(image_path)
         now = datetime.now()
         reward_date = now + timedelta(days=7)

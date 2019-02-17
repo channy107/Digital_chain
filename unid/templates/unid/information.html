@@ -71,7 +71,7 @@
                                 {% endif %}
                             </li>
                             <li>
-                                {{ info.email.email }}
+                                {{ info.email.name }}
                             </li>
                         </a>
                         {% else %}
@@ -84,7 +84,7 @@
                                 {% endif %}
                             </li>
                             <li>
-                                {{ info.email.email }}
+                                {{ info.email.name }}
                             </li>
                         </a>
                         {% endif %}
@@ -100,7 +100,7 @@
                             {% if info.file_path %}
                             <img src="/{{ info.file_path }}" width="99px" height="75px" style="border-radius: 3px;">
                             {% else %}
-                            <img src="/media/unid_default_info.png" width="99px" height="75px" style="border-radius: 3px;">
+                            <img src="/media/defaultthumbnail.png" width="99px" height="75px" style="border-radius: 3px;">
                             {% endif %}
                         </a>
                     </div>

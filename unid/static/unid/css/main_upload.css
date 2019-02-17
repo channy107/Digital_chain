@@ -135,7 +135,7 @@ left: 0;
 top: 0;
 height: 100%;
 width: 100%;
-background-color: rgba(94, 110, 141, 0.9);
+background-color: #5959597d;
 opacity: 0;
 visibility: hidden;
 -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
@@ -295,4 +295,9 @@ color: black;
   border-color: rgb(179, 179, 179);
   border-color: transparent;
   font-family: 'Noto Sans KR', sans-serif;
+}
+
+.ql-editor {
+    height: 610px !important;
+
 }

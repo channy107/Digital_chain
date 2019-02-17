@@ -616,24 +616,18 @@ xpopup
                         </ol>
                         <div class="carousel-inner" role="listbox">
                             {% if first_preview %}
-                            {% if first_preview != "media/default.png" %}
                             <div class="carousel-item active" id="view-preview1">
                                 <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="600" height="780">
                             </div>
-                            {% endif %}
                             {% if second_preview %}
-                            {% if second_preview != "media/default.png" %}
                             <div class="carousel-item" id="view-preview2">
                                 <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="600" height="780">
                             </div>
                             {% endif %}
-                            {% endif %}
                             {% if third_preview %}
-                            {% if third_preview != "media/default.png" %}
                             <div class="carousel-item" id="view-preview3">
                                 <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="600" height="780">
                             </div>
-                            {% endif %}
                             {% endif %}
                             {% else %}
 

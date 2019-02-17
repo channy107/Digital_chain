@@ -122,7 +122,7 @@ class Post(models.Model):
                                            blank=True,
                                            related_name='like_user_set',
                                            through='LikeUsers')
-    aaa = models.CharField(max_length=250, blank=True, null=True)
+    aaa = models.CharField(max_length=10000, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
@@ -256,3 +256,13 @@ class opinions(models.Model):
     title = models.CharField(max_length=250, blank=True, null=True)
     type = models.CharField(max_length=250, blank=True, null=True)
     result = models.CharField(max_length=50, blank=True, null=True)
+
+
+class advertise(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=250)
+    image_path = models.CharField(max_length=250)
+    background_image_path = models.CharField(max_length=250)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
