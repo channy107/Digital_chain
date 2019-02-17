@@ -170,7 +170,7 @@
 
             var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
             let accounts = web3.eth.accounts;
-            let unidAccount = web3.eth.coinbase;
+            let unidAccount = "0xab8348cc337c3a807b21f7655cae0769d79c3772";
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
             let nidAmount       = $('#amount').val();
@@ -275,7 +275,7 @@
 </script>
 
 
-
+<div class="contentsmain-container1">
 <!-- Page Content -->
 <div class="container1">
     <!-- contents InFo -->
@@ -301,14 +301,15 @@
                 </br>
                 </br>
 
-                <p align="left" size ="5"> 구매할 토큰종류 </p>
+                <p align="left" size ="5"> 구매할 토큰 </p>
+                <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> eth </span>
+                <img src="{% static 'unid/icon/front.png' %}" border="0" width="10" height="10">&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
                 </br>
                 </br>
                 </br>
-                </br>
                 <div class="exchange-predict">
-                <p align="left" size ="5"> 내 eth 잔고 </p>
+                <p align="left" size ="5"> 내가 보유한 eth </p>
                 <p align="left" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="150" height="150">
                     <div id="Status_balance">
                     </div>
@@ -316,11 +317,11 @@
                 <hr size="10" align="right" width=80% noshade="noshade" color="#efefef" />
                 </div>
                 <br><br><br>
-                <p align="left" size ="5"> 구매 가능 금액 </p>
+                <p align="left" size ="5"> 구매 가능한 nid </p>
                 <div id="potential_balance"></div>
                 </br>
                 </br>
-                <p align="left" size ="5"> 구매 할 금액 </p>
+                <p align="left" size ="5"> 구매 할 nid </p>
                 <input type="number" id="amount" class="transaction-input" placeholder="금액을 입력해주세요" />
                 <h2 align="right"> nid </h2>
                 </br>
@@ -352,9 +353,9 @@
                                    <!--<p>-->
                                         <!--<span>예상수수료</span> <span>0.0043 eth</span>-->
                                    <!--</p>-->
-                                   <p>
+                                   <!-- <p>
                                         <span>구매 총액</span> <div id="exchange-expect"></div>
-                                   </p>
+                                   </p> -->
                                    <p>
                                   <div class="form-group">
                                     <label for="fromPassword">프라이빗 키</label>
@@ -375,8 +376,7 @@
     </div>
 
 </div>
-
-
+</div>
 
 <script>
         //transaction pop

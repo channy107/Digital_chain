@@ -57,9 +57,7 @@
             <input name="answer_delta" type="hidden">
             <input name="answer_delta_text" id="answer_delta_text" type="hidden">
             <div id="quill-editor" aria-readonly="false">
-                <p>Hello World!</p>
-                <p>Some initial <strong>bold</strong> text</p>
-                <p><br></p>
+
             </div>
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
@@ -120,7 +118,6 @@
           modules: {
             toolbar: toolbarOptions
           },
-          placeholder: 'Free Write...',
           theme: 'snow'
       });
 
@@ -179,7 +176,8 @@
           // push image url to rich editor.
           let range = editor.getSelection();
           console.log(range)
-          editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
+          //editor.insertEmbed(range.index, 'image', `http://www.unid.online${url}`);
+          editor.insertEmbed(range.index, 'image', `http://www.unid.online${url}`);
           var form = document.querySelector('form')
           console.log(form);
           console.log(document.querySelector('input[name="answer_delta"]'));
@@ -200,8 +198,6 @@
               answer_delta.value = JSON.stringify(editor.getContents());
 
               document.getElementById("answer_delta_text").value = editor.getText();
-              alert(answer_delta.value);
-              alert(answer_delta_text.value);
               document.getElementById('myform').submit()
           }
 

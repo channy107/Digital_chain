@@ -575,29 +575,15 @@ xpopup
         <div class="row">
             <div class="picture-box">
                 <div>
-                    {% if first_preview %}
-                    {% if first_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview1" name="1">
                         <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% if second_preview %}
-                    {% if second_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview2" name="2">
                         <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% endif %}
-                    {% if third_preview %}
-                    {% if third_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview3" name="3">
                         <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% endif %}
-                    {% else %}
-
-                    {% endif %}
                 </div>
             </div>
         </div>

@@ -33,7 +33,7 @@
                 $('#coinone_BTC').html('&#8361; ' + numberWithCommas(coinone_btc)); // 거래소 시세 정보 표에 값 세팅
                 $('#coinone_ETH').html('&#8361; ' + numberWithCommas(coinone_eth));
                 $('#coinone_XRP').html('&#8361; ' + numberWithCommas(coinone_xrp));
-                $('#coinone_NID').html(`${numberWithCommas(coinone_nid)} nid`);
+                $('#coinone_NID').html(`${numberWithCommas(coinone_nid)}`);
             });
         }
 
@@ -74,15 +74,14 @@
 
 
 
-
-
+<div class="contentsmain-container1">
 <div class="container1">
     <!-- contents InFo -->
     <div class="rows">
         <div class="row">
             <div class="contents-info">
                 <h5 class="contents-title">
-                    <b>  내 지갑 </b>
+                    <p id="name-title"> 내 지갑 </p>
                 </h5>
 
                     <h4 class="contents-title2" align="right">
@@ -92,30 +91,29 @@
                         </div>
 
                     </h4>
-
                 </br>
                 </br>
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef"/>
                     <div>
                         <p align="center" size ="5" id="idaccount"> {{ mypage.name }} 님의 보유자산</p>
                     </div>
-                <p align="center" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="170" height="170">  </p>
+                <p align="center" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="100" height="100">  </p>
                     <div id="Status_balance">
                     </div>
                 </br>
                 </br>
                 <div class="function-button">
-                        <a href="/unid/transaction"> <img src="{% static 'unid/icon/credit-card.png' %}" border="0" width="100" height="100"></a>
+                        <a href="/unid/transaction"> <img src="{% static 'unid/icon/credit-card.png' %}" border="0" width="75" height="75"></a>
                     <br>
                         <span class="icon-name" size="5">토큰송금</span>
                 </div>
                 <div class="function-button">
-                        <a href="/unid/exchange"><img src="{% static 'unid/icon/exchange.png' %}" border="0" width="100" height="100"></a>
+                        <a href="/unid/exchange"><img src="{% static 'unid/icon/exchange.png' %}" border="0" width="75" height="75"></a>
                     <br>
                         <span class="icon-name" size="5">토큰환전</span>
                 </div>
                 <div class="function-button">
-                        <a href="/unid/purchase"><img src="{% static 'unid/icon/bill.png' %}" border="0" width="100" height="100"></a>
+                        <a href="/unid/purchase"><img src="{% static 'unid/icon/bill.png' %}" border="0" width="75" height="75"></a>
                     <br>
                         <span class="icon-name"  size="5">토큰구매</span>
                 </div>
@@ -123,8 +121,7 @@
             </div>
         </div>
 
-        </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
-
+        </br></br></br></br></br></br></br></br></br></br></br></br></br>
 
         <!-- search bar -->
         <!-- <div class="box">
@@ -137,7 +134,6 @@
                  </div>
               </div>
         </div> -->
-
 
         <div class="row">
             <div class="history">
@@ -185,7 +181,7 @@
 
             </div>
         </div>
-        <br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br>
         <div class="row">
             <div class="history">
                     <h6> 환전내역  <span>{{ count_ex }}건</span></h6>
@@ -273,7 +269,7 @@
         </div>
     </div>
 </div>
-
+</div>
 
 
 <!--key pop-->
@@ -320,39 +316,35 @@
                   <table border=1>
                       <tr>
                           <th></th>
-                          <th>코인원</th>
-                          <th>빗썸</th>
+                          <th>거래소 시세 조회</th>
+                          <!-- <th>빗썸</th> -->
                       </tr>
                       <tr>
                           <td>비트코인</td>
                           <td id="coinone_BTC"></td>
-                          <td id="bithumb_BTC"></td>
+                          <!-- <td id="bithumb_BTC"></td> -->
                       </tr>
                       <tr>
                           <td>이더리움</td>
                           <td id="coinone_ETH"></td>
-                          <td id="bithumb_ETH"></td>
+                          <!-- <td id="bithumb_ETH"></td> -->
                       </tr>
                       <tr>
                           <td>리플</td>
                           <td id="coinone_XRP"></td>
-                          <td id="bithumb_XRP"></td>
+                          <!-- <td id="bithumb_XRP"></td> -->
                       </tr>
                       <tr>
                           <td>기준시</td>
                           <td colspan="4" id="lastUpdate"></td>
                       </tr>
                   </table>
-                 <span>1 eth</span>
-                 <div>
-                     <span>코인원기준</span> <span id="coinone_NID"></span>
+                <br><br>
+                 <div id="nid-eth-value">
+                 <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
+                 =
+                 <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"> nid</span>
                  </div>
-                 <div>
-                     <span>빗썸기준</span> <span id="bithumb_NID"></span>
-                 </div>
-
-
-
 
              </div>
              <div class="modal-footer">
@@ -471,8 +463,8 @@
            function showStatus() {
 
                let statusBalance =`
-                   <h4 id="nd_bal" align="center" size ="5"></h4>
-                   <h4 id="bal" align="center" size ="5"></h4>
+                   <h4 id="nd_bal" align="center" size ="5"><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="20" height="20"> <span align="left" size ="5"></h4>
+                   <h4 id="bal" align="center" size ="5"><img src="{% static 'unid/icon/ether.png' %}" border="0" width="20" height="20"> <span align="left" size ="5"></h4>
                 `;
 
                let statusAccountPop = `
