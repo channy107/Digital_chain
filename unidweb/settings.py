@@ -60,8 +60,8 @@ INSTALLED_APPS = [
 
 CRONJOBS = [
     ('0 0 * * *', 'unid.views.my_cron_job'),
-    ('* * * * *', 'unid.views.writer_rewards'),
-    ('* * * * *', 'unid.views.liked_users_reward')
+    ('0 0 * * *', 'unid.views.writer_rewards'),
+    ('0 0 * * *', 'unid.views.liked_users_reward')
 ]
 
 

@@ -541,6 +541,9 @@ xpopup
                 </div>
                 <div class="infobox"  align="center">
                     <div class="writerinfo">
+                        {% if contents.writeremail.name == request.session.user_name %}
+                        <a href="/unid/mypage">
+                        {% else %}
                         <a href="{% url 'user_detail' contents.writeremail.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if contents.writeremail.userimage %}
@@ -550,6 +553,7 @@ xpopup
                                 {% endif %}
                             </p>
                         </a>
+                        {% endif %}
                     </div>
                     <div class="dateinfo">
                         {{ contents.created|timesince }}전
