@@ -118,7 +118,6 @@
           modules: {
             toolbar: toolbarOptions
           },
-          placeholder: 'Free Write...',
           theme: 'snow'
       });
 
@@ -199,8 +198,6 @@
               answer_delta.value = JSON.stringify(editor.getContents());
 
               document.getElementById("answer_delta_text").value = editor.getText();
-              alert(answer_delta.value);
-              alert(answer_delta_text.value);
               document.getElementById('myform').submit()
           }
 
