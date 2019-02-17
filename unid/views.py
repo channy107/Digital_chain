@@ -329,7 +329,7 @@ def transaction(request):
         transactionData.save()
 
 
-        recentAccount = walletInFormation.objects.filter(fromAccount=request.session['user_name'], type='coinTransaction')[:5]
+        recentAccount = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='coinTransaction')[:5]
 
     return render(request, 'unid/transaction.html', {'list':recentAccount})
 

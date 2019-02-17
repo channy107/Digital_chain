@@ -126,6 +126,9 @@
              <h3 id="nid_potent" align="right" size ="5"></h3>
         `;
 
+        $('#potential_nid').empty();
+        $('#potential_nid').append(coinone_nid);
+
         $('#potential_balance').empty();
         $('#potential_balance').append(potentialNid);
 
@@ -171,8 +174,8 @@
             let unidAccount = "0xd9ee4d08a86b430544254ff95e32aa6fcc1d3163";
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
-            let nidAmount       = $('#amount').val() * coinone_nid;
-            let ethAmount  = $('#amount').val();
+            let nidAmount       = $('#amount').val();
+            let ethAmount  = $('#amount').val() / coinone_nid;
             let fromPasswordBase = 'pass0';
 
             // 보내는 사람의 계정을 언락
@@ -306,14 +309,23 @@
                 </p>
                 <hr size="10" align="right" width=80% noshade="noshade" color="#efefef" />
                 </div>
-                <br><br><br>
-                <p align="left" size ="5"> 환전 가능 금액 </p>
+                </br>
+                </br>
+                <p align="left" size ="5"> nid 시세 (1 eth 당 교환가능 nid수량) </p>
+                <div id="potential_nid"></div>
+                </br>
+                </br>
+                <p align="left" size ="5"> 환전 가능 eth </p>
                 <div id="potential_balance"></div>
+                </br>
+                </br>
+                <p align="left" size ="5"> 환전 가능 nid </p>
+                <div id="Status_balance"></div>
                 </br>
                 </br>
                 <p align="left" size ="5"> 환전 할 금액 </p>
                 <input type="number" id="amount" class="transaction-input" placeholder="금액을 입력해주세요" />
-                <h2 align="right"> eth </h2>
+                <h2 align="right"> nid </h2>
                 </br>
                 </br>
 
