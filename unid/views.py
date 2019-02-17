@@ -1143,8 +1143,14 @@ def main_upload(request):
         category = request.POST['category']
         print(3)
         tags = request.POST['tags']
-        print(request.POST['firstimage'])
-        image_path = request.POST['firstimage']
+        try:
+            image_path = request.POST['firstimage']
+        except:
+            image_path = "/media/defaultthumbnail.png"
+
+
+
+
         print(image_path)
         now = datetime.now()
         reward_date = now + timedelta(days=7)
