@@ -118,7 +118,7 @@ xpopup
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(94, 110, 141, 0.9);
+  background-color: #5959597d;
   opacity: 0;
   visibility: hidden;
   -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
@@ -516,23 +516,23 @@ xpopup
                 {% for reply in replys %}
                 <div class="reply">
                     <div class="reply-picture">
-                        {% if reply.email.name == mypage.name %}
+                        {% if reply.email.name == request.session.user_name %}
                         <a href="/unid/mypage">
                         {% else %}
                         <a href="{% url 'user_detail' reply.email.IDX %}">
                         {% endif %}
                             {% if reply.mail.userimage %}
-                                <img src="/{{ reply.writeremail.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
+                                <img src="/{{ reply.email.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
                             {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
                             {% endif %}
                         </a>
                     </div>
                     <div class="reply-id">
-                        {% if reply.email.name == mypage.name %}
+                        {% if reply.email.name == request.session.user_name %}
                         <a href="/unid/mypage" style="color:black">
                         {% else %}
-                        <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
+                        <a href="{% url 'user_detail' reply.email.IDX %}" style="color:black">
                         {% endif %}
                             {{ reply.email_id }}
                         </a>

@@ -60,7 +60,7 @@
                     {% for contents in contentsPost %}
                     <div class="popular-row">
                         <ul class="row-top">
-                            {% if contents.writeremail.name == mypage.name %}
+                            {% if contents.writeremail.name == request.session.user_name %}
                             <a href="/unid/mypage">
                             {% else %}
                             <a href="{% url 'user_detail' contents.writeremail.IDX %}">

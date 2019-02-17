@@ -541,6 +541,9 @@ xpopup
                 </div>
                 <div class="infobox"  align="center">
                     <div class="writerinfo">
+                        {% if contents.writeremail.name = request.session.user_name %}
+                        <a href="/unid/mypage">
+                        {% else %}
                         <a href="{% url 'user_detail' contents.writeremail.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if contents.writeremail.userimage %}
@@ -550,6 +553,7 @@ xpopup
                                 {% endif %}
                             </p>
                         </a>
+                        {% endif %}
                     </div>
                     <div class="dateinfo">
                         {{ contents.created|timesince }}전
@@ -571,29 +575,15 @@ xpopup
         <div class="row">
             <div class="picture-box">
                 <div>
-                    {% if first_preview %}
-                    {% if first_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview1" name="1">
                         <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% if second_preview %}
-                    {% if second_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview2" name="2">
                         <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% endif %}
-                    {% if third_preview %}
-                    {% if third_preview != "media/default.png" %}
                     <div class="preview pointeffect" id="preview3" name="3">
                         <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="200" height="285">
                     </div>
-                    {% endif %}
-                    {% endif %}
-                    {% else %}
-
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -616,18 +606,24 @@ xpopup
                         </ol>
                         <div class="carousel-inner" role="listbox">
                             {% if first_preview %}
+                            {% if first_preview != "media/default.png" %}
                             <div class="carousel-item active" id="view-preview1">
                                 <img class="d-block" src="/{{ first_preview }}" alt="first slide" width="600" height="780">
                             </div>
+                            {% endif %}
                             {% if second_preview %}
+                            {% if second_preview != "media/default.png" %}
                             <div class="carousel-item" id="view-preview2">
                                 <img class="d-block" src="/{{ second_preview }}" alt="Second slide" width="600" height="780">
                             </div>
                             {% endif %}
+                            {% endif %}
                             {% if third_preview %}
+                            {% if third_preview != "media/default.png" %}
                             <div class="carousel-item" id="view-preview3">
                                 <img class="d-block" src="/{{ third_preview }}" alt="Third slide" width="600" height="780">
                             </div>
+                            {% endif %}
                             {% endif %}
                             {% else %}
 

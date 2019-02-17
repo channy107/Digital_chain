@@ -86,9 +86,20 @@ def mypage(request):
             if article.like_count:
                 rewardedArticles = Post.objects.filter(email_id=request.session['user_email'])
                 rewardDate = article.created_at + timedelta(days=7)
-                numbersOfrewardedArticles = len(rewardedArticles)
+                notrewardedArticles = Post.objects.filter(email_id=request.session['user_email'], like_count = '0')
+                minus = len(notrewardedArticles)
+                numbersOfrewardedArticle = len(rewardedArticles)
+                numbersOfrewardedArticles = numbersOfrewardedArticle - minus
+
             else:
                 print()
+
+
+        Article_data_for_Jan = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-01-01", "2019-01-31"]))
+        Article_data_for_Fed = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-02-01", "2019-02-28"]))
+        Article_data_for_Mar = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-03-01", "2019-03-31"]))
+        Article_data_for_Apr = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-04-01", "2019-04-30"]))
+        Article_data_for_May = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-05-01", "2019-05-31"]))
         numbersOfArticles = len(Post.objects.filter(email_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
@@ -159,6 +170,11 @@ def mypage(request):
                        'rewardDate': rewardDate,
                        'numbersOfrewardedArticles': numbersOfrewardedArticles,
                        'totalForContentsSelling': totalForContentsSelling,
+                       'Article_data_for_Jan': Article_data_for_Jan,
+                       'Article_data_for_Fed': Article_data_for_Fed,
+                       'Article_data_for_Mar': Article_data_for_Mar,
+                       'Article_data_for_Apr': Article_data_for_Apr,
+                       'Article_data_for_May': Article_data_for_May,
                        }
             return render(request, 'unid/mypage.html', context)
         except:
@@ -166,8 +182,7 @@ def mypage(request):
                        'myreward': myreward,
                        'likeusers': likeusers,
                        'numbersOfLike': numbersOfLike,
-                       'mypage': mypage,
-                       'totalRewards': totalRewards,
+                       # 'totalRewards': totalRewards,
                        'joiningdate': joiningdate,
                        'joining': joining,
                        'numbersOfArticles': numbersOfArticles,
@@ -457,7 +472,7 @@ def contentsdetail(request, id):
         for i in range(len(previewInfo.objects.filter(contents_id=id).values())):
             previewimage = previewInfo.objects.filter(contents_id=id).values()[i]['imagepath']
             previewlist.append(previewimage)
-
+        print(previewlist)
         if len(previewlist) == 2:
             first_preview =  previewlist[0]
             second_preview = previewlist[1]
@@ -470,6 +485,7 @@ def contentsdetail(request, id):
             first_preview = previewlist[0]
             second_preview = "media/default.png"
             third_preview = "media/default.png"
+        print(second_preview)
     else:
         first_preview = "media/default.png"
         second_preview = "media/default.png"
@@ -546,7 +562,7 @@ def moneytrade(request):
     print(buyeraccount)
     print(price)
     w3.personal.unlockAccount(buyeraccount, buyerpwd, 0)
-    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    tx_hash = ncc.functions.transfer(buyeraccount, selleraccount, price*1000000000000000000).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -589,7 +605,6 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
-
     return render(request, 'unid/contentstran.html', {
                                                             'populated_informations': populated_informations,
                                                             'populated_reports_lists': populated_reports_lists,
@@ -600,7 +615,7 @@ def main(request):
                                                             'populated_resume_lists': populated_resume_lists,
                                                             'populated_fiction_lists': populated_fiction_lists,
                                                             'populated_fortest_lists': populated_fortest_lists,
-                                                            'populated_video_lists': populated_video_lists
+                                                            'populated_video_lists': populated_video_lists,
                                                         })
 
 
@@ -610,6 +625,7 @@ def info_popular(request):
         posts = Post.objects.order_by('-like_count', '-created_at')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -668,8 +684,7 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num':page_num,
-                       'category':category,
-                       'mypgae':mypage}
+                       'category':category,}
             return render(request, 'unid/infotag_ajax.html', context)
 
         context = {'allinfolists': allinfolists,
@@ -735,7 +750,6 @@ def information(request):
     voting_count = myPageInfomation.objects.get(email=sess)
     paginator = Paginator(posts, 3)
     page_num = request.POST.get('page')
-
     try:
         posts = paginator.page(page_num)
     except PageNotAnInteger:
@@ -745,10 +759,11 @@ def information(request):
 
     if request.is_ajax():
         context = {'posts': posts,
-                   'page_num':page_num}
+                   'page_num':page_num,
+                   }
         return render(request, 'unid/information_ajax.html', context)
 
-    context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
+    context = {'posts':posts, 'voting_count':voting_count}
 
     return render(request, 'unid/information.html', context)
 
@@ -903,7 +918,6 @@ def main_detail(request, id):
 
 def user_detail(request, id):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         yourpage = myPageInfomation.objects.get(IDX=id)
         joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
@@ -925,7 +939,6 @@ def user_detail(request, id):
                    'yourpage':yourpage,
                    # 'likeusers':likeusers,
                    # 'numbersOfLike':numbersOfLike,
-                   'mypage':mypage,
                    'joiningdate':joiningdate,
                    'joining':joining,
                    'numbersOfArticles':numbersOfArticles,
