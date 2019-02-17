@@ -793,12 +793,11 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(hours=1)
+    reward_day = now - timedelta(miutes=30)
     rewarded_day = reward_day - timedelta(days=7)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
 
-    # print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -813,7 +812,7 @@ def writer_rewards():
         # print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
-
+        writer_reward_success = Post.objects.get(posts_id=post_id)
         writeraccounts = writer_info.account
         writername = writer_info.name
         coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
@@ -834,23 +833,23 @@ def writer_rewards():
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
         store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=rewards, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
-
         store.save()
-
+        writer_reward_success.rewards_success = "success"
+        writer_reward_success.save()
 
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(hours=1)
+    reward_day = now - timedelta(miutes=30)
     rewarded_day = reward_day - timedelta(days=7)
-    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
     reward_post_values = reward_post.values()
-    # print(reward_post_values)
+
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
         # print(userreward)
-        reward = LikeUsers.objects.filter(posts_id=post_id).exclude(rewards_success="success")
+        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -866,10 +865,11 @@ def liked_users_reward():
             usercount = reward.count()
             # print(usercount)
             user_info = myPageInfomation.objects.get(email=likedusers)
-            writer_reward_success = Post.objects.get(posts_id=post_id)
+
             reward_success = LikeUsers.objects.get(posts_id=post_id, email=likedusers)
             username = user_info.name
             # print(username)
+
             useraccount = user_info.account
             # print(useraccount)
             coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
@@ -885,13 +885,11 @@ def liked_users_reward():
             tx_hash = ncc.functions.writerreward(coinbase, likedusersaccount, user_reward).transact(
                 {'from': coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-            store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=user_info, user=username, balance=0.2, txid=receipt, type="rewards",posts_id_id = post_id ,bbb="success")
+            store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=user_info, user=username, balance=0.02, txid=receipt, type="rewards",posts_id_id = post_id ,bbb="success")
             store.save()
-            writer_reward_success.rewards_success = "success"
-            writer_reward_success.save()
+
             reward_success.rewards_success = "success"
             reward_success.save()
-
 
 
 def main_detail(request, id):
