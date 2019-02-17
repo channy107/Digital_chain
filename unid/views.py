@@ -793,8 +793,8 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(days=7)
-    rewarded_day = reward_day - timedelta(hours=1)
+    reward_day = now - timedelta(hours=1)
+    rewarded_day = reward_day - timedelta(days=7)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
 
@@ -837,10 +837,12 @@ def writer_rewards():
 
         store.save()
 
+
+
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(days=7)
-    rewarded_day = reward_day - timedelta(hours=1)
+    reward_day = now - timedelta(hours=1)
+    rewarded_day = reward_day - timedelta(days=7)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_post_values = reward_post.values()
     # print(reward_post_values)
@@ -889,6 +891,7 @@ def liked_users_reward():
             writer_reward_success.save()
             reward_success.rewards_success = "success"
             reward_success.save()
+
 
 
 def main_detail(request, id):

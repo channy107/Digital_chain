@@ -59,14 +59,11 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    ('0 0 * * *', 'unid.views.my_cron_job')
-]
-CRONJOBS = [
-    ('* * * * *', 'unid.views.writer_rewards')
-]
-CRONJOBS = [
+    ('0 0 * * *', 'unid.views.my_cron_job'),
+    ('* * * * *', 'unid.views.writer_rewards'),
     ('* * * * *', 'unid.views.liked_users_reward')
 ]
+
 
 WHOOSH_INDEX = os.path.join(BASE_DIR, 'whoosh_index')
 
