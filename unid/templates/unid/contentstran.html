@@ -32,11 +32,8 @@
             {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
-                    {% if list.email.name == mypage.name %}
+                    {% if list.email.name == request.session.user_name %}
                     <a href="/unid/mypage">
-                    {% else %}
-                    <a href="{% url 'user_detail' list.email.IDX %}">
-                    {% endif %}
                         <li>
                             {% if list.email.userimage %}
                             <img src="/{{ list.email.userimage }}">
@@ -48,6 +45,20 @@
                             {{ list.email.name }}
                         </li>
                     </a>
+                    {% else %}
+                    <a href="{% url 'user_detail' list.email.IDX %}">
+                        <li>
+                            {% if list.email.userimage %}
+                            <img src="/{{ list.email.userimage }}">
+                            {% else %}
+                            <img src="{% static 'unid/icon/profle-icon.png' %}">
+                            {% endif %}
+                        </li>
+                        <li>
+                            {{ list.email.name }}
+                        </li>
+                    </a>
+                    {% endif %}
                     <li>
                         ·         {{ list.created_at|timesince }}전
                     </li>

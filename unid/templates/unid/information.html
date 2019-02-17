@@ -61,11 +61,11 @@
                     {% for info in posts %}
                     <div class="popular-row">
                         <ul class="row-top">
-                        {% if info.email.name == mypage.name %}
+                        {% if info.email.name == request.session.user_name %}
                         <a href="/unid/mypage">
                             <li>
                                 {% if info.email.userimage %}
-                                <img src="/{{ info.user.userimage }}">
+                                <img src="/{{ info.email.userimage }}">
                                 {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}">
                                 {% endif %}
@@ -78,7 +78,7 @@
                         <a href="{% url 'user_detail' info.email.IDX %}">
                             <li>
                                 {% if info.email.userimage %}
-                                <img src="/{{ info.user.userimage }}">
+                                <img src="/{{ info.email.userimage }}">
                                 {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}">
                                 {% endif %}

@@ -115,6 +115,7 @@
             <li class="tab-link" id="my_act2" data-tab="tab-2" style="padding-left:15px;">콘텐츠</li> &nbsp&nbsp
             <li class="tab-link" id="my_act3" data-tab="tab-3" style="padding-left:21px;">콘텐츠거래</li> &nbsp&nbsp
             <li class="tab-link" id="my_act4" data-tab="tab-4" style="padding-left:10px;">보상</li>
+            <li class="tab-link" id="my_act5" data-tab="tab-5" style="padding-left:10px;">분석</li>
             <div id="wallet">
                 <a href="../mywallet" style="color:black;"><img style="width:30px;" src="{% static 'unid/icon/wallet-for-mypage.png' %}">지갑</a>
             </div>
@@ -560,9 +561,115 @@
                 {% endif %}
             </div>
         </div>
+        <div id="tab-5" class="tab-content">
+            <div style="text-align: center;    position: relative; bottom: -66px; z-index: 1;"><p><h3>월별 니드토큰 이용 내역</h3></p></div>
+            <div id="chart_div" style="width: 900px; height: 500px;"></div>
+            <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
+                {% if rewardedArticles %}
+
+                <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px; margin-left:-55px;">
+                    <div id="cal_for_rewards" style="color: #2fcc71;"><span style="color:darkgray">보상금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px;margin-left:10px; margin-right:5px;">{{ totalRewards }}</div>
+                    <div id="will_reward" style="color: #f1c40f;"><span style="color:darkgray">예정금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;">{{ willReward }}</div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
+                    <table class="table">
+                        <thead>
+                            <tr style="font-family: 'Noto Sans KR', sans-serif;">
+                                <th scope="col" id="col" style="width:140px;">게시일</th>
+                                <th scope="col" id="col" style="width:140px;">보상예정일</th>
+                                <th scope="col" id="col" style="width:150px">금액</th>
+                                <th scope="col" id="col" style="">게시글</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rewardedArticle in rewardedArticles %}
+                                {% if rewardedArticle.rewards != 0 %}
+                                <tr>
+                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.created_at }}</th>
+                                    {% if rewardedArticle.rewards_success %}
+                                        <td style="text-align: center; font-weight:400;">
+                                            <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20" style="margin-bottom: 3px; margin-right: 5px; font-size:15px;">완료
+                                        </td>
+                                    {% else %}
+                                        <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.reward_date }}</th>
+                                    {% endif %}
+                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;">{{ rewardedArticle.bbb }}</td>
+                                    <a href="{% url 'main_detail' rewardedArticle.posts_id %}">
+                                        <td style="text-align: center;font-size:16px; font-weight:500;"><a href="{% url 'main_detail' rewardedArticle.posts_id %}">{{ rewardedArticle.title }}</a></td>
+                                    </a>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                <div id="number_of_something" style="padding-left: 25px;"> 0 건</div>
+                <br>
+                <br>
+                <br>
+                <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
+                {% endif %}
+            </div>
+            <br>
+            <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
+                <div id="title_of_contents" style="margin-bottom:30px;">보팅 보상 내역</div>
+                <div id="number_of_something4" class="ddddd">{{ numbersOfLike }}건</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px; margin-left:-55px;">
+                    <div id="cal_for_rewards" style="color: #2fcc71;"><span style="color:darkgray">보상금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" style="margin-bottom:3px; margin-left:10px; margin-right:5px;" border="0" width="18" height="18">{{ totalRewardsForLikes }}</div>
+                    <div id="will_reward" style="color: #f1c40f;"><span style="color:darkgray">예정금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" style="margin-bottom:3px; margin-left:10px; margin-right:5px;" border="0" width="18" height="18">{{ willRewardForLikes }}</div>
+                </div>
+                <br>
+                <br>
+                <br>
+                {% if likeusers %}
+                <div class="row_for_table" style="width:95%; ">
+                    <table class="table">
+                        <thead>
+                            <tr style="font-family: 'Noto Sans KR', sans-serif;">
+                                <th scope="col" id="col" style="width:140px;">게시일</th>
+                                <th scope="col" id="col" style="width:140px;">보상예정일</th>
+                                <th scope="col" id="col" style="width:150px">금액</th>
+                                <th scope="col" id="col" style="">게시글</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for like in likeusers %}
+                            <tr>
+                                <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.created_at }}</th>
+                                {% if like.rewards_success %}
+                                    <td style="text-align: center; font-weight:400; font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20" style="margin-bottom: 3px; margin-right: 5px;font-size:15px;">완료</td>
+                                {% else %}
+                                    <td style="text-align: center; font-weight:400; font-size:13.1px; font-family: 'Noto Sans KR', sans-serif;">{{ like.posts_id.reward_date }}</td>
+                                {% endif %}
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;"> 0.02 </td>
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;font-size:16px; font-weight:500;"><a href="{% url 'main_detail' like.posts_id.posts_id %}">{{ like.posts_id.title }}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div id="text_message">보팅내역이 없습니다. 정보공유 게시글에 보팅하고 보상을 받으세요!</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+	// 차트를 사용하기 위한 준비입니다.
+	google.charts.load('current', {packages:['corechart']});
+</script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 
 
@@ -900,6 +1007,41 @@
     /* var kk = "{{ replies }}" ;
     console.log(kk); */
 
+
+
+
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Month', '정보공유보상', '보팅보상', '콘텐츠판매', '콘텐츠구매', 'Average'],
+          ['Jan',  {{ Article_data_for_Jan }},      {{ numbersOfLike }},         {{ numbersOfsell }},             {{ numbersOfbuy }},      6],
+          ['Feb',  {{ Article_data_for_Fed }},      {{ numbersOfLike }},        {{ numbersOfsell }},             {{ numbersOfbuy }},      8],
+          ['Mar',  {{ Article_data_for_Mar }},      {{ numbersOfLike }},        {{ numbersOfsell }},             {{ numbersOfbuy }},      6],
+          ['Apr',  {{ Article_data_for_Apr }},      {{ numbersOfLike }},        {{ numbersOfsell }},             {{ numbersOfbuy }},      4],
+          ['May',  {{ Article_data_for_May }},      {{ numbersOfLike }},         {{ numbersOfsell }},             {{ numbersOfbuy }},      5]
+        ]);
+
+        var options = {
+          title : '월별 개인 사용 내역(통합)',
+          titlePosition: 'none',
+          'legend' : 'center',
+          vAxis: {title: '니드토큰 '},
+          hAxis: {title: '월'},
+          seriesType: 'bars',
+          series: {6: {type: 'line'}},
+          'width':900,
+          'height':500,
+        };
+
+
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
 </script>
 </html>
 {% endblock %}
