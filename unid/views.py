@@ -328,12 +328,12 @@ def contentsboard(request):
 
 @login_required
 def mywallet(request):
-    walletInfo = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='coinTransaction')[:3]
-    walletInfo_pu = walletInFormation.objects.filter(toAccount=request.session['user_email'],type='purchase')[:3]
-    walletInfo_ex = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='exchange')[:3]
-    walletcount = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='coinTransaction').count()
-    walletcount_pu = walletInFormation.objects.filter(toAccount=request.session['user_email'],type='purchase').count()
-    walletcount_ex = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='exchange').count()
+    walletInfo = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction')[:3]
+    walletInfo_pu = walletInFormation.objects.filter(toAccount_id=request.session['user_email'],type='purchase')[:3]
+    walletInfo_ex = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='exchange')[:3]
+    walletcount = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction').count()
+    walletcount_pu = walletInFormation.objects.filter(toAccount_id=request.session['user_email'],type='purchase').count()
+    walletcount_ex = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='exchange').count()
     mypage = myPageInfomation.objects.get(email=request.session['user_email'])
 
     return render(request,'unid/mywallet.html', {'list':walletInfo, 'count':walletcount, 'mypage':mypage, 'list_pu':walletInfo_pu, 'list_ex':walletInfo_ex,'count_pu':walletcount_pu, 'count_ex':walletcount_ex})
@@ -352,14 +352,14 @@ def transaction(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
   
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount_id=from_info.email, toAccount_id=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("coinTransaction")
         transactionData.save()
 
 
-        recentAccount = walletInFormation.objects.filter(fromAccount=request.session['user_email'], type='coinTransaction')[:5]
+        recentAccount = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction')[:5]
 
     return render(request, 'unid/transaction.html', {'list':recentAccount})
 
@@ -377,7 +377,7 @@ def exchange(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount_id=from_info.email, toAccount_id=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("exchange")
@@ -399,7 +399,7 @@ def purchase(request):
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount=from_info.email, toAccount=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount_id=from_info.email, toAccount_id=to_info.email, balance=account_bal,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
