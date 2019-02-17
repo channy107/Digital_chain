@@ -1078,8 +1078,14 @@ def main_upload(request):
         category = request.POST['category']
         print(3)
         tags = request.POST['tags']
-        print(request.POST['firstimage'])
-        image_path = request.POST['firstimage']
+        try:
+            image_path = request.POST['firstimage']
+        except:
+            image_path = "/media/defaultthumbnail.png"
+
+
+
+
         print(image_path)
         # reward_date = now + timedelta(days=7)
         email = myPageInfomation.objects.get(email=sess)
