@@ -61,30 +61,30 @@
                     {% for info in posts %}
                     <div class="popular-row">
                         <ul class="row-top">
-                        {% if info.user.name == mypage.name %}
+                        {% if info.email.name == mypage.name %}
                         <a href="/unid/mypage">
                             <li>
-                                {% if info.user.userimage %}
+                                {% if info.email.userimage %}
                                 <img src="/{{ info.user.userimage }}">
                                 {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}">
                                 {% endif %}
                             </li>
                             <li>
-                                {{ info.user.email }}
+                                {{ info.email.email }}
                             </li>
                         </a>
                         {% else %}
-                        <a href="{% url 'user_detail' info.user.IDX %}">
+                        <a href="{% url 'user_detail' info.email.IDX %}">
                             <li>
-                                {% if info.user.userimage %}
+                                {% if info.email.userimage %}
                                 <img src="/{{ info.user.userimage }}">
                                 {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}">
                                 {% endif %}
                             </li>
                             <li>
-                                {{ info.user.email }}
+                                {{ info.email.email }}
                             </li>
                         </a>
                         {% endif %}
@@ -109,19 +109,19 @@
                             <a href="{% url 'main_detail' info.posts_id %}">{{ info.title }}</a>
                         </li>
                         <li>
-                            <a href="{% url 'main_detail' info.posts_id %}">{{ info.contents|truncatechars_html:65 }}</a>
+                            <a href="{% url 'main_detail' info.posts_id %}">{{ info.aaa|truncatechars_html:65 }}</a>
                         </li>
                     </ul>
                     <ul class="row-bottom">
                         <li>
                             <span class="main-voting">
                                 {% if user in info.like_user_set.all and info.rewards_success != "success" %}
-                                    <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
+                                    <img src="{% static 'unid/icon/votingafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
 
                                 {% elif user not in info.like_user_set.all and info.rewards_success != "success" %}
-                                    <img src="{% static 'unid/icon/like.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
+                                    <img src="{% static 'unid/icon/votingbefore.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
                                 {% else %}
-                                    <img src="{% static 'unid/icon/reward_compelete.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
+                                    <img src="{% static 'unid/icon/rewardafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings">
                                 {% endif %}
                                 {{info.like_count}}
                             </span>

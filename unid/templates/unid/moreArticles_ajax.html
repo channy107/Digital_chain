@@ -1,0 +1,60 @@
+{% load static %}
+<head>
+<link href="{% static 'unid/css/mypage.css' %}" rel="stylesheet">
+<script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
+</head>
+    {% for article in articles %}
+    <div class="popular-row">
+        <ul class="row-top">
+            {% if article.user.name == mypage.name %}
+            <a href="/unid/mypage">
+            {% else %}
+            <a href="{% url 'user_detail' article.user.IDX %}">
+            {% endif %}
+                <li>
+                    {% if article.user.userimage %}
+                    <img src="/{{ article.user.userimage }}">
+                    {% else %}
+                    <img src="{% static 'unid/icon/profle-icon.png' %}">
+                    {% endif %}
+                </li>
+                <li>
+                    {{ article.user.name }}
+                </li>
+            </a>
+            <li>
+                ·         {{ article.created_at|timesince }}전
+            </li>
+                <img src="/{{ article.category_path }}" width="64.7px" height="21.7px" />
+        </ul>
+        <div class="row-picture">
+            <a href="{% url 'main_detail' article.posts_id %}">
+                {% if article.file_path %}
+                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ article.file_path }}" style="width:99px;  height: 75px" alt="">
+                {% else %}
+                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" style="width:99px;  height: 75px" alt="">
+                {% endif %}
+            </a>
+        </div>
+        <ul class="row-middle">
+            <li>
+                <a href="{% url 'main_detail' article.posts_id %}">{{ article.title }}</a>
+            </li>
+            <li>
+                <a href="{% url 'main_detail' article.posts_id %}">{{ article.contents|truncatechars_html:80 }}</a>
+            </li>
+        </ul>
+        <ul class="row-bottom">
+            <li>
+                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.like_count }}
+            </li>
+            <li>
+                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.rewards }}
+            </li>
+            <li>
+                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" width="25px" height="16.7px"> {{ article.rewards }}
+            </li>
+        </ul>
+    </div>
+    {% endfor %}
+

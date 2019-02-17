@@ -32,20 +32,20 @@
             {% for list in populated_informations %}
             <div class="popular-row">
                 <ul class="row-top">
-                    {% if list.user.name == mypage.name %}
+                    {% if list.email.name == mypage.name %}
                     <a href="/unid/mypage">
                     {% else %}
-                    <a href="{% url 'user_detail' list.user.IDX %}">
+                    <a href="{% url 'user_detail' list.email.IDX %}">
                     {% endif %}
                         <li>
-                            {% if list.user.userimage %}
-                            <img src="/{{ list.user.userimage }}">
+                            {% if list.email.userimage %}
+                            <img src="/{{ list.email.userimage }}">
                             {% else %}
                             <img src="{% static 'unid/icon/profle-icon.png' %}">
                             {% endif %}
                         </li>
                         <li>
-                            {{ list.user.name }}
+                            {{ list.email.name }}
                         </li>
                     </a>
                     <li>
@@ -63,7 +63,7 @@
                         <a href="{% url 'main_detail' list.posts_id %}">{{ list.title }}</a>
                     </li>
                     <li>
-                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.contents|truncatechars_html:80 }}</a>
+                        <a href="{% url 'main_detail' list.posts_id %}">{{ list.aaa|truncatechars_html:80 }}</a>
                     </li>
                 </ul>
                 <ul class="row-bottom">

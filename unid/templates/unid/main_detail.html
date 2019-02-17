@@ -357,9 +357,9 @@ xpopup
                         <a href="{% url 'user_detail' posts.email.IDX %}">
                             <p align="center" size="5" style="color: black;">
                                 {% if posts.email.userimage %}
-                                <img src="/{{ contents.user.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
+                                <img src="/{{ contents.email.userimage}}" border="0" width="35" height="35" style="border-radius: 25px;">&nbsp {{ posts.email.name }}
                                 {% else %}
-                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ post.email.name }}
+                                <img src="/static/unid/icon/profle-icon.png" border="0" width="35" height="35">&nbsp {{ posts.email.name }}
                                 {% endif %}
                             </p>
                         </a>
@@ -394,8 +394,35 @@ xpopup
                 <div class="icon-boxs">
                     <div class="icon-box">
                         <span class="main-voting">
-                            <button class="votings" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
-                                <img src="{% static 'unid/icon/heart-icon.png' %}" border="0" width="20" height="20">                              </button>
+
+                            {% if request.session.user_email %}
+                                {% if posts.rewards_success != "success" %}
+                                    {% if user in posts.like_user_set.all %}
+                                         <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                            <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter1" border="0" width="20" height="20">
+                                            <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore1" border="0" width="20" height="20">
+                                        </button>
+
+                                    {% else %}
+                                        <button class="votings2" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                            <img src="{% static 'unid/icon/votingafter.png' %}" id="votingafter2" border="0" width="20" height="20">
+                                            <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingbefore2" border="0" width="20" height="20">
+                                         </button>
+                                    {% endif %}
+                                {% else %}
+                                    <img src="{% static 'unid/icon/rewardafter.png' %}" id="rewardafter" border="0" width="20" height="20">
+                                {% endif %}
+
+                            {% else %}
+                                {% if posts.rewards_success == "success" %}
+                                    <img src="{% static 'unid/icon/votingbefore.png' %}" id="rewardafter" border="0" width="20" height="20">
+                                {% else %}
+                                    <button class="votings1" name="{{ info.posts_id }}" value="{{voting_count.votingcount }}">
+                                        <img src="{% static 'unid/icon/votingbefore.png' %}" id="votingafter" border="0" width="20" height="20"></button>
+                                {% endif %}
+                            {% endif %}
+
+
                             <span class="voting-count" id="voting-{{posts.posts_id}}">{{posts.like_count}}
                             </span>
                         </span>
@@ -507,7 +534,7 @@ xpopup
                         {% else %}
                         <a href="{% url 'user_detail' reply.writeremail.IDX %}" style="color:black">
                         {% endif %}
-                            {{ reply.user_id }}
+                            {{ reply.email_id }}
                         </a>
                     </div>
                     <div class="reply-date">
@@ -556,96 +583,17 @@ xpopup
         placeholder: 'Free Write...',
     });
 
-    // quill editor add image handler
-    editor.getModule('toolbar').addHandler('image', () => {
-      selectLocalImage();
-    });
-
-      /**
-       * Step1. select local image
-       *
-       */
-    function selectLocalImage() {
-        let input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('name', 'richimage');
-        input.click();
-
-        input.onchange = () => {
-            // 파일선택창에서 선택한 첫번째 파일
-            let file = input.files[0];
-            if (/^image\//.test(file.type)) {
-            //     saveToServer();
-                form_data = new FormData();
-                console.log(file);
-                form_data.append('richimage', file);
-                console.log(form_data);
-                $.ajax({
-                    type: 'POST',
-                    url: "../uploadImage/",
-                    processData: false,
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    data: form_data,
-                    success: function(res) {
-                        console.log(333);
-                        // this is callback data: url
-                        //let url = xhr.responseText;
-                        //console.log(444);
-                        //insertToEditor(url);
-                        console.log(res.status);
-                        // this is callback data: url
-                        console.log(res.status);
-                        console.log(res.responseText);
-                        insertToEditor(res.responseText);
-                    }
-                });
-            } else {
-                console.log("셀렉로클이미지5");
-                console.warn('You could only upload images.');
-            }
-         };
-    }
-
-    function insertToEditor(url) {
-        console.log("인선트투에디터");
-        // push image url to rich editor.
-        let range = editor.getSelection();
-        console.log(range)
-        editor.insertEmbed(range.index, 'image', `http://localhost:8000${url}`);
-    }
-
-    var form = document.querySelector('form')
-
-        form.onsubmit = function() {
-
-            //console.log(quill.getContents());
-
-            //console.log(quill.root.innerHTML);
-
-
-
-            var answer_delta = document.querySelector('input[name="answer_delta"]');
-
-            answer_delta.value = JSON.stringify(editor.getContents());
-
-
-
-            //return false;
-
-
-
-        }
-        editor.setContents(JSON.parse("{{ k.delta_content | escapejs }}"));
+    editor.setContents(JSON.parse("{{ posts.contents | escapejs }}"));
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
-        $(".votings").click(function() {
+        $(".votings1").click(function() {
                 var pk = {{posts.posts_id}};
                 var like_count = parseInt($('#voting-' + pk).text());
                 var rewards = parseFloat($('#reward-' + pk).text());
                 var like_users = "{{request.session.user_email}}";
                 var voting_count = parseInt($('#count').text());
                 var votinged = "";
+
 
 
                 if (!like_users) {
@@ -661,14 +609,14 @@ xpopup
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     success: function(res) {
-                        alert(res.Ans);
-
+                        console.log(res.count)
                         if (res.Ans == "보팅을 취소했습니다.") {
 
                             if (voting_count >= 10) {
                                 like_count = like_count - parseInt(1);
                                 votinged = "좋아요취소";
-
+                                $("#votingafter1").hide();
+                                $("#votingbefore1").show();
                                 $('#voting-' + pk).text(like_count);
 
                                 if (like_count % 1 == 0) {
@@ -677,12 +625,16 @@ xpopup
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
 
+                            alert("남은 보팅수는 10 입니다")
+
+
                             } else {
                                 like_count = like_count - parseInt(1);
                                 voting_count = voting_count + parseInt(1);
 
                                 votinged = "좋아요취소";
-
+                                $("#votingafter1").hide();
+                                $("#votingbefore1").show();
 
                                 $('#voting-' + pk).text(like_count);
 
@@ -692,7 +644,12 @@ xpopup
                                 rewards = rewards.toFixed(1);
                                 $("#reward-" + pk).text(rewards);
                                 $("#count").text(voting_count);
+                                counts = res.count + parseInt(1)
+                                alert("남은 보팅수는" + counts + "입니다")
+
+
                             }
+
 
                         } else if (res.Ans == "보팅을 완료했습니다.") {
 
@@ -700,7 +657,8 @@ xpopup
                             voting_count = voting_count - parseInt(1);
 
                             votinged = "좋아요";
-
+                            $("#votingbefore1").hide();
+                            $("#votingafter1").show();
                             $('#voting-' + pk).text(like_count);
 
                             if (like_count % 1 == 0) {
@@ -709,6 +667,8 @@ xpopup
                             rewards = rewards.toFixed(1);
                             $("#reward-" + pk).text(rewards);
                             $("#count").text(voting_count);
+                            counts = res.count - parseInt(1)
+                            alert("남은 보팅수는" + counts + "입니다.")
                             }
 
                          else {
@@ -736,6 +696,118 @@ xpopup
                     }
                 });
             });
+
+        $(".votings2").click(function() {
+                var pk = {{posts.posts_id}};
+                var like_count = parseInt($('#voting-' + pk).text());
+                var rewards = parseFloat($('#reward-' + pk).text());
+                var like_users = "{{request.session.user_email}}";
+                var voting_count = parseInt($('#count').text());
+                var votinged = "";
+
+
+
+                if (!like_users) {
+                    alert('로그인을 해주세요');
+                }
+
+
+                $.ajax ({
+                    type: 'POST',
+                    url: "../vote/",
+                    data: {
+                        posts_id: pk,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(res) {
+                        console.log(res.count)
+                        if (res.Ans == "보팅을 취소했습니다.") {
+
+                            if (voting_count >= 10) {
+                                like_count = like_count - parseInt(1);
+                                votinged = "좋아요취소";
+                                $("#votingafter2").hide();
+                                $("#votingbefore2").show();
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                rewards = rewards - parseFloat(0.1);
+                                }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+
+                            alert("남은 보팅수는 10 입니다")
+
+
+                            } else {
+                                like_count = like_count - parseInt(1);
+                                voting_count = voting_count + parseInt(1);
+
+                                votinged = "좋아요취소";
+                                $("#votingafter2").hide();
+                                $("#votingbefore2").show();
+
+                                $('#voting-' + pk).text(like_count);
+
+                                if (like_count % 1 == 0) {
+                                    rewards = rewards - parseFloat(0.1);
+                                    }
+                                rewards = rewards.toFixed(1);
+                                $("#reward-" + pk).text(rewards);
+                                $("#count").text(voting_count);
+                                counts = res.count + parseInt(1)
+                                alert("남은 보팅수는" + counts + "입니다")
+
+
+                            }
+
+
+                        } else if (res.Ans == "보팅을 완료했습니다.") {
+
+                            like_count = like_count + parseInt(1);
+                            voting_count = voting_count - parseInt(1);
+
+                            votinged = "좋아요";
+                            $("#votingbefore2").hide();
+                            $("#votingafter2").show();
+                            $('#voting-' + pk).text(like_count);
+
+                            if (like_count % 1 == 0) {
+                                rewards = rewards + parseFloat(0.1);
+                            }
+                            rewards = rewards.toFixed(1);
+                            $("#reward-" + pk).text(rewards);
+                            $("#count").text(voting_count);
+                            counts = res.count - parseInt(1)
+                            alert("남은 보팅수는" + counts + "입니다.")
+                            }
+
+                         else {
+                            votinged = "카운팅소진";
+                         }
+
+
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "../voting/",
+                            data: {
+                                posts_id: pk,
+                                like_count: like_count,
+                                rewards: rewards,
+                                liked_users: like_users,
+                                votinged: votinged,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(res) {
+
+                            }
+                        });
+
+                    }
+                });
+            });
+
 
         $('.postdelete').on('click', function(event) {
             event.preventDefault();

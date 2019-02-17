@@ -22,6 +22,19 @@ background-color : white;
 border: none;
 cursor : pointer;
 }
+
+button.votings1 {
+background-color : white;
+border: none;
+cursor : pointer;
+}
+
+button.votings2 {
+background-color : white;
+border: none;
+cursor : pointer;
+}
+
 }
 .img-replace {
 /* replace text with an image */
@@ -32,6 +45,13 @@ color: transparent;
 white-space: nowrap;
 }
 
+#votingbefore1 {
+    display:none;
+}
+
+#votingafter2 {
+    display:none;
+}
 .category {
     margin: 10px auto 20px auto;
     width: 110px;

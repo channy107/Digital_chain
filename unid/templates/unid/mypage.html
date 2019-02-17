@@ -136,7 +136,7 @@
                             <a href="{% url 'user_detail' article.email.IDX %}">
                             {% endif %}
                                 <li>
-                                    {% if article.user.userimage %}
+                                    {% if article.email.userimage %}
                                     <img src="/{{ article.email.userimage }}">
                                     {% else %}
                                     <img src="{% static 'unid/icon/profle-icon.png' %}">
@@ -388,14 +388,13 @@
             <div id="content_column" style="margin-left: 50px; min-height:250px;">
                 <div id="title_of_contents" style="margin-bottom:30px;">콘텐츠 판매 내역</div>
                 <div id="number_of_something">{{ numbersOfsell }}건</div>
-                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 589px;">total:
-                    <span style="color: #2fcc71;">{{ totalForContentsSelling }}</span>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 586px;">합계:
+                    <span style="color: #2fcc71;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;">{{ totalForContentsSelling }}</span>
                 </div>
                 <br>
                 <br>
                 <br>
                 {% if contents_transfer %}
-                    {% for content_transfer in contents_transfer %}
                     <div class="row_for_table" style="width:95%; ">
                         <table class="table">
                             <thead>
@@ -406,23 +405,22 @@
                                     <th scope="col" id="col" style="">금액</th>
                                 </tr>
                             </thead>
+                            {% for content_transfer in contents_transfer %}
                             <tbody>
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer.transactiondate }}</th>
-                                    <td style="text-align: center; font-weight:500;">{{ content_transfer.contents_id.title }}</td>
+                                    <td style="text-align: center; font-size:16px; font-weight:500;"><a href="{% url 'contentsdetail' content_transfer.contents_id.contents_id %}">{{ content_transfer.contents_id.title }}</a></td>
                                     {% if content_transfer.toAccount.name == mypage.name %}
-                                        <a href="/unid/mypage">
+                                    <td style="text-align: center;"><a href="/unid/mypage">{{ content_transfer.toAccount.name }}</a></td>
                                     {% else %}
-                                        <a href="{% url 'user_detail' content_transfer.toAccount.IDX %}">
+                                    <td style="text-align: center;"><a href="{% url 'user_detail' content_transfer.toAccount.IDX %}">{{ content_transfer.toAccount.name }}</a></td>
                                     {% endif %}
-                                            <td style="text-align: center;">{{ content_transfer.toAccount.name }}</td>
-                                        </a>
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer.balance }}</td>
                                 </tr>
                             </tbody>
+                            {% endfor %}
                         </table>
                     </div>
-                    {% endfor %}
                 {% else%}
                     <div id="text_message">아직 판매한 콘텐츠가 없습니다.</div>
                 {% endif %}
@@ -434,7 +432,6 @@
                 <br>
                 <br>
                 {% if contents_transfer_sell %}
-                    {% for content_transfer_sell in contents_transfer_sell %}
                     <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
                         <table class="table">
                             <thead>
@@ -445,25 +442,22 @@
                                     <th scope="col" id="col" style="">금액</th>
                                 </tr>
                             </thead>
+                            {% for content_transfer_sell in contents_transfer_sell %}
                             <tbody>
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ content_transfer_sell.transactiondate }}</th>
-                                    <a href="{% url 'contentsdetail' content_transfer_sell.contents_id.contents_id %}">
-                                        <td style="text-align: center; font-weight:500;">{{ content_transfer_sell.contents_id.title }}</td>
-                                    </a>
+                                    <td style="text-align: center;font-size:16px; font-weight:500;"><a href="{% url 'contentsdetail' content_transfer_sell.contents_id.contents_id %}">{{ content_transfer_sell.contents_id.title }}</a></td>
                                     {% if content_transfer_sell.toAccount.name == mypage.name %}
-                                        <a href="/unid/mypage">
+                                    <td style="text-align: center;"><a href="/unid/mypage">{{ content_transfer_sell.toAccount.name }}</a></td>
                                     {% else %}
-                                        <a href="{% url 'user_detail' content_transfer_sell.toAccount.IDX %}">
+                                    <td style="text-align: center;"><a href="{% url 'user_detail' content_transfer_sell.toAccount.IDX %}">{{ content_transfer_sell.toAccount.name }}</a></td>
                                     {% endif %}
-                                            <td style="text-align: center;">{{ content_transfer_sell.toAccount.name }}</td>
-                                        </a>
                                     <td style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> {{ content_transfer_sell.balance }}</td>
                                 </tr>
                             </tbody>
+                            {% endfor %}
                         </table>
                     </div>
-                    {% endfor %}
                 {% else %}
                     <div id="text_message">아직 구매한 콘텐츠가 없습니다.</div>
                 {% endif %}
@@ -471,56 +465,65 @@
         </div>
         <div id="tab-4" class="tab-content">
             <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
-                {% if rewardedArticles != null %}
+                {% if rewardedArticles %}
+
                 <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
                 <div id="number_of_something" style="padding-left: 25px;">{{ numbersOfrewardedArticles }}건</div>
-                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
-                    <span id="cal_for_rewards" style="color: #2fcc71;">1000</span>
-                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px; margin-left:-55px;">
+                    <div id="cal_for_rewards" style="color: #2fcc71;"><span style="color:darkgray">보상금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px;margin-left:10px; margin-right:5px;">{{ totalRewards }}</div>
+                    <div id="will_reward" style="color: #f1c40f;"><span style="color:darkgray">예정금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;">{{ willReward }}</div>
                 </div>
-                    <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
-                        <table class="table">
-                            <thead>
-                                <tr style="font-family: 'Noto Sans KR', sans-serif;">
-                                    <th scope="col" id="col" style="width:140px;">게시일</th>
-                                    <th scope="col" id="col" style="width:140px;">보상예정일</th>
-                                    <th scope="col" id="col" style="width:150px">금액</th>
-                                    <th scope="col" id="col" style="">게시글</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for rewardedArticle in rewardedArticles %}
+                <br>
+                <br>
+                <br>
+                <div class="row_for_table" style="width:95%; font-family: 'Noto Sans KR', sans-serif;">
+                    <table class="table">
+                        <thead>
+                            <tr style="font-family: 'Noto Sans KR', sans-serif;">
+                                <th scope="col" id="col" style="width:140px;">게시일</th>
+                                <th scope="col" id="col" style="width:140px;">보상예정일</th>
+                                <th scope="col" id="col" style="width:150px">금액</th>
+                                <th scope="col" id="col" style="">게시글</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rewardedArticle in rewardedArticles %}
+                                {% if rewardedArticle.rewards != 0 %}
                                 <tr>
                                     <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.created_at }}</th>
-                                    {% if rewardedArticle.rewards_success == success %}
-                                    <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.reward_date }}</th>
+                                    {% if rewardedArticle.rewards_success %}
+                                        <td style="text-align: center; font-weight:400;">
+                                            <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20" style="margin-bottom: 3px; margin-right: 5px; font-size:15px;">완료
+                                        </td>
                                     {% else %}
-                                    <td style="text-align: center; font-weight:500;">
-                                        <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                    </td>
+                                        <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ rewardedArticle.reward_date }}</th>
                                     {% endif %}
-                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18">{{ rewardedArticle.writer_rewards }}</td>
-                                    <td style="text-align: center;">{{ rewardedArticle.title }}</td>
+                                    <td id="calculate" style="text-align: center;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;">{{ rewardedArticle.bbb }}</td>
+                                    <a href="{% url 'main_detail' rewardedArticle.posts_id %}">
+                                        <td style="text-align: center;font-size:16px; font-weight:500;"><a href="{% url 'main_detail' rewardedArticle.posts_id %}">{{ rewardedArticle.title }}</a></td>
+                                    </a>
                                 </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 {% else %}
-                    <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
-                    <div id="number_of_something" style="padding-left: 25px;"> 0 건</div>
-                    <br>
-                    <br>
-                    <br>
-                        <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
+                <div id="title_of_contents" style="margin-bottom:30px;">정보공유 보상 내역</div>
+                <div id="number_of_something" style="padding-left: 25px;"> 0 건</div>
+                <br>
+                <br>
+                <br>
+                <div id="text_message">정보공유 보상내역이 없습니다. 정보공유 게시판에 글을 작성하고 보상을 받으세요!</div>
                 {% endif %}
             </div>
+            <br>
             <div id="content_column" style="font-family: 'Noto Sans KR', sans-serif;">
                 <div id="title_of_contents" style="margin-bottom:30px;">보팅 보상 내역</div>
                 <div id="number_of_something">{{ numbersOfLike }}건</div>
-                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px;">total:
-                    <span id="cal_for_rewards" style="color: #2fcc71;"></span>
-                    <div id="will_reward" style="color: #f1c40f">(+5.50)</div>
+                <div id="number_of_something" style="font-size:16px; width:300px; font-weight:400; position: relative; left: 600px; margin-left:-55px;">
+                    <div id="cal_for_rewards" style="color: #2fcc71;"><span style="color:darkgray">보상금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" style="margin-bottom:3px; margin-left:10px; margin-right:5px;" border="0" width="18" height="18">{{ totalRewardsForLikes }}</div>
+                    <div id="will_reward" style="color: #f1c40f;"><span style="color:darkgray">예정금액:</span>  <img src="{% static 'unid/icon/dollar-icon.png' %}" style="margin-bottom:3px; margin-left:10px; margin-right:5px;" border="0" width="18" height="18">{{ willRewardForLikes }}</div>
                 </div>
                 <br>
                 <br>
@@ -539,16 +542,14 @@
                         <tbody>
                             {% for like in likeusers %}
                             <tr>
-                                <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.last_modified }}</th>
-                                <td style="text-align: center; font-weight:400; font-size:13.1px; font-family: 'Noto Sans KR', sans-serif;">
-                                    {% if like.aaa != success %}
-                                    <img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20">완료
-                                    {% else %}
-                                    {{ like.posts_id.reward_date }}
-                                    {% endif %}
-                                </td>
-                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18"> 0.02 </td>
-                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;">{{ like.posts_id.title }}</td>
+                                <th scope="row" style="text-align: center; font-size:13.1px; font-weight: 400;"> {{ like.created_at }}</th>
+                                {% if like.rewards_success %}
+                                    <td style="text-align: center; font-weight:400; font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/success.png' %}" border="0" width="20" height="20" style="margin-bottom: 3px; margin-right: 5px;font-size:15px;">완료</td>
+                                {% else %}
+                                    <td style="text-align: center; font-weight:400; font-size:13.1px; font-family: 'Noto Sans KR', sans-serif;">{{ like.posts_id.reward_date }}</td>
+                                {% endif %}
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;"><img src="{% static 'unid/icon/dollar-icon.png' %}" border="0" width="18" height="18" style="margin-bottom:3px; margin-left:10px; margin-right:5px;"> 0.02 </td>
+                                <td style="text-align: center;font-family: 'Noto Sans KR', sans-serif;font-size:16px; font-weight:500;"><a href="{% url 'main_detail' like.posts_id.posts_id %}">{{ like.posts_id.title }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -563,13 +564,6 @@
 </body>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
-
-    $("#change_user_name").keypress(function(e) {
-
-        if (e.keyCode == 13){
-            submitzzz();
-        }
-    });
 
 
 
