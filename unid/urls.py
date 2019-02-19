@@ -58,4 +58,9 @@ urlpatterns = [
     path('zzz/', views.zzz, name='zzz'),
     path('kkk/', views.kkk, name='kkk'),
     path('uploadImage/', views.uploadImage, name='uploadImage'),
+    path('uploadAd/', views.uploadAd, name='uploadAd'),
+    path('crowdfunding/', views.crowdfunding, name='crowdfunding'),
+    path('crowdfunding/fundingdetail/<int:id>', views.fundingdetail, name='fundingdetail'),
+    path('erollFunding', views.erollFunding, name='erollFunding'),
+    path('createfunding', views.createfunding, name='createfunding'),
 ]

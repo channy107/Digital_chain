@@ -1,6 +1,4 @@
-.form-group {
-    padding: 0 20px;
-}
+
 .board-title {
     margin: 20px 0 20px 20px;
     font-size: 17px;
@@ -90,7 +88,8 @@
     }
 .form-group {
     height: 60px;
-    }
+    padding: 0 20px;
+}
 /* .btn-danger {
     width: 400px;
     margin: 0 auto;

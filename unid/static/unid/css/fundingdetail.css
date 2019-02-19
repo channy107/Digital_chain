@@ -1,0 +1,110 @@
+.fundingdetail-container {
+    position: relative;
+    bottom: 198px;
+    margin: 0 auto;
+    max-width: 1070px !important;
+    font-family: 'Noto Sans KR', sans-serif;
+
+}
+.funding-background-image {
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-size: cover;
+    -webkit-filter: blur(12px);
+}
+.fund-title {
+    font-size: 29px;
+    font-weight: bold;
+    color: black;
+    margin: 0 0 5px 0;
+}
+
+.fund-context {
+    font-size: 14]px;
+    margin: 0 0 10px 0;
+}
+.currunt-amount {
+    font-size: 20px;
+    font-weight: 500;
+    color: #4d4d4d;;
+    display: inline-block;
+    margin: 0 5px 5px 0;
+}
+.target-amount {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    color: gray;
+    font-size: 14px;
+}
+.percentage {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    color: gray;
+    font-size: 14px;
+}
+.expire-date {
+    font-size: 20px;
+    font-weight: 500;
+    color: #4d4d4d;;
+    display: inline-block;
+    margin: 0 5px 20px 0;
+}
+.deadline {
+    display: inline-block;
+    margin: 0 5px 0 0;
+    color: gray;
+    font-size: 14px;
+    width: 271px;
+}
+.fund-info {
+    border-top: solid;
+    border-bottom: solid;
+    border-width: 1px;
+    border-color: #80808057;
+}
+.fund-creater {
+    display: inline-block;
+    width: 580px;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
+.fund-tags{
+    display: inline-block;
+    width: 580px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.fund-sharebox {
+    display: inline-block;
+    width: 450px;
+    padding: 0 19px;
+}
+.fund-infobox {
+    display: inline-block;
+    width: 580px;
+    float: left;
+}
+.currunt-sharemember {
+    padding: 11px 0;
+    font-weight: bold;
+}
+.share-context {
+    display: inline-block;
+    width: 250px;
+    float: left;
+    margin: 0 30px 0 0;
+    font-size: 12px;
+}
+.sign {
+    display: inline-block;
+    width: 130px;
+    float: left;
+    height: 52px;
+    padding: 14px 14px 14px 20px;
+    border: solid;
+    border-radius: 52px;
+    border-width: 1px;
+    border-width: 1px;
+    border-color: #80808057;
+}

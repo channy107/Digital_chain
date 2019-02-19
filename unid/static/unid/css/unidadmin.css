@@ -25,7 +25,7 @@ a {
 
 .user_preview_files {
     position: relative;
-    left: 690px;
+    left: 483px;
     top: 35px;
     opacity: 0;
     z-index: 1;
@@ -53,6 +53,9 @@ a {
     text-align: center;
 }
 .files-button {
-    position: relative;
-    left: 635px;
+    display: inline-block;
+}
+.form-group {
+    height: 60px;
+    padding: 0 20px;
 }
