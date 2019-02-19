@@ -6,7 +6,7 @@
     {% for article in articles %}
     <div class="popular-row">
         <ul class="row-top">
-            {% if article.user.name == mypage.name %}
+            {% if article.user.name == request.session.user_name %}
             <a href="/unid/mypage">
             {% else %}
             <a href="{% url 'user_detail' article.user.IDX %}">

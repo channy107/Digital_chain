@@ -87,9 +87,20 @@ def mypage(request):
             if article.like_count:
                 rewardedArticles = Post.objects.filter(email_id=request.session['user_email'])
                 rewardDate = article.created_at + timedelta(days=7)
-                numbersOfrewardedArticles = len(rewardedArticles)
+                notrewardedArticles = Post.objects.filter(email_id=request.session['user_email'], like_count = '0')
+                minus = len(notrewardedArticles)
+                numbersOfrewardedArticle = len(rewardedArticles)
+                numbersOfrewardedArticles = numbersOfrewardedArticle - minus
+
             else:
                 print()
+
+
+        Article_data_for_Jan = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-01-01", "2019-01-31"]))
+        Article_data_for_Fed = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-02-01", "2019-02-28"]))
+        Article_data_for_Mar = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-03-01", "2019-03-31"]))
+        Article_data_for_Apr = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-04-01", "2019-04-30"]))
+        Article_data_for_May = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-05-01", "2019-05-31"]))
         numbersOfArticles = len(Post.objects.filter(email_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
@@ -160,6 +171,11 @@ def mypage(request):
                        'rewardDate': rewardDate,
                        'numbersOfrewardedArticles': numbersOfrewardedArticles,
                        'totalForContentsSelling': totalForContentsSelling,
+                       'Article_data_for_Jan': Article_data_for_Jan,
+                       'Article_data_for_Fed': Article_data_for_Fed,
+                       'Article_data_for_Mar': Article_data_for_Mar,
+                       'Article_data_for_Apr': Article_data_for_Apr,
+                       'Article_data_for_May': Article_data_for_May,
                        }
             return render(request, 'unid/mypage.html', context)
         except:
@@ -167,8 +183,7 @@ def mypage(request):
                        'myreward': myreward,
                        'likeusers': likeusers,
                        'numbersOfLike': numbersOfLike,
-                       'mypage': mypage,
-                       'totalRewards': totalRewards,
+                       # 'totalReward':totalRewards,
                        'joiningdate': joiningdate,
                        'joining': joining,
                        'numbersOfArticles': numbersOfArticles,
@@ -179,7 +194,7 @@ def mypage(request):
                        'numbersOfReply': numbersOfReply,
                        'contentsboard': contentsboard,
                        'downloads': downloads,
-                       'rewardedArticles': rewardedArticles,
+                       # 'rewardedArticles': rewardedArticles,
                        'replies': replies,
                        'contents_transfer': contents_transfer,
                        'contents_transfer_sell': contents_transfer_sell,
@@ -591,7 +606,6 @@ def main(request):
     populated_resume_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="이력서"))[0:6]
     populated_PPT_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="PPT"))[0:6]
     populated_paper_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="논문"))[0:6]
-
     return render(request, 'unid/contentstran.html', {
                                                             'populated_informations': populated_informations,
                                                             'populated_reports_lists': populated_reports_lists,
@@ -602,7 +616,7 @@ def main(request):
                                                             'populated_resume_lists': populated_resume_lists,
                                                             'populated_fiction_lists': populated_fiction_lists,
                                                             'populated_fortest_lists': populated_fortest_lists,
-                                                            'populated_video_lists': populated_video_lists
+                                                            'populated_video_lists': populated_video_lists,
                                                         })
 
 
@@ -612,6 +626,7 @@ def info_popular(request):
         posts = Post.objects.order_by('-like_count', '-created_at')
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
+        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -670,8 +685,7 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num':page_num,
-                       'category':category,
-                       'mypgae':mypage}
+                       'category':category,}
             return render(request, 'unid/infotag_ajax.html', context)
 
         context = {'allinfolists': allinfolists,
@@ -737,7 +751,6 @@ def information(request):
     voting_count = myPageInfomation.objects.get(email=sess)
     paginator = Paginator(posts, 3)
     page_num = request.POST.get('page')
-
     try:
         posts = paginator.page(page_num)
     except PageNotAnInteger:
@@ -747,10 +760,11 @@ def information(request):
 
     if request.is_ajax():
         context = {'posts': posts,
-                   'page_num':page_num}
+                   'page_num':page_num,
+                   }
         return render(request, 'unid/information_ajax.html', context)
 
-    context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
+    context = {'posts':posts, 'voting_count':voting_count}
 
     return render(request, 'unid/information.html', context)
 
@@ -795,12 +809,11 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(hours=1)
-    rewarded_day = reward_day - timedelta(days=7)
+    reward_day = now - timedelta(days=1)
+    rewarded_day = reward_day - timedelta(days=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
-
-    # print(reward_values)
+    print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -815,7 +828,7 @@ def writer_rewards():
         # print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
-
+        writer_reward_success = Post.objects.get(posts_id=post_id)
         writeraccounts = writer_info.account
         writername = writer_info.name
         coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
@@ -836,23 +849,23 @@ def writer_rewards():
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
         store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=rewards, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
-
         store.save()
-
+        writer_reward_success.rewards_success = "success"
+        writer_reward_success.save()
 
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(hours=1)
-    rewarded_day = reward_day - timedelta(days=7)
-    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
+    reward_day = now - timedelta(days=1)
+    rewarded_day = reward_day - timedelta(days=1)
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
     reward_post_values = reward_post.values()
-    # print(reward_post_values)
+    print(reward_post_values)
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
         # print(userreward)
-        reward = LikeUsers.objects.filter(posts_id=post_id).exclude(rewards_success="success")
+        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -868,10 +881,11 @@ def liked_users_reward():
             usercount = reward.count()
             # print(usercount)
             user_info = myPageInfomation.objects.get(email=likedusers)
-            writer_reward_success = Post.objects.get(posts_id=post_id)
+
             reward_success = LikeUsers.objects.get(posts_id=post_id, email=likedusers)
             username = user_info.name
             # print(username)
+
             useraccount = user_info.account
             # print(useraccount)
             coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
@@ -887,13 +901,11 @@ def liked_users_reward():
             tx_hash = ncc.functions.writerreward(coinbase, likedusersaccount, user_reward).transact(
                 {'from': coinbase, 'gas': 2000000})
             receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-            store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=user_info, user=username, balance=0.2, txid=receipt, type="rewards",posts_id_id = post_id ,bbb="success")
+            store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=user_info, user=username, balance=0.02, txid=receipt, type="rewards",posts_id_id = post_id ,bbb="success")
             store.save()
-            writer_reward_success.rewards_success = "success"
-            writer_reward_success.save()
+
             reward_success.rewards_success = "success"
             reward_success.save()
-
 
 
 def main_detail(request, id):
@@ -907,7 +919,6 @@ def main_detail(request, id):
 
 def user_detail(request, id):
     if request.method == 'GET':
-        mypage = myPageInfomation.objects.get(email=request.session['user_email'])
         yourpage = myPageInfomation.objects.get(IDX=id)
         joiningdate = myPageInfomation.objects.get(IDX=id).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
@@ -929,7 +940,6 @@ def user_detail(request, id):
                    'yourpage':yourpage,
                    # 'likeusers':likeusers,
                    # 'numbersOfLike':numbersOfLike,
-                   'mypage':mypage,
                    'joiningdate':joiningdate,
                    'joining':joining,
                    'numbersOfArticles':numbersOfArticles,

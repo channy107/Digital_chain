@@ -148,7 +148,7 @@
         let accounts = web3.eth.accounts;
         let account = "{{ request.session.user_account }}";
         let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
-        let nid_balance = nd.balanceOf(account);
+        let nid_balance = nd.balanceOf(account)* 0.000000000000000001;
         let nid_price = nd.balanceOf(account) / coinone_nid;
         totalAmount += balance;
 
@@ -181,8 +181,8 @@
             let unidAccount = "0xab8348cc337c3a807b21f7655cae0769d79c3772";
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
-            let nidAmount       = $('#amount').val();
-            let ethAmount  = $('#amount').val() / coinone_nid;
+            let nidAmount       = $('#amount').val() * 1000000000000000000;
+            let ethAmount  = nidAmount / coinone_nid;
             let fromPasswordBase = 'pass0';
 
             // 보내는 사람의 계정을 언락
@@ -275,6 +275,8 @@
 
 
 </script>
+
+<div class="contentsmain-container1">
 <!-- Page Content -->
 <div class="container1">
     <!-- contents InFo -->
@@ -296,10 +298,50 @@
                 </br>
 
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef" />
-
                 </br>
                 </br>
-
+                <p align="left" size ="5"> 시세조회 </p>
+                <div id="chartdiv"></div>
+                 <!-- 거래소 시세 정보 -->
+                 <table align="right"border=1>
+                    <tr>
+                        <th></th>
+                        <th>거래소 시세 조회</th>
+                        <!-- <th>빗썸</th> -->
+                    </tr>
+                    <tr>
+                        <td>비트코인</td>
+                        <td id="coinone_BTC"></td>
+                        <!-- <td id="bithumb_BTC"></td> -->
+                    </tr>
+                    <tr>
+                        <td>이더리움</td>
+                        <td id="coinone_ETH"></td>
+                        <!-- <td id="bithumb_ETH"></td> -->
+                    </tr>
+                    <tr>
+                        <td>리플</td>
+                        <td id="coinone_XRP"></td>
+                        <!-- <td id="bithumb_XRP"></td> -->
+                    </tr>
+                    <tr>
+                        <td>기준시</td>
+                        <td colspan="4" id="lastUpdate"></td>
+                    </tr>
+                </table>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <div id="nid-eth-value">
+               <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
+               =
+               <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"></span>
+               </div>
+               <hr size="10" align="center" width=100% noshade="noshade" color="#efefef" />
+                <br><br>
                 <p align="left" size ="5"> 환전할 토큰 </p>
                 <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/front.png' %}" border="0" width="10" height="10">&nbsp&nbsp&nbsp;
@@ -375,6 +417,7 @@
 
     </div>
 
+</div>
 </div>
 
 <script>
@@ -464,41 +507,50 @@
              </div>
              <div class="modal-body">
 
-                  <!-- 거래소 시세 정보 -->
-                  <table border=1>
-                      <tr>
-                          <th></th>
-                          <th>코인원</th>
-                          <th>빗썸</th>
-                      </tr>
-                      <tr>
-                          <td>비트코인</td>
-                          <td id="coinone_BTC"></td>
-                          <td id="bithumb_BTC"></td>
-                      </tr>
-                      <tr>
-                          <td>이더리움</td>
-                          <td id="coinone_ETH"></td>
-                          <td id="bithumb_ETH"></td>
-                      </tr>
-                      <tr>
-                          <td>리플</td>
-                          <td id="coinone_XRP"></td>
-                          <td id="bithumb_XRP"></td>
-                      </tr>
-                      <tr>
-                          <td>기준시</td>
-                          <td colspan="4" id="lastUpdate"></td>
-                      </tr>
-                  </table>
-                 <span>1 eth</span>
-                 <div>
-                     <span>코인원기준</span> <span id="coinone_NID"></span>
-                 </div>
-                 <div>
-                     <span>빗썸기준</span> <span id="bithumb_NID"></span>
-                 </div>
-
+                 <!--니드 코인 현황차트 -->
+                 <div id="chartdiv"></div>
+                 <!--chart module -->
+                 <script src="{% static 'unid/node_modules/simple-line-chart/core.js' %}"></script>
+                 <script src="{% static 'unid/node_modules/simple-line-chart/charts.js' %}"></script>
+                 <script src="{% static 'unid/node_modules/simple-line-chart/animated.js' %}"></script>
+                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
+                 <br>
+                 <br>
+ 
+ 
+                 <!-- 거래소 시세 정보 -->
+                   <table border=1>
+                       <tr>
+                           <th></th>
+                           <th>거래소 시세 조회</th>
+                           <!-- <th>빗썸</th> -->
+                       </tr>
+                       <tr>
+                           <td>비트코인</td>
+                           <td id="coinone_BTC"></td>
+                           <!-- <td id="bithumb_BTC"></td> -->
+                       </tr>
+                       <tr>
+                           <td>이더리움</td>
+                           <td id="coinone_ETH"></td>
+                           <!-- <td id="bithumb_ETH"></td> -->
+                       </tr>
+                       <tr>
+                           <td>리플</td>
+                           <td id="coinone_XRP"></td>
+                           <!-- <td id="bithumb_XRP"></td> -->
+                       </tr>
+                       <tr>
+                           <td>기준시</td>
+                           <td colspan="4" id="lastUpdate"></td>
+                       </tr>
+                   </table>
+                 <br><br>
+                  <div id="nid-eth-value">
+                  <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
+                  =
+                  <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"> nid</span>
+                  </div>
 
 
 
