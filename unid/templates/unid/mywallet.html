@@ -95,7 +95,7 @@
                 </br>
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef"/>
                     <div>
-                        <p align="center" size ="5" id="idaccount"> {{ mypage.name }} 님의 보유자산</p>
+                        <p align="center" size ="7" id="idaccount"> {{ mypage.name }} 님의 보유자산</p>
                     </div>
                 <p align="center" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="100" height="100">  </p>
                     <div id="Status_balance">
@@ -481,7 +481,7 @@
                let accounts = web3.eth.accounts;
                let account = "{{ request.session.user_account }}";
                let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether")) ;
-               let nid_balance = nd.balanceOf(account);
+               let nid_balance = nd.balanceOf(account) * 0.000000000000000001;
                $('#bal').append(`${balance} <span>eth</span>`);
                $('#nd_bal').append(`${nid_balance} <span>nid</span>`);
                $('#pop').append(`${account}`);

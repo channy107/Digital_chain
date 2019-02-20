@@ -1,0 +1,59 @@
+.row-advertise {
+    width: 100%;
+    position: relative;
+    top: -5px;
+    margin: 20px auto 0 auto;
+}
+.crowdfunding-container {
+    margin: 0 auto;
+    max-width: 1070px !important;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 0;
+    background-color: #f2f2f2;
+}
+.card-body {
+    padding: 10px;
+    min-height: 166.4px;
+}
+
+
+.isfunding {
+    display: inline-block;
+    margin: 0 10px 0 0;
+}
+.fund-category {
+    display: inline-block;
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+}
+.fund-category {
+    display: inline-block;
+    font-size: 13px;
+    color: gray;
+    font-weight: 400;
+}
+.card-title {
+    font-size: 21px;
+    font-weight: bold;
+    color: black;
+}
+.card-title a{
+    color: black;
+}
+.card-title a: hover{
+    color: gray;
+}
+.percentage {
+    font-size: 15px;
+    color: blue;
+    display: inline-block;
+    font-weight: bold;
+    margin: 0 10px 0 0;
+}
+.fund-amount, .fund-creater, .expire-date {
+    display: inline-block;
+    color: gray;
+    font-size: 13px;
+    font-weight: 400px;
+}

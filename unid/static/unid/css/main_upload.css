@@ -301,3 +301,11 @@ color: black;
     height: 610px !important;
 
 }
+
+.ql-image {
+    width: 85px !important;
+}
+.ql-strike, .ql-underline {
+    position: relative !important;
+    top: 1px !important;
+}

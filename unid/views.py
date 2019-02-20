@@ -33,7 +33,8 @@ import hashlib
 from allauth.account.signals import user_logged_in, user_logged_out
 import pyminizip
 import shutil
-
+import time
+from solc import compile_source
 from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
@@ -1108,6 +1109,19 @@ def zzz(request):
 
     return render(request, 'unid/zzzz.html', {})
 
+@csrf_exempt
+def uploadAd(request):
+    upload_images = request.FILES.get('ad_image')
+
+    print(2)
+    print(os.getcwd())
+    contents_dir = "static/"
+    # 해당 날짜의 디렉토리
+    with open(contents_dir + upload_images.name, 'wb') as file:  # 저장경로
+        for chunk in upload_images.chunks():
+            file.write(chunk)
+    res = {'Ans': "광고가 업로드 되었습니다"}
+    return JsonResponse(res)
 @csrf_exempt
 def uploadImage(request):
     upload_images = request.FILES.get('richimage')
@@ -2284,8 +2298,205 @@ def autocomplete(request):
     })
     return HttpResponse(the_data, content_type='application/json')
 
+def crowdfunding(request):
+    fundposts = fundPost.objects.order_by('-IDX').filter(isfunding="펀딩중")
 
+    return render(request, 'unid/crowdfunding.html', {'fundposts': fundposts})
+
+
+def fundingdetail(request, id):
+    fundposts = fundPost.objects.get(IDX=id)
+
+
+
+
+    return render(request, 'unid/fundingdetail.html', {'fundposts': fundposts})
+
+# def isSatisfy(request):
+#     if
 #
+#     return
+def applyForFund(request):
+    rpc_url = "http://222.239.231.252:8220"
+    w3 = Web3(HTTPProvider(rpc_url))
+    nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
+    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+    id = request.POST['id']
+    fund_info = fundPost.objects.get(IDX=id)
+
+    invester = request.POST['funder']
+    amount = request.POST['amount']
+
+    tx_hash = ncc.functions.transfer(invester, fund_info.account, amount*1000000000000000000).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+
+
+    res = {"Ans":"펀딩되었습니다.", "amount":amount}
+    return JsonResponse(res)
+
+def erollFunding(request):
+    br = fundPost(
+        image_path = '/media/unid banner 이니스프리.png',
+        title = '국내 수제맥주를 선도하는 세븐브로이의 세 번째 브루어리',
+        context = "'강서맥주'에 이어 '서울.한강, 양평 맥주'를 생산하는 세븐브로이의 세 번째 브루어리",
+        targetAmount = 400144000,
+        currentAmount = 388342000,
+        expireDate = '2019-02-28',
+        funderEmail = myPageInfomation.objects.get(email='injh9900@gmail.com'),
+        tags = '#크라우드펀딩',
+        sharePeopleNumber = 145,
+        isfunding = '펀딩중',
+        fundCategory = '주식',
+    )
+    br.save()
+
+    return HttpResponse("성공쓰")
+
+def createfunding(request):
+    if request.method == 'GET':
+        return render(request, 'unid/createfunding.html', {})
+
+    else:
+        try:
+            upload_images = request.FILES.getlist('user_preview_files')
+        except MultiValueDictKeyError as e:
+            pass
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        try:
+            print(os.getcwd())
+            os.mkdir("media/funding/" + today)
+        except FileExistsError as e:
+            pass
+        preview_save_filelist = []
+        preview_ui_filelist = []
+        for upload_image in upload_images:
+            image_number = str(random.random())
+            previewfilename = upload_image.name
+            extendname = previewfilename[previewfilename.find(".", -5):]
+            real_preview_filename = image_number + extendname
+            preview_save_filelist.append(real_preview_filename)
+            preview_ui_filelist.append(previewfilename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            print(os.getcwd())
+            contents_dir = "media/funding/" + today + "/"
+            # 해당 날짜의 디렉토리
+            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
+                for chunk in upload_image.chunks():
+                    file.write(chunk)
+
+
+        rpc_url = "http://222.239.231.252:8220"
+        w3 = Web3(HTTPProvider(rpc_url))
+        password = "123"
+        account = w3.personal.newAccount(password)
+        print(1)
+        publisheddate = str(request.POST['publisheddate'])[0:10]
+        preview_images_dir = "/media/funding" + today + "/"
+        br = fundPost(
+            image_path=preview_images_dir + preview_save_filelist[0],
+            title=request.POST['title'],
+            context=request.POST['intro'],
+            targetAmount=request.POST['price'],
+            currentAmount=0,
+            expireDate=publisheddate,
+            funderEmail=myPageInfomation.objects.get(email='injh9900@gmail.com'),
+            tags=request.POST['tags'],
+            sharePeopleNumber=0,
+            isfunding='펀딩중',
+            fundCategory=request.POST['category'],
+            ccc=account
+        )
+        br.save()
+
+        print('저장까지 완료 이후 solc')
+
+        # Solidity source code
+        contract_source_code = '''
+        contract CrowdFunding {
+            struct Investor {
+                address addr;
+                uint amount;
+            }
+        
+            address public owner;
+            uint public numInvestors;
+            uint public deadline;
+            string public status;
+            bool public ended;
+            uint public goalAmount;
+            uint public totalAmount;
+            mapping (uint => Investor) public investors;
+        
+            modifier onlyOwner () {
+                require(msg.sender == owner);
+                _;
+            }
+        
+            function fund() payable {
+                require(!ended);
+        
+        
+                Investor inv = investors[numInvestors++];
+                inv.addr = msg.sender;
+                inv.amount = msg.value;
+                totalAmount += inv.amount;
+            }
+        
+            function checkGoalReached () public onlyOwner {
+                require(!ended);
+                require(now >= deadline);
+        
+                if(totalAmount >= goalAmount) {
+                    status = "Campaign Succeeded";
+                    ended = true;
+                    if (!owner.send(this.balance)) { throw; }
+                } else {
+                    uint i = 0;
+                    status = "Campaign Failed";
+                    ended = true;
+                    while(i <= numInvestors) {
+                        if (!investors[i].addr.send(investors[i].amount)) { throw; }
+                        i++;
+                    }
+                }
+            }
+            function kill() public onlyOwner {
+                selfdestruct(owner);
+            }
+        }
+            '''
+        print('계약 코드 장성 완료')
+        # web3.py
+        rpc_url = "http://222.239.231.252:8220"
+        w3 = Web3(HTTPProvider(rpc_url))
+        # 혹은 IPC를 통해 연결할 수 있다.
+        # w3 = Web3(IPCProvider("./chain-data/geth.ipc"))
+        # 지갑 주소를 unlock 해준다. 순서대로 지갑 주소, 비밀번호, unlock할 시간 (0은 영원히)
+        w3.personal.unlockAccount(w3.eth.accounts[0], "test", 0)
+        print(contract_source_code)
+        compiled_sol = compile_source(contract_source_code)
+        print('계약 배포')
+
+        contract_interface = compiled_sol["<stdin>:CrowdFunding"]
+
+        # 배포 준비, 스마트 컨트랙트 껍데기(abi)에 내용물(bin)을 채운다.
+        contract = w3.eth.contract(abi=contract_interface['abi'],
+                                   bytecode=contract_interface['bin'],
+                                   bytecode_runtime=contract_interface['bin-runtime'])
+
+        # 비용을 부담할 주소를 from으로 하는 트랜잭션을 포함해 배포한다.
+        tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0]})
+
+        # 마이닝을 해줘야 후에 실제로 사용할 수 있다.
+        # w3.miner.start(2)
+        # time.sleep(5)
+        # w3.miner.stop()
+        url = '/unid/crowdfunding/'
+        return HttpResponseRedirect(url)
+
 # class MySearchView(SearchView):
 #     # def extra_context(self):
 #     #
