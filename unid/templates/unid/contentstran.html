@@ -79,7 +79,17 @@
                 </ul>
                 <ul class="row-bottom">
                     <li>
-                        <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ list.like_count }}
+                        <span class="main-voting">
+                                {% if user in list.like_user_set.all and list.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+
+                                {% elif user not in list.like_user_set.all and list.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingbefore.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% else %}
+                                <img src="{% static 'unid/icon/rewardafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% endif %}
+                                {{list.like_count}}
+                            </span>
                     </li>
                     <li>
                         <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ list.rewards }}
