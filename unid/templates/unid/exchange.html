@@ -6,6 +6,7 @@
 {% block content %}
 <head>
     <link href="{% static 'unid/css/transaction.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <script>    // coin price check
@@ -149,7 +150,7 @@
         let account = "{{ request.session.user_account }}";
         let balance = parseFloat(web3.fromWei(web3.eth.getBalance(account), "ether"));
         let nid_balance = nd.balanceOf(account)* 0.000000000000000001;
-        let nid_price = nd.balanceOf(account) / coinone_nid;
+        let nid_price = nid_balance / coinone_nid;
         totalAmount += balance;
 
         $('#nd_bal').append(`${nid_balance}nid`);
@@ -300,39 +301,41 @@
                 <hr size="10" align="center" width=100% noshade="noshade" color="#efefef" />
                 </br>
                 </br>
-                <p align="left" size ="5"> 시세조회 </p>
-                <div id="chartdiv"></div>
+                <p align="left" size ="5"> 거래소 시세 조회 </p>
+                <div id="chart_nid"></div>
+                <!-- <div id="chartdiv"></div> -->
                  <!-- 거래소 시세 정보 -->
-                 <table align="right"border=1>
-                    <tr>
-                        <th></th>
-                        <th>거래소 시세 조회</th>
-                        <!-- <th>빗썸</th> -->
-                    </tr>
-                    <tr>
-                        <td>비트코인</td>
-                        <td id="coinone_BTC"></td>
-                        <!-- <td id="bithumb_BTC"></td> -->
-                    </tr>
-                    <tr>
-                        <td>이더리움</td>
-                        <td id="coinone_ETH"></td>
-                        <!-- <td id="bithumb_ETH"></td> -->
-                    </tr>
-                    <tr>
-                        <td>리플</td>
-                        <td id="coinone_XRP"></td>
-                        <!-- <td id="bithumb_XRP"></td> -->
-                    </tr>
-                    <tr>
-                        <td>기준시</td>
-                        <td colspan="4" id="lastUpdate"></td>
-                    </tr>
-                </table>
-               <br>
-               <br>
-               <br>
-               <br>
+                 <br><br>
+                 <table id="chart_table" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">명칭</th>
+                            <th scope="col">시세</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>BTC</td>
+                            <td id="coinone_BTC"></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>ETH</td>
+                            <td id="coinone_ETH"></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td>XRP</td>
+                            <td id="coinone_XRP"></td>
+                          </tr>                          
+                          <tr>
+                            <th scope="row">4</th>
+                            <td colspan="4" id="lastUpdate"></td>
+                          </tr>
+                        </tbody>
+                      </table>
                <br>
                <br>
                <div id="nid-eth-value">
@@ -638,6 +641,43 @@
                       }
                   }
           </script>
+
+        <script> // nid chart function
+
+            google.charts.load('current', {'packages':['line']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', '2019-02 (day)');
+            data.addColumn('number', 'Ethereum');
+
+            data.addRows([
+                [0, 119000],   [1, 117000],  [2, 117700],  [3, 121500],  [4, 118700],  [5, 118800],
+                [6, 118700],  [7, 116300],  [8, 116300],  [9, 130300],  [10, 130300], [11, 137000],
+                [12, 132600], [13, 134200], [14, 134600], [15, 133900], [16, 134700], [17, 135900],
+                [18, 147200], [19, 158300], [20, 156400], [21, 143200], [22, 146300], [23, 155400],
+                [24, 157200], [25, 159300], [26, 164400], [27, 162600]
+            ]);
+
+            var options = {
+                chart: {
+                title: '이더리움(Ethereum) 시세 ',
+                subtitle: 'ETH/KRW'
+                },
+                width: 900,
+                height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('chart_nid'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+
+        </script>
+
+
 
 </body>
 
