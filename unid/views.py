@@ -827,7 +827,7 @@ def writer_rewards():
     rewarded_day = reward_day - timedelta(days=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
-    print(reward_values)
+    # print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -839,6 +839,10 @@ def writer_rewards():
         rewards = reward_values[i]['rewards']
         writer = reward_values[i]['email_id']
         # print(rewards)
+        writer_reward = rewards * 0.8
+        reward = "%.2f" % writer_reward
+        # print(writer_reward)
+        # print(reward)
         # print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
@@ -862,10 +866,11 @@ def writer_rewards():
 
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
-        store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=rewards, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
+        store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=reward, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
         store.save()
         writer_reward_success.rewards_success = "success"
         writer_reward_success.save()
+
 
 
 def liked_users_reward():
