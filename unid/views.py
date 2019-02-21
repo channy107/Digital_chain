@@ -628,26 +628,7 @@ def info_popular(request):
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        paginator = Paginator(posts, 3)
-        page_num = request.POST.get('page')
-
-        try:
-            posts = paginator.page(page_num)
-        except PageNotAnInteger:
-            posts = paginator.page(1)
-        except EmptyPage:
-            posts = paginator.page(paginator.num_pages)
-
-        if request.is_ajax():
-            context = {'posts': posts,
-                       'page_num':page_num}
-            return render(request, 'unid/info_popular_ajax.html', context)
-
-        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
-
-        return render(request, 'unid/info_popular.html', context)
-    else:
-        posts = Post.objects.order_by('-like_count', '-created_at')
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -661,10 +642,33 @@ def info_popular(request):
         if request.is_ajax():
             context = {'posts': posts,
                        'page_num':page_num,
-                       'mypage':mypage}
+                       'ads':ads}
             return render(request, 'unid/info_popular_ajax.html', context)
 
-        context = {'posts': posts, 'mypage':mypage}
+        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage, 'ads':ads}
+
+        return render(request, 'unid/info_popular.html', context)
+    else:
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        ads = advertise.objects.order_by('-IDX')[0]
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts,
+                       'page_num':page_num,
+                       'mypage':mypage,
+                       'ads':ads}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts': posts, 'mypage':mypage, 'ads':ads}
 
         return render(request, 'unid/info_popular.html', context)
 
@@ -673,6 +677,7 @@ def infotag(request, category):
         myPageInfomation.objects.filter(email=request.session['user_email']).values()
     except KeyError as e:
         allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(allinfolists, 3)
         page_num = request.POST.get('page')
 
@@ -686,13 +691,15 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num':page_num,
-                       'category':category,}
+                       'category':category,
+                       'ads':ads}
             return render(request, 'unid/infotag_ajax.html', context)
 
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
                    'category': category,
+                   'ads':ads
                    }
 
         return render(request, 'unid/infotag.html', context)
@@ -701,6 +708,7 @@ def infotag(request, category):
     allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
+    ads = advertise.objects.order_by('-IDX')[0]
     paginator = Paginator(allinfolists, 3)
     page_num = request.POST.get('page')
 
@@ -715,10 +723,11 @@ def infotag(request, category):
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
                        'category': category,
+                       'ads':ads
                        }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category,}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category, 'ads':ads}
 
     return render(request, 'unid/infotag.html', context)
 

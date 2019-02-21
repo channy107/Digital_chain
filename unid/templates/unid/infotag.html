@@ -43,6 +43,19 @@
                     <a href="../infotag/기타" class="list-group-item">#기타</a>
 
                 </div>
+
+                <div class="advertise">
+                 <img class="img-fluid" src="/{{ads.image_path}}" style="width:200px; height:400px;">
+                </div>
+                {% if request.session.Unid_admin %}
+                    <div id="edit_icon">
+                        <a href="../enrollad/">
+                        <img style="width:28px; cursor: pointer;" src="{% static 'unid/icon/ui icons-32.png' %}"/>
+                        </a>
+                    </div>
+                {% else %}
+
+                {% endif %}
             </div>
             <div class="information-popular-row">
                 <div class="popular-rows">
