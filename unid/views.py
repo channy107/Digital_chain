@@ -597,7 +597,7 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def main(request):
-    populated_informations = Post.objects.order_by('like_count').filter(~Q(isdelete="삭제"))[0:6]
+    populated_informations = Post.objects.order_by('-like_count').filter(~Q(isdelete="삭제"))[0:6]
     populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="레포트"))[0:6]
     populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의자료"))[0:6]
     populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의노트"))[0:6]
