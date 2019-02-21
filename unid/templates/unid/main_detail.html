@@ -521,7 +521,7 @@ xpopup
                         {% else %}
                         <a href="{% url 'user_detail' reply.email.IDX %}">
                         {% endif %}
-                            {% if reply.mail.userimage %}
+                            {% if reply.email.userimage %}
                                 <img src="/{{ reply.email.userimage }}" border="0" width="30" height="30" style="border-radius: 25px;">
                             {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}" border="0" width="30" height="30">
@@ -534,7 +534,7 @@ xpopup
                         {% else %}
                         <a href="{% url 'user_detail' reply.email.IDX %}" style="color:black">
                         {% endif %}
-                            {{ reply.email_id }}
+                            {{ reply.email.name }}
                         </a>
                     </div>
                     <div class="reply-date">

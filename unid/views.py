@@ -925,7 +925,7 @@ def liked_users_reward():
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     images = postImage.objects.filter(posts_id=id)
-    replys = replyForPosts.objects.filter(posts_id=id).values()
+    replys = replyForPosts.objects.filter(posts_id=id)
     likes = LikeUsers.objects.filter(posts_id=id)
     k = Post.objects.get(posts_id=38)
     context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
