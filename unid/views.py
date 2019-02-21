@@ -2021,6 +2021,48 @@ def searchcontents(request, category):
     #     {'contentslists': allcontentslists}
     # )
 
+def enrollad(request):
+    if request.methon == 'GET':
+
+        return render(request, 'unid/enrollad.html', {})
+
+    else:
+        try:
+            upload_images = request.FILES.getlist('user_preview_files')
+        except MultiValueDictKeyError as e:
+            pass
+
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+
+        try:
+            print(os.getcwd())
+            os.mkdir("media/" + today)
+        except FileExistsError as e:
+            pass
+
+        preview_save_filelist = []
+        preview_ui_filelist = []
+
+        for upload_image in upload_images:
+            previewfilename = upload_image.name
+            preview_save_filelist.append(previewfilename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            contents_dir = "media/imageForAdvertise/" + today + "/"
+
+            with open(contents_dir + previewfilename, 'wb') as file:
+                for chunk in upload_image.chunks():
+                    file.write(chunk)
+
+            br = adBySuperUser(
+                advertiser=request.POST['tags'],
+                ad_path=contents_dir + preview_save_filelist[0],
+                aaa= request.POST['authorinfo'],
+                bbb= request.POST[''],
+                ccc=,
+            )
+
 @login_required
 def opinion(request):
 
@@ -2081,6 +2123,10 @@ def admin(request):
                 walletInFormation.objects.filter(type='contentsTrasaction'))
             myreward = walletInFormation.objects.filter(type='rewards')
             numbersOfLike = len(LikeUsers.objects.all())
+
+
+
+
             context = {
                        'numbersOfArticles': numbersOfArticles,
                        'numbersOfcontents': numbersOfcontents,
@@ -2095,12 +2141,22 @@ def admin(request):
                        'Article_data_for_Mar': Article_data_for_Mar,
                        'Article_data_for_Apr': Article_data_for_Apr,
                        'Article_data_for_May': Article_data_for_May,
+                       'admin_account': admin_account,
+                       'admin_balance': admin_balance,
+                       'allUsers': allUsers,
+                       'allBlackList': allBlackList,
+                       'allTransacts': allTransacts,
+                       'allContents': allContents,
+                       'allPost': allPost,
+                       'allOpinions': allOpinions,
+                       'allMoneyTrade': allMoneyTrade,
                        }
 
             return render(request, 'unid/admin.html', context)
     except KeyError as e:
         url = '/unid/admin/'
         return HttpResponseRedirect(url)
+
 
 
 def unidAdmin(request):

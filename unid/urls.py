@@ -41,6 +41,7 @@ urlpatterns = [
     path('exchange/', views.exchange, name='exchange'),
     path('purchase/', views.purchase, name='purchase'),
     path('download/', views.download, name='download'),
+    path('enrollad/', views.enrollad, name='enrollad'),
     path('my_cron_job/', my_cron_job, name='my_cron_job'),
     path('test_validfile/', views.test_validfile, name='test_validfile'),
     path('termsofuse/', views.termsofuse, name='termsofuse'),

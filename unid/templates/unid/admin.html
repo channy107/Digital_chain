@@ -61,6 +61,7 @@
         <div id="tab-1" class="tab-content current">
             <div id="content_column">
                 <div class="admin-context" id="T0">
+
             <h4>계좌 : {{ admin_account }}</h4>
             <h5>잔고 : {{ admin_balance }}</h5>
             <h3>거래내역</h3>
@@ -138,6 +139,7 @@
             <p>유일한 수입원.</p>
         </div>
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
+            {% csrf_token %}
             <div id="user_preview_file_before">
                 <div id="user_file_over">
                     <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
@@ -161,9 +163,15 @@
                     <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
                 </div>
             </div>
+
+
+
+                        <a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a>
+
         </form>
         </div>
         </div>
+
         <div id="tab-4" class="tab-content">
             <div class="admin-row">
         <div class="unid-opininon-title speadButton spreadTable" name="T2">

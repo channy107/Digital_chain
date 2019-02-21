@@ -23,6 +23,17 @@
                 <div class="carousel-item" style="background-color: white;">
                     <img class="d-block img-fluid" src="/static/unid/img/unid banner 청년.png" alt="Third slide">
                 </div>
+                {% if request.session.Unid_admin %}
+                    <div id="edit_icon" style="text-align: center; position: relative; padding-left: 1010px; bottom: 30px;">
+                        <a href="../enrollad/">
+                        <img style="width:28px; cursor: pointer;" src="{% static 'unid/icon/ui icons-32.png' %}"/>
+
+                        <input id="background" class="aaa" style="width: 29px; position: relative; right: 33px; opacity: 0; cursor: pointer;" type="button" name="background" title="배경사진등록">
+                            </a>
+                    </div>
+                {% else %}
+
+                {% endif %}
             </div>
         </div>
     </div>
@@ -60,6 +71,7 @@
                     <hr>
                     {% for info in posts %}
                     <div class="popular-row">
+
                         <ul class="row-top">
                         {% if info.email.name == request.session.user_name %}
                         <a href="/unid/mypage">
