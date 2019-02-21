@@ -116,7 +116,7 @@
 
         .rows {
             width:1000px;
-            height:1470px;
+            height:2050px;
             margin: 0 auto;
             background-color:#ffffff!important;
             border-width:1px;
@@ -354,6 +354,14 @@
             margin-bottom:0px;
 
         }
+
+        #chart_table{
+            width:50%;
+        }
+        #chart_nid{
+            width:50%;
+        }
+
 
 
         
