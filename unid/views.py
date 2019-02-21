@@ -727,6 +727,7 @@ def information(request):
         myPageInfomation.objects.filter(email=request.session['user_email']).values()
     except KeyError as e:
         posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -739,10 +740,11 @@ def information(request):
 
         if request.is_ajax():
             context = {'posts': posts,
-                       'page_num':page_num}
+                       'page_num':page_num,
+                       'ads':ads}
             return render(request, 'unid/information_ajax.html', context)
 
-        context = {'posts': posts}
+        context = {'posts': posts, 'ads':ads}
 
         return render(request, 'unid/information.html', context)
 
@@ -750,6 +752,7 @@ def information(request):
     posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
+    ads = advertise.objects.order_by('-IDX')[0]
     paginator = Paginator(posts, 3)
     page_num = request.POST.get('page')
     try:
@@ -762,10 +765,11 @@ def information(request):
     if request.is_ajax():
         context = {'posts': posts,
                    'page_num':page_num,
+                   'ads':ads
                    }
         return render(request, 'unid/information_ajax.html', context)
 
-    context = {'posts':posts, 'voting_count':voting_count}
+    context = {'posts':posts, 'voting_count':voting_count, 'ads':ads}
 
     return render(request, 'unid/information.html', context)
 
@@ -2022,7 +2026,7 @@ def searchcontents(request, category):
     # )
 
 def enrollad(request):
-    if request.methon == 'GET':
+    if request.method == 'GET':
 
         return render(request, 'unid/enrollad.html', {})
 
@@ -2055,13 +2059,31 @@ def enrollad(request):
                 for chunk in upload_image.chunks():
                     file.write(chunk)
 
-            br = adBySuperUser(
-                advertiser=request.POST['tags'],
-                ad_path=contents_dir + preview_save_filelist[0],
-                aaa= request.POST['authorinfo'],
-                bbb= request.POST[''],
-                ccc=,
+        br = advertise(
+                company=request.POST['tags'],
+                image_path=contents_dir + preview_save_filelist[0],
+                advertiser= request.POST['authorinfo'],
+                startdate= request.POST['publisheddate'],
+                enddate=request.POST['publisheddate1'],
+                price=request.POST['price'],
+                introduce=request.POST['intro'],
             )
+        br.save()
+
+        idx = advertise.objects.all().order_by('-pk')[0]
+        preview_images_dir = "media/imageForAdvertise/" + today + "/"
+        previewlistlength = len(preview_save_filelist)
+
+        for i in range(previewlistlength):
+            br = adBySuperUser(
+                ad_id = idx,
+                adname = preview_save_filelist[i],
+                ad_path = preview_images_dir + preview_save_filelist[i],
+            )
+            br.save()
+
+        url = '/unid/information/'
+        return HttpResponseRedirect(url)
 
 @login_required
 def opinion(request):
@@ -2096,6 +2118,7 @@ def admin(request):
             allTransacts = walletInFormation.objects.all()
             allContents = uploadContents.objects.all()
             allPost = Post.objects.all()
+            allAd = advertise.objects.all()
             allOpinions = opinions.objects.filter(result="확인중")
             allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
             Article_data_for_Jan = len(
@@ -2150,6 +2173,7 @@ def admin(request):
                        'allPost': allPost,
                        'allOpinions': allOpinions,
                        'allMoneyTrade': allMoneyTrade,
+                       'allAd': allAd,
                        }
 
             return render(request, 'unid/admin.html', context)

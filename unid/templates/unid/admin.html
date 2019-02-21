@@ -135,43 +135,37 @@
         <div id="tab-3" class="tab-content">
             <div class="admin-row" data-role='collapsible'>
         <div class="unid-user-title speadButton spreadTable" name="T1">
-            <h2>광고 업로드</h2>
-            <p>유일한 수입원.</p>
+            <h2>광고 관리( {{ allAd|length }} ) </h2>
+
         </div>
-        <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
-            {% csrf_token %}
-            <div id="user_preview_file_before">
-                <div id="user_file_over">
-                    <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
-                </div>
-                <div class="form-group">
-                    <label for="input_previewfiles_before" class="col-sm-2">광고 업로드</label>
-                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
-                    <ul class="str_ul">
-                        <li class="tip_str">
-                        .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div id="user_preview_file_after">
-                <div class="form-group">
-                    <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
-                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
-                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
-                </div>
-            </div>
+        <table class="admin-context table table-striped" id="T1">
+            <thead>
+                <tr>
+                    <th>광고 회사명</th>
+                    <th>광고주</th>
+                    <th>시작일</th>
+                    <th>종료일</th>
+                    <th>광고 가격</th>
+                    <th>광고 소개</th>
 
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allAd %}
+            <tr>
+                <td>{{ list.company}}</td>
+                <td>{{ list.advertiser }}</td>
+                <td>{{ list.startdate}}</td>
+                <td>{{ list.enddate }}</td>
+                <td>{{ list.price }}</td>
+                <td>{{ list.introduce|truncatechars_html:10 }}</td>
 
-
-                        <a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a>
-
-        </form>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
         </div>
         </div>
-
         <div id="tab-4" class="tab-content">
             <div class="admin-row">
         <div class="unid-opininon-title speadButton spreadTable" name="T2">

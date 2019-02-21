@@ -6,7 +6,7 @@
 
 <head>
     <link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
-    <link href="{% static 'unid/css/contentsupload.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/enrollad.css' %}" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -554,7 +554,7 @@ xpopup
             </div>
             <div class="form-group">
                 <label for="inputpublisheddate1" class="col-sm-3 pointeffect">광고 기간(종료일)</label>
-                <input type="date" class="form-control creatdate" id="inputpublisheddate1"  name="publisheddate">
+                <input type="date" class="form-control creatdate" id="inputpublisheddate1"  name="publisheddate1">
 
             </div>
             <div class="form-group">
@@ -573,30 +573,9 @@ xpopup
                 </ul>
             </div>
 
-            <div class="form-group" align="center">
-                <input type="button" class="cd-popup-trigger form-control col-sm-2 buttonColor pointeffect" name="enrollcontents" id="enrollcontents" style="float: inherit;" value="광고 등록" readonly/>
+            <div class="adenroll">
+                <a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a>
             </div>
-            <div class="cd-popup" role="alert">
-                <div class="cd-popup-container">
-                    <div class="popuprow1">
-                        <h4>광고를 등록하시겠습니까?</h4>
-                    </div>
-                    <div class="popuprow2">
-                        <ul id='popupinfo'>
-
-                        </ul>
-                    </div>
-                    <div class="popuprow3">
-                        컨텐츠는 저자가 책정한 판매가에 따라 구매자가 지불한 니드코인을 통해 보상되며 이더리움 네트워크 사정에 의해 처리속도가 지연될 수 있습니다.
-                    </div>
-
-                    <ul class="cd-buttons">
-                        <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
-                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
-                    </ul>
-                    <a href="#0" class="cd-popup-close img-replace"></a>
-                </div> <!-- cd-popup-container -->
-            </div> <!-- cd-popup -->
 
         </div>
     </form>
@@ -734,8 +713,8 @@ xpopup
             console.log(fileee.lastIndexOf('.'));
             console.log(extendname);
             console.log(fileee);
-            if ( upload_files.length > 3 ) {
-                alert("최대 3개까지만 등록할 수 있습니다.");
+            if ( upload_files.length > 1 ) {
+                alert(" 배너사진은 한 장만 업로드 해주세요");
             } else {
                 $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
                 $("#user_preview_file_before").hide();
