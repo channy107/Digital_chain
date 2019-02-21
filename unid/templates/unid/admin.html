@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv = "Cache-Control" content = "no-cache">
+    <meta http-equiv = "X-UA-Compatible" content = "IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="{% static 'unid/vendor/jquery/jquery.js' %}"></script>
+    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500,700&amp;subset=korean" rel="stylesheet">
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+
+    <script src="{% static 'unid/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'unid/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/admin.css' %}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script src="{% static 'unid/node_modules/jquery/dist/jquery.js' %}"></script>
+    <!--<script src="{% static 'unid/node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>-->
+    <!--font awesome-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+</head>
+
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="padding: 0 1rem;">
+    <div class="container">
+        <a class="navbar-brand" href="/unid/">
+            <img class="twinkle-transparent" src="{% static 'unid/icon/unid_icon.png' %}" border="0" width="80" height="35"> Admin
+        </a>
+
+
+
+    </div>
+
+</nav>
+
+    <div id="container">
+        <ul class="tabs" id="tabs" style="margin-left:30px; margin-right:30px; padding-top:40px; font-size: 15px; font-weight: 500; border-bottom: 1px solid #c1c1c1; padding-bottom:5px;">
+            <li class="tab-link current" id="my_act1" data-tab="tab-1">UNID_Account</li> &nbsp&nbsp
+            <li class="tab-link" id="my_act2" data-tab="tab-2" style="padding-left:15px;">UNID_USER</li> &nbsp
+            <li class="tab-link" id="my_act3" data-tab="tab-3" style="padding-left:21px;">광고 관리</li> &nbsp
+            <li class="tab-link" id="my_act4" data-tab="tab-4" style="padding-left:10px;">OPINIONS</li>
+            <li class="tab-link" id="my_act5" data-tab="tab-5" style="padding-left:10px;">BLACK_LIST</li>
+            <li class="tab-link" id="my_act6" data-tab="tab-6" style="padding-left:10px;">거래 내역</li>
+            <li class="tab-link" id="my_act7" data-tab="tab-7" style="padding-left:10px;">정보공유 게시글</li>
+            <li class="tab-link" id="my_act8" data-tab="tab-8" style="padding-left:10px;">콘텐츠 게시글</li>
+
+        </ul>
+        <div id="tab-1" class="tab-content current">
+            <div id="content_column">
+                <div class="admin-context" id="T0">
+            <h4>계좌 : {{ admin_account }}</h4>
+            <h5>잔고 : {{ admin_balance }}</h5>
+            <h3>거래내역</h3>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>IDX</th>
+                        <th>보내는 사람</th>
+                        <th>받는 사람</th>
+                        <th>금액</th>
+                        <th>사유</th>
+                        <th>날짜</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for list in allMoneyTrade %}
+                <tr>
+                    <td>{{ list.IDX }}</td>
+                    <td>{{ list.fromAccount }}</td>
+                    <td>{{ list.toAccount }}</td>
+                    <td>{{ list.balance }}</td>
+                    <td>{{ list.type }}</td>
+                    <td>{{ list.transactiondate }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+            </div>
+
+        </div>
+        <div id="tab-2" class="tab-content" >
+            <div class="admin-row" data-role='collapsible'>
+        <div class="unid-user-title speadButton spreadTable" name="T1">
+            <h2>UNID_USER( {{ allUsers|length }} ) </h2>
+            <p>손님이 왕이다.</p>
+        </div>
+        <table class="admin-context table table-striped" id="T1">
+            <thead>
+                <tr>
+                    <th>유저이메일</th>
+                    <th>유저명</th>
+                    <th>프로필</th>
+                    <th>가입일</th>
+                    <th>남은 보팅 수</th>
+                    <th>계좌</th>
+                    <th>최종 수정일</th>
+                    <th>블랙리스트 여부</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allUsers %}
+            <tr>
+                <td>{{ list.email|truncatechars_html:10 }}</td>
+                <td>{{ list.name }}</td>
+                <td>{{ list.profile|truncatechars_html:5 }}</td>
+                <td>{{ list.joiningdate }}</td>
+                <td>{{ list.votingcount }}</td>
+                <td>{{ list.account|truncatechars_html:10 }}</td>
+                <td>{{ list.last_modified }}</td>
+                <td>{{ list.is_blacklist }}</td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        </div>
+
+        <div id="tab-3" class="tab-content">
+            <div class="admin-row" data-role='collapsible'>
+        <div class="unid-user-title speadButton spreadTable" name="T1">
+            <h2>광고 업로드</h2>
+            <p>유일한 수입원.</p>
+        </div>
+        <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
+            <div id="user_preview_file_before">
+                <div id="user_file_over">
+                    <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
+                </div>
+                <div class="form-group">
+                    <label for="input_previewfiles_before" class="col-sm-2">광고 업로드</label>
+                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
+                    <ul class="str_ul">
+                        <li class="tip_str">
+                        .jpg, .png 형식의 파일만 가능합니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="user_preview_file_after">
+                <div class="form-group">
+                    <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
+                    <input class="form-control col-sm-6 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
+                </div>
+            </div>
+        </form>
+        </div>
+        </div>
+        <div id="tab-4" class="tab-content">
+            <div class="admin-row">
+        <div class="unid-opininon-title speadButton spreadTable" name="T2">
+            <h2>OPINIONS( {{ allOpinions|length }} )</h2>
+            <p>사용자의 불편함을 개선합시다.</p>
+        </div>
+        <table class="admin-context table table-striped" id="T2">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>게시판</th>
+                    <th>게시글 제목</th>
+                    <th>작성자</th>
+                    <th>신고자</th>
+                    <th>신고이유</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allOpinions %}
+            <tr id="row{{ list.posts_id }}">
+                <td id="number{{ list.posts_id }}">{{ list.IDX }}</td>
+                <td id="postType{{ list.posts_id }}">{{ list.type }}</td>
+                <td id="{{ list.posts_id }}"><a href="../contentsdetail/{{ list.posts_id }}">{{ list.title }}</a></td>
+                <td id="writeruser{{ list.posts_id }}">{{ list.writeruser }}</td>
+                <td id="fromuser{{ list.posts_id }}">{{ list.fromuser }}</td>
+                {% if list.exceptopinion %}
+                <td id="reason{{ list.posts_id }}">
+                    {{ list.context }} ( {{ list.exceptopinion }} )
+                    <input type="button" class="yellowCard" name="{{ list.posts_id }}" value="경고" style="cursor: pointer;">
+                    <input type="button" class="noProblem" name="{{ list.posts_id }}" value="이상없음" style="cursor: pointer;">
+                </td>
+                {% else %}
+                <td id="reason{{ list.posts_id }}">
+                    {{ list.context }}
+                    <input type="button" class="yellowCard" name="{{ list.posts_id }}" value="경고" style="cursor: pointer;">
+                    <input type="button" class="noProblem" name="{{ list.posts_id }}" value="이상없음" style="cursor: pointer;">
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        </div>
+        <div id="tab-5" class="tab-content">
+            <div class="admin-row">
+        <div class="unid-blacklist-title speadButton spreadTable" name="T3">
+            <h2>BLACK_LIST( {{ allBlackList|length }} )</h2>
+            <p>주의 관찰이 필요합니다.</p>
+        </div>
+        <table class="admin-context table table-striped" id="T3">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>유저명</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allBlackList %}
+            <tr>
+                <td>{{ list.IDX }}</td>
+                <td>{{ list.user_id }}</td>
+                <td>{{ list.created }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        </div>
+        <div id="tab-6" class="tab-content">
+            <div class="admin-row">
+        <div class="unid-transactions-title speadButton spreadTable" name="T4">
+            <h2>거래내역( {{ allTransacts|length }} )</h2>
+            <p>돈 관리는 철저히.</p>
+        </div>
+        <table class="admin-context table table-striped" id="T4">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>보내는사람</th>
+                    <th>받는사람</th>
+                    <th>금액</th>
+                    <th>txid</th>
+                    <th>송금사유</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for list in allTransacts %}
+            <tr>
+                <td>{{ list.IDX }}</td>
+                <td>{{ list.fromAccount }}</td>
+                <td>{{ list.toAccount }}</td>
+                <td>{{ list.balance }}nid</td>
+                <td>{{ list.txid|truncatechars_html:10 }}</td>
+                <td>{{ list.type }}</td>
+                <td>{{ list.transactiondate|truncatechars_html:23 }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        </div>
+        <div id="tab-7" class="tab-content">
+
+            <div style="text-align: center;    position: relative; bottom: -66px; z-index: 1;"><p><h3>월별 보상 내역</h3></p></div>
+            <div id="chart_div1" style="width: 900px; height: 500px;"></div>
+
+        </div>
+
+        <div id="tab-8" class="tab-content">
+            <div style="text-align: center;    position: relative; bottom: -66px; z-index: 1;"><p><h3>월별 콘텐츠 거래 내역</h3></p></div>
+            <div id="chart_div2" style="width: 900px; height: 500px;"></div>
+        </div>
+</div>
+</body>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization1);
+
+
+      function drawVisualization1() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Month', '정보공유보상', '보팅보상', 'Average'],
+          ['Jan',  {{ Article_data_for_Jan }},      {{ numbersOfLike }},      6],
+          ['Feb',  {{ Article_data_for_Fed }},      {{ numbersOfLike }},      8],
+          ['Mar',  {{ Article_data_for_Mar }},      {{ numbersOfLike }},      6],
+          ['Apr',  {{ Article_data_for_Apr }},      {{ numbersOfLike }},      4],
+          ['May',  {{ Article_data_for_May }},      {{ numbersOfLike }},      5]
+        ]);
+
+        var options = {
+          title : '월별 개인 사용 내역(통합)',
+          titlePosition: 'none',
+          'legend' : 'center',
+          vAxis: {title: '보상 내역 '},
+          hAxis: {title: '월'},
+          seriesType: 'bars',
+          series: {6: {type: 'line'}},
+          'width':900,
+          'height':500,
+        };
+
+
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div1'));
+        chart.draw(data, options);
+      }
+
+</script>
+<script>
+
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization2);
+      function drawVisualization2() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Month','콘텐츠판매', '콘텐츠구매', 'Average'],
+          ['Jan',  {{ numbersOfsell }},             {{ numbersOfbuy }},      6],
+          ['Feb',  {{ numbersOfsell }},             {{ numbersOfbuy }},      8],
+          ['Mar',  {{ numbersOfsell }},             {{ numbersOfbuy }},      6],
+          ['Apr',  {{ numbersOfsell }},             {{ numbersOfbuy }},      4],
+          ['May',  {{ numbersOfsell }},             {{ numbersOfbuy }},      5]
+        ]);
+
+        var options = {
+          title : '월별 개인 사용 내역(통합)',
+          titlePosition: 'none',
+          'legend' : 'center',
+          vAxis: {title: '거래 내역 '},
+          hAxis: {title: '월'},
+          seriesType: 'bars',
+          series: {6: {type: 'line'}},
+          'width':900,
+          'height':500,
+        };
+
+
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
+        chart.draw(data, options);
+      }
+
+</script>
+<script>
+
+    jQuery(document).ready(function($){
+
+        $('#user_preview_files').on('change', function(){
+            let upload_files = $('#user_preview_files').get(0).files
+            console.log($('#user_preview_files').get(0).files.length);
+            console.log($('#user_preview_files').get(0).files);
+            var fileee = $('#user_preview_files').get(0).files[0]['name'];
+            var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
+            const extendArray = ['.jpg', '.png', '.jpeg'];
+            console.log(fileee);
+            for (var i = 0; i < upload_files.length; i++) {
+                kkk = $('#user_preview_files').get(0).files[i]['name'];
+                console.log(kkk);
+                extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
+                console.log(extendname);
+                if ( !extendArray.includes(extendname.toLowerCase()) ) {
+                    alert(extendname + "형식은 업로드 할 수 없습니다.");
+                    return false;
+                }
+
+           };
+            console.log(1);
+            console.log(fileee.substring(fileee.lastIndexOf('.'),fileee.length ));
+            console.log(fileee.lastIndexOf('.'));
+            console.log(extendname);
+            console.log(fileee);
+            if ( upload_files.length > 3 ) {
+                alert("최대 3개까지만 등록할 수 있습니다.");
+            } else {
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_preview_file_before").hide();
+                $("#user_preview_file_after").show();
+            }
+        });
+
+        $('#reupload_preview').on('click', function(){
+            $("#user_preview_file_after").hide();
+            $("#user_preview_file_before").show();
+        });
+        $(document).on('click', '.deletePost', function(){
+            console.log(1);
+            id = $(this).attr('name').substr(0,3);
+            type = $(this).attr('id').substr(0,4);
+            $.ajax({
+                type: 'POST',
+                url: '../postdelete/',
+                data: {
+                    id: id,
+                    type: type,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                }
+            });
+
+
+        });
+        $(document).on('click', '.spreadTable', function(){
+            id = $(this).attr('name');
+            if ( $('#' + id).css("display") == "none" ) {
+                $('#' + id).show();
+            } else {
+                $('#' + id).hide();
+            }
+        });
+        $(document).on('click', '.yellowCard', function(){
+            var post_id = $(this).attr('name');
+            var number = $('#number' + post_id).text();
+            console.log(post_id);
+            var postType = $('#postType' + post_id).text();
+            var writerUser = $('#writeruser' + post_id).text();
+            var reason = $('#reason' + post_id).text();
+            console.log(postType);
+            console.log(reason);
+
+            $.ajax({
+                type: 'POST',
+                url: '../warninguser/',
+                data: {
+                    number: number,
+                    id: post_id,
+                    postType: postType,
+                    writerUser: writerUser,
+                    reason: reason,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                    $('#row' + post_id).hide();
+                }
+            });
+        });
+        $(document).on('click', '.noProblem', function(){
+            var post_id = $(this).attr('name');
+            var number = $('#number' + post_id).text();
+            console.log(post_id);
+            var noproblem = "이상없음";
+            $.ajax({
+                type: 'POST',
+                url: '../noProblem/',
+                data: {
+                    id: post_id,
+                    number: number,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(res) {
+                    alert(res.Ans);
+                    $('#row' + post_id).hide();
+                }
+            });
+        });
+
+
+        $('ul.tabs li').click(function(){
+            var tab_id = $(this).attr('data-tab');
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+
+            $(this).addClass('current');
+            $("#"+tab_id).addClass('current');
+        });
+
+
+        $('p#my_articles').click(function(){
+            var tab_id = $(this).attr('data-tab');
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+
+            $(this).addClass('current');
+            $("#"+tab_id).addClass('current');
+        });
+
+        $('p#my_contents').click(function(){
+            var tab_id = $(this).attr('data-tab');
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+
+            $(this).addClass('current');
+            $("#"+tab_id).addClass('current');
+        });
+
+        $('#number-of-contents').on('click', function() {
+            if ( !$('#my_act2').hasClass('current') ){
+                $('#my_act1').removeClass('current');
+                $('#my_act3').removeClass('current');
+                $('#my_act2').addClass('current');
+                $('#tab-3').removeClass('current');
+                $('#tab-1').removeClass('current');
+                $('#tab-2').addClass('current');
+                $('.content_column').scrollIntoView();
+            }
+        });
+        $('#number-of-posts').on('click', function() {
+            if ( !$('#my_act1').hasClass('current') ){
+                $('#my_act3').removeClass('current');
+                $('#my_act2').removeClass('current');
+                $('#my_act1').addClass('current');
+                $('#tab-3').removeClass('current');
+                $('#tab-2').removeClass('current');
+                $('#tab-1').addClass('current');
+                $('.content_column').scrollIntoView();
+            }
+        });
+
+
+    });
+
+
+</script>
+</html>

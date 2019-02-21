@@ -158,8 +158,8 @@
                       <tbody>
                         <tr>
                           <th scope="row">{{item.transactiondate}}</th>
-                          <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{item.fromAccount}}</td>
-                          <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{item.toAccount}}</td>
+                          <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{item.fromAccount_id}}</td>
+                          <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{item.toAccount_id}}</td>
                           <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
                           <td>{{item.txid|truncatechars_html:20 }}</td>
                         </tr>

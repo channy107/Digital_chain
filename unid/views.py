@@ -6,6 +6,7 @@ from PIL import Image
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.db.models.functions import TruncMonth
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.timezone import now
@@ -362,7 +363,7 @@ def transaction(request):
     else:
         from_account = request.POST['from_account']
         to_account = request.POST['to_account']
-        account_bal = request.POST['account_bal']
+        account_bal = request.POST['account_bal'] * int(0.000000000000000001)
         tran_id = request.POST['tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -387,7 +388,7 @@ def exchange(request):
     else:
         from_account = request.POST['e_from_account']
         to_account = request.POST['e_to_account']
-        account_bal = request.POST['e_account_bal']
+        account_bal = request.POST['e_account_bal'] * int(0.000000000000000001)
         tran_id = request.POST['e_tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -409,7 +410,7 @@ def purchase(request):
     else:
         from_account = request.POST['p_from_account']
         to_account = request.POST['p_to_account']
-        account_bal = request.POST['p_account_bal']
+        account_bal = request.POST['p_account_bal'] * int(0.000000000000000001)
         tran_id = request.POST['p_tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -2037,6 +2038,69 @@ def opinion(request):
 
     res = {'Ans': '소중한 의견 감사합니다.'}
     return JsonResponse(res)
+
+def admin(request):
+    try:
+        if request.session['Unid_admin']:
+            rpc_url = "http://222.239.231.252:8220"
+            w3 = Web3(HTTPProvider(rpc_url))
+            nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
+            ncc = w3.eth.contract(address=nidCoinContract_address, abi=[{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
+
+            admin_account = w3.eth.coinbase
+            admin_balance = ncc.functions.balanceOf(admin_account).call()
+            allUsers = myPageInfomation.objects.all()
+            allBlackList = unidBlackList.objects.all()
+            allTransacts = walletInFormation.objects.all()
+            allContents = uploadContents.objects.all()
+            allPost = Post.objects.all()
+            allOpinions = opinions.objects.filter(result="확인중")
+            allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
+            Article_data_for_Jan = len(
+                Post.objects.filter(rewards_success='success',
+                                    reward_date__range=["2019-01-01", "2019-01-31"]))
+            Article_data_for_Fed = len(
+                Post.objects.filter(rewards_success='success',
+                                    reward_date__range=["2019-02-01", "2019-02-28"]))
+            Article_data_for_Mar = len(
+                Post.objects.filter(rewards_success='success',
+                                    reward_date__range=["2019-03-01", "2019-03-31"]))
+            Article_data_for_Apr = len(
+                Post.objects.filter(rewards_success='success',
+                                    reward_date__range=["2019-04-01", "2019-04-30"]))
+            Article_data_for_May = len(
+                Post.objects.filter(rewards_success='success',
+                                    reward_date__range=["2019-05-01", "2019-05-31"]))
+            numbersOfArticles = len(Post.objects.all())
+            numbersOfcontents = len(uploadContents.objects.all())
+            numbersOfDownloads = len(downloadContents.objects.all())
+            numbersOfReply = len(replyForPosts.objects.all())
+            numbersOfsell = len(
+                walletInFormation.objects.filter(type='contentsTrasaction'))
+            numbersOfbuy = len(
+                walletInFormation.objects.filter(type='contentsTrasaction'))
+            myreward = walletInFormation.objects.filter(type='rewards')
+            numbersOfLike = len(LikeUsers.objects.all())
+            context = {
+                       'numbersOfArticles': numbersOfArticles,
+                       'numbersOfcontents': numbersOfcontents,
+                       'numbersOfDownloads': numbersOfDownloads,
+                       'numbersOfLike' : numbersOfLike,
+                       'numbersOfsell': numbersOfsell,
+                       'numbersOfbuy': numbersOfbuy,
+                       'numbersOfReply': numbersOfReply,
+                       'contentsboard': contentsboard,
+                       'Article_data_for_Jan': Article_data_for_Jan,
+                       'Article_data_for_Fed': Article_data_for_Fed,
+                       'Article_data_for_Mar': Article_data_for_Mar,
+                       'Article_data_for_Apr': Article_data_for_Apr,
+                       'Article_data_for_May': Article_data_for_May,
+                       }
+
+            return render(request, 'unid/admin.html', context)
+    except KeyError as e:
+        url = '/unid/admin/'
+        return HttpResponseRedirect(url)
 
 
 def unidAdmin(request):
