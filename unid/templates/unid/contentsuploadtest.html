@@ -1,0 +1,1233 @@
+
+{% extends 'unid/navigationbar.html' %}
+{% load static %}
+{% block content %}
+<!-- Page Content -->
+
+<head>
+    <link href="{% static 'unid/css/index.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/contentsupload.css' %}" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<style>
+ul {
+    margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+    list-style: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+}
+.img-replace {
+  /* replace text with an image */
+  display: inline-block;
+  overflow: hidden;
+  text-indent: 100%;
+  color: transparent;
+  white-space: nowrap;
+}
+
+.cd-nugget-info {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  bottom: 0;
+  left: 0;
+}
+.cd-nugget-info a {
+  position: relative;
+  font-size: 14px;
+  color: #5e6e8d;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.no-touch .cd-nugget-info a:hover {
+  opacity: .8;
+}
+.cd-nugget-info span {
+  vertical-align: middle;
+  display: inline-block;
+}
+.cd-nugget-info span svg {
+  display: block;
+}
+.cd-nugget-info .cd-nugget-info-arrow {
+  fill: #5e6e8d;
+}
+
+/* --------------------------------
+
+Main components
+
+-------------------------------- */
+header {
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  background-color: #5e6e8d;
+  color: #FFF;
+}
+header h1 {
+  font-size: 20px;
+  font-size: 1.25rem;
+}
+
+.cd-popup-trigger {
+  display: block;
+  width: 300px;
+  height: 40px;
+  text-align: center;
+  color: #FFF;
+  font-size: 14px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  border-radius: 0.5em;
+  background: #fb2323d1;
+}
+@media only screen and (min-width: 1170px) {
+  .cd-popup-trigger {
+    margin: 1em auto;
+  }
+}
+
+/* --------------------------------
+
+xpopup
+
+-------------------------------- */
+.cd-popup, .cd-popup1 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #5959597d;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+}
+.cd-popup.is-visible, .cd-popup1.is-visible {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+.cd-popup3 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #5959597d;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  transition: opacity 0.3s 0s, visibility 0s 0.3s;
+  z-index: 1;
+}
+
+.cd-popup3.is-visible {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transition: opacity 0.3s 0s, visibility 0s 0s;
+  -moz-transition: opacity 0.3s 0s, visibility 0s 0s;
+  transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+.cd-popup-container3 {
+  position: relative;
+  width: 35%;
+  max-width: 500px;
+  height: auto;
+  margin: 9em auto;
+  text-align: center;
+  background: #FFF;
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  padding: 30px;
+}
+.cd-popup-container1 {
+  position: relative;
+  width: 90%;
+  max-width: 1100px;
+  margin: 4em auto;
+  background: #FFF;
+  border-radius: .25em .25em .4em .4em;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  padding: 30px;
+}
+.cd-popup-container {
+  position: relative;
+  width: auto;
+  max-width: 540px;
+  margin: 4em auto;
+  background: #FFF;
+  border-radius: .25em .25em .4em .4em;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translateY(-40px);
+  -moz-transform: translateY(-40px);
+  -ms-transform: translateY(-40px);
+  -o-transform: translateY(-40px);
+  transform: translateY(-40px);
+  /* Force Hardware Acceleration in WebKit */
+  -webkit-backface-visibility: hidden;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  padding: 30px;
+}
+.cd-popup-container p, .cd-popup-container1 p{
+  padding: 3em 1em;
+}
+.cd-popup-container .cd-buttons:after, .cd-popup-container1 .cd-buttons:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.cd-popup-container .cd-buttons li, .cd-popup-container1 .cd-buttons li {
+  float: left;
+  width: 50%;
+  padding: 5px 20px 10px 20px;
+  list-style: none;
+}
+.cd-popup-container .cd-buttons a, .cd-popup-container1 .cd-buttons a .cd-popup-container1 .cd-buttons input[type="button"]{
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  text-transform: uppercase;
+  color: #FFF;
+  -webkit-transition: background-color 0.2s;
+  -moz-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.cd-popup-container .cd-buttons li:first-child a, .cd-popup-container1 .cd-buttons li:first-child a, cd-popup-container1 .cd-buttons li:first-child input[type="button"]{
+  background: #b6bece;
+  border-radius: 0 0 0 .25em;
+}
+.popuprow1 {
+    font-weight: bold;
+    padding: 30px 20px 50px;
+}
+.popuprow2 {
+    color: grey;
+    padding: 0 0 30px 0;
+    font-size: 0.95rem;
+    text-align: left;
+}
+.popuprow3 {
+    color: grey;
+    padding: 0 0 30px 0;
+    font-size: 0.8rem;
+}
+
+
+.cd-popup-container .cd-buttons li:last-child a, .cd-popup-container1 .cd-buttons li:last-child a, cd-popup-container1 .cd-buttons li:last-child input[type="button"] {
+  background: #fc7169;
+  border-radius: 0 0 .25em 0;
+}
+/*
+.no-touch .cd-popup-container .cd-buttons li:last-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:last-child a:hover {
+  background-color: #c5ccd8;
+}
+.no-touch .cd-popup-container .cd-buttons li:first-child a:hover, .no-touch .cd-popup-container1 .cd-buttons li:first-child a:hover {
+  background-color: #fc8982;
+}
+*/
+.cd-popup-container .cd-popup-close, .cd-popup-container1 .cd-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+}
+.cd-popup-container .cd-popup-close::before, .cd-popup-container .cd-popup-close::after, .cd-popup-container1 .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  width: 14px;
+  height: 3px;
+  background-color: #8f9cb5;
+}
+.cd-popup-container .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  left: 8px;
+}
+.cd-popup-container .cd-popup-close::after, .cd-popup-container1 .cd-popup-close::after {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  right: 8px;
+}
+.is-visible .cd-popup-container, .is-visible .cd-popup-container1 {
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+  transform: translateY(0);
+  color: black;
+}
+.popupinformationsrow {
+    flex-direction: row;
+    display: inline;
+}
+.popupinformations {
+    color: black;
+    font-weight: bold;
+    float: right;
+}
+
+#link {color: #E45635;display:block;font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;text-align:center; text-decoration: none;}
+#link:hover {color: #CCCCCC}
+
+#link, #link:hover {-webkit-transition: color 0.5s ease-out;-moz-transition: color 0.5s ease-out;-ms-transition: color 0.5s ease-out;-o-transition: color 0.5s ease-out;transition: color 0.5s ease-out;}
+
+/** BEGIN CSS **/
+@keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-moz-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-webkit-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-o-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-moz-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-webkit-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@-o-keyframes rotate-loading {
+    0%  {transform: rotate(0deg);-ms-transform: rotate(0deg); -webkit-transform: rotate(0deg); -o-transform: rotate(0deg); -moz-transform: rotate(0deg);}
+    100% {transform: rotate(360deg);-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); -o-transform: rotate(360deg); -moz-transform: rotate(360deg);}
+}
+
+@keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-moz-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-webkit-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+
+@-o-keyframes loading-text-opacity {
+    0%  {opacity: 0}
+    20% {opacity: 0}
+    50% {opacity: 1}
+    100%{opacity: 0}
+}
+.loading-container,
+.loading {
+    height: 170px;
+    position: relative;
+    width: 170px;
+    border-radius: 100%;
+}
+
+
+.loading-container { margin: 40px auto }
+
+.loading {
+    border: 2px solid transparent;
+    border-color: transparent #E64C3C; transparent #E64C3C;
+    -moz-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -o-transform-origin: 50% 50%;
+    -webkit-animation: rotate-loading 1.5s linear 0s infinite normal;
+    -webkit-transform-origin: 50% 50%;
+    animation: rotate-loading 1.5s linear 0s infinite normal;
+    transform-origin: 50% 50%;
+}
+
+.loading-container:hover .loading {
+    border-color: transparent #E45635 transparent #E45635;
+}
+.loading-container:hover .loading,
+.loading-container .loading {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+#loading-text {
+    -moz-animation: loading-text-opacity 2s linear 0s infinite normal;
+    -o-animation: loading-text-opacity 2s linear 0s infinite normal;
+    -webkit-animation: loading-text-opacity 2s linear 0s infinite normal;
+    animation: loading-text-opacity 2s linear 0s infinite normal;
+    color: #ec1010;
+    font-family: "Helvetica Neue, "Helvetica", ""arial";
+    font-weight: bold;
+    margin-top: 45px;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: -10px;
+    width: 167px;
+}
+.loading-text2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2F2F2F;
+}
+.loading-text3 {
+    font-size: 14px;
+    color: #989898;
+    margin: 10px 0 15px 0;
+    font-weight: bold;
+}
+@media only screen and (min-width: 349px) {
+  .cd-popup-container {
+    margin: 10rem auto;
+  }
+  .cd-popup-container1 {
+    margin: 7rem auto;
+  }
+  .cd-popup-container3 {
+    margin: 13rem auto;
+  }
+
+
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+
+
+</style>
+<body>
+<div class="container1">
+    <!-- contents InFo -->
+    <div class="contentsuploadrows">
+        <div class="board-title">
+            <img src="{% static 'unid/icon/icons-학사모.png' %}" width="30" height="20" style="margin: 0 15px 0 0;">컨텐츠 등록
+        </div>
+        <div id="user_file_before">
+            <div id="user_file_over">
+                <form id="fileform" name="fileform" action="../test_validfile/" method="post" enctype="multipart/form-data">
+                    <input type="file"  id="user_files"  name="user_files" class="user_files"  title="파일찾기" multiple/>
+                </form>
+            </div>
+            <div class="form-group">
+                <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button buttonColor" style="text-align:center;"value="파일 첨부"readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str">
+                    .hwp, .ppt(x), .doc(x), .xlsx, .pdf 형식의 파일만 가능합니다.
+                    </li>
+                    <li class="tip_str">
+                    이미 등록된 콘텐츠는 업로드하실 수 없습니다.(최대 5개)
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="user_file_after">
+            <div class="form-group">
+                <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-7 files2"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button1 buttonColor pointeffect" type="button" id="reupload" value="다시 올리기"readonly/>
+                <input class="form-control col-sm-1 files-button1 buttonColor pointeffect" type="button" id="uploadbutton" value="중복검사" readonly/>
+                <input class="form-control col-sm-1 files-button1 buttonColor pointeffect" type="button" id="similarity" value="유사도검사" readonly/>
+                <input class="form-control col-sm-1 files-button1" type="button" id="after_test" name="after_test" style="background-color: green;color: white;text-align:center;cursor: pointer;" readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str" style="color: #E64C3C;" id="before_confirm" name="before_confirm">
+                    콘텐츠 중복검사 버튼을 클릭해주세요.
+                    </li>
+                    <li class="tip_str" style="color: blue; display: none;" id="after_connfirm" name="after_connfirm">
+                    업로드 가능한 콘텐츠입니다. 콘텐츠 등록시 업로드 되는 파일 내역을 볼 수 있습니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
+            {% csrf_token %}
+            <input style="display:none;" id="filepath"  name="filepath" readonly/>
+            <input style="display:none;" id="filename"  name="filename" readonly/>
+            <input style="display:none;" id="ftpfilelist"  name="ftpfilelist"  readonly/>
+            <input style="display:none;" id="uifilelist"  name="uifilelist"  readonly/>
+            <input style="display:none;" id="filehashdatas"  name="filehashdatas"   readonly/>
+            <input style="display:none;" id="filesize"  name="filesize"  readonly/>
+            <input style="display:none;" id="filehash"  name="filehash"  readonly/>
+            <div id="user_preview_file_before">
+                <div id="user_file_over">
+                    <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
+                </div>
+                <div class="form-group">
+                    <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
+                    <ul class="str_ul">
+                        <li class="tip_str">
+                        .jpg, .png 형식의 파일만 가능합니다.
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="user_preview_file_after">
+                <div class="form-group">
+                    <label for="input_previewfiles_after" class="col-sm-2" >프리뷰 업로드</label>
+                    <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview_after" id="input_previewfiles_after" type="text" readonly/>
+                    <input class="form-control col-sm-2 files-button buttonColor pointeffect" type="button" id="reupload_preview" value="다시 올리기"readonly/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputtitle" class="col-sm-2" id="contentsName">제목</label>
+                <input class="form-control col-sm-10" id="inputtitle" name="title" type="text" autocomplete="off">
+                <ul class="str_ul">
+                    <li class="tip_str">
+                    자료의 핵심내용을 알수있도록 30자 내외로 작성해주세요!
+                    </li>
+                    <li class="byte_str"><span class="col_red" id="body_byte">0</span>자</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="inputcategory" class="col-sm-2" >카테고리</label>
+                <select class="form-control col-sm-10" id="inputcategory" name="category">
+                    <option title="Combo 1">레포트</option>
+                    <option title="Combo 2">강의자료</option>
+                    <option title="Combo 3">강의노트</option>
+                    <option title="Combo 4">시험자료</option>
+                    <option title="Combo 5">동영상</option>
+                    <option title="Combo 6">자기소개서</option>
+                    <option title="Combo 7">이력서</option>
+                    <option title="Combo 9">PPT</option>
+                    <option title="Combo 10">논문</option>
+                    <option title="Combo 10" selected="selected">선택하세요</option>
+                </select>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="inputfileinfo" class="col-sm-2">파일정보</label>-->
+                <!--<select class="form-control col-sm-10" id="inputfileinfo" name="fileinfo">-->
+                    <!--<option title="Combo 1">PDF</option>-->
+                    <!--<option title="Combo 2">Excel</option>-->
+                    <!--<option title="Combo 3">한글</option>-->
+                    <!--<option title="Combo 4">PPT</option>-->
+                    <!--<option title="Combo 5">Word</option>-->
+                    <!--<option title="Combo 6" selected="selected">선택하세요</option>-->
+                <!--</select>-->
+            <!--</div>-->
+            <div class="form-group">
+                <label for="inputtags" class="col-sm-2" >태그</label>
+                <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업 #취업 #성공적" autocomplete="off">
+                <ul class="str_ul">
+                    <li class="tip_str">
+                    태그를 입력해주세요.
+                    </li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label for="inputauthorinfo" class="col-sm-2">저자</label>
+                <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="inputpublisheddate" class="col-sm-3 pointeffect">저작시기</label>
+                <input type="date" class="form-control creatdate" id="inputpublisheddate"  name="publisheddate">
+            </div>
+            <div class="form-group">
+                <label for="inputprice" class="col-sm-2">판매 가격</label>
+                <input class="form-control col-sm-10 price" id="inputprice" name="price" type="text" autocomplete="off"/>
+                <div class="priceunit">
+                    nid
+                </div>
+            </div>
+            <div class="text-group">
+                <label for="inputintro">소개글</label>
+                <textarea rows="5" class="form-control" id="inputintro" name="intro" placeholder="구매 후 활용 방법, 흐름 등을 소개하여 구매자가 자료를 이해하는데 도움을 줄 수 있습니다."></textarea>
+                <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte1">0</span>자</li>
+                </ul>
+            </div>
+            <div class="text-group">
+                <label for="inputindex">목차</label>
+                <textarea rows="5" class="form-control" id="inputindex"  name="index" placeholder="목차 내용은 검색 결과에 반영되며, 구매 전 자료의 전반적인 흐름을 파악할 수 있게 도와줍니다."></textarea>
+                <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte2">0</span>자</li>
+                </ul>
+            </div>
+            <div class="text-group">
+                <label for="inputtext">본문 내용</label>
+                <textarea rows="5" class="form-control" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
+                </ul>
+            </div>
+            <div class="text-group">
+                <label for="inputreference">참고 문헌</label>
+                <textarea rows="5" class="form-control" id="inputreference" name="reference" placeholder="참고 문헌 입력은 자료 신뢰도를 높일 수 있습니다."></textarea>
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte4">0</span>자</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">계약 동의서</label>
+                <div class="checks">
+                    <input type="checkbox" id="ex_chk" name="checkconsensus" class="pointeffect">
+                    <label for="ex_chk">(필수) 등록하는 자료의 저작물 판매에 대한 계약/서약에 동의 합니다.</label>
+                    <button type="button" class="btn cons pointeffect" name="cons" id="cons">동의서 보기</button>
+                    <div class="cd-popup1" role="alert">
+                        <div class="cd-popup-container1">
+                            <div class="popuprow1">
+                                <h4>저작물 판매에 대한 계약서/서약서</h4>
+                            </div>
+                            <div class="popuprow3">
+                                <textarea class="contracttext" style="width: 1000px;height: 300px;" readonly> 저작권자인 (성명){{ request.session.user_name }}, (아이디){{ request.session.user_email }} 을 "갑"으로 온라인서비스 제공자인 ㈜지커뮤니케이션을 "을"로 하여 "갑"과 "을" 양 당사자는 저작물 판매(전송, 복제, 배포)에 관한 계약에 대해 동의하며 다음과 같이 계약을 체결한다.
+
+제 1조(계약내용)
+ "갑"은 "을"에게 "갑"이 지적재산권을 소유하는 저작물에 관한 사항을 제 2조에 정한 바에 의하여 "을"이 정보통신망을 통하여 "갑"의 저작물의 복제 또는 전송 할 수 있도록 온라인 서비스를 제공 한다 (저작권법 제2조 30호) 온라인 서비스 제공자 요건
+
+제 2조(저작권 이용범위)
+ 본 계약에 있어서 "을"이 행하는 저작물 서비스 제공 범위는 “을” 이 소유 하는 웹사이트와 “을"과 제휴한 웹사이트에 대해 전송/복제권(디지털 File형태) 이다.
+
+제 3조(계약기간)
+ 본 계약의 유효기간은 계약일로부터 1년으로 한다. 계약기간의 연장 또는 재계약은 계약기간 만료일 1개월 전까지 "갑","을" 어느 한쪽에서 계약갱신을 원하지 않는다는 통고가 없는 한 이 계약과 동일한 조건으로 자동적으로 갱신된 것으로 본다.
+
+제 4조(수수료율)
+ "을"이 "갑"에게 지급할 서비스이용수수료율 및 서비스이용수수료 지급시기에 관해서는 다음과 같이 약정한다.
+
+1. 서비스이용수수료(금액) : 자료 판매 수수료는 등급별(A등급, B등급, C등급, D등급, E등급, F등급) 수수료 정책에 따라 "갑"에게 차등 지급한다. 단, "을"이 제공하는 웹사이트에 따라 서비스이용수수료율은 변동 될 수 있다.
+
+2. 지급방법 : 누적된 출금가능액이 5,500원 초과 시 “갑”이 5,000원 단위로 지급신청을 하면 “을”은 온라인으로 입금한다.
+
+제 5조(분쟁책임)
+1. "갑"은 본 계약의 대상이 되는 저작물에 관한 권리에 적합한 소유자임을 확인하며, 당해 저작물과 관련된 저작권 분쟁이 야기되었을 경우에는 "갑"이 전적으로 책임진다.
+
+2. "을"은 본 계약의 대상이 되는 저작물에 대해 권리주장자가 있을 경우 "갑"에게 분쟁사실을 통보 후, 분쟁에 대해 "갑"이 회신하지 않는 경우 저작권 없음을 인정한 것으로 간주하고 “을”의 업무처리 정책에 따라 후속업무를 처리한다.
+
+제 6조(별도계약)
+ 본 계약약관에 포함되지 아니한 사항은 "갑"과 "을"이 합의하여 결정하여 별도의 계약서를 작성한다.
+
+제 7조(손해배상)
+ 계약당사자중 어느 일방이 본 계약사항을 위배하였을 때에는 그 상대방은 기간을 정하여 그 위배사항의 시정을 최고한 후 계약해지를 통고할 수 있고 또 본 계약 불이행으로 인한 손해배상을 청구할 수 있다.
+
+제 8조(면책사항)
+ 천재지변 등 불가항력적 재난이나 전쟁, 소요, 파업 등 사회적 혼란 또는 관련법령의 개폐로 인한 계약불이행은 면책된다.
+
+제 9조(분쟁)
+ 본 계약과 관련하여 제기된 분쟁이나 소송은 저작권법에 의해 설치된 저작권심의 조정위원회에 부의 하거나 "을"의 소재지를 관할하는 법원으로 한다.
+
+제 10조(적용사항)
+ 본 계약과 관련하여 해석상 논란이 있는 부분이나 본 계약상에 약정되지 아니한 구체적인 사항에 대해서는 저작권 관계법령 및 일반적인 관행에 따른다.
+
+
+
+ 온라인서비스 제공자인 (주)지커뮤니케이션 또는 (주)지커뮤니케이션과 제휴한 온라인서비스 제공자(이하 “귀사”)에 대하여 저작물 등록을 신청한 본인 (성명)인준희, (아이디)injh9900 은 귀사에 저작물을 등록 신청함에 있어 다음과 같은 사항을 확인하고, 이에 대하여 본 서약서를 제출합니다.
+
+1. 본인이 등록 신청한 저작물에 대하여, 본인은 저작권법 및 기타 관련법령, 귀사의 약관, 저작물 판매에 관한 계약서를 숙지하였습니다.
+
+2. 본인이 등록 신청한 저작물의 저작권리 일체는 본인에게 있습니다.
+
+3. 본인이 등록 신청한 저작물은 저작권법 및 기타 관련 법령에 저촉되지 않습니다.
+
+4. 본인이 등록 신청한 저작물은 명예훼손, 민,형사상 책임은 본인에게 있습니다.
+
+5. 회원가입 시 또는 저작물 등록 신청 시 귀사에 제공한 본인의 개인정보는 모두 거짓이 없습니다.
+
+ 본 저작물의 모든 저자는 본 저작물에 실제적이고 지적인 공헌을 했으며, 저작물의 내용에 대해 일체의 민·형사상의 책임을 부담합니다.
+                                </textarea>
+                                <ul class="cd-buttons">
+                                    <li><input class="cd-popup-no form-control pointeffect" type="button"  style="background-color: #B2B2B2; color: white;" value="동의하지않습니다." /></li>
+                                    <li><input class="cd-popup-yes1 form-control beforeScroll" type="button" value="동의합니다." disabled/></li>
+                                </ul>
+                            </div>
+                        </div> <!-- cd-popup-container -->
+                    </div> <!-- cd-popup -->
+                </div>
+            </div>
+            <div class="form-group" align="center">
+                <input type="button" class="cd-popup-trigger form-control col-sm-2 buttonColor pointeffect" name="enrollcontents" id="enrollcontents" style="float: inherit;" value="콘텐츠 등록" readonly/>
+            </div>
+            <div class="cd-popup" role="alert">
+                <div class="cd-popup-container">
+                    <div class="popuprow1">
+                        <h4>컨텐츠를 등록하시겠습니까?</h4>
+                    </div>
+                    <div class="popuprow2">
+                        <ul id='popupinfo'>
+
+                        </ul>
+                    </div>
+                    <div class="popuprow3">
+                        컨텐츠는 저자가 책정한 판매가에 따라 구매자가 지불한 니드코인을 통해 보상되며 이더리움 네트워크 사정에 의해 처리속도가 지연될 수 있습니다.
+                    </div>
+
+                    <ul class="cd-buttons">
+                        <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
+                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
+                    </ul>
+                    <a href="#0" class="cd-popup-close img-replace"></a>
+                </div> <!-- cd-popup-container -->
+            </div> <!-- cd-popup -->
+            <div class="cd-popup3">
+                <div class="cd-popup-container3">
+                    <div class="loading-container" >
+                        <div class="loading"></div>
+                        <div id="loading-text">
+                            <img src="/media/icon-로딩바.png" width="100" height="100">
+                        </div>
+                    </div>
+                    <div class="loading-text2">콘텐츠 등록중입니다...</div>
+                    <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                </div> <!-- cd-popup-container -->
+            </div> <!-- cd-popup -->
+        </div>
+    </form>
+</div>
+
+</body>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+<script>
+
+    jQuery(document).ready(function($){
+        $('#nav2').addClass('visible-place');
+        $('#nav1').removeClass('visible-place');
+        $('#similarity').on('click', function() {
+            var form = $('form')[1];
+            console.log(form)
+            var formData = new FormData(form);
+            console.log(formData);
+                $.ajax({
+                    type: 'POST',
+                    url: "../similarity/",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(res){
+                        alert(res.Ans)
+                        }
+
+                });
+        });
+        $('#uploadbutton').on('click', function() {
+            var form = $('form')[1];
+            console.log(form);
+            var formData = new FormData(form);
+            console.log(formData);
+                $.ajax({
+                    type: 'POST',
+                    url: "../test_validfile/",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(res) {
+                        if ( res.noform ) {
+                            console.log(1);
+                            alert(res.Ans)
+                        }
+                        if ( res.list ) {
+                            alert(res.Ans + res.list)
+                        }
+                        if ( res.test ) {
+                                alert(res.Ans)
+                                $('#after_test').val("체크체크");
+                                $("#uploadbutton").hide();
+                                $("#after_test").show();
+                                $('#before_confirm').hide();
+                                $('#after_connfirm').show();
+                                $('#filepath').val(res.filepath)
+                                $('#filename').val(res.filename)
+                                $('#ftpfilelist').val(res.ftpfilelist)
+                                $('#uifilelist').val(res.uifilelist)
+                                $('#filehashdatas').val(res.filehashdatas)
+                                $('#filesize').val(res.filesize)
+                                $('#filehash').val(res.filehashdata)
+                                console.log($('#filepath').val());
+                                console.log($('#uifilelist').val());
+                            }
+                     }
+            });
+        });
+        $('input:checkbox[id="ex_chk"]').on('change', function(){
+            $('.cd-popup1').addClass('is-visible');
+            });
+        $('.contracttext').on('scroll', function() {
+            if($('.contracttext').scrollTop() >= 700) {
+                $('.cd-popup-yes1').addClass('pointeffect');
+                $('.cd-popup-yes1').removeAttr("disabled");
+                $('.cd-popup-yes1').removeClass("beforeScroll");
+                $('.cd-popup-yes1').addClass("buttonColor");
+            }
+        });
+        $('.cons').on('click', function(event){
+            event.preventDefault();
+            $('.cd-popup1').addClass('is-visible');
+        });
+
+        //close popup
+        $('.cd-popup1').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+                $('input:checkbox[id="ex_chk"]').prop("checked", false);
+            } else if( $(event.target).is('.cd-popup-yes1')) {
+                    event.preventDefault();
+                    $(this).removeClass('is-visible');
+                    $('input:checkbox[id="ex_chk"]').prop("checked", true);
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup1').removeClass('is-visible');
+                $('input:checkbox[id="ex_chk"]').prop("checked", false);
+            }
+
+        });
+        $('#user_files').on('change', function(){
+            let upload_files = $('#user_files').get(0).files
+            var fileee = $('#user_files').get(0).files[0]['name'];
+            console.log(fileee);
+            if ( upload_files.length > 5 ) {
+                alert("최대 5개까지만 등록할 수 있습니다.");
+            } else {
+                $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_file_before").hide();
+                $("#user_file_after").show();
+            }
+        });
+
+        $('#reupload').on('click', function(){
+            $('#after_test').val();
+            $("#user_file_after").hide();
+            $("#user_file_before").show();
+            $("#after_test").hide();
+            $("#uploadbutton").show();
+            $('#after_connfirm').hide();
+            $('#before_confirm').show();
+
+
+        });
+
+        $('#user_preview_files').on('change', function(){
+            let upload_files = $('#user_preview_files').get(0).files
+            console.log($('#user_preview_files').get(0).files.length);
+            console.log($('#user_preview_files').get(0).files);
+            var fileee = $('#user_preview_files').get(0).files[0]['name'];
+            var extendname = fileee.substring(fileee.lastIndexOf('.'),fileee.length );
+            const extendArray = ['.jpg', '.png', '.jpeg'];
+            console.log(fileee);
+            for (var i = 0; i < upload_files.length; i++) {
+                kkk = $('#user_preview_files').get(0).files[i]['name'];
+                console.log(kkk);
+                extendname = kkk.substring(kkk.lastIndexOf('.'),kkk.length );
+                console.log(extendname);
+                if ( !extendArray.includes(extendname.toLowerCase()) ) {
+                    alert(extendname + "형식은 업로드 할 수 없습니다.");
+                    return false;
+                }
+
+           };
+            console.log(1);
+            console.log(fileee.substring(fileee.lastIndexOf('.'),fileee.length ));
+            console.log(fileee.lastIndexOf('.'));
+            console.log(extendname);
+            console.log(fileee);
+            if ( upload_files.length > 3 ) {
+                alert("최대 3개까지만 등록할 수 있습니다.");
+            } else {
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_preview_file_before").hide();
+                $("#user_preview_file_after").show();
+            }
+        });
+
+        $('#reupload_preview').on('click', function(){
+            $("#user_preview_file_after").hide();
+            $("#user_preview_file_before").show();
+        });
+        $('#inputtitle').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte').html(totalByte + "/30");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 30) {
+                alert(30 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 30);
+                console.log(str2);
+                $('#inputtitle').val(str2);
+                console.log($('#inputtitle').val());
+            }
+        });
+        $('#inputintro').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte1').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                console.log(strValue);
+                str2 = strValue.substr(0, 1000);
+                console.log(str2);
+                $('#inputintro').val(str2);
+                console.log($('#inputintro').val());
+            }
+        });
+        $('#inputindex').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte2').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
+                $('#inputindex').val(str2);
+            }
+        });
+        $('#inputtext').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte3').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
+                $('#inputtext').val(str2);
+            }
+        });
+        $('#inputreference').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte4').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
+                $('#inputreference').val(str2);
+            }
+        });
+
+
+        //open popup
+        $('.cd-popup-trigger').on('click', function(event){
+            event.preventDefault();
+            var form = document.writeform;
+            console.log(form.title.value);
+            console.log(form);
+            if (!$('#inputfiles_after').val()) {
+                alert("파일을 첨부 해주세요.");
+                $('#inputfiles_before').focus();
+                return false;
+            }
+            if ($('#after_test').val() != "체크체크") {
+                alert("파일 중복검사를 해주세요");
+                $('#uploadbutton').focus();
+                return false;
+            }
+            if (!form.title.value) {
+                alert("제목을 적어주세요");
+                $('#inputtitle').focus();
+                return false;
+            }
+            if (form.category.value == "선택하세요") {
+                alert("카테고리를 선택해주세요");
+                $('#inputcategory').focus();
+                return false;
+            }
+            if (!form.authorinfo.value) {
+                alert("저자를 적어주세요");
+                $('#inputauthorinfo').focus();
+                return false;
+            }
+            if (!form.publisheddate.value) {
+                alert("저작시기를 적어주세요");
+                $('#inputpublisheddate').focus();
+                return false;
+            }
+            if (!form.price.value) {
+                alert("판매 가격을 적어주세요");
+                $('#inputprice').focus();
+                return false;
+            }
+            if (!form.intro.value) {
+                alert("소개글을 적어주세요");
+                $('#inputintro').focus();
+                return false;
+            }
+            if (!form.index.value) {
+                alert("목차를 적어주세요");
+                $('#inputindex').focus();
+                return false;
+            }if (!form.contents.value) {
+                alert("본문내용을 적어주세요");
+                $('#inputtext').focus();
+                return false;
+            }
+            if (!$('input:checkbox[id="ex_chk"]').is(":checked")) {
+                alert("계약서에 동의해주세요.");
+                $('#ex_chk').focus();
+                return false;
+            }
+
+
+            var WEB3 = require('web3');
+            var web3 = new WEB3();
+            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8220"));
+            var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+
+            console.log(1);
+            let cmc = contentsmasterContract.at("0x318970434dad6697677992794a62737dc15f1bb5");
+            console.log(2);
+
+
+            console.log("{{request.session.user_email }}");
+            var hashdata = $('#filehash').val();
+            console.log(hashdata);
+            var account = "{{ request.session.user_account }}";
+            console.log(account);
+
+            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
+            var gasPrice = web3.eth.gasPrice.toNumber();
+            console.log(gasPrice);
+            var transactionFees = gas * gasPrice * 0.0000000000000000001;
+            console.log(transactionFees);
+
+            console.log(3);
+            $('.cd-popup').addClass('is-visible');
+            let contentsprice = $('#inputprice').val();
+            let contentsname = $('#user_files').val();
+            console.log(contentsprice);
+            let upload_files = $('#user_files').get(0).files
+            $('#popupinfo').empty();
+            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>작성자 : </li> <li class='popupinformations'>" + "{{ request.session.user_name }}" + "</li> </ul><br><br>");
+            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>파일명 : </li> ");
+            for(var i=0; i<upload_files.length; i++) {
+                $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
+            };
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
+
+        });
+
+
+        
+        //close popup
+        $('.cd-popup').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup').removeClass('is-visible');
+            }
+
+        });
+         $('.cd-popup-yes').on('click', function(event) {
+             $('.cd-popup').removeClass('is-visible');
+             $('.cd-popup3').addClass('is-visible');
+             $('#nav1').click(function () {return false;});
+             $('#nav2').click(function () {return false;});
+             $('#nav4').click(function () {return false;});
+             $('#nav3').click(function () {return false;});
+             $('.navbar-brand').click(function () {return false;});
+            if (event.which=='8') {
+
+                alert('업로드 중에는 뒤로 돌아가실 수 없습니다.')
+
+                return false;
+            }
+        });
+
+    });
+
+</script>
+
+
+
+{% endblock %}
+
+
+

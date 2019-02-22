@@ -1,0 +1,227 @@
+
+.board-title {
+    margin: 20px 0 20px 20px;
+    font-size: 17px;
+    font-weight: 500;
+}
+.contentsuploadrows {
+    width: 1000px;
+    height: auto;
+    margin: 0 auto;
+    background-color: #ffffff!important;
+    border-width: 1px;
+    box-shadow: 0px 0px 0px 2px #e6e6e6;
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: rgb(179, 179, 179);
+    border-color: transparent;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.form-control {
+    float: right;
+    }
+
+.adenroll{
+    text-align : center;
+}
+.form-control1 {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    clear:right;
+}
+
+#enrollyes {
+    color : #212529;
+}
+
+.buttonColor {
+    background-color: #E64C3C !important;
+    color: white;
+    text-align: center;
+}
+.beforeScroll {
+    background-color: #B2B2B2 !important;
+    color: white;
+}
+.text-group {
+    clear: both;
+    height: 200px;
+    clear: margin;
+    padding: 0 30px;
+}
+.textformtip {
+    margin: 10px 0 10px 0;
+}
+.tip_str {
+    font-size: 15px;
+    list-style: none;
+    display: inline;
+    float: left;
+
+    }
+.byte_str {
+    font-size: 15px;
+    list-style: none;
+    float: right;
+    }
+.str_ul {
+    padding: 10px 0 0 0;
+    flex-direction: row;
+    margin: 0 0 0 165px;
+
+    }
+.user_files {
+    position: relative;
+    left: 690px;
+    top: 35px;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    }
+.user_preview_files {
+    position: relative;
+    left: 690px;
+    top: 35px;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    }
+.form-group {
+    height: 60px;
+    padding: 0 20px;
+}
+/* .btn-danger {
+    width: 400px;
+    margin: 0 auto;
+} */
+.hi {
+    display: inline;
+}
+.files1 {
+    position: relative;
+    right: 160px;
+}
+.files2 {
+    position: relative;
+    right: 240px;
+}
+.files-button {
+    position: relative;
+    left: 635px;
+}
+.files-button1 {
+    position: relative;
+    left: 558px;
+}
+#after_test {
+    display: none;
+
+    }
+.price {
+    width: 170px;
+    position: relative;
+    right: 630px;
+}
+.creatdate {
+    width: 170px;
+    position: relative;
+    right: 630px;
+}
+.shortput {
+    position: relative;
+    right: 320px;
+}
+.priceunit {
+    float: right;
+    position: relative;
+    right: 428px;
+    top: 10px;
+}
+.checks {
+    position: relative;
+    float: right;
+    right: 235px;
+    bottom: 5px;
+}
+.checks input[type="checkbox"] {
+    /* 실제 체크박스는 화면에서 숨김 */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip:rect(0,0,0,0); border: 0
+}
+.checks input[type="checkbox"] + label {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select:
+    none; -ms-user-select: none;
+}
+.checks input[type="checkbox"] + label:before {
+    /* 가짜 체크박스 */
+    content: ' ';
+    display: inline-block;
+    width: 21px;  /* 체크박스의 너비를 지정 */
+    height: 21px; /* 체크박스의 높이를 지정 */
+    line-height: 21px; /* 세로정렬을 위해 높이값과 일치 */
+    margin: -2px 8px 0 0;
+    text-align: center;
+    vertical-align: middle;
+    background: #fafafa;
+    border: 1px solid #cacece;
+    border-radius : 3px;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+    }
+.checks input[type="checkbox"] + label:active:before,
+.checks input[type="checkbox"]:checked + label:active:before {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+    }
+.checks input[type="checkbox"]:checked + label:before {
+    /* 체크박스를 체크했을때 */
+    content: '\2714'; /* 체크표시 유니코드 사용 */
+    color: #99a1a7;
+    text-shadow: 1px 1px #fff;
+    background: #e9ecee;
+    border-color: #adb8c0;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+}
+.popuprow {
+    padding: 30px;
+}
+
+#user_file_after {
+    display: none;
+    position: relative;
+    top: 30px;
+    margin: 0 0 20px 0;
+}
+#user_preview_file_after, #user_preview_file_after1, #user_preview_file_after2 {
+    display: none;
+    position: relative;
+    top: 30px;
+    margin: 0 0 40px 0;
+}
+.totalpageunit {
+    float: right;
+    position: relative;
+    right: 417px;
+    top: 10px;
+    }
+
+#enrollcontents {
+    margin: 0 auto;
+
+}
