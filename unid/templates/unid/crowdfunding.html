@@ -39,7 +39,7 @@
             {% for post in fundposts %}
             <div class="col-lg-4 col-md-6 mb-4">
               <div class="card">
-                <a href="{% url 'fundingdetail' post.IDX %}"><img class="card-img-top" src="http://localhost:8000/media/imageForInfo/2019-02-11/KakaoTalk_20160407_005304262.jpg" alt=""></a>
+                <a href="{% url 'fundingdetail' post.IDX %}"><img class="card-img-top" src="{{ post.image_path }}" width="300" height="200"></a>
                 <div class="card-body">
                   <div class="first-box">
                     <div class="isfunding">

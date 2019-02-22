@@ -52,6 +52,15 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+class contentsnouns(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    contents_nouns = models.CharField(max_length=10000, blank=True, null=True)
+    contents_id = models.CharField(max_length=300, blank=True, null=True)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
+
+
 class uploadContents(models.Model):
     contents_id = models.AutoField(primary_key=True)
     writeremail = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
@@ -196,15 +205,7 @@ class superUser(models.Model):
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)
 
-class adBySuperUser(models.Model):
-    IDX = models.AutoField(primary_key=True)
-    advertiser = models.CharField(max_length=100)
-    ad_path = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
-    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
-    aaa = models.CharField(max_length=250, blank=True, null=True)
-    bbb = models.CharField(max_length=250, blank=True, null=True)
-    ccc = models.CharField(max_length=250, blank=True, null=True)
+
 
 
 class postImage(models.Model):
@@ -260,9 +261,24 @@ class opinions(models.Model):
 
 class advertise(models.Model):
     IDX = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=250)
+    company = models.CharField(max_length=250)
     image_path = models.CharField(max_length=250)
-    background_image_path = models.CharField(max_length=250)
+    advertiser = models.CharField(max_length=250)
+    startdate = models.CharField(max_length=250, blank=True, null=True)
+    enddate = models.CharField(max_length=250, blank=True, null=True)
+    price = models.CharField(max_length=250, blank=True, null=True)
+    introduce = models.CharField(max_length=250, blank=True, null=True)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
+
+class adBySuperUser(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    ad_id = models.ForeignKey(advertise, on_delete=models.CASCADE, null=True)
+    adname = models.CharField(max_length=100)
+    ad_path = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, editable=False, null=True, blank=False)
     aaa = models.CharField(max_length=250, blank=True, null=True)
     bbb = models.CharField(max_length=250, blank=True, null=True)
     ccc = models.CharField(max_length=250, blank=True, null=True)

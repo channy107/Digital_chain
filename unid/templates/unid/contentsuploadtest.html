@@ -500,7 +500,45 @@ xpopup
     <!-- contents InFo -->
     <div class="contentsuploadrows">
         <div class="board-title">
-            크라우드 펀딩 등록
+            <img src="{% static 'unid/icon/icons-학사모.png' %}" width="30" height="20" style="margin: 0 15px 0 0;">컨텐츠 등록
+        </div>
+        <div id="user_file_before">
+            <div id="user_file_over">
+                <form id="fileform" name="fileform" action="../test_validfile/" method="post" enctype="multipart/form-data">
+                    <input type="file"  id="user_files"  name="user_files" class="user_files"  title="파일찾기" multiple/>
+                </form>
+            </div>
+            <div class="form-group">
+                <label for="inputfiles_before" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputfile" id="inputfiles_before" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button buttonColor" style="text-align:center;"value="파일 첨부"readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str">
+                    .hwp, .ppt(x), .doc(x), .xlsx, .pdf 형식의 파일만 가능합니다.
+                    </li>
+                    <li class="tip_str">
+                    이미 등록된 콘텐츠는 업로드하실 수 없습니다.(최대 5개)
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="user_file_after">
+            <div class="form-group">
+                <label for="inputfiles_after" class="col-sm-2">파일 업로드</label>
+                <input class="form-control col-sm-7 files2"  style="background-color: white;" name="inputfile_after" id="inputfiles_after" type="text" readonly/>
+                <input class="form-control col-sm-2 files-button1 buttonColor pointeffect" type="button" id="reupload" value="다시 올리기"readonly/>
+                <input class="form-control col-sm-1 files-button1 buttonColor pointeffect" type="button" id="uploadbutton" value="중복검사" readonly/>
+                <input class="form-control col-sm-1 files-button1 buttonColor pointeffect" type="button" id="similarity" value="유사도검사" readonly/>
+                <input class="form-control col-sm-1 files-button1" type="button" id="after_test" name="after_test" style="background-color: green;color: white;text-align:center;cursor: pointer;" readonly/>
+                <ul class="str_ul">
+                    <li class="tip_str" style="color: #E64C3C;" id="before_confirm" name="before_confirm">
+                    콘텐츠 중복검사 버튼을 클릭해주세요.
+                    </li>
+                    <li class="tip_str" style="color: blue; display: none;" id="after_connfirm" name="after_connfirm">
+                    업로드 가능한 콘텐츠입니다. 콘텐츠 등록시 업로드 되는 파일 내역을 볼 수 있습니다.
+                    </li>
+                </ul>
+            </div>
         </div>
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
             {% csrf_token %}
@@ -516,13 +554,13 @@ xpopup
                     <input type="file"  id="user_preview_files"  name="user_preview_files" class="user_preview_files"  title="파일찾기" multiple/>
                 </div>
                 <div class="form-group">
-                    <label for="input_previewfiles_before" class="col-sm-2">사진 업로드</label>
+                    <label for="input_previewfiles_before" class="col-sm-2">프리뷰 업로드</label>
                     <input class="form-control col-sm-8 files1"  style="background-color: white;" name="inputpreview" id="input_previewfiles_before" type="text" readonly/>
                     <input class="form-control col-sm-2 files-button buttonColor pointeffect" value="파일 첨부"readonly/>
                     <ul class="str_ul">
                         <li class="tip_str">
                         .jpg, .png 형식의 파일만 가능합니다.
-                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 1장)
+                        업로드하지 않을 시 기본 이미지로 등록됩니다.(최대 3장)
                         </li>
                     </ul>
                 </div>
@@ -539,16 +577,38 @@ xpopup
                 <label for="inputtitle" class="col-sm-2" id="contentsName">제목</label>
                 <input class="form-control col-sm-10" id="inputtitle" name="title" type="text" autocomplete="off">
                 <ul class="str_ul">
+                    <li class="tip_str">
+                    자료의 핵심내용을 알수있도록 30자 내외로 작성해주세요!
+                    </li>
                     <li class="byte_str"><span class="col_red" id="body_byte">0</span>자</li>
                 </ul>
             </div>
             <div class="form-group">
                 <label for="inputcategory" class="col-sm-2" >카테고리</label>
                 <select class="form-control col-sm-10" id="inputcategory" name="category">
-                    <option title="Combo 1">주식</option>
+                    <option title="Combo 1">레포트</option>
+                    <option title="Combo 2">강의자료</option>
+                    <option title="Combo 3">강의노트</option>
+                    <option title="Combo 4">시험자료</option>
+                    <option title="Combo 5">동영상</option>
+                    <option title="Combo 6">자기소개서</option>
+                    <option title="Combo 7">이력서</option>
+                    <option title="Combo 9">PPT</option>
+                    <option title="Combo 10">논문</option>
                     <option title="Combo 10" selected="selected">선택하세요</option>
                 </select>
             </div>
+            <!--<div class="form-group">-->
+                <!--<label for="inputfileinfo" class="col-sm-2">파일정보</label>-->
+                <!--<select class="form-control col-sm-10" id="inputfileinfo" name="fileinfo">-->
+                    <!--<option title="Combo 1">PDF</option>-->
+                    <!--<option title="Combo 2">Excel</option>-->
+                    <!--<option title="Combo 3">한글</option>-->
+                    <!--<option title="Combo 4">PPT</option>-->
+                    <!--<option title="Combo 5">Word</option>-->
+                    <!--<option title="Combo 6" selected="selected">선택하세요</option>-->
+                <!--</select>-->
+            <!--</div>-->
             <div class="form-group">
                 <label for="inputtags" class="col-sm-2" >태그</label>
                 <input class="form-control col-sm-6 input-lg shortput" id="inputtags"  name="tags" type="text" placeholder="예) #대기업 #취업 #성공적" autocomplete="off">
@@ -559,31 +619,50 @@ xpopup
                 </ul>
             </div>
             <div class="form-group">
-                <label for="inputpublisheddate" class="col-sm-3 pointeffect">만료 기한</label>
+                <label for="inputauthorinfo" class="col-sm-2">저자</label>
+                <input class="form-control col-sm-6 shortput" id="inputauthorinfo" name="authorinfo" type="text" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="inputpublisheddate" class="col-sm-3 pointeffect">저작시기</label>
                 <input type="date" class="form-control creatdate" id="inputpublisheddate"  name="publisheddate">
             </div>
             <div class="form-group">
-                <label for="inputprice" class="col-sm-2">목표 금액</label>
+                <label for="inputprice" class="col-sm-2">판매 가격</label>
                 <input class="form-control col-sm-10 price" id="inputprice" name="price" type="text" autocomplete="off"/>
                 <div class="priceunit">
                     nid
                 </div>
             </div>
             <div class="text-group">
-                <label for="inputintro">설명</label>
-                <textarea rows="5" class="form-control" id="inputintro" name="intro"></textarea>
+                <label for="inputintro">소개글</label>
+                <textarea rows="5" class="form-control" id="inputintro" name="intro" placeholder="구매 후 활용 방법, 흐름 등을 소개하여 구매자가 자료를 이해하는데 도움을 줄 수 있습니다."></textarea>
+                <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte1">0</span>자</li>
                 </ul>
             </div>
             <div class="text-group">
-                <label for="inputindex">투자조건</label>
-                <textarea rows="5" class="form-control" id="inputindex"  name="index"></textarea>
+                <label for="inputindex">목차</label>
+                <textarea rows="5" class="form-control" id="inputindex"  name="index" placeholder="목차 내용은 검색 결과에 반영되며, 구매 전 자료의 전반적인 흐름을 파악할 수 있게 도와줍니다."></textarea>
+                <!--<textarea rows="5" cols="5" name="body" id="inputtext" class="input_txt_area" onkeydown="inputByte(this, 'body_byte');" onkeyup="inputByte(this, 'body_byte');" ></textarea>-->
                 <ul class="str_ul textformtip">
                     <li class="byte_str"><span class="col_red" id="body_byte2">0</span>자</li>
                 </ul>
             </div>
-
+            <div class="text-group">
+                <label for="inputtext">본문 내용</label>
+                <textarea rows="5" class="form-control" id="inputtext" name="contents" placeholder="검색한 단어와 일치하는 키워드가 있을 때 검색 결과 상위에 노출됩니다."></textarea>
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte3">0</span>자</li>
+                </ul>
+            </div>
+            <div class="text-group">
+                <label for="inputreference">참고 문헌</label>
+                <textarea rows="5" class="form-control" id="inputreference" name="reference" placeholder="참고 문헌 입력은 자료 신뢰도를 높일 수 있습니다."></textarea>
+                <ul class="str_ul textformtip">
+                    <li class="byte_str"><span class="col_red" id="body_byte4">0</span>자</li>
+                </ul>
+            </div>
             <div class="form-group">
                 <label class="col-sm-2">계약 동의서</label>
                 <div class="checks">
@@ -660,12 +739,12 @@ xpopup
                 </div>
             </div>
             <div class="form-group" align="center">
-                <input type="button" class="cd-popup-trigger form-control col-sm-2 buttonColor pointeffect" name="enrollcontents" id="enrollcontents" style="float: inherit;" value="크라우드 펀딩 등록" readonly/>
+                <input type="button" class="cd-popup-trigger form-control col-sm-2 buttonColor pointeffect" name="enrollcontents" id="enrollcontents" style="float: inherit;" value="콘텐츠 등록" readonly/>
             </div>
             <div class="cd-popup" role="alert">
                 <div class="cd-popup-container">
                     <div class="popuprow1">
-                        <h4>크라우드 펀딩을 등록하시겠습니까?</h4>
+                        <h4>컨텐츠를 등록하시겠습니까?</h4>
                     </div>
                     <div class="popuprow2">
                         <ul id='popupinfo'>
@@ -678,8 +757,7 @@ xpopup
 
                     <ul class="cd-buttons">
                         <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
-                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">크라우드 펀딩 등록</a></li>
-                        <!--<li><a href="#0" class="cd-popup-yes" id="enrollyes">크라우드 펀딩 등록</a></li>-->
+                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">게시물 등록</a></li>
                     </ul>
                     <a href="#0" class="cd-popup-close img-replace"></a>
                 </div> <!-- cd-popup-container -->
@@ -692,7 +770,7 @@ xpopup
                             <img src="/media/icon-로딩바.png" width="100" height="100">
                         </div>
                     </div>
-                    <div class="loading-text2">크라우드 펀딩을 등록중입니다...</div>
+                    <div class="loading-text2">콘텐츠 등록중입니다...</div>
                     <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
                 </div> <!-- cd-popup-container -->
             </div> <!-- cd-popup -->
@@ -705,12 +783,65 @@ xpopup
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 <script>
 
-
     jQuery(document).ready(function($){
-
         $('#nav2').addClass('visible-place');
         $('#nav1').removeClass('visible-place');
+        $('#similarity').on('click', function() {
+            var form = $('form')[1];
+            console.log(form)
+            var formData = new FormData(form);
+            console.log(formData);
+                $.ajax({
+                    type: 'POST',
+                    url: "../similarity/",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(res){
+                        alert(res.Ans)
+                        }
 
+                });
+        });
+        $('#uploadbutton').on('click', function() {
+            var form = $('form')[1];
+            console.log(form);
+            var formData = new FormData(form);
+            console.log(formData);
+                $.ajax({
+                    type: 'POST',
+                    url: "../test_validfile/",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(res) {
+                        if ( res.noform ) {
+                            console.log(1);
+                            alert(res.Ans)
+                        }
+                        if ( res.list ) {
+                            alert(res.Ans + res.list)
+                        }
+                        if ( res.test ) {
+                                alert(res.Ans)
+                                $('#after_test').val("체크체크");
+                                $("#uploadbutton").hide();
+                                $("#after_test").show();
+                                $('#before_confirm').hide();
+                                $('#after_connfirm').show();
+                                $('#filepath').val(res.filepath)
+                                $('#filename').val(res.filename)
+                                $('#ftpfilelist').val(res.ftpfilelist)
+                                $('#uifilelist').val(res.uifilelist)
+                                $('#filehashdatas').val(res.filehashdatas)
+                                $('#filesize').val(res.filesize)
+                                $('#filehash').val(res.filehashdata)
+                                console.log($('#filepath').val());
+                                console.log($('#uifilelist').val());
+                            }
+                     }
+            });
+        });
         $('input:checkbox[id="ex_chk"]').on('change', function(){
             $('.cd-popup1').addClass('is-visible');
             });
@@ -722,7 +853,6 @@ xpopup
                 $('.cd-popup-yes1').addClass("buttonColor");
             }
         });
-
         $('.cons').on('click', function(event){
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');
@@ -747,6 +877,18 @@ xpopup
                 $('input:checkbox[id="ex_chk"]').prop("checked", false);
             }
 
+        });
+        $('#user_files').on('change', function(){
+            let upload_files = $('#user_files').get(0).files
+            var fileee = $('#user_files').get(0).files[0]['name'];
+            console.log(fileee);
+            if ( upload_files.length > 5 ) {
+                alert("최대 5개까지만 등록할 수 있습니다.");
+            } else {
+                $('#inputfiles_after').val(fileee + "  등  " + upload_files.length + "개");
+                $("#user_file_before").hide();
+                $("#user_file_after").show();
+            }
         });
 
         $('#reupload').on('click', function(){
@@ -786,9 +928,9 @@ xpopup
             console.log(extendname);
             console.log(fileee);
             if ( upload_files.length > 3 ) {
-                alert("최대 1개까지만 등록할 수 있습니다.");
+                alert("최대 3개까지만 등록할 수 있습니다.");
             } else {
-                $('#input_previewfiles_after').val(fileee );
+                $('#input_previewfiles_after').val(fileee + "  등  " + upload_files.length + "개");
                 $("#user_preview_file_before").hide();
                 $("#user_preview_file_after").show();
             }
@@ -888,6 +1030,62 @@ xpopup
                 $('#inputindex').val(str2);
             }
         });
+        $('#inputtext').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte3').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
+                $('#inputtext').val(str2);
+            }
+        });
+        $('#inputreference').on('keyup', function(){
+            // 남은 글자 수를 구한다.
+            var strValue = $(this).val();
+            var strLen = strValue.length;
+            console.log(strLen);
+            var totalByte = 0;
+
+            var len = 0;
+            var oneChar = "";
+            var str2 = "";
+
+            for (var i = 0; i < strLen; i++) {
+                oneChar = strValue.charAt(i);
+                if (escape(oneChar).length > 4) {
+                    totalByte++ ;
+                } else {
+                    totalByte += 0.5;
+                }
+                $('#body_byte4').html(totalByte + "/1000");
+            }
+            console.log(totalByte);
+            // 넘어가는 글자는 자른다.
+            if (totalByte > 1000) {
+                alert(1000 + "자를 초과 입력 할 수 없습니다.");
+                str2 = strValue.substr(0, 1000);
+                $('#inputreference').val(str2);
+            }
+        });
 
 
         //open popup
@@ -896,6 +1094,16 @@ xpopup
             var form = document.writeform;
             console.log(form.title.value);
             console.log(form);
+            if (!$('#inputfiles_after').val()) {
+                alert("파일을 첨부 해주세요.");
+                $('#inputfiles_before').focus();
+                return false;
+            }
+            if ($('#after_test').val() != "체크체크") {
+                alert("파일 중복검사를 해주세요");
+                $('#uploadbutton').focus();
+                return false;
+            }
             if (!form.title.value) {
                 alert("제목을 적어주세요");
                 $('#inputtitle').focus();
@@ -906,24 +1114,33 @@ xpopup
                 $('#inputcategory').focus();
                 return false;
             }
+            if (!form.authorinfo.value) {
+                alert("저자를 적어주세요");
+                $('#inputauthorinfo').focus();
+                return false;
+            }
             if (!form.publisheddate.value) {
-                alert("만료기한을 적어주세요");
+                alert("저작시기를 적어주세요");
                 $('#inputpublisheddate').focus();
                 return false;
             }
             if (!form.price.value) {
-                alert("목표금액을 적어주세요");
+                alert("판매 가격을 적어주세요");
                 $('#inputprice').focus();
                 return false;
             }
             if (!form.intro.value) {
-                alert("설명을 적어주세요");
+                alert("소개글을 적어주세요");
                 $('#inputintro').focus();
                 return false;
             }
             if (!form.index.value) {
-                alert("투자조건을 적어주세요");
+                alert("목차를 적어주세요");
                 $('#inputindex').focus();
+                return false;
+            }if (!form.contents.value) {
+                alert("본문내용을 적어주세요");
+                $('#inputtext').focus();
                 return false;
             }
             if (!$('input:checkbox[id="ex_chk"]').is(":checked")) {
@@ -931,6 +1148,30 @@ xpopup
                 $('#ex_chk').focus();
                 return false;
             }
+
+
+            var WEB3 = require('web3');
+            var web3 = new WEB3();
+            web3.setProvider(new web3.providers.HttpProvider("http://222.239.231.252:8220"));
+            var contentsmasterContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}]);
+
+            console.log(1);
+            let cmc = contentsmasterContract.at("0x318970434dad6697677992794a62737dc15f1bb5");
+            console.log(2);
+
+
+            console.log("{{request.session.user_email }}");
+            var hashdata = $('#filehash').val();
+            console.log(hashdata);
+            var account = "{{ request.session.user_account }}";
+            console.log(account);
+
+            var gas = cmc.addContents.estimateGas("{{ request.session.user_email }}", hashdata, {from: account});
+            var gasPrice = web3.eth.gasPrice.toNumber();
+            console.log(gasPrice);
+            var transactionFees = gas * gasPrice * 0.0000000000000000001;
+            console.log(transactionFees);
+
             console.log(3);
             $('.cd-popup').addClass('is-visible');
             let contentsprice = $('#inputprice').val();
@@ -938,11 +1179,18 @@ xpopup
             console.log(contentsprice);
             let upload_files = $('#user_files').get(0).files
             $('#popupinfo').empty();
-            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>등록자 : </li> <li class='popupinformations'>" + "{{ request.session.user_name }}" + "</li> </ul><br><br>");
+            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popupwriter'>작성자 : </li> <li class='popupinformations'>" + "{{ request.session.user_name }}" + "</li> </ul><br><br>");
+            $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>파일명 : </li> ");
+            for(var i=0; i<upload_files.length; i++) {
+                $('#popupinfo').append("<li class='popupinformations'>" + $('#user_files').get(0).files[i]['name'] + "</li><br>");
+            };
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupprice'>가격 : </li> <li class='popupinformations'>" + contentsprice + " nid </li> </ul>");
+            $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupfees'>예상 수수료 : </li> <li class='popupinformations'>" + transactionFees + " ether </li> </ul>");
+
         });
 
 
-
+        
         //close popup
         $('.cd-popup').on('click', function(event){
             if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {

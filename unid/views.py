@@ -34,11 +34,17 @@ from allauth.account.signals import user_logged_in, user_logged_out
 import pyminizip
 import shutil
 import time
-from solc import compile_source
 from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
 from .mixins import ActiveOnlyMixin
+import itertools
+
+from konlpy.tag import Kkma, Twitter
+from sklearn.feature_extraction.text import TfidfVectorizer
+from konlpy.utils import pprint
+import docx2txt
+import numpy as np
 
 class MyView(ActiveOnlyMixin, View):
     permission_denied_message = 'You must be logged in to view this page'
@@ -598,7 +604,7 @@ def moneytrade(request):
     return JsonResponse(res)
 
 def main(request):
-    populated_informations = Post.objects.order_by('like_count').filter(~Q(isdelete="삭제"))[0:6]
+    populated_informations = Post.objects.order_by('-like_count').filter(~Q(isdelete="삭제"))[0:6]
     populated_reports_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="레포트"))[0:6]
     populated_forlecture_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의자료"))[0:6]
     populated_note_lists = uploadContents.objects.order_by('downloadcount').filter(~Q(isdelete="삭제") & Q(category="강의노트"))[0:6]
@@ -629,26 +635,7 @@ def info_popular(request):
         sess = request.session['user_email']
         voting_count = myPageInfomation.objects.get(email=sess)
         mypage = myPageInfomation.objects.get(email=request.session['user_email'])
-        paginator = Paginator(posts, 3)
-        page_num = request.POST.get('page')
-
-        try:
-            posts = paginator.page(page_num)
-        except PageNotAnInteger:
-            posts = paginator.page(1)
-        except EmptyPage:
-            posts = paginator.page(paginator.num_pages)
-
-        if request.is_ajax():
-            context = {'posts': posts,
-                       'page_num':page_num}
-            return render(request, 'unid/info_popular_ajax.html', context)
-
-        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage}
-
-        return render(request, 'unid/info_popular.html', context)
-    else:
-        posts = Post.objects.order_by('-like_count', '-created_at')
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -662,10 +649,33 @@ def info_popular(request):
         if request.is_ajax():
             context = {'posts': posts,
                        'page_num':page_num,
-                       'mypage':mypage}
+                       'ads':ads}
             return render(request, 'unid/info_popular_ajax.html', context)
 
-        context = {'posts': posts, 'mypage':mypage}
+        context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage, 'ads':ads}
+
+        return render(request, 'unid/info_popular.html', context)
+    else:
+        posts = Post.objects.order_by('-like_count', '-created_at')
+        ads = advertise.objects.order_by('-IDX')[0]
+        paginator = Paginator(posts, 3)
+        page_num = request.POST.get('page')
+
+        try:
+            posts = paginator.page(page_num)
+        except PageNotAnInteger:
+            posts = paginator.page(1)
+        except EmptyPage:
+            posts = paginator.page(paginator.num_pages)
+
+        if request.is_ajax():
+            context = {'posts': posts,
+                       'page_num':page_num,
+                       'mypage':mypage,
+                       'ads':ads}
+            return render(request, 'unid/info_popular_ajax.html', context)
+
+        context = {'posts': posts, 'mypage':mypage, 'ads':ads}
 
         return render(request, 'unid/info_popular.html', context)
 
@@ -674,6 +684,7 @@ def infotag(request, category):
         myPageInfomation.objects.filter(email=request.session['user_email']).values()
     except KeyError as e:
         allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(allinfolists, 3)
         page_num = request.POST.get('page')
 
@@ -687,13 +698,15 @@ def infotag(request, category):
         if request.is_ajax():
             context = {'allinfolists': allinfolists,
                        'page_num':page_num,
-                       'category':category,}
+                       'category':category,
+                       'ads':ads}
             return render(request, 'unid/infotag_ajax.html', context)
 
         context = {'allinfolists': allinfolists,
                    'category': category,
                    'page_num': page_num,
                    'category': category,
+                   'ads':ads
                    }
 
         return render(request, 'unid/infotag.html', context)
@@ -702,6 +715,7 @@ def infotag(request, category):
     allinfolists = Post.objects.order_by('-posts_id').filter(Q(category=category) & ~Q(isdelete="삭제"))
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
+    ads = advertise.objects.order_by('-IDX')[0]
     paginator = Paginator(allinfolists, 3)
     page_num = request.POST.get('page')
 
@@ -716,10 +730,11 @@ def infotag(request, category):
             context = {'allinfolists': allinfolists,
                        'page_num': page_num,
                        'category': category,
+                       'ads':ads
                        }
             return render(request, 'unid/infotag_ajax.html', context)
 
-    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category,}
+    context = {'allinfolists': allinfolists, 'voting_count': voting_count, 'category':category, 'ads':ads}
 
     return render(request, 'unid/infotag.html', context)
 
@@ -728,6 +743,7 @@ def information(request):
         myPageInfomation.objects.filter(email=request.session['user_email']).values()
     except KeyError as e:
         posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
+        ads = advertise.objects.order_by('-IDX')[0]
         paginator = Paginator(posts, 3)
         page_num = request.POST.get('page')
 
@@ -740,10 +756,11 @@ def information(request):
 
         if request.is_ajax():
             context = {'posts': posts,
-                       'page_num':page_num}
+                       'page_num':page_num,
+                       'ads':ads}
             return render(request, 'unid/information_ajax.html', context)
 
-        context = {'posts': posts}
+        context = {'posts': posts, 'ads':ads}
 
         return render(request, 'unid/information.html', context)
 
@@ -751,6 +768,7 @@ def information(request):
     posts = Post.objects.order_by('-posts_id').filter( ~Q(isdelete="삭제") )
     sess = request.session['user_email']
     voting_count = myPageInfomation.objects.get(email=sess)
+    ads = advertise.objects.order_by('-IDX')[0]
     paginator = Paginator(posts, 3)
     page_num = request.POST.get('page')
     try:
@@ -763,10 +781,11 @@ def information(request):
     if request.is_ajax():
         context = {'posts': posts,
                    'page_num':page_num,
+                   'ads':ads
                    }
         return render(request, 'unid/information_ajax.html', context)
 
-    context = {'posts':posts, 'voting_count':voting_count}
+    context = {'posts':posts, 'voting_count':voting_count, 'ads':ads}
 
     return render(request, 'unid/information.html', context)
 
@@ -815,7 +834,7 @@ def writer_rewards():
     rewarded_day = reward_day - timedelta(days=1)
     reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
-    print(reward_values)
+    # print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -827,6 +846,10 @@ def writer_rewards():
         rewards = reward_values[i]['rewards']
         writer = reward_values[i]['email_id']
         # print(rewards)
+        writer_reward = rewards * 0.8
+        reward = "%.2f" % writer_reward
+        # print(writer_reward)
+        # print(reward)
         # print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
@@ -850,10 +873,11 @@ def writer_rewards():
 
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
-        store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=rewards, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
+        store = walletInFormation(transactiondate=now, fromAccount=unidadmin, toAccount=writer_info, user=writername ,balance=reward, txid=receipt, type="rewards",posts_id_id=post_id , bbb="success")
         store.save()
         writer_reward_success.rewards_success = "success"
         writer_reward_success.save()
+
 
 
 def liked_users_reward():
@@ -913,7 +937,7 @@ def liked_users_reward():
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
     images = postImage.objects.filter(posts_id=id)
-    replys = replyForPosts.objects.filter(posts_id=id).values()
+    replys = replyForPosts.objects.filter(posts_id=id)
     likes = LikeUsers.objects.filter(posts_id=id)
     k = Post.objects.get(posts_id=38)
     context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
@@ -1245,6 +1269,67 @@ def createaccount(request):
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
+        nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
+        ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
+            {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
+             "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
+                                                                                "stateMutability": "nonpayable",
+                                                                                "type": "function"}, {"constant": False,
+                                                                                                      "inputs": [{
+                                                                                                                     "name": "_from",
+                                                                                                                     "type": "address"},
+                                                                                                                 {
+                                                                                                                     "name": "_to",
+                                                                                                                     "type": "address"},
+                                                                                                                 {
+                                                                                                                     "name": "_rewards",
+                                                                                                                     "type": "int256"},
+                                                                                                                 {
+                                                                                                                     "name": "_usercount",
+                                                                                                                     "type": "int256"}],
+                                                                                                      "name": "userreward",
+                                                                                                      "outputs": [],
+                                                                                                      "payable": False,
+                                                                                                      "stateMutability": "nonpayable",
+                                                                                                      "type": "function"},
+            {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
+             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
+             "type": "function"},
+            {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
+             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
+             "type": "function"}, {"constant": False,
+                                   "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                                              {"name": "_value", "type": "int256"}], "name": "transfer", "outputs": [],
+                                   "payable": False, "stateMutability": "nonpayable", "type": "function"}, {
+                "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
+                           {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
+                "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
+                                                                                            "inputs": [{"indexed": True,
+                                                                                                        "name": "from",
+                                                                                                        "type": "address"},
+                                                                                                       {"indexed": True,
+                                                                                                        "name": "to",
+                                                                                                        "type": "address"},
+                                                                                                       {
+                                                                                                           "indexed": False,
+                                                                                                           "name": "value",
+                                                                                                           "type": "int256"}],
+                                                                                            "name": "EvtTransfer",
+                                                                                            "type": "event"}])
+
+        #w3.personal.unlockAccount(w3.eth.accounts[0], 123, 0)
+        tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
+            {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 210})
+
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
             print("이거시" + IDX)
@@ -1511,6 +1596,312 @@ def contentsupload(request):
 
         url = '/unid/searchcontents/'+ request.POST['category']
         return HttpResponseRedirect(url)
+
+@login_required
+def contentsuploadtest(request):
+    if request.method == 'GET':
+        return render(request, 'unid/contentsuploadtest.html', {'mypage':mypage})
+    else:  # submit으로 제출
+        try:
+            # upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
+            # print(upload_files)
+            upload_images = request.FILES.getlist('user_preview_files')
+        except MultiValueDictKeyError as e:
+            pass
+        # try:
+        #     number = str(random.random())
+        #     print(number)
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        #     os.mkdir("uploadfiles/" + number)  # 그 날짜에 맞는 디렉토리 생성
+        # except FileExistsError as e:
+        #     pass
+        try:
+            print(os.getcwd())
+            os.mkdir("media/" + today)
+        except FileExistsError as e:
+            pass
+        # print(2)
+        # ftpfilelist = []
+        # uifilelist = []
+        # filehashdatas = []
+        # filesize = []
+        # contents_dir = "uploadfiles/" + number + "/"
+        # for upload_file in upload_files:  # 다중 파일 업로드
+        #     # file_name = upload_file.name
+        #     # number = str(random.random())
+        #     filename = upload_file.name
+        #     extendname = filename[filename.find(".", -4):]
+        #     # real_filename = number + extendname
+        #     # ftpfilelist.append(real_filename)
+        #     uifilelist.append(filename)
+        #     # now = datetime.now()
+        #     # today = now.strftime('%Y-%m-%d')
+        #     # 해당 날짜의 디렉토리
+        #     with open(contents_dir + filename, 'wb') as file:  # 저장경로
+        #         for chunk in upload_file.chunks():
+        #             file.write(chunk)
+        #     with open(contents_dir + filename, 'rb') as file:
+        #         filedata = file.read()
+        #         hashdata = hashlib.sha256(filedata).hexdigest()
+        #         filehashdatas.append(hashdata)
+        #     file_size = os.path.getsize(contents_dir + filename)
+        #     filesize.append(file_size)
+
+        # if len(uifilelist) == 1:
+        #     filename = uifilelist[0]
+        #     print(filename)
+        #     zipname = number + ".zip"
+        #     password = filehashdatas[0][0:8]
+        #     # with open(contents_dir + filename, 'wb') as file:
+        #     pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password,
+        #                                 4)
+        # elif len(uifilelist) == 2:
+        #     filename = uifilelist[0]
+        #     filename2 = uifilelist[1]
+        #     zipname = number + ".zip"
+        #     password = filehashdatas[0][0:8]
+        #     pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2],
+        #                                 ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
+
+        preview_save_filelist = []
+        preview_ui_filelist = []
+        for upload_image in upload_images:
+            image_number = str(random.random())
+            previewfilename = upload_image.name
+            extendname = previewfilename[previewfilename.find(".", -5):]
+            real_preview_filename = image_number + extendname
+            preview_save_filelist.append(real_preview_filename)
+            preview_ui_filelist.append(previewfilename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            print(os.getcwd())
+            contents_dir = "media/" + today + "/"
+            # 해당 날짜의 디렉토리
+            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
+                for chunk in upload_image.chunks():
+                    file.write(chunk)
+            im = Image.open(contents_dir + real_preview_filename)
+            size = (1000, 1050)
+            im2 = im.resize(size)
+            im2.save(contents_dir + real_preview_filename)
+        contents_dir = "media/" + today + "/"
+        try:
+            thumb = Image.open(contents_dir + preview_save_filelist[0])
+            size = (180, 200)
+            thumbnailimage = thumb.resize(size)
+            thumbnailimage.save(contents_dir + "thumb" + preview_save_filelist[0])
+        except IndexError as e:
+            pass
+
+        """
+
+        검수시스템 추후 개발예정
+
+        """
+        print("fpt start")
+        ftp = FTP()
+        ftp.connect("222.239.231.253")  # Ftp 주소 Connect(주소 , 포트)
+        ftp.login("unid", "qhdkscjfwj0!")
+        ftp.cwd("/home/unid/contents")
+        ftp_contents_dir = "/home/unid/contents/" + today + "/"
+        print("fpt")
+        try:
+            ftp.mkd(today)
+            print("fpt1")
+        except:
+            ftp.cwd("/home/unid/contents/" + today)
+            print("fpt2")
+        ftp.cwd("/home/unid/contents/" + today)
+        print("fpt3")
+        print(os.getcwd())
+        filepath = request.POST['filepath']
+        filename = request.POST['filename']
+
+        print("fpt4")
+        print(os.getcwd())
+        os.chdir(filepath)
+        print("fpt5")
+        print(os.getcwd())
+        # contents_dir = today + "/"
+        # # with open(contents_dir + file_name, "wb") as file:
+        # #     ftp.storlines('STOR %s' % file_name, file)
+
+        uploadfile = open(filename, "rb")
+        print("fpt6")
+        print(os.getcwd())
+        ftp.storbinary('STOR ' + filename, uploadfile)
+
+        print("fpt end")
+        uploadfile.close()
+        print(os.getcwd())
+        os.chdir("..")
+        print(os.getcwd())
+        os.chdir("..")
+        print(os.getcwd())
+        shutil.rmtree(filepath)
+        print(os.getcwd())
+        publisheddate = str(request.POST['publisheddate'])[0:10]
+        preview_images_dir = "media/" + today + "/"
+        writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
+        try:
+            br = uploadContents(
+                writeremail=writeremail,
+                title=request.POST['title'],
+                publisheddate=publisheddate,
+                category=request.POST['category'],
+                price=request.POST['price'],
+                tags=request.POST['tags'],
+                # totalpages=request.POST['totalpages'],
+                authorinfo=request.POST['authorinfo'],
+                intro=request.POST['intro'],
+                index=request.POST['index'],
+                contents=request.POST['contents'],  # 소개글 제한?
+                reference=request.POST['reference'],
+                imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
+                downloadcount=0,
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
+            )
+            br.save()
+        except IndexError as e:
+            br = uploadContents(
+                writeremail=writeremail,
+                title=request.POST['title'],
+                publisheddate=publisheddate,
+                category=request.POST['category'],
+                price=request.POST['price'],
+                tags=request.POST['tags'],
+                # totalpages=request.POST['totalpages'],
+                authorinfo=request.POST['authorinfo'],
+                intro=request.POST['intro'],
+                index=request.POST['index'],
+                contents=request.POST['contents'],  # 소개글 제한?
+                reference=request.POST['reference'],
+                downloadcount=0,
+                replymentcount=0,
+                cagegory_path="media/" + request.POST['category'] + '.png',
+                writername=request.session['user_name'],
+            )
+            br.save()
+        uifilelist = request.POST['uifilelist'].split(',')
+        filehashdatas = request.POST['filehashdatas'].split(',')
+        filesize = request.POST['filesize'].split(',')
+        idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
+        filelistlength = len(filehashdatas)
+        print(filelistlength)
+
+
+        preview_images_dir = "media/" + today + "/"
+        previewlistlength = len(preview_save_filelist)
+        for i in range(previewlistlength):
+            print(7)
+            br = previewInfo(
+                contents_id=idx,
+                uploadpreviewname=preview_ui_filelist[i],
+                savepreviewname=preview_save_filelist[i],
+                imagepath=preview_images_dir + preview_save_filelist[i],
+            )
+            br.save()
+
+        rpc_url = "http://222.239.231.252:8220"
+        w3 = Web3(HTTPProvider(rpc_url))
+        print("시작 트랜젝션")
+        contentsMasterContract_address = Web3.toChecksumAddress("0x318970434dad6697677992794a62737dc15f1bb5")
+
+        cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
+
+        price = int(request.POST['price'])
+        transactionHashList = []
+        for i in range(len(filehashdatas)):
+            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
+            tx_hash = cmc.functions.addContents(request.session['user_email'], filehashdatas[i]).transact(
+                {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
+            receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+            transactionHashList.append(receipt)
+
+        for i in range(filelistlength):
+            print(6)
+            br = contentsInfo(
+                contents_id=idx,
+                uploadzipfilename=filename,
+                uploadfile=uifilelist[i],
+                contentspath=ftp_contents_dir,
+                hash=filehashdatas[i],
+                filesize=filesize[i],
+                bbb=transactionHashList[i]
+            )
+            br.save()
+
+        url = '/unid/searchcontents/'+ request.POST['category']
+        return HttpResponseRedirect(url)
+@csrf_exempt
+def similarity(request):
+
+    upload_files = request.FILES.getlist('user_files')
+    contents_nouns = contentsnouns.objects.all()
+    values = contents_nouns.values()
+
+    if contents_nouns:
+        for i in range(len(values)):
+            data = values[i]['contents_nouns']
+            for j in upload_files:
+                text = docx2txt.process(j)
+
+                mydoclist = [text, data]
+                kkma =Kkma()
+                nouns = str(kkma.nouns(text))
+
+                doc_nouns_list = []
+
+                for doc in mydoclist:
+                    nouns = kkma.nouns(doc)
+                    doc_nouns = ''
+
+                    for noun in nouns:
+                        doc_nouns += noun + ' '
+
+                    doc_nouns_list.append(doc_nouns)
+
+                for i in range(0, 2):
+                    print('doc' + str(i + 1) + ' : ' + str(doc_nouns_list[i]))
+
+                tfid_vectorizer = TfidfVectorizer(min_df=1)
+                tfid_matrix = tfid_vectorizer.fit_transform(doc_nouns_list)
+
+                document_distances = (tfid_matrix * tfid_matrix.T)
+
+                print('유사도 분석을 위한 ' + str(document_distances.get_shape()[0]) + 'x' + str(
+                    document_distances.get_shape()[1]) + 'matrix를 만들었습니다.')
+
+                print(document_distances.toarray())
+                s = 100*float(document_distances.toarray()[0][1])
+                s1 = int(s)
+                if s1 < 80 :
+                    br = contentsnouns(contents_nouns=nouns)
+                    br.save()
+                    res = {
+                        "Ans": "업로드 가능한 콘텐츠입니다."
+                    }
+                else:
+                    res = {
+                        "Ans": "내용이"+s1+"%"+"유사한 컨텐츠가 있습니다."
+                    }
+
+    else:
+        for i in upload_files:
+            text = docx2txt.process(i)
+            kkma = Kkma()
+            nouns=str(kkma.nouns(text))
+            br = contentsnouns(contents_nouns=nouns)
+            br.save()
+            res = {
+                "Ans": "업로드 가능한 콘텐츠입니다."
+            }
+
+    return_obj = JsonResponse(res)
+    return return_obj
 
 @csrf_exempt
 def test_validfile(request):
@@ -2022,6 +2413,66 @@ def searchcontents(request, category):
     #     {'contentslists': allcontentslists}
     # )
 
+def enrollad(request):
+    if request.method == 'GET':
+
+        return render(request, 'unid/enrollad.html', {})
+
+    else:
+        try:
+            upload_images = request.FILES.getlist('user_preview_files')
+        except MultiValueDictKeyError as e:
+            pass
+
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+
+        try:
+            print(os.getcwd())
+            os.mkdir("media/" + today)
+        except FileExistsError as e:
+            pass
+
+        preview_save_filelist = []
+        preview_ui_filelist = []
+
+        for upload_image in upload_images:
+            previewfilename = upload_image.name
+            preview_save_filelist.append(previewfilename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            contents_dir = "media/imageForAdvertise/" + today + "/"
+
+            with open(contents_dir + previewfilename, 'wb') as file:
+                for chunk in upload_image.chunks():
+                    file.write(chunk)
+
+        br = advertise(
+                company=request.POST['tags'],
+                image_path=contents_dir + preview_save_filelist[0],
+                advertiser= request.POST['authorinfo'],
+                startdate= request.POST['publisheddate'],
+                enddate=request.POST['publisheddate1'],
+                price=request.POST['price'],
+                introduce=request.POST['intro'],
+            )
+        br.save()
+
+        idx = advertise.objects.all().order_by('-pk')[0]
+        preview_images_dir = "media/imageForAdvertise/" + today + "/"
+        previewlistlength = len(preview_save_filelist)
+
+        for i in range(previewlistlength):
+            br = adBySuperUser(
+                ad_id = idx,
+                adname = preview_save_filelist[i],
+                ad_path = preview_images_dir + preview_save_filelist[i],
+            )
+            br.save()
+
+        url = '/unid/information/'
+        return HttpResponseRedirect(url)
+
 @login_required
 def opinion(request):
 
@@ -2055,6 +2506,7 @@ def admin(request):
             allTransacts = walletInFormation.objects.all()
             allContents = uploadContents.objects.all()
             allPost = Post.objects.all()
+            allAd = advertise.objects.all()
             allOpinions = opinions.objects.filter(result="확인중")
             allMoneyTrade = allTransacts.filter(Q(fromAccount="Unid_Account") | Q(toAccount="Unid_Account"))
             Article_data_for_Jan = len(
@@ -2082,6 +2534,10 @@ def admin(request):
                 walletInFormation.objects.filter(type='contentsTrasaction'))
             myreward = walletInFormation.objects.filter(type='rewards')
             numbersOfLike = len(LikeUsers.objects.all())
+
+
+
+
             context = {
                        'numbersOfArticles': numbersOfArticles,
                        'numbersOfcontents': numbersOfcontents,
@@ -2096,12 +2552,23 @@ def admin(request):
                        'Article_data_for_Mar': Article_data_for_Mar,
                        'Article_data_for_Apr': Article_data_for_Apr,
                        'Article_data_for_May': Article_data_for_May,
+                       'admin_account': admin_account,
+                       'admin_balance': admin_balance,
+                       'allUsers': allUsers,
+                       'allBlackList': allBlackList,
+                       'allTransacts': allTransacts,
+                       'allContents': allContents,
+                       'allPost': allPost,
+                       'allOpinions': allOpinions,
+                       'allMoneyTrade': allMoneyTrade,
+                       'allAd': allAd,
                        }
 
             return render(request, 'unid/admin.html', context)
     except KeyError as e:
         url = '/unid/admin/'
         return HttpResponseRedirect(url)
+
 
 
 def unidAdmin(request):
@@ -2311,6 +2778,8 @@ def fundingdetail(request, id):
 
 
 
+
+
     return render(request, 'unid/fundingdetail.html', {'fundposts': fundposts})
 
 # def isSatisfy(request):
@@ -2320,15 +2789,19 @@ def fundingdetail(request, id):
 def applyForFund(request):
     rpc_url = "http://222.239.231.252:8220"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
-    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-    id = request.POST['id']
-    fund_info = fundPost.objects.get(IDX=id)
+    fundAccount = request.POST['crowdAccount']
+    print(fundAccount)
+    cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"geNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
 
-    invester = request.POST['funder']
+
+
+    invester = myPageInfomation.objects.get(email=request.POST['funder']).account
     amount = request.POST['amount']
-
-    tx_hash = ncc.functions.transfer(invester, fund_info.account, amount*1000000000000000000).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    print(invester)
+    print(amount)
+    pwd = request.POST['pwd']
+    w3.personal.unlockAccount(invester, pwd, 0)
+    tx_hash = cf.functions.fund(int(amount), invester).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -2394,8 +2867,26 @@ def createfunding(request):
         password = "123"
         account = w3.personal.newAccount(password)
         print(1)
-        publisheddate = str(request.POST['publisheddate'])[0:10]
-        preview_images_dir = "/media/funding" + today + "/"
+
+        crowdFundMaster_address = Web3.toChecksumAddress("0x55ea7a67351ebeeb4c7bf8cc46e10ba7f455d984")
+        cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
+
+        import time
+        publisheddate = str(request.POST['publisheddate'])[0:10] + ' 19:00:00'
+
+        print(datetime.strptime(publisheddate, '%Y-%m-%d %H:%M:%S'))
+        timestamp = time.mktime(datetime.strptime(publisheddate, '%Y-%m-%d %H:%M:%S').timetuple())
+        fundcreater = Web3.toChecksumAddress(myPageInfomation.objects.get(name=request.session['user_name']).account)
+        print(type(fundcreater))
+        print(type(int(timestamp)))
+        print(type(request.POST['price']))
+        tx_hash = cfc.functions.creatFunding(fundcreater, int(timestamp), int(request.POST['price'])).transact(
+            {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+        myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
+        eventlist = myfilter.get_all_entries()[0].args.CA
+
+        preview_images_dir = "/media/funding/" + today + "/"
         br = fundPost(
             image_path=preview_images_dir + preview_save_filelist[0],
             title=request.POST['title'],
@@ -2408,95 +2899,36 @@ def createfunding(request):
             sharePeopleNumber=0,
             isfunding='펀딩중',
             fundCategory=request.POST['category'],
-            ccc=account
+            ccc=account,
+            ddd=receipt,
+            eee=eventlist
         )
         br.save()
 
         print('저장까지 완료 이후 solc')
 
-        # Solidity source code
-        contract_source_code = '''
-        contract CrowdFunding {
-            struct Investor {
-                address addr;
-                uint amount;
-            }
-        
-            address public owner;
-            uint public numInvestors;
-            uint public deadline;
-            string public status;
-            bool public ended;
-            uint public goalAmount;
-            uint public totalAmount;
-            mapping (uint => Investor) public investors;
-        
-            modifier onlyOwner () {
-                require(msg.sender == owner);
-                _;
-            }
-        
-            function fund() payable {
-                require(!ended);
-        
-        
-                Investor inv = investors[numInvestors++];
-                inv.addr = msg.sender;
-                inv.amount = msg.value;
-                totalAmount += inv.amount;
-            }
-        
-            function checkGoalReached () public onlyOwner {
-                require(!ended);
-                require(now >= deadline);
-        
-                if(totalAmount >= goalAmount) {
-                    status = "Campaign Succeeded";
-                    ended = true;
-                    if (!owner.send(this.balance)) { throw; }
-                } else {
-                    uint i = 0;
-                    status = "Campaign Failed";
-                    ended = true;
-                    while(i <= numInvestors) {
-                        if (!investors[i].addr.send(investors[i].amount)) { throw; }
-                        i++;
-                    }
-                }
-            }
-            function kill() public onlyOwner {
-                selfdestruct(owner);
-            }
-        }
-            '''
-        print('계약 코드 장성 완료')
-        # web3.py
-        rpc_url = "http://222.239.231.252:8220"
-        w3 = Web3(HTTPProvider(rpc_url))
-        # 혹은 IPC를 통해 연결할 수 있다.
-        # w3 = Web3(IPCProvider("./chain-data/geth.ipc"))
-        # 지갑 주소를 unlock 해준다. 순서대로 지갑 주소, 비밀번호, unlock할 시간 (0은 영원히)
-        w3.personal.unlockAccount(w3.eth.accounts[0], "test", 0)
-        print(contract_source_code)
-        compiled_sol = compile_source(contract_source_code)
-        print('계약 배포')
 
-        contract_interface = compiled_sol["<stdin>:CrowdFunding"]
-
-        # 배포 준비, 스마트 컨트랙트 껍데기(abi)에 내용물(bin)을 채운다.
-        contract = w3.eth.contract(abi=contract_interface['abi'],
-                                   bytecode=contract_interface['bin'],
-                                   bytecode_runtime=contract_interface['bin-runtime'])
-
-        # 비용을 부담할 주소를 from으로 하는 트랜잭션을 포함해 배포한다.
-        tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0]})
-
-        # 마이닝을 해줘야 후에 실제로 사용할 수 있다.
-        # w3.miner.start(2)
-        # time.sleep(5)
-        # w3.miner.stop()
         url = '/unid/crowdfunding/'
         return HttpResponseRedirect(url)
+
+def checkCrowd(request):
+
+
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
+    crowdFunds = fundPost.objects.filter( Q(expireDate__range= now()) & Q(isfunding="펀딩중") )
+
+
+
+
+
+    # rpc_url = "http://222.239.231.252:8220"
+    # w3 = Web3(HTTPProvider(rpc_url))
+    # fundAccount = request.POST['crowdAccount']
+    # print(fundAccount)
+    # cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"geNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
+    # tx_hash = cf.functions.checkGoalReached().transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    #
+    return HttpResponse(crowdFunds)
 
 # class MySearchView(SearchView):
 #     # def extra_context(self):
