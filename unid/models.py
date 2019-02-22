@@ -73,6 +73,7 @@ class uploadContents(models.Model):
     authorinfo = models.CharField(max_length=1000)
     intro = models.CharField(max_length=2000)
     index = models.CharField(max_length=2000)
+    checksimilar = models.CharField(max_length=50, null=True, blank=True)
     contents = models.CharField(max_length=2000)  # 소개글 제한?
     reference = models.CharField(max_length=2000, default=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=False)
