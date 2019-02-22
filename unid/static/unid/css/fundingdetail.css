@@ -13,20 +13,21 @@
     -webkit-filter: blur(12px);
 }
 .fund-title {
-    font-size: 29px;
+    font-size: 43px;
     font-weight: bold;
-    color: black;
+    color: white;
     margin: 0 0 5px 0;
 }
 
 .fund-context {
-    font-size: 14]px;
+    font-size: 20px;
     margin: 0 0 10px 0;
+    color: white;
 }
 .currunt-amount {
-    font-size: 20px;
-    font-weight: 500;
-    color: #4d4d4d;;
+    font-size: 26px;
+    font-weight: bold;
+    color: #4d4d4d;
     display: inline-block;
     margin: 0 5px 5px 0;
 }
@@ -34,20 +35,21 @@
     display: inline-block;
     margin: 0 5px 10px 0;
     color: gray;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 400;
 }
 .percentage {
     display: inline-block;
     margin: 0 5px 10px 0;
     color: gray;
-    font-size: 14px;
+    font-size: 17px;
 }
 .expire-date {
     font-size: 20px;
     font-weight: 500;
     color: #4d4d4d;;
     display: inline-block;
-    margin: 0 5px 20px 0;
+    margin: 0 5px 0 0;
 }
 .deadline {
     display: inline-block;
@@ -61,7 +63,10 @@
     border-bottom: solid;
     border-width: 1px;
     border-color: #80808057;
+    position: relative;
+    bottom: 198px;
 }
+
 .fund-creater {
     display: inline-block;
     width: 580px;
@@ -107,4 +112,8 @@
     border-width: 1px;
     border-width: 1px;
     border-color: #80808057;
+}
+#popupbalance {
+    display: inline;
+
 }

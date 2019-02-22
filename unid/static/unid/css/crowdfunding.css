@@ -10,6 +10,15 @@
     font-family: 'Noto Sans KR', sans-serif;
     padding: 0;
     background-color: #f2f2f2;
+    background-color: white;
+}
+.popular-rows-top {
+    padding: 20px 20px 0 20px;
+}
+.popular-rows-title {
+    display: inline-block;
+    width: 880px;
+    float: left;
 }
 .card-body {
     padding: 10px;
@@ -19,7 +28,17 @@
 
 .isfunding {
     display: inline-block;
-    margin: 0 10px 0 0;
+    margin: 0 5px 0 0;
+    background-color: #00BF99;
+    border-radius: 4px;
+    width: 55px;
+    text-align: center;
+    font-size: 12px;
+    height: 21px;
+    padding: 2px;
+}
+.isfunding a {
+    color:white;
 }
 .fund-category {
     display: inline-block;
@@ -38,22 +57,27 @@
     font-weight: bold;
     color: black;
 }
-.card-title a{
-    color: black;
+.card-title a, .fund-category a{
+    color: #292929;
 }
 .card-title a: hover{
     color: gray;
 }
 .percentage {
-    font-size: 15px;
-    color: blue;
+    font-size: 17px;
+    color: #00BF99;
     display: inline-block;
-    font-weight: bold;
+    font-weight: bolder;
     margin: 0 10px 0 0;
 }
+
 .fund-amount, .fund-creater, .expire-date {
     display: inline-block;
     color: gray;
     font-size: 13px;
     font-weight: 400px;
+}
+a {
+    color: black;
+
 }

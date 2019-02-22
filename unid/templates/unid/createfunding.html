@@ -500,8 +500,9 @@ xpopup
     <!-- contents InFo -->
     <div class="contentsuploadrows">
         <div class="board-title">
-            크라우드 펀딩 등록
+           크라우드 펀딩 등록
         </div>
+
         <form id="myform" class="form-horizontal" name="writeform" method='post' enctype="multipart/form-data">
             {% csrf_token %}
             <input style="display:none;" id="filepath"  name="filepath" readonly/>
@@ -708,7 +709,7 @@ xpopup
 
     jQuery(document).ready(function($){
 
-        $('#nav2').addClass('visible-place');
+        $('#nav4').addClass('visible-place');
         $('#nav1').removeClass('visible-place');
 
         $('input:checkbox[id="ex_chk"]').on('change', function(){

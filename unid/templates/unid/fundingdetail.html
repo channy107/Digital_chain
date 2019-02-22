@@ -76,23 +76,9 @@ header h1 {
   font-size: 1.25rem;
 }
 
-.cd-popup-trigger {
-  display: block;
-  width: 150px;
-  height: 40px;
-  /* line-height: 50px; */
-  text-align: center;
-  color: #FFF;
-  font-size: 14px;
-  font-size: 0.95rem;
-  border-radius: 0.5em;
-  background: #fb2323d1;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.07);
-}
+
 @media only screen and (min-width: 1170px) {
-  .cd-popup-trigger {
-    margin: 1em auto;
-  }
+
 }
 
 /* --------------------------------
@@ -545,63 +531,73 @@ xpopup
       <!-- Heading Row -->
       <div class="row align-items-center my-5">
         <div class="col-lg-7">
-          <img src="{{ fundposts.image_path }}" width="600" height="300">
+          <img src="{{ fundposts.image_path }}" width="600" height="340">
         </div>
         <!-- /.col-lg-8 -->
-        <div class="col-lg-5">
-          <div class="fund-title">{{ fundposts.title }}</div>
-          <div class="fund-context">{{ fundposts.context }}</div>
-          <div class="currunt-amount">{{ fundposts.currentAmount }}</div>
-          <div class="target-amount">목표금액 {{ fundposts.targetAmount }}</div>
-          <div class="percentage">90%</div>
-          <div class="expire-date">11일 남음</div>
-          <div class="deadline">{{ fundposts.expireDate }} 마감</div>
-          <img src="/media/지금 투자하기.PNG" class="pointeffect cd-popup-trigger" id="go-fund">
-          <div class="cd-popup" role="alert">
-              <div class="cd-popup-container">
-                  <div class="popuprow1">
-                      <h4>펀딩 하시겠습니까?</h4>
-                  </div>
-                  <div class="popuprow2">
-                      <ul id='popupinfo'>
-
-                      </ul>
-                  </div>
-                  <div class="popuprow4">
-                      <div class="form-group">
-                          <label for="inputpwd" class="col-sm-10" id="contentsName">계좌 비밀번호를 입력해주세요</label>
-                          <input class="form-control col-sm-12"  style="margin: 0 auto;" id="inputpwd" name="inputpwd" type="password">
-                      </div>
-                  </div>
-                  <div class="popuprow3">
-                      컨텐츠는 저자가 책정한 판매가에 따라 구매자가 지불한 니드코인을 통해 보상되며 이더리움 네트워크 사정에 의해 처리속도가 지연될 수 있습니다.
-                  </div>
-                  <ul class="cd-buttons">
-                      <li><a href="#0" class="cd-popup-no">No</a></li>
-                      <li><a href="#0" class="cd-popup-buy-yes">Yes</a></li>
-                  </ul>
-              </div> <!-- cd-popup-container -->
-          </div> <!-- cd-popup -->
-          <div class="cd-popup3">
-                <div class="cd-popup-container3">
-                    <div class="loading-container" >
-                        <div class="loading"></div>
-                        <div id="loading-text">
-                            <img src="/media/icon-로딩바.png" width="100" height="100">
+        <div class="col-lg-5" style="height: 370px;">
+            <div style="min-height: 150px;">
+                <div class="fund-title">{{ fundposts.title }}</div>
+                <div class="fund-context">{{ fundposts.context }}</div>
+            </div>
+            <div style="margin: 60px 0 0 0;">
+                <div class="currunt-amount">{{ fundposts.currentAmount }} nid 달성</div>
+                <div class="target-amount">목표금액 {{ fundposts.targetAmount }} nid</div>
+                <div class="percentage">·{{ fundposts.percent }}%</div>
+                <div style="margin: 0 0 13px;">
+                    <div class="expire-date">11일 남음</div>
+                    <div class="deadline">{{ fundposts.expireDate }} 마감</div>
+                </div>
+                <img src="/media/지금 투자하기.PNG" class="pointeffect cd-popup-trigger" id="go-fund" width="380" height="55">
+                <div class="cd-popup" role="alert">
+                    <div class="cd-popup-container">
+                        <div class="popuprow1">
+                            <h4>펀딩 하시겠습니까?</h4>
                         </div>
-                    </div>
-                    <div class="loading-text2">콘텐츠 등록중입니다...</div>
-                    <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
-                </div> <!-- cd-popup-container -->
-            </div> <!-- cd-popup -->
+                        <label for="inputpwd" class="col-sm-10" id="contentsName">투자 금액</label>
+                        <input class="form-control col-sm-12"  style="margin: 0 auto;" id="inputpwd" name="inputpwd" type="password">
+                        <div class="popuprow2">
+                            <ul id='popupinfo'>
+
+                            </ul>
+                        </div>
+                        <div class="popuprow4">
+                            <div class="form-group">
+                                <label for="inputpwd" class="col-sm-10" id="contentsName">계좌 비밀번호를 입력해주세요</label>
+                                <input class="form-control col-sm-12"  style="margin: 0 auto;" id="inputpwd" name="inputpwd" type="password">
+                            </div>
+                        </div>
+                        <div class="popuprow3">
+                             해당 기간동안 목표 금액을 달성하지 못할 시 투자하신 금액은 자동으로 환급됩니다.
+                        </div>
+                        <ul class="cd-buttons">
+                            <li><a href="#0" class="cd-popup-no">No</a></li>
+                            <li><a href="#0" class="cd-popup-buy-yes">Yes</a></li>
+                        </ul>
+                    </div> <!-- cd-popup-container -->
+                </div> <!-- cd-popup -->
+                <div class="cd-popup3">
+                      <div class="cd-popup-container3">
+                          <div class="loading-container" >
+                              <div class="loading"></div>
+                              <div id="loading-text">
+                                  <img src="/media/icon-로딩바.png" width="100" height="100">
+                             </div>
+                          </div>
+                          <div class="loading-text2">콘텐츠 등록중입니다...</div>
+                          <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                       </div> <!-- cd-popup-container -->
+                </div> <!-- cd-popup -->
+            </div>
+
         </div>
         <!-- /.col-md-4 -->
       </div>
+    </div>
       <!-- /.row -->
 
       <!-- Call to Action Well -->
       <div class="fund-info">
-        <div class="card-body">
+        <div class="card-body" style="padding: 1.25rem 14rem;">
           <div>
             <div class="fund-infobox">
               <div class="fund-creater"> 등록자 아이디 </div>
@@ -639,30 +635,43 @@ xpopup
         $('#nav4').addClass('visible-place');
         $('#id_q').attr('disabled');
 
+        //open popup
+        $('.cd-popup-trigger').on('click', function(event){
+            event.preventDefault();
+            let isUser = "{{ request.session.user_email }}"
+            if ( !isUser ) {
+                alert("로그인이 필요합니다");
+                location="{% url 'login' %}"
+            } else {
+                $('.cd-popup').addClass('is-visible');
+                let contentstitle = "{{ fundposts.title }}";
+                let mybalance = "{{ nid_balance }}";
+                console.log(mybalance);
 
-        $('#go-fund').on('click', function() {
-          let id = {{ fundposts.IDX }};
-          let funder = "{{ request.session.user_email }}";
-          let amount = 10;
-          let crowdAccount = "{{ fundposts.eee }}";
-          var pwd = $('#inputpwd').val();
-          $.ajax({
-            type: 'POST',
-            url: '/unid/applyForFund/',
-            data: {
-                    id: id,
-                    crowdAccount: crowdAccount,
-                    funder: funder,
-                    amount: amount,
-                    pwd: pwd,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            success: function(res) {
-                alert(res.amount + "nid 가 " + res.Ans);
-                }
-            });
-
+                if ( mybalance == "로그인이 필요합니다" ) {
+                    $('#popupinfo').empty();
+                    $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
+                    } else {
+                        $('#popupinfo').empty();
+                        $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupbalance'>내 잔고 : </li> <li class='popupinformations'>" + mybalance/1000000000000000000 + " nid </li> </ul>");
+                    };
+                };
         });
+
+        //close popup
+        $('.cd-popup').on('click', function(event){
+            if( $(event.target).is('.cd-popup-close') || $(event.target).is('.cd-popup') || $(event.target).is('.cd-popup-no')) {
+                event.preventDefault();
+                $(this).removeClass('is-visible');
+            }
+        });
+        //close popup when clicking the esc keyboard button
+        $(document).keyup(function(event){
+            if(event.which=='27'){
+                $('.cd-popup').removeClass('is-visible');
+            }
+        });
+
     });
 </script>
 </html>
