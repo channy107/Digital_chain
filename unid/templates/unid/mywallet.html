@@ -4,6 +4,7 @@
 <!-- Page Content -->
 
 <link href="{% static 'unid/css/mywallet.css' %}" rel="stylesheet">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- <link href="{% static 'unid/css/chartindex.css' %}" rel="stylesheet"> -->
 
 
@@ -134,14 +135,27 @@
                  </div>
               </div>
         </div> -->
+        
+        <div align='right'>
+                <div class="dropdown" id="list-drop" >
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          내역목록
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                          <button class="dropdown-item" type="button" id="tran-list">송금내역</button>
+                          <button class="dropdown-item" type="button" id="ex-list">환전내역</button>
+                          <button class="dropdown-item" type="button" id="pu-list">구매내역</button>
+                        </div>
+                      </div>
+                    </div>
 
+       <div id="table-list-tran">
         <div class="row">
             <div class="history">
                     <h6> 송금내역  <span>{{ count }}건</span></h6>
             </div>
         </div>
-
-        <!-- history-detail -->
+        
         <div class="row">
             <div class="history-detail">
                     <table class="table">
@@ -161,7 +175,7 @@
                           <td><img src="{% static 'unid/icon/arrow-up.png' %}" border="0" width="18" height="18"> {{item.fromAccount_id}}</td>
                           <td><img src="{% static 'unid/icon/arrow-down.png' %}" border="0" width="18" height="18"> {{item.toAccount_id}}</td>
                           <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
-                          <td>{{item.txid|truncatechars_html:20 }}</td>
+                          <td>{{item.txid|truncatechars_html:14 }}</td>
                         </tr>
                       </tbody>
                  {% endfor %}
@@ -181,7 +195,9 @@
 
             </div>
         </div>
-        <br><br><br><br><br><br><br><br><br>
+    </div>
+
+    <div id="table-list-ex">
         <div class="row">
             <div class="history">
                     <h6> 환전내역  <span>{{ count_ex }}건</span></h6>
@@ -204,7 +220,7 @@
                         <tr>
                           <th scope="row">{{item.transactiondate}}</th>
                           <td><img src="{% static 'unid/icon/ether.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
-                          <td>{{item.txid|truncatechars_html:20 }}</td>
+                          <td>{{item.txid|truncatechars_html:14 }}</td>
                         </tr>
                       </tbody>
                  {% endfor %}
@@ -224,7 +240,10 @@
 
             </div>
         </div>
-        <br><br><br><br><br><br><br>
+    </div>
+
+
+    <div id="table-list-pu">
         <div class="row">
             <div class="history">
                     <h6> 구매내역  <span>{{ count_pu }}건</span></h6>
@@ -247,7 +266,7 @@
                         <tr>
                           <th scope="row">{{item.transactiondate}}</th>
                           <td><img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="18" height="18"> {{item.balance}}</td>
-                          <td>{{item.txid|truncatechars_html:20 }}</td>
+                          <td>{{item.txid|truncatechars_html:14 }}</td>
                         </tr>
                       </tbody>
                  {% endfor %}
@@ -268,7 +287,9 @@
             </div>
         </div>
     </div>
-</div>
+    
+   </div>
+ </div>
 </div>
 
 
@@ -308,38 +329,38 @@
                 <script src="{% static 'unid/node_modules/simple-line-chart/charts.js' %}"></script>
                 <script src="{% static 'unid/node_modules/simple-line-chart/animated.js' %}"></script>
                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
-                <br>
-                <br>
-
-
-                <!-- 거래소 시세 정보 -->
-                  <table border=1>
-                      <tr>
-                          <th></th>
-                          <th>거래소 시세 조회</th>
-                          <!-- <th>빗썸</th> -->
-                      </tr>
-                      <tr>
-                          <td>비트코인</td>
-                          <td id="coinone_BTC"></td>
-                          <!-- <td id="bithumb_BTC"></td> -->
-                      </tr>
-                      <tr>
-                          <td>이더리움</td>
-                          <td id="coinone_ETH"></td>
-                          <!-- <td id="bithumb_ETH"></td> -->
-                      </tr>
-                      <tr>
-                          <td>리플</td>
-                          <td id="coinone_XRP"></td>
-                          <!-- <td id="bithumb_XRP"></td> -->
-                      </tr>
-                      <tr>
-                          <td>기준시</td>
-                          <td colspan="4" id="lastUpdate"></td>
-                      </tr>
-                  </table>
                 <br><br>
+                <table id="chart_table" class="table table-hover">
+                       <thead>
+                         <tr>
+                           <th scope="col">#</th>
+                           <th scope="col">명칭</th>
+                           <th scope="col">시세</th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         <tr>
+                           <th scope="row">1</th>
+                           <td>BTC</td>
+                           <td id="coinone_BTC"></td>
+                         </tr>
+                         <tr>
+                           <th scope="row">2</th>
+                           <td>ETH</td>
+                           <td id="coinone_ETH"></td>
+                         </tr>
+                         <tr>
+                           <th scope="row">3</th>
+                           <td>XRP</td>
+                           <td id="coinone_XRP"></td>
+                         </tr>                          
+                         <tr>
+                           <th scope="row">4</th>
+                           <td colspan="4" id="lastUpdate"></td>
+                         </tr>
+                       </tbody>
+                     </table>
+               <br><br>
                  <div id="nid-eth-value">
                  <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
                  =
@@ -430,6 +451,74 @@
                   }
           </script>
 
+
+          <script> // listdrop function
+
+                  // Get the div
+                  var pu_list_div = document.getElementById('table-list-pu');
+                  var ex_list_div = document.getElementById('table-list-ex');
+                  var tran_list_div = document.getElementById('table-list-tran');
+
+                  // Get the button that opens the div
+                  var pu_list_btn = document.getElementById("pu-list");
+                  var ex_list_btn = document.getElementById("ex-list");
+                  var tran_list_btn = document.getElementById("tran-list");
+
+                  // When the user clicks on the button, open the div
+                  pu_list_btn.onclick = function() {
+                      pu_list_div.style.display = "block";
+                      ex_list_div.style.display = "none";
+                      tran_list_div.style.display = "none";
+                  }
+                  ex_list_btn.onclick = function() {
+                      pu_list_div.style.display = "none";
+                      ex_list_div.style.display = "block";
+                      tran_list_div.style.display = "none";
+                  }
+                  tran_list_btn.onclick = function() {
+                      pu_list_div.style.display = "none";
+                      ex_list_div.style.display = "none";
+                      tran_list_div.style.display = "block";
+                  }
+
+
+          </script>
+
+
+          <script> // nid chart function
+
+            google.charts.load('current', {'packages':['line']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', '2019-02 (day)');
+            data.addColumn('number', 'Ethereum');
+
+            data.addRows([
+                [0, 119000],   [1, 117000],  [2, 117700],  [3, 121500],  [4, 118700],  [5, 118800],
+                [6, 118700],  [7, 116300],  [8, 116300],  [9, 130300],  [10, 130300], [11, 137000],
+                [12, 132600], [13, 134200], [14, 134600], [15, 133900], [16, 134700], [17, 135900],
+                [18, 147200], [19, 158300], [20, 156400], [21, 143200], [22, 146300], [23, 155400],
+                [24, 157200], [25, 159300], [26, 164400], [27, 162600]
+            ]);
+
+            var options = {
+                chart: {
+                title: '이더리움(Ethereum) 시세 ',
+                subtitle: 'ETH/KRW'
+                },
+                width: 900,
+                height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('chart_nid'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+
+          </script>
 
        <script> // solidity function
 
