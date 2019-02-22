@@ -6,6 +6,7 @@
 {% block content %}
 <head>
     <link href="{% static 'unid/css/transaction.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <script>    // coin price check
@@ -77,7 +78,7 @@
 <!-- Page Content -->
 <div class="container1">
     <!-- contents InFo -->
-    <div class="rows">
+    <div class="rows-t">
         <div class="row">
             <div class="contents-info">
                     <h5 class="contents-title">
@@ -189,6 +190,50 @@
                         <th scope="col"></th>
                       </tr>
                     </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 22일 17:59</th>
+                        <td>주니준</td>
+                        <td><div id="address-clip1"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip1">복사</button></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 23일 17:59</th>
+                        <td>헌찬쓰</td>
+                        <td><div id="address-clip2"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip2">복사</button></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 24일 17:59</th>
+                        <td>조이조이</td>
+                        <td><div id="address-clip3"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip3">복사</button></td>
+                      </tr>
+                    </tbody>
+                    <tbody>
+                      <tr>
+                        <th scope="row">2019년 2월 24일 20:59</th>
+                        <td>Binspired</td>
+                        <td><div id="address-clip4"></div></td>
+                        <td><button type="button" class="btn btn-dark" id="clip4">복사</button></td>
+                      </tr>
+                    </tbody>                    
+                  </table>                
+
+                 <!-- 실제 최근 전송주소 코드 -->
+                <!-- <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">전송시간</th>
+                        <th scope="col">유저</th>
+                        <th scope="col">전송주소</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
                     {% for item in list %}
                     <tbody>
                       <tr>
@@ -199,7 +244,8 @@
                       </tr>
                     </tbody>
                     {% endfor %}
-                  </table>
+                  </table> -->
+
              <div class="modal-footer">
              </div>
          </div>
@@ -238,48 +284,50 @@
              <div class="modal-body">
 
                  <!--니드 코인 현황차트 -->
-                 <div id="chartdiv"></div>
+                 <div id="chart_nid"></div>
+                 <!-- <div id="chartdiv"></div> -->
                  <!--chart module -->
-                 <script src="{% static 'unid/node_modules/simple-line-chart/core.js' %}"></script>
+                 <!-- <script src="{% static 'unid/node_modules/simple-line-chart/core.js' %}"></script>
                  <script src="{% static 'unid/node_modules/simple-line-chart/charts.js' %}"></script>
                  <script src="{% static 'unid/node_modules/simple-line-chart/animated.js' %}"></script>
-                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
-                 <br>
-                 <br>
- 
- 
+                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script> -->
                  <!-- 거래소 시세 정보 -->
-                   <table border=1>
-                       <tr>
-                           <th></th>
-                           <th>거래소 시세 조회</th>
-                           <!-- <th>빗썸</th> -->
-                       </tr>
-                       <tr>
-                           <td>비트코인</td>
-                           <td id="coinone_BTC"></td>
-                           <!-- <td id="bithumb_BTC"></td> -->
-                       </tr>
-                       <tr>
-                           <td>이더리움</td>
-                           <td id="coinone_ETH"></td>
-                           <!-- <td id="bithumb_ETH"></td> -->
-                       </tr>
-                       <tr>
-                           <td>리플</td>
-                           <td id="coinone_XRP"></td>
-                           <!-- <td id="bithumb_XRP"></td> -->
-                       </tr>
-                       <tr>
-                           <td>기준시</td>
-                           <td colspan="4" id="lastUpdate"></td>
-                       </tr>
-                   </table>
                  <br><br>
+                 <table id="chart_table" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">명칭</th>
+                            <th scope="col">시세</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>BTC</td>
+                            <td id="coinone_BTC"></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>ETH</td>
+                            <td id="coinone_ETH"></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td>XRP</td>
+                            <td id="coinone_XRP"></td>
+                          </tr>                          
+                          <tr>
+                            <th scope="row">4</th>
+                            <td colspan="4" id="lastUpdate"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                <br><br>
                   <div id="nid-eth-value">
                   <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
                   =
-                  <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"> nid</span>
+                  <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"></span>
                   </div>
 
 
@@ -496,11 +544,24 @@
 
         <script> // clipboard copy
 
-        let clipboard = "{{ request.session.user_account }}";
+        // let clipboard = "{{ request.session.user_account }}";
+        let clipboard1 = "0x24729d3179850A72F10C3f2776083E464e9D4CAF";
+        let clipboard2 = "0x7a7483d83a767ddBdAc16485f4831646cC268313";
+        let clipboard3 = "0x3162D491EC13493535c1AE2397A7424f3E94ef26";
+        let clipboard4 = "0x465f0e1c50bcf162530baf9272ddea6955c52ac8";
 
 
-        $('#address-clip').empty();
-        $('#address-clip').append(clipboard);
+        $('#address-clip1').empty();
+        $('#address-clip1').append(clipboard1);
+
+        $('#address-clip2').empty();
+        $('#address-clip2').append(clipboard2);
+
+        $('#address-clip3').empty();
+        $('#address-clip3').append(clipboard3);
+
+        $('#address-clip4').empty();
+        $('#address-clip4').append(clipboard4);
 
 
         function copyToClipboard(val) {
@@ -513,8 +574,23 @@
         }
 
 
-        $('#clip').click(function() {
-        copyToClipboard(`${clipboard}`);
+        $('#clip1').click(function() {
+        copyToClipboard(`${clipboard1}`);
+        alert('주소가 복사되었습니다.');
+        });
+
+        $('#clip2').click(function() {
+        copyToClipboard(`${clipboard2}`);
+        alert('주소가 복사되었습니다.');
+        });
+
+        $('#clip3').click(function() {
+        copyToClipboard(`${clipboard3}`);
+        alert('주소가 복사되었습니다.');
+        });
+
+        $('#clip4').click(function() {
+        copyToClipboard(`${clipboard4}`);
         alert('주소가 복사되었습니다.');
         });
 
@@ -527,6 +603,45 @@
             });
 
 </script>
+
+
+
+<script> // nid chart function
+
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', '2019-02 (day)');
+        data.addColumn('number', 'Ethereum');
+
+        data.addRows([
+            [0, 119000],   [1, 117000],  [2, 117700],  [3, 121500],  [4, 118700],  [5, 118800],
+            [6, 118700],  [7, 116300],  [8, 116300],  [9, 130300],  [10, 130300], [11, 137000],
+            [12, 132600], [13, 134200], [14, 134600], [15, 133900], [16, 134700], [17, 135900],
+            [18, 147200], [19, 158300], [20, 156400], [21, 143200], [22, 146300], [23, 155400],
+            [24, 157200], [25, 159300], [26, 164400], [27, 162600]
+        ]);
+
+        var options = {
+            chart: {
+            title: '이더리움(Ethereum) 시세 ',
+            subtitle: 'ETH/KRW'
+            },
+            width: 900,
+            height: 500
+        };
+
+        var chart = new google.charts.Line(document.getElementById('chart_nid'));
+
+        chart.draw(data, google.charts.Line.convertOptions(options));
+        }
+
+      </script>
+
+
 
 <script>   // 니드 코인 솔리디티 코드
            var WEB3 = require('web3');

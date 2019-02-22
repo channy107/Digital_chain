@@ -351,9 +351,9 @@ def contentsboard(request):
 
 @login_required
 def mywallet(request):
-    walletInfo = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction')[:3]
-    walletInfo_pu = walletInFormation.objects.filter(toAccount_id=request.session['user_email'],type='purchase')[:3]
-    walletInfo_ex = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='exchange')[:3]
+    walletInfo = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction')[:5]
+    walletInfo_pu = walletInFormation.objects.filter(toAccount_id=request.session['user_email'],type='purchase')[:5]
+    walletInfo_ex = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='exchange')[:5]
     walletcount = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='coinTransaction').count()
     walletcount_pu = walletInFormation.objects.filter(toAccount_id=request.session['user_email'],type='purchase').count()
     walletcount_ex = walletInFormation.objects.filter(fromAccount_id=request.session['user_email'], type='exchange').count()
@@ -418,11 +418,12 @@ def purchase(request):
         to_account = request.POST['p_to_account']
         account_bal = request.POST['p_account_bal'] * int(0.000000000000000001)
         tran_id = request.POST['p_tran_id']
+        account_bal_db = int(account_bal)
 
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
 
-        transactionData = walletInFormation(fromAccount_id=from_info.email, toAccount_id=to_info.email, balance=account_bal,
+        transactionData = walletInFormation(fromAccount_id=from_info.email, toAccount_id=to_info.email, balance=account_bal_db,
                                             txid=tran_id)
         transactionData.transactiondate = timezone.now()
         transactionData.type = str("purchase")
