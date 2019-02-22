@@ -63,5 +63,7 @@ urlpatterns = [
     path('crowdfunding/', views.crowdfunding, name='crowdfunding'),
     path('crowdfunding/fundingdetail/<int:id>', views.fundingdetail, name='fundingdetail'),
     path('erollFunding', views.erollFunding, name='erollFunding'),
-    path('createfunding', views.createfunding, name='createfunding'),
+    path('createfunding/', views.createfunding, name='createfunding'),
+    path('applyForFund/', views.applyForFund, name='applyForFund'),
+    path('checkCrowd/', views.checkCrowd, name='checkCrowd'),
 ]

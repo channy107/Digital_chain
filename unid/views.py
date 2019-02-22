@@ -34,7 +34,6 @@ from allauth.account.signals import user_logged_in, user_logged_out
 import pyminizip
 import shutil
 import time
-from solc import compile_source
 from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
@@ -1244,6 +1243,67 @@ def createaccount(request):
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
+        nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
+        ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
+            {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
+             "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+                {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
+                                                                                "stateMutability": "nonpayable",
+                                                                                "type": "function"}, {"constant": False,
+                                                                                                      "inputs": [{
+                                                                                                                     "name": "_from",
+                                                                                                                     "type": "address"},
+                                                                                                                 {
+                                                                                                                     "name": "_to",
+                                                                                                                     "type": "address"},
+                                                                                                                 {
+                                                                                                                     "name": "_rewards",
+                                                                                                                     "type": "int256"},
+                                                                                                                 {
+                                                                                                                     "name": "_usercount",
+                                                                                                                     "type": "int256"}],
+                                                                                                      "name": "userreward",
+                                                                                                      "outputs": [],
+                                                                                                      "payable": False,
+                                                                                                      "stateMutability": "nonpayable",
+                                                                                                      "type": "function"},
+            {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
+             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
+             "type": "function"},
+            {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
+             "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
+             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
+             "type": "function"}, {"constant": False,
+                                   "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+                                              {"name": "_value", "type": "int256"}], "name": "transfer", "outputs": [],
+                                   "payable": False, "stateMutability": "nonpayable", "type": "function"}, {
+                "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
+                           {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
+                "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
+                                                                                            "inputs": [{"indexed": True,
+                                                                                                        "name": "from",
+                                                                                                        "type": "address"},
+                                                                                                       {"indexed": True,
+                                                                                                        "name": "to",
+                                                                                                        "type": "address"},
+                                                                                                       {
+                                                                                                           "indexed": False,
+                                                                                                           "name": "value",
+                                                                                                           "type": "int256"}],
+                                                                                            "name": "EvtTransfer",
+                                                                                            "type": "event"}])
+
+        #w3.personal.unlockAccount(w3.eth.accounts[0], 123, 0)
+        tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
+            {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 210})
+
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
             print("이거시" + IDX)
@@ -2310,6 +2370,8 @@ def fundingdetail(request, id):
 
 
 
+
+
     return render(request, 'unid/fundingdetail.html', {'fundposts': fundposts})
 
 # def isSatisfy(request):
@@ -2319,15 +2381,19 @@ def fundingdetail(request, id):
 def applyForFund(request):
     rpc_url = "http://222.239.231.252:8220"
     w3 = Web3(HTTPProvider(rpc_url))
-    nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
-    ncc = w3.eth.contract(address = nidCoinContract_address, abi = [{"constant":True,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"}],"name":"writerreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_rewards","type":"int256"},{"name":"_usercount","type":"int256"}],"name":"userreward","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"account","type":"address"}],"name":"getBalance","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":False,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"int256"}],"name":"transfer","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_supply","type":"int256"},{"name":"_name","type":"string"},{"name":"_symbol","type":"string"},{"name":"_decimals","type":"uint8"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":False,"inputs":[{"indexed":True,"name":"from","type":"address"},{"indexed":True,"name":"to","type":"address"},{"indexed":False,"name":"value","type":"int256"}],"name":"EvtTransfer","type":"event"}])
-    id = request.POST['id']
-    fund_info = fundPost.objects.get(IDX=id)
+    fundAccount = request.POST['crowdAccount']
+    print(fundAccount)
+    cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"geNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
 
-    invester = request.POST['funder']
+
+
+    invester = myPageInfomation.objects.get(email=request.POST['funder']).account
     amount = request.POST['amount']
-
-    tx_hash = ncc.functions.transfer(invester, fund_info.account, amount*1000000000000000000).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    print(invester)
+    print(amount)
+    pwd = request.POST['pwd']
+    w3.personal.unlockAccount(invester, pwd, 0)
+    tx_hash = cf.functions.fund(int(amount), invester).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
 
@@ -2393,8 +2459,26 @@ def createfunding(request):
         password = "123"
         account = w3.personal.newAccount(password)
         print(1)
-        publisheddate = str(request.POST['publisheddate'])[0:10]
-        preview_images_dir = "/media/funding" + today + "/"
+
+        crowdFundMaster_address = Web3.toChecksumAddress("0x55ea7a67351ebeeb4c7bf8cc46e10ba7f455d984")
+        cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
+
+        import time
+        publisheddate = str(request.POST['publisheddate'])[0:10] + ' 19:00:00'
+
+        print(datetime.strptime(publisheddate, '%Y-%m-%d %H:%M:%S'))
+        timestamp = time.mktime(datetime.strptime(publisheddate, '%Y-%m-%d %H:%M:%S').timetuple())
+        fundcreater = Web3.toChecksumAddress(myPageInfomation.objects.get(name=request.session['user_name']).account)
+        print(type(fundcreater))
+        print(type(int(timestamp)))
+        print(type(request.POST['price']))
+        tx_hash = cfc.functions.creatFunding(fundcreater, int(timestamp), int(request.POST['price'])).transact(
+            {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+        myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
+        eventlist = myfilter.get_all_entries()[0].args.CA
+
+        preview_images_dir = "/media/funding/" + today + "/"
         br = fundPost(
             image_path=preview_images_dir + preview_save_filelist[0],
             title=request.POST['title'],
@@ -2407,95 +2491,36 @@ def createfunding(request):
             sharePeopleNumber=0,
             isfunding='펀딩중',
             fundCategory=request.POST['category'],
-            ccc=account
+            ccc=account,
+            ddd=receipt,
+            eee=eventlist
         )
         br.save()
 
         print('저장까지 완료 이후 solc')
 
-        # Solidity source code
-        contract_source_code = '''
-        contract CrowdFunding {
-            struct Investor {
-                address addr;
-                uint amount;
-            }
-        
-            address public owner;
-            uint public numInvestors;
-            uint public deadline;
-            string public status;
-            bool public ended;
-            uint public goalAmount;
-            uint public totalAmount;
-            mapping (uint => Investor) public investors;
-        
-            modifier onlyOwner () {
-                require(msg.sender == owner);
-                _;
-            }
-        
-            function fund() payable {
-                require(!ended);
-        
-        
-                Investor inv = investors[numInvestors++];
-                inv.addr = msg.sender;
-                inv.amount = msg.value;
-                totalAmount += inv.amount;
-            }
-        
-            function checkGoalReached () public onlyOwner {
-                require(!ended);
-                require(now >= deadline);
-        
-                if(totalAmount >= goalAmount) {
-                    status = "Campaign Succeeded";
-                    ended = true;
-                    if (!owner.send(this.balance)) { throw; }
-                } else {
-                    uint i = 0;
-                    status = "Campaign Failed";
-                    ended = true;
-                    while(i <= numInvestors) {
-                        if (!investors[i].addr.send(investors[i].amount)) { throw; }
-                        i++;
-                    }
-                }
-            }
-            function kill() public onlyOwner {
-                selfdestruct(owner);
-            }
-        }
-            '''
-        print('계약 코드 장성 완료')
-        # web3.py
-        rpc_url = "http://222.239.231.252:8220"
-        w3 = Web3(HTTPProvider(rpc_url))
-        # 혹은 IPC를 통해 연결할 수 있다.
-        # w3 = Web3(IPCProvider("./chain-data/geth.ipc"))
-        # 지갑 주소를 unlock 해준다. 순서대로 지갑 주소, 비밀번호, unlock할 시간 (0은 영원히)
-        w3.personal.unlockAccount(w3.eth.accounts[0], "test", 0)
-        print(contract_source_code)
-        compiled_sol = compile_source(contract_source_code)
-        print('계약 배포')
 
-        contract_interface = compiled_sol["<stdin>:CrowdFunding"]
-
-        # 배포 준비, 스마트 컨트랙트 껍데기(abi)에 내용물(bin)을 채운다.
-        contract = w3.eth.contract(abi=contract_interface['abi'],
-                                   bytecode=contract_interface['bin'],
-                                   bytecode_runtime=contract_interface['bin-runtime'])
-
-        # 비용을 부담할 주소를 from으로 하는 트랜잭션을 포함해 배포한다.
-        tx_hash = contract.deploy(transaction={'from': w3.eth.accounts[0]})
-
-        # 마이닝을 해줘야 후에 실제로 사용할 수 있다.
-        # w3.miner.start(2)
-        # time.sleep(5)
-        # w3.miner.stop()
         url = '/unid/crowdfunding/'
         return HttpResponseRedirect(url)
+
+def checkCrowd(request):
+
+
+    reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
+    crowdFunds = fundPost.objects.filter( Q(expireDate__range= now()) & Q(isfunding="펀딩중") )
+
+
+
+
+
+    # rpc_url = "http://222.239.231.252:8220"
+    # w3 = Web3(HTTPProvider(rpc_url))
+    # fundAccount = request.POST['crowdAccount']
+    # print(fundAccount)
+    # cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"geNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
+    # tx_hash = cf.functions.checkGoalReached().transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+    #
+    return HttpResponse(crowdFunds)
 
 # class MySearchView(SearchView):
 #     # def extra_context(self):

@@ -679,6 +679,7 @@ xpopup
                     <ul class="cd-buttons">
                         <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
                         <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">크라우드 펀딩 등록</a></li>
+                        <!--<li><a href="#0" class="cd-popup-yes" id="enrollyes">크라우드 펀딩 등록</a></li>-->
                     </ul>
                     <a href="#0" class="cd-popup-close img-replace"></a>
                 </div> <!-- cd-popup-container -->
@@ -704,7 +705,9 @@ xpopup
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 <script>
 
+
     jQuery(document).ready(function($){
+
         $('#nav2').addClass('visible-place');
         $('#nav1').removeClass('visible-place');
 
@@ -719,6 +722,7 @@ xpopup
                 $('.cd-popup-yes1').addClass("buttonColor");
             }
         });
+
         $('.cons').on('click', function(event){
             event.preventDefault();
             $('.cd-popup1').addClass('is-visible');
