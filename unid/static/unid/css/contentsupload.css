@@ -4,6 +4,15 @@
     font-size: 17px;
     font-weight: 500;
 }
+#similarity {
+    display:none;
+}
+
+#before_confirm1 {
+    display:none;
+}
+
+
 .contentsuploadrows {
     width: 1000px;
     height: auto;

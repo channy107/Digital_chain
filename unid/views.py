@@ -1536,245 +1536,7 @@ def contentsupload(request):
         url = '/unid/searchcontents/'+ request.POST['category']
         return HttpResponseRedirect(url)
 
-@login_required
-def contentsuploadtest(request):
-    if request.method == 'GET':
-        return render(request, 'unid/contentsuploadtest.html', {'mypage':mypage})
-    else:  # submit으로 제출
-        try:
-            # upload_files = request.FILES.getlist('user_files')  # submit에 첨부됨 파일
-            # print(upload_files)
-            upload_images = request.FILES.getlist('user_preview_files')
-        except MultiValueDictKeyError as e:
-            pass
-        # try:
-        #     number = str(random.random())
-        #     print(number)
-        now = datetime.now()
-        today = now.strftime('%Y-%m-%d')
-        #     os.mkdir("uploadfiles/" + number)  # 그 날짜에 맞는 디렉토리 생성
-        # except FileExistsError as e:
-        #     pass
-        try:
-            print(os.getcwd())
-            os.mkdir("media/" + today)
-        except FileExistsError as e:
-            pass
-        # print(2)
-        # ftpfilelist = []
-        # uifilelist = []
-        # filehashdatas = []
-        # filesize = []
-        # contents_dir = "uploadfiles/" + number + "/"
-        # for upload_file in upload_files:  # 다중 파일 업로드
-        #     # file_name = upload_file.name
-        #     # number = str(random.random())
-        #     filename = upload_file.name
-        #     extendname = filename[filename.find(".", -4):]
-        #     # real_filename = number + extendname
-        #     # ftpfilelist.append(real_filename)
-        #     uifilelist.append(filename)
-        #     # now = datetime.now()
-        #     # today = now.strftime('%Y-%m-%d')
-        #     # 해당 날짜의 디렉토리
-        #     with open(contents_dir + filename, 'wb') as file:  # 저장경로
-        #         for chunk in upload_file.chunks():
-        #             file.write(chunk)
-        #     with open(contents_dir + filename, 'rb') as file:
-        #         filedata = file.read()
-        #         hashdata = hashlib.sha256(filedata).hexdigest()
-        #         filehashdatas.append(hashdata)
-        #     file_size = os.path.getsize(contents_dir + filename)
-        #     filesize.append(file_size)
 
-        # if len(uifilelist) == 1:
-        #     filename = uifilelist[0]
-        #     print(filename)
-        #     zipname = number + ".zip"
-        #     password = filehashdatas[0][0:8]
-        #     # with open(contents_dir + filename, 'wb') as file:
-        #     pyminizip.compress_multiple([contents_dir + filename], ["Unid_Contents"], contents_dir + zipname, password,
-        #                                 4)
-        # elif len(uifilelist) == 2:
-        #     filename = uifilelist[0]
-        #     filename2 = uifilelist[1]
-        #     zipname = number + ".zip"
-        #     password = filehashdatas[0][0:8]
-        #     pyminizip.compress_multiple([contents_dir + filename, contents_dir + filename2],
-        #                                 ["Unid_Contents", "Unid_Contents"], contents_dir + zipname, password, 4)
-
-        preview_save_filelist = []
-        preview_ui_filelist = []
-        for upload_image in upload_images:
-            image_number = str(random.random())
-            previewfilename = upload_image.name
-            extendname = previewfilename[previewfilename.find(".", -5):]
-            real_preview_filename = image_number + extendname
-            preview_save_filelist.append(real_preview_filename)
-            preview_ui_filelist.append(previewfilename)
-            now = datetime.now()
-            today = now.strftime('%Y-%m-%d')
-            print(os.getcwd())
-            contents_dir = "media/" + today + "/"
-            # 해당 날짜의 디렉토리
-            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
-                for chunk in upload_image.chunks():
-                    file.write(chunk)
-            im = Image.open(contents_dir + real_preview_filename)
-            size = (1000, 1050)
-            im2 = im.resize(size)
-            im2.save(contents_dir + real_preview_filename)
-        contents_dir = "media/" + today + "/"
-        try:
-            thumb = Image.open(contents_dir + preview_save_filelist[0])
-            size = (180, 200)
-            thumbnailimage = thumb.resize(size)
-            thumbnailimage.save(contents_dir + "thumb" + preview_save_filelist[0])
-        except IndexError as e:
-            pass
-
-        """
-
-        검수시스템 추후 개발예정
-
-        """
-        print("fpt start")
-        ftp = FTP()
-        ftp.connect("222.239.231.253")  # Ftp 주소 Connect(주소 , 포트)
-        ftp.login("unid", "qhdkscjfwj0!")
-        ftp.cwd("/home/unid/contents")
-        ftp_contents_dir = "/home/unid/contents/" + today + "/"
-        print("fpt")
-        try:
-            ftp.mkd(today)
-            print("fpt1")
-        except:
-            ftp.cwd("/home/unid/contents/" + today)
-            print("fpt2")
-        ftp.cwd("/home/unid/contents/" + today)
-        print("fpt3")
-        print(os.getcwd())
-        filepath = request.POST['filepath']
-        filename = request.POST['filename']
-
-        print("fpt4")
-        print(os.getcwd())
-        os.chdir(filepath)
-        print("fpt5")
-        print(os.getcwd())
-        # contents_dir = today + "/"
-        # # with open(contents_dir + file_name, "wb") as file:
-        # #     ftp.storlines('STOR %s' % file_name, file)
-
-        uploadfile = open(filename, "rb")
-        print("fpt6")
-        print(os.getcwd())
-        ftp.storbinary('STOR ' + filename, uploadfile)
-
-        print("fpt end")
-        uploadfile.close()
-        print(os.getcwd())
-        os.chdir("..")
-        print(os.getcwd())
-        os.chdir("..")
-        print(os.getcwd())
-        shutil.rmtree(filepath)
-        print(os.getcwd())
-        publisheddate = str(request.POST['publisheddate'])[0:10]
-        preview_images_dir = "media/" + today + "/"
-        writeremail = myPageInfomation.objects.get(email=request.session['user_email'])
-        try:
-            br = uploadContents(
-                writeremail=writeremail,
-                title=request.POST['title'],
-                publisheddate=publisheddate,
-                category=request.POST['category'],
-                price=request.POST['price'],
-                tags=request.POST['tags'],
-                # totalpages=request.POST['totalpages'],
-                authorinfo=request.POST['authorinfo'],
-                intro=request.POST['intro'],
-                index=request.POST['index'],
-                contents=request.POST['contents'],  # 소개글 제한?
-                reference=request.POST['reference'],
-                imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
-                downloadcount=0,
-                replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png',
-                writername=request.session['user_name'],
-            )
-            br.save()
-        except IndexError as e:
-            br = uploadContents(
-                writeremail=writeremail,
-                title=request.POST['title'],
-                publisheddate=publisheddate,
-                category=request.POST['category'],
-                price=request.POST['price'],
-                tags=request.POST['tags'],
-                # totalpages=request.POST['totalpages'],
-                authorinfo=request.POST['authorinfo'],
-                intro=request.POST['intro'],
-                index=request.POST['index'],
-                contents=request.POST['contents'],  # 소개글 제한?
-                reference=request.POST['reference'],
-                downloadcount=0,
-                replymentcount=0,
-                cagegory_path="media/" + request.POST['category'] + '.png',
-                writername=request.session['user_name'],
-            )
-            br.save()
-        uifilelist = request.POST['uifilelist'].split(',')
-        filehashdatas = request.POST['filehashdatas'].split(',')
-        filesize = request.POST['filesize'].split(',')
-        idx = uploadContents.objects.all().order_by('-pk')[0]  # ★
-        filelistlength = len(filehashdatas)
-        print(filelistlength)
-
-
-        preview_images_dir = "media/" + today + "/"
-        previewlistlength = len(preview_save_filelist)
-        for i in range(previewlistlength):
-            print(7)
-            br = previewInfo(
-                contents_id=idx,
-                uploadpreviewname=preview_ui_filelist[i],
-                savepreviewname=preview_save_filelist[i],
-                imagepath=preview_images_dir + preview_save_filelist[i],
-            )
-            br.save()
-
-        rpc_url = "http://222.239.231.252:8220"
-        w3 = Web3(HTTPProvider(rpc_url))
-        print("시작 트랜젝션")
-        contentsMasterContract_address = Web3.toChecksumAddress("0x318970434dad6697677992794a62737dc15f1bb5")
-
-        cmc = w3.eth.contract(address=contentsMasterContract_address, abi= [{"constant":False,"inputs":[{"name":"name","type":"string"},{"name":"hash","type":"string"}],"name":"addContents","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"contents","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"name","type":"string"}],"name":"EventAddContents","type":"event"}])
-
-        price = int(request.POST['price'])
-        transactionHashList = []
-        for i in range(len(filehashdatas)):
-            # cmc.functions.addContents(request.session['user_email'], request.POST['price'], filehashdatas[i]).transact({"from": w3.eth.accounts[-4], "gas": 1000000 })
-            tx_hash = cmc.functions.addContents(request.session['user_email'], filehashdatas[i]).transact(
-                {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
-            receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-            transactionHashList.append(receipt)
-
-        for i in range(filelistlength):
-            print(6)
-            br = contentsInfo(
-                contents_id=idx,
-                uploadzipfilename=filename,
-                uploadfile=uifilelist[i],
-                contentspath=ftp_contents_dir,
-                hash=filehashdatas[i],
-                filesize=filesize[i],
-                bbb=transactionHashList[i]
-            )
-            br.save()
-
-        url = '/unid/searchcontents/'+ request.POST['category']
-        return HttpResponseRedirect(url)
 @csrf_exempt
 def similarity(request):
 
@@ -1783,6 +1545,7 @@ def similarity(request):
     values = contents_nouns.values()
 
     if contents_nouns:
+        similar = []
         for i in range(len(values)):
             data = values[i]['contents_nouns']
             for j in upload_files:
@@ -1790,7 +1553,7 @@ def similarity(request):
 
                 mydoclist = [text, data]
                 kkma =Kkma()
-                nouns = str(kkma.nouns(text))
+                nounes = str(kkma.nouns(text))
 
                 doc_nouns_list = []
 
@@ -1811,22 +1574,25 @@ def similarity(request):
 
                 document_distances = (tfid_matrix * tfid_matrix.T)
 
-                print('유사도 분석을 위한 ' + str(document_distances.get_shape()[0]) + 'x' + str(
-                    document_distances.get_shape()[1]) + 'matrix를 만들었습니다.')
-
-                print(document_distances.toarray())
+                # print('유사도 분석을 위한 ' + str(document_distances.get_shape()[0]) + 'x' + str(
+                #     document_distances.get_shape()[1]) + 'matrix를 만들었습니다.')
+                #
+                # print(document_distances.toarray())
                 s = 100*float(document_distances.toarray()[0][1])
                 s1 = int(s)
                 if s1 < 80 :
-                    br = contentsnouns(contents_nouns=nouns)
-                    br.save()
-                    res = {
-                        "Ans": "업로드 가능한 콘텐츠입니다."
-                    }
+                    similar.append('0')
                 else:
-                    res = {
-                        "Ans": "내용이"+s1+"%"+"유사한 컨텐츠가 있습니다."
-                    }
+                    similar.append('1')
+
+        if '1' in similar:
+            res = {'cannot' : '80% 이상의 유사한 콘텐츠가 있습니다.'}
+
+        else:
+            res = {'can' : '업로드 가능한 콘텐츠 입니다.'}
+            br = contentsnouns(contents_nouns=nounes)
+            br.save()
+
 
     else:
         for i in upload_files:
@@ -1836,7 +1602,7 @@ def similarity(request):
             br = contentsnouns(contents_nouns=nouns)
             br.save()
             res = {
-                "Ans": "업로드 가능한 콘텐츠입니다."
+                "can": "업로드 가능한 콘텐츠입니다."
             }
 
     return_obj = JsonResponse(res)
@@ -1935,7 +1701,7 @@ def test_validfile(request):
         os.chdir("..")
         print(os.getcwd())
         res = {
-                "Ans":"업로드 가능한 콘텐츠입니다.",
+                "Ans":"해당 콘텐츠는 존재하지 않습니다.",
                 "test":"test",
                 "filepath": contents_dir,
                 "filename": 'Unid_contents' + number + '.zip',
