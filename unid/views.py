@@ -1516,6 +1516,7 @@ def contentsupload(request):
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
+                checksimilar=request.POST['similar'],
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
                 imagepath=preview_images_dir + "thumb" + preview_save_filelist[0],
@@ -1537,6 +1538,7 @@ def contentsupload(request):
                 authorinfo=request.POST['authorinfo'],
                 intro=request.POST['intro'],
                 index=request.POST['index'],
+                checksimilar=request.POST['similar'],
                 contents=request.POST['contents'],  # 소개글 제한?
                 reference=request.POST['reference'],
                 downloadcount=0,
