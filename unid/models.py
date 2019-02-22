@@ -52,6 +52,15 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
+class contentsnouns(models.Model):
+    IDX = models.AutoField(primary_key=True)
+    contents_nouns = models.CharField(max_length=10000, blank=True, null=True)
+    contents_id = models.CharField(max_length=300, blank=True, null=True)
+    aaa = models.CharField(max_length=250, blank=True, null=True)
+    bbb = models.CharField(max_length=250, blank=True, null=True)
+    ccc = models.CharField(max_length=250, blank=True, null=True)
+
+
 class uploadContents(models.Model):
     contents_id = models.AutoField(primary_key=True)
     writeremail = models.ForeignKey(myPageInfomation, on_delete=models.CASCADE)
