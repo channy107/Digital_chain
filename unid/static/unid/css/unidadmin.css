@@ -7,6 +7,22 @@
 
 
 }
+
+
+#contents-login{
+list-style: none;
+padding: 0px;
+text-align:center;
+margin:55px;
+}
+
+#container-login{
+    background: white;
+    width: 405px;
+    height: auto;
+    margin: 90px auto;
+    padding: 1px;
+    box-shadow: 0px 0px 0px 2px #e6e6e6;}
 .unid_users .context li {
     display: inline-block;
     width: auto;
