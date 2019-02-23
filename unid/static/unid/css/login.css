@@ -1,6 +1,4 @@
-body{
-background: #d6d6d6;
-}
+
 
 #container{
 background: white;
@@ -8,6 +6,11 @@ margin: 0 auto;
 margin-top:150px;
 width: 400px;
 height: 540px;
+}
+
+.back {
+    padding: 85px;
+    background: #f1eeee;
 }
 
 #contents{
