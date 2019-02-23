@@ -850,11 +850,11 @@ xpopup
                         }
                         if ( res.test ) {
                                 alert(res.Ans)
-
+                                $('#after_test').val("체크체크");
                                 $("#uploadbutton").hide();
-                                $("#similarity").show();
+                                $('#after_test').show();
                                 $('#before_confirm').hide();
-                                $('#before_confirm1').show();
+                                $('#after_connfirm').show();
                                 $('#filepath').val(res.filepath)
                                 $('#filename').val(res.filename)
                                 $('#ftpfilelist').val(res.ftpfilelist)
