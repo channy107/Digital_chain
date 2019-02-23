@@ -38,13 +38,13 @@ from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
 from .mixins import ActiveOnlyMixin
-import itertools
+# import itertools
 
-from konlpy.tag import Kkma, Twitter
-from sklearn.feature_extraction.text import TfidfVectorizer
-from konlpy.utils import pprint
-import docx2txt
-import numpy as np
+# from konlpy.tag import Kkma, Twitter
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from konlpy.utils import pprint
+# import docx2txt
+# import numpy as np
 
 class MyView(ActiveOnlyMixin, View):
     permission_denied_message = 'You must be logged in to view this page'
@@ -1600,76 +1600,76 @@ def contentsupload(request):
         return HttpResponseRedirect(url)
 
 
-@csrf_exempt
-def similarity(request):
-
-    upload_files = request.FILES.getlist('user_files')
-    contents_nouns = contentsnouns.objects.all()
-    values = contents_nouns.values()
-
-    if contents_nouns:
-        similar = []
-        for i in range(len(values)):
-            data = values[i]['contents_nouns']
-            for j in upload_files:
-                text = docx2txt.process(j)
-
-                mydoclist = [text, data]
-                kkma =Kkma()
-                nounes = str(kkma.nouns(text))
-
-                doc_nouns_list = []
-
-                for doc in mydoclist:
-                    nouns = kkma.nouns(doc)
-                    doc_nouns = ''
-
-                    for noun in nouns:
-                        doc_nouns += noun + ' '
-
-                    doc_nouns_list.append(doc_nouns)
-
-                for i in range(0, 2):
-                    print('doc' + str(i + 1) + ' : ' + str(doc_nouns_list[i]))
-
-                tfid_vectorizer = TfidfVectorizer(min_df=1)
-                tfid_matrix = tfid_vectorizer.fit_transform(doc_nouns_list)
-
-                document_distances = (tfid_matrix * tfid_matrix.T)
-
-                # print('유사도 분석을 위한 ' + str(document_distances.get_shape()[0]) + 'x' + str(
-                #     document_distances.get_shape()[1]) + 'matrix를 만들었습니다.')
-                #
-                # print(document_distances.toarray())
-                s = 100*float(document_distances.toarray()[0][1])
-                s1 = int(s)
-                if s1 < 80 :
-                    similar.append('0')
-                else:
-                    similar.append('1')
-
-        if '1' in similar:
-            res = {'cannot' : '80% 이상의 유사한 콘텐츠가 있습니다.'}
-
-        else:
-            res = {'can' : '업로드 가능한 콘텐츠 입니다.'}
-            br = contentsnouns(contents_nouns=nounes)
-            br.save()
-
-
-    else:
-        for i in upload_files:
-            text = docx2txt.process(i)
-            kkma = Kkma()
-            nouns=str(kkma.nouns(text))
-            br = contentsnouns(contents_nouns=nouns)
-            br.save()
-            res = {
-                "can": "업로드 가능한 콘텐츠입니다."
-            }
-
-    return_obj = JsonResponse(res)
-    return return_obj
+# @csrf_exempt
+# def similarity(request):
+#
+#     upload_files = request.FILES.getlist('user_files')
+#     contents_nouns = contentsnouns.objects.all()
+#     values = contents_nouns.values()
+#
+#     if contents_nouns:
+#         similar = []
+#         for i in range(len(values)):
+#             data = values[i]['contents_nouns']
+#             for j in upload_files:
+#                 text = docx2txt.process(j)
+#
+#                 mydoclist = [text, data]
+#                 kkma =Kkma()
+#                 nounes = str(kkma.nouns(text))
+#
+#                 doc_nouns_list = []
+#
+#                 for doc in mydoclist:
+#                     nouns = kkma.nouns(doc)
+#                     doc_nouns = ''
+#
+#                     for noun in nouns:
+#                         doc_nouns += noun + ' '
+#
+#                     doc_nouns_list.append(doc_nouns)
+#
+#                 for i in range(0, 2):
+#                     print('doc' + str(i + 1) + ' : ' + str(doc_nouns_list[i]))
+#
+#                 tfid_vectorizer = TfidfVectorizer(min_df=1)
+#                 tfid_matrix = tfid_vectorizer.fit_transform(doc_nouns_list)
+#
+#                 document_distances = (tfid_matrix * tfid_matrix.T)
+#
+#                 # print('유사도 분석을 위한 ' + str(document_distances.get_shape()[0]) + 'x' + str(
+#                 #     document_distances.get_shape()[1]) + 'matrix를 만들었습니다.')
+#                 #
+#                 # print(document_distances.toarray())
+#                 s = 100*float(document_distances.toarray()[0][1])
+#                 s1 = int(s)
+#                 if s1 < 80 :
+#                     similar.append('0')
+#                 else:
+#                     similar.append('1')
+#
+#         if '1' in similar:
+#             res = {'cannot' : '80% 이상의 유사한 콘텐츠가 있습니다.'}
+#
+#         else:
+#             res = {'can' : '업로드 가능한 콘텐츠 입니다.'}
+#             br = contentsnouns(contents_nouns=nounes)
+#             br.save()
+#
+#
+#     else:
+#         for i in upload_files:
+#             text = docx2txt.process(i)
+#             kkma = Kkma()
+#             nouns=str(kkma.nouns(text))
+#             br = contentsnouns(contents_nouns=nouns)
+#             br.save()
+#             res = {
+#                 "can": "업로드 가능한 콘텐츠입니다."
+#             }
+#
+#     return_obj = JsonResponse(res)
+#     return return_obj
 
 @csrf_exempt
 def test_validfile(request):
