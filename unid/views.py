@@ -1269,65 +1269,65 @@ def createaccount(request):
         password = request.POST['pwd']
         account = w3.personal.newAccount(password)
         lockpwd = sha256(password.encode('utf-8'))
-        nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
-        ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
-            {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
-             "payable": False, "stateMutability": "view", "type": "function"},
-            {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
-             "payable": False, "stateMutability": "view", "type": "function"},
-            {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
-             "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
-                {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
-                                                                                "stateMutability": "nonpayable",
-                                                                                "type": "function"}, {"constant": False,
-                                                                                                      "inputs": [{
-                                                                                                                     "name": "_from",
-                                                                                                                     "type": "address"},
-                                                                                                                 {
-                                                                                                                     "name": "_to",
-                                                                                                                     "type": "address"},
-                                                                                                                 {
-                                                                                                                     "name": "_rewards",
-                                                                                                                     "type": "int256"},
-                                                                                                                 {
-                                                                                                                     "name": "_usercount",
-                                                                                                                     "type": "int256"}],
-                                                                                                      "name": "userreward",
-                                                                                                      "outputs": [],
-                                                                                                      "payable": False,
-                                                                                                      "stateMutability": "nonpayable",
-                                                                                                      "type": "function"},
-            {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
-             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
-             "type": "function"},
-            {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
-             "payable": False, "stateMutability": "view", "type": "function"},
-            {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
-             "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
-             "type": "function"}, {"constant": False,
-                                   "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
-                                              {"name": "_value", "type": "int256"}], "name": "transfer", "outputs": [],
-                                   "payable": False, "stateMutability": "nonpayable", "type": "function"}, {
-                "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
-                           {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
-                "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
-                                                                                            "inputs": [{"indexed": True,
-                                                                                                        "name": "from",
-                                                                                                        "type": "address"},
-                                                                                                       {"indexed": True,
-                                                                                                        "name": "to",
-                                                                                                        "type": "address"},
-                                                                                                       {
-                                                                                                           "indexed": False,
-                                                                                                           "name": "value",
-                                                                                                           "type": "int256"}],
-                                                                                            "name": "EvtTransfer",
-                                                                                            "type": "event"}])
-
-        #w3.personal.unlockAccount(w3.eth.accounts[0], 123, 0)
-        tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
-            {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+        # nidCoinContract_address = Web3.toChecksumAddress("0x956199801a6c15687641ba8b357c91ee8dea3f68")
+        # ncc = w3.eth.contract(address=nidCoinContract_address, abi=[
+        #     {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}],
+        #      "payable": False, "stateMutability": "view", "type": "function"},
+        #     {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "int256"}],
+        #      "payable": False, "stateMutability": "view", "type": "function"},
+        #     {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}],
+        #      "payable": False, "stateMutability": "view", "type": "function"}, {"constant": False, "inputs": [
+        #         {"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+        #         {"name": "_rewards", "type": "int256"}], "name": "writerreward", "outputs": [], "payable": False,
+        #                                                                         "stateMutability": "nonpayable",
+        #                                                                         "type": "function"}, {"constant": False,
+        #                                                                                               "inputs": [{
+        #                                                                                                              "name": "_from",
+        #                                                                                                              "type": "address"},
+        #                                                                                                          {
+        #                                                                                                              "name": "_to",
+        #                                                                                                              "type": "address"},
+        #                                                                                                          {
+        #                                                                                                              "name": "_rewards",
+        #                                                                                                              "type": "int256"},
+        #                                                                                                          {
+        #                                                                                                              "name": "_usercount",
+        #                                                                                                              "type": "int256"}],
+        #                                                                                               "name": "userreward",
+        #                                                                                               "outputs": [],
+        #                                                                                               "payable": False,
+        #                                                                                               "stateMutability": "nonpayable",
+        #                                                                                               "type": "function"},
+        #     {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "balanceOf",
+        #      "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "view",
+        #      "type": "function"},
+        #     {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}],
+        #      "payable": False, "stateMutability": "view", "type": "function"},
+        #     {"constant": False, "inputs": [{"name": "account", "type": "address"}], "name": "getBalance",
+        #      "outputs": [{"name": "", "type": "int256"}], "payable": False, "stateMutability": "nonpayable",
+        #      "type": "function"}, {"constant": False,
+        #                            "inputs": [{"name": "_from", "type": "address"}, {"name": "_to", "type": "address"},
+        #                                       {"name": "_value", "type": "int256"}], "name": "transfer", "outputs": [],
+        #                            "payable": False, "stateMutability": "nonpayable", "type": "function"}, {
+        #         "inputs": [{"name": "_supply", "type": "int256"}, {"name": "_name", "type": "string"},
+        #                    {"name": "_symbol", "type": "string"}, {"name": "_decimals", "type": "uint8"}],
+        #         "payable": False, "stateMutability": "nonpayable", "type": "constructor"}, {"anonymous": False,
+        #                                                                                     "inputs": [{"indexed": True,
+        #                                                                                                 "name": "from",
+        #                                                                                                 "type": "address"},
+        #                                                                                                {"indexed": True,
+        #                                                                                                 "name": "to",
+        #                                                                                                 "type": "address"},
+        #                                                                                                {
+        #                                                                                                    "indexed": False,
+        #                                                                                                    "name": "value",
+        #                                                                                                    "type": "int256"}],
+        #                                                                                     "name": "EvtTransfer",
+        #                                                                                     "type": "event"}])
+        #
+        # #w3.personal.unlockAccount(w3.eth.accounts[0], 123, 0)
+        # tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
+        #     {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
         w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 210})
 
         try:
@@ -2495,8 +2495,15 @@ from django.contrib import auth
 
 
 def commandMysql(request):
-
-    bbr = myPageInfomation.objects.filter(IDX=4).delete()
+    bbr = myPageInfomation ( IDX=1,
+                             user="admin",
+                             email="admin@unid.com",
+                             name="admin",
+                             account="0xab8348cc337c3a807b21f7655cae0769d79c3772")
+    bbr.save()
+    # bbr = myPageInfomation.objects.filter(IDX=1).delete()
+    # bbr = myPageInfomation.objects.filter(IDX=3).delete()
+    # bbr = myPageInfomation.objects.filter(IDX=4).delete()
     return HttpResponse("성공쓰")
 
 
