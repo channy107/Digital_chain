@@ -87,8 +87,8 @@
                     </ul>
                     <div class="row-picture">
                         <a href="{% url 'main_detail' info.posts_id %}">
-                            {% if info.file_path %}
-                            <img src="/{{ info.file_path }}" width="99px" height="75px" style="border-radius: 3px;">
+                            {% if info.image_path %}
+                            <img src="/{{ info.image_path }}" width="99px" height="75px" style="border-radius: 3px;">
                             {% else %}
                             <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px;">
                             {% endif %}
