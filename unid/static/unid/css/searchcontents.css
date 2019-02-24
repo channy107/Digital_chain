@@ -265,3 +265,10 @@ margin:5px;
     width: 15px;
     height: 15px;
 }
+
+.thumbnail {
+    border-radius: 3px;
+    border: solid;
+    border-width: 1px;
+    border-color: #cecccc;
+}
