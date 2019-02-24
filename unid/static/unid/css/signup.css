@@ -1,6 +1,7 @@
 
-body{
-background: #f1eeee;
+.back {
+    padding: 85px;
+    background: #f1eeee;
 }
 
 #contents{

@@ -21,7 +21,7 @@
                     <img class="d-block img-fluid" src="/static/unid/img/unid banner 이니스프리.png" alt="Second slide">
                 </div>
                 <div class="carousel-item" style="background-color: white;">
-                    <img class="d-block img-fluid" src="/static/unid/img/unid banner 청년.png" alt="Third slide">
+                    <img class="d-block img-fluid" src="/{{ads.image_path}}" alt="Third slide">
                 </div>
             </div>
         </div>
@@ -44,18 +44,7 @@
 
                 </div>
 
-                <div class="advertise">
-                 <img class="img-fluid" src="/{{ads.image_path}}" style="width:200px; height:400px;">
-                </div>
-                {% if request.session.Unid_admin %}
-                    <div id="edit_icon">
-                        <a href="../enrollad/">
-                        <img style="width:28px; cursor: pointer;" src="{% static 'unid/icon/ui icons-32.png' %}"/>
-                        </a>
-                    </div>
-                {% else %}
 
-                {% endif %}
             </div>
             <div class="information-popular-row">
                 <div class="popular-rows">

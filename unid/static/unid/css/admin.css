@@ -242,12 +242,7 @@ font-family: 'Noto Sans KR', sans-serif;
 }
 
 
-#content_column{
-    margin-left:50px;
-    min-height: 250px;
-    margin-top: 20px;
-    font-family: 'Noto Sans KR', sans-serif;
-}
+
 
 #text_message{
     margin-top: 30px;
@@ -375,7 +370,10 @@ ul.tabs li.current:after{
 .tab-content{
   display: none;
   background: ;
-  padding: 15px;
+  padding-top: 20px;
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-bottom: 20px;
   font-family: 'Noto Sans KR', sans-serif;
 }
 
@@ -641,6 +639,7 @@ font-family: 'Noto Sans KR', sans-serif;
     position: relative;
     right: 240px;
 }
+
 
 .files-button1 {
     position: relative;

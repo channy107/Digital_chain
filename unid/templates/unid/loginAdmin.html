@@ -1,13 +1,102 @@
 {% extends 'unid/navigationbar.html' %}
 {% load static %}
 {% block content %}
-<div class="input-group" style="margin: 20% auto 10% 35%;">
-    <label class="input-group-text" for="pwd">PASSWORD</label>
-    <input class="form-control col-sm-2" type="password" id="pwd">
-    <div class="input-group-append">
-        <button type="button" class="btn btn-primary" id="submit">확인</button>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>(로고) sign up</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'unid/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'unid/css/shop-homepage.css' %}" rel="stylesheet">
+    <link href="{% static 'unid/css/unidadmin.css' %}" rel="stylesheet">
+    <!-- 검색아이콘 -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<style>
+.back {
+    padding: 85px;
+    background: #f1eeee;
+}
+#container-login{
+    background: white;
+    margin: 0 auto;
+    margin-top:150px;
+    margin-bottom: 150px;
+    width: 400px;
+    height: 540px;
+    box-shadow: 0px 0px 0px 2px #e6e6e6;
+}
+
+#contents-login{
+    width: 70%
+}
+
+#logo{
+    margin: 0 auto;
+    width: 80%;
+}
+
+#description{
+    margin : bottom;
+}
+
+#logInLinks{
+    display: block;
+    margin: 0 auto;
+    width: 80%
+}
+
+#signup{
+    display: inline-block;
+    }
+
+#logo{
+    margin-top: 20px;
+}
+</style>
+<body>
+<div class="back">
+    <div id="container-login">
+        <ul id="contents-login">
+            <li><img style="width:210px" src="{% static 'unid/icon/unid_icon.png' %}"></li>
+            <br>
+            <li><h1 style=""><strong>관리자 로그인</strong></h1></li>
+            <br>
+                <li>
+                <P style="margin:0px;">관리자 계정으로</P>
+                <P>로그인해주세요</P>
+            </li>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <br>
+            <li>
+                <div class="input-group">
+                <label class="input-group-text" for="pwd">PASSWORD</label>
+                <input class="form-control col-sm-14" type="password" id="pwd">
+
+                <button type="button" class="btn btn-primary" id="submit">확인</button>
+
+                </div>
+            </li>
+
+            <br>
+
+        </ul>
     </div>
 </div>
+</body>
+
+
 
 <script>
     jQuery(document).ready(function($){

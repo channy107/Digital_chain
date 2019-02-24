@@ -939,7 +939,7 @@ def main_detail(request, id):
     images = postImage.objects.filter(posts_id=id)
     replys = replyForPosts.objects.filter(posts_id=id)
     likes = LikeUsers.objects.filter(posts_id=id)
-    k = Post.objects.get(posts_id=38)
+    k = Post.objects.get(posts_id=id)
     context = {'posts': posts, 'replys': replys, 'likes': likes,'images':images, 'k':k}
     return render(request, 'unid/main_detail.html', context)
 
