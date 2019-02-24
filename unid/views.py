@@ -1332,6 +1332,17 @@ def createaccount(request):
 
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
+
+            myPageInfomation.objects.filter(email=request.session['user_email']).update(
+                joiningdate=datetime.now(),
+                pwd=lockpwd,
+                name=name,
+                account=account,
+                IDX=IDX + 1
+            )
+            url = '/unid'
+
+            return HttpResponseRedirect(url)
             print("이거시" + IDX)
         except TypeError as e:
             print("errorpass")
@@ -1346,16 +1357,7 @@ def createaccount(request):
             url = '/unid'
 
             return HttpResponseRedirect(url)
-        myPageInfomation.objects.filter(email=request.session['user_email']).update(
-                            joiningdate=datetime.now(),
-                            pwd=lockpwd,
-                            name=name,
-                            account=account,
-                            IDX=IDX + 1
-                            )
-        url = '/unid'
 
-        return HttpResponseRedirect(url)
 
 @login_required
 def contentsupload(request):

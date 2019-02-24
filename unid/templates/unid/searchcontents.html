@@ -79,7 +79,7 @@
                             <li>
                                 ·         {{ contents.created|timesince }}전
                             </li>
-                            <img src="/{{ contents.cagegory_path }}" width="75" height="25">
+                            <img src="/{{ contents.cagegory_path }}" width="75" height="25" style="border-radius: 3px; border: solid;border-width:1px;border-color: #cecccc;">
                         </ul>
                     <div class="row-picture">
                         <a href="{% url 'contentsdetail' contents.contents_id %}">

@@ -711,12 +711,11 @@ xpopup
                     {% else %}
                     {% if downloadid %}
                     <a href="../download?id={{ contents.contents_id }}">
-                        <img src="{% static 'unid/icon/icons-다운로드버튼.png' %}" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
+                        <img src="/media/다운로드버튼.png" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect">
                     </a>                              <!--★★★★★★★★★★★★ㅍ-->
                     {% else %}
-                    <button type="button" class="cd-popup-trigger" id='enrollcontents' class="pointeffect">
-                        콘텐츠 구매
-                    </button>
+                    <img src="/media/컨텐츠구매버튼.png" border="0" width="155" height="45" style="position: relative; right: 10px; bottom: 6px;" class="pointeffect cd-popup-trigger">
+
                     <div class="cd-popup" role="alert">
                         <div class="cd-popup-container">
                             <div class="popuprow1">
