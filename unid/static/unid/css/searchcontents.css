@@ -170,6 +170,9 @@ margin:5px;
     float: left;
 
 }
+.d-block img-fluid {
+    width : 1010px;
+}
 .information-popular-row .popular-rows .popular-row ul:nth-child(1) {
     padding: 0;
     height: 30px;
