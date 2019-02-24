@@ -1328,7 +1328,7 @@ def createaccount(request):
         # #w3.personal.unlockAccount(w3.eth.accounts[0], 123, 0)
         # tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
         #     {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
-        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 210})
+        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 210000000000000000000})
 
         try:
             IDX = myPageInfomation.objects.all().order_by('-IDX')[0].IDX
