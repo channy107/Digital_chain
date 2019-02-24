@@ -154,10 +154,10 @@
                         </ul>
                         <div class="row-picture">
                             <a href="{% url 'main_detail' article.posts_id %}">
-                                {% if article.file_path %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ article.file_path }}" style="width:99px;  height: 75px" alt="">
+                                {% if article.imagepath %}
+                                    <img src="{{ article.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" style="width:99px;  height: 75px" alt="">
+                                    <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
                             </a>
                         </div>
@@ -166,7 +166,7 @@
                                 <a href="{% url 'main_detail' article.posts_id %}">{{ article.title }}</a>
                             </li>
                             <li>
-                                <a href="{% url 'main_detail' article.posts_id %}">{{ article.contents|truncatechars_html:80 }}</a>
+                                <a href="{% url 'main_detail' article.posts_id %}">{{ article.aaa|truncatechars_html:80 }}</a>
                             </li>
                         </ul>
                         <ul class="row-bottom">
@@ -226,10 +226,10 @@
                         </ul>
                         <div class="row-picture">
                             <a href="{% url 'main_detail' reply.posts_id_id %}">
-                                {% if reply.posts_id.file_path %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ reply.posts_id.file_path }}" style="width:99px;  height: 75px" alt="">
+                                {% if reply.posts_id.imagepath %}
+                                    <img src="{{ article.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" style="width:99px;  height: 75px" alt="">
+                                    <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
                             </a>
                         </div>
@@ -294,9 +294,9 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' content.contents_id %}">
                                 {% if content.imagepath %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ content.imagepath }}" style="width:99px;  height: 75px" alt="">
+                                    <img src="{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" style="width:99px;  height: 75px" alt="">
+                                    <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
                             </a>
                         </div>
@@ -356,9 +356,9 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">
                                 {% if download.contents_id.imagepath %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/{{ download.contents_id.imagepath }}" style="width:99px;  height: 75px" alt="">
+                                    <img src="{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
-                                <img class="img-fluid rounded mb-3 mb-md-0" src="/media/defaultthumbnail.png" style="width:99px; height:75px;" alt="">
+                                    <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
                             </a>
                         </div>
