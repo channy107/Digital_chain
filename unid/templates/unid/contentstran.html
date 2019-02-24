@@ -66,8 +66,12 @@
                 </ul>
                 <div class="row-picture">
                     <a href="{% url 'main_detail' list.posts_id %}">
-                        <img src="/{{list.file_path}}" width="100px" height="75px">
-                    </a>
+                            {% if list.image_path %}
+                            <img src="{{ list.image_path }}" width="99px" height="75px" style="border-radius: 3px;">
+                            {% else %}
+                            <img src="/media/defaultthumbnail.png" width="99px" height="75px" style="border-radius: 3px;">
+                            {% endif %}
+                        </a>
                 </div>
                 <ul class="row-middle">
                     <li>
