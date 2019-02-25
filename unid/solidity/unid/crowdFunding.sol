@@ -62,10 +62,13 @@ contract CrowdFunding {
     }
     mapping (uint => Investor) public investors;
 
-    modifier onlyOwner () {
-        require(msg.sender == owner);
+    modifier onlyAdmin () {
+        require(msg.sender == 0xab8348cc337c3a807b21f7655cae0769d79c3772);
         _;
     }
+
+    
+
     function getOwner() public view returns (address) {
         return owner;
     }
@@ -100,7 +103,7 @@ contract CrowdFunding {
 
     }
 
-    function checkGoalReached () public onlyOwner {
+    function checkGoalReached () public onlyAdmin {
         require(!ended);
         require(now >= deadline);
         if (totalAmount >= goalAmount) {
@@ -120,7 +123,7 @@ contract CrowdFunding {
         }
     }
     
-    function kill() public onlyOwner {
+    function kill() public onlyAdmin {
         selfdestruct(owner);
     }
 }

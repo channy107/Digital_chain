@@ -190,6 +190,7 @@ def mypage(request):
                        'myreward': myreward,
                        'likeusers': likeusers,
                        'numbersOfLike': numbersOfLike,
+                       'mypage': mypage,
                        # 'totalReward':totalRewards,
                        'joiningdate': joiningdate,
                        'joining': joining,
@@ -2577,35 +2578,40 @@ def applyForFund(request):
     w3 = Web3(HTTPProvider(rpc_url))
     fundAccount = request.POST['crowdAccount']
     print(fundAccount)
-    cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":True,"inputs":[],"name":"getNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
+    cf = w3.eth.contract(address = fundAccount, abi = [{"constant":False,"inputs":[],"name":"checkGoalReached","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getEnded","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"ended","outputs":[{"name":"","type":"bool"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"numInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"status","outputs":[{"name":"","type":"string"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"goalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"deadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"investors","outputs":[{"name":"addr","type":"address"},{"name":"amount","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[],"name":"kill","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getGoalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getDeadline","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalAmount","outputs":[{"name":"","type":"int256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getNumInvestors","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getOwner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getNow","outputs":[{"name":"","type":"uint256"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundAmount","type":"int256"},{"name":"funder","type":"address"}],"name":"fund","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"payable":False,"stateMutability":"nonpayable","type":"constructor"}])
+
+    category = fundPost.objects.get(IDX=request.POST['id']).category
+    if category == "투자":
+        invester = myPageInfomation.objects.get(email=request.POST['funder']).account
+        amount = request.POST['amount']
+        print(invester)
+        print(amount)
+        pwd = request.POST['pwd']
+        w3.personal.unlockAccount(invester, pwd, 0)
+        tx_hash = cf.functions.fund(int(amount), invester).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+
+        receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+        print(1)
+        print(request.POST['id'])
+        fund = fundPost.objects.filter(IDX=request.POST['id'])
+        print(2)
+        currentAmount = fund[0].currentAmount
+        targetAmount = fund[0].targetAmount
+        print(4)
+        afterAmount = int(currentAmount) + int(amount)
+        print(afterAmount)
+        percentage = round(int(currentAmount)/int(targetAmount), 4)
+
+        fund.update(currentAmount=afterAmount, percent=percentage)
 
 
-
-    invester = myPageInfomation.objects.get(email=request.POST['funder']).account
-    amount = request.POST['amount']
-    print(invester)
-    print(amount)
-    pwd = request.POST['pwd']
-    w3.personal.unlockAccount(invester, pwd, 0)
-    tx_hash = cf.functions.fund(int(amount), invester).transact({'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
-
-    receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-    print(1)
-    print(request.POST['id'])
-    fund = fundPost.objects.filter(IDX=request.POST['id'])
-    print(2)
-    currentAmount = fund[0].currentAmount
-    targetAmount = fund[0].targetAmount
-    print(4)
-    afterAmount = int(currentAmount) + int(amount)
-    print(afterAmount)
-    percentage = round(int(currentAmount)/int(targetAmount), 4)
-
-    fund.update(currentAmount=afterAmount, percent=percentage)
-
-
-    res = {"Ans":"펀딩되었습니다.", "amount":amount}
-    return JsonResponse(res)
+        res = {"Ans":"펀딩되었습니다.", "amount":amount}
+        return JsonResponse(res)
+    # else:
+    #     targetAmount=fundPost.objects.get(IDX=request.POST['id']).targetAmount
+    #     currentAmount=fundPost.objects.get(IDX=request.POST['id']).currentAmounts
+    #     if currentAmount >= targetAmount:
+            
 
 def erollFunding(request):
     br = fundPost(
@@ -2665,7 +2671,7 @@ def createfunding(request):
 
         print(1)
 
-        crowdFundMaster_address = Web3.toChecksumAddress("0x1fc28d5db7aa2d19a3205dbd481d38588e528952")
+        crowdFundMaster_address = Web3.toChecksumAddress("0xaba72696023b37ecc2edd1fcf56a82e56488cb8b")
         cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
 
 
@@ -2681,6 +2687,7 @@ def createfunding(request):
         tx_hash = cfc.functions.creatFunding(fundcreater, int(timestamp), int(request.POST['price'])).transact(
             {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
         receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+        print(receipt)
         myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
         eventlist = myfilter.get_all_entries()[0].args.CA
 
@@ -2697,8 +2704,8 @@ def createfunding(request):
             sharePeopleNumber=0,
             isfunding='펀딩중',
             fundCategory=request.POST['category'],
-            ddd=receipt,
-            eee=eventlist,
+            txid=receipt,
+            fundaccount=eventlist,
         )
         br.save()
 

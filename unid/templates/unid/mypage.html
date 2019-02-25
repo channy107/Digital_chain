@@ -25,7 +25,7 @@
             </a>
         </div>
         <div id="profile-icon" style="margin-top:-25px" >
-            {% if mypage.userimage %}
+            {% if request.session.user_image %}
             <div id="user_image_icon" style="text-align:center; padding-top:30px;">
                 <img style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             </div>
@@ -70,7 +70,7 @@
         <form id="user_profile_edit_form" name="user_profile_edit_form" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
             <div id="profile-icon_edit" style="margin-top:-23px; height: 100px; padding-top:30px;">
-            {% if mypage.userimage %}
+            {% if request.session.user_image %}
                 <img id="img" style="width:67px; height: 67px; border-radius:50%;" src="/{{ mypage.userimage }}">
             {% else %}
                 <img id="img" name="default_profile_img" style="width:67px; height: 67px;text-align: center; border-radius:50%;" src="{% static 'unid/icon/profle-icon.png' %}">
