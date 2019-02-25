@@ -702,6 +702,7 @@ xpopup
         },
         readOnly: true,
     });
+    editor.setContents(JSON.parse("{{ posts.contents | escapejs }}"));
 
     jQuery(document).ready(function($){
         $('#nav1').unbind("click");

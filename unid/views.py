@@ -2641,8 +2641,36 @@ def createfunding(request):
         return render(request, 'unid/createfunding.html', {})
 
     else:
+        try:
+            upload_images = request.FILES.getlist('user_preview_files')
+        except MultiValueDictKeyError as e:
+            pass
+        now = datetime.now()
+        today = now.strftime('%Y-%m-%d')
+        try:
+            print(os.getcwd())
+            os.mkdir("media/funding/" + today)
+        except FileExistsError as e:
+            pass
+        preview_save_filelist = []
+        preview_ui_filelist = []
+        for upload_image in upload_images:
+            image_number = str(random.random())
+            previewfilename = upload_image.name
+            extendname = previewfilename[previewfilename.find(".", -5):]
+            real_preview_filename = image_number + extendname
+            preview_save_filelist.append(real_preview_filename)
+            preview_ui_filelist.append(previewfilename)
+            now = datetime.now()
+            today = now.strftime('%Y-%m-%d')
+            print(os.getcwd())
+            contents_dir = "media/funding/" + today + "/"
+            # 해당 날짜의 디렉토리
+            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
+                for chunk in upload_image.chunks():
+                    file.write(chunk)
 
-        sess = request.session['user_name']
+        sess = request.session['user_email']
         print(1)
         title = request.POST['title']
         print(2)
@@ -2685,21 +2713,22 @@ def createfunding(request):
         myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
         eventlist = myfilter.get_all_entries()[0].args.CA
 
-
+        contents_dir = "media/funding/" + today + "/"
         br = fundPost(
-            image_path=image_path,
+            image_path=contents_dir + preview_save_filelist[0],
             title=title,
             context=intro,
             targetAmount=targetamount,
             currentAmount=0,
             expireDate=publisheddate,
-            funderEmail=myPageInfomation.objects.get(email='injh9900@gmail.com'),
+            funderEmail=myPageInfomation.objects.get(email=sess),
             tags=tags,
             sharePeopleNumber=0,
             isfunding='펀딩중',
             fundCategory=category,
             txid=receipt,
             fundaccount=eventlist,
+            ccc=request.POST.get('answer_delta'),
         )
         br.save()
 
