@@ -1210,7 +1210,7 @@ def main_upload(request):
 
 
 
-
+        print(request.POST.get('answer_delta'))
         print(image_path)
         now = datetime.now()
         reward_date = now + timedelta(days=7)
@@ -2669,7 +2669,7 @@ def createfunding(request):
             with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
                 for chunk in upload_image.chunks():
                     file.write(chunk)
-
+        print(request.POST.get('answer_delta'))
         sess = request.session['user_email']
         print(1)
         title = request.POST['title']
@@ -2713,7 +2713,7 @@ def createfunding(request):
         myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
         eventlist = myfilter.get_all_entries()[0].args.CA
 
-        contents_dir = "media/funding/" + today + "/"
+        contents_dir = "/media/funding/" + today + "/"
         br = fundPost(
             image_path=contents_dir + preview_save_filelist[0],
             title=title,
