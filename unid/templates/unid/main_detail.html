@@ -580,10 +580,11 @@ xpopup
           toolbar: toolbarOptions
         },
         readOnly: true,
-        placeholder: 'Free Write...',
+
     });
 
     editor.setContents(JSON.parse("{{ posts.contents | escapejs }}"));
+
     jQuery(document).ready(function($){
         $('#nav1').addClass('visible-place');
         $(".votings1").click(function() {

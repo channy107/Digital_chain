@@ -699,7 +699,7 @@ xpopup
 
                     <ul class="cd-buttons">
                         <li><a href="#0" class="cd-popup-no pointeffect">취소</a></li>
-                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="document.getElementById('myform').submit()">크라우드 펀딩 등록</a></li>
+                        <li><a href="#0" class="cd-popup-yes" id="enrollyes" onclick="richTextSubmin()">크라우드 펀딩 등록</a></li>
                         <!--<li><a href="#0" class="cd-popup-yes" id="enrollyes">크라우드 펀딩 등록</a></li>-->
                     </ul>
                     <a href="#0" class="cd-popup-close img-replace"></a>
@@ -827,11 +827,10 @@ xpopup
       console.log(document.querySelector('input[name="answer_delta"]'));
       console.log(document.querySelector('input[name="answer_delta"]').value);
           function richTextSubmin() {
+            console.log("괸다");
               //console.log(quill.getContents());
               //console.log(quill.root.innerHTML);
 
-
-                answer_delta_text
               var answer_delta = document.querySelector('input[name="answer_delta"]');
               answer_delta.value = JSON.stringify(editor.getContents());
 
