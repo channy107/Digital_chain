@@ -833,9 +833,9 @@ def writer_rewards():
     now = datetime.now()
     reward_day = now - timedelta(days=1)
     rewarded_day = reward_day - timedelta(days=1)
-    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
+    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success", isdelete="삭제")
     reward_values = reward.values()
-    # print(reward_values)
+    print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -846,16 +846,18 @@ def writer_rewards():
         post_id = reward_values[i]['posts_id']
         rewards = reward_values[i]['rewards']
         writer = reward_values[i]['email_id']
-        # print(rewards)
+        print(rewards)
         writer_reward = rewards * 0.8
         reward = "%.2f" % writer_reward
-        # print(writer_reward)
-        # print(reward)
-        # print(writer)
+        print(writer_reward)
+        print(reward)
+        print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
+        print(writer_info)
         writer_reward_success = Post.objects.get(posts_id=post_id)
         writeraccounts = writer_info.account
+        print(writeraccounts)
         writername = writer_info.name
         coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
         writeraccount = Web3.toChecksumAddress(writeraccounts)
@@ -865,7 +867,7 @@ def writer_rewards():
         # print(reward_nwei)
         # print(coinbase)
         unidadmin = myPageInfomation.objects.get(account=coinbase)
-        # print(unidadmin)
+        print(unidadmin)
 
 
         unidaccountpwd = "pass0"
@@ -879,6 +881,7 @@ def writer_rewards():
         writer_reward_success.rewards_success = "success"
         writer_reward_success.save()
 
+# writer_rewards()
 
 
 def liked_users_reward():
@@ -892,7 +895,7 @@ def liked_users_reward():
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
         # print(userreward)
-        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success")
+        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success", isdelete="삭제")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -933,7 +936,7 @@ def liked_users_reward():
 
             reward_success.rewards_success = "success"
             reward_success.save()
-
+# liked_users_reward()
 
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
@@ -1148,6 +1151,8 @@ def uploadAd(request):
             file.write(chunk)
     res = {'Ans': "광고가 업로드 되었습니다"}
     return JsonResponse(res)
+
+
 @csrf_exempt
 def uploadImage(request):
     upload_images = request.FILES.get('richimage')
@@ -1244,7 +1249,6 @@ def signup(request):
 @login_required
 def createaccount(request):
     if request.method == 'GET':
-        account = myPageInfomation.objects.get(email=request.session['user_email']).account
         try:
             unidBlackList.objects.get(user_id=request.session['user_email'])
             request.session['user_email'] = {}
@@ -1252,11 +1256,12 @@ def createaccount(request):
             request.session.modified = True
             return HttpResponse("사용이 금지 된 유저입니다.")
         except ObjectDoesNotExist as e:
-            if account:
+            try:
+                account = myPageInfomation.objects.get(email=request.session['user_email']).account
                 request.session['user_account'] = account
                 url = '/unid'
                 return HttpResponseRedirect(url)
-            else:
+            except:
                 return render(request, 'unid/createaccount.html', {})
     else:
         rpc_url = "http://222.239.231.252:8220"
@@ -1821,7 +1826,7 @@ def infomodify(request, id):
 
         user = myPageInfomation.objects.get(email=sess)
 
-        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, image_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
 
 
 
@@ -2636,35 +2641,24 @@ def createfunding(request):
         return render(request, 'unid/createfunding.html', {})
 
     else:
-        try:
-            upload_images = request.FILES.getlist('user_preview_files')
-        except MultiValueDictKeyError as e:
-            pass
-        now = datetime.now()
-        today = now.strftime('%Y-%m-%d')
-        try:
-            print(os.getcwd())
-            os.mkdir("media/funding/" + today)
-        except FileExistsError as e:
-            pass
-        preview_save_filelist = []
-        preview_ui_filelist = []
-        for upload_image in upload_images:
-            image_number = str(random.random())
-            previewfilename = upload_image.name
-            extendname = previewfilename[previewfilename.find(".", -5):]
-            real_preview_filename = image_number + extendname
-            preview_save_filelist.append(real_preview_filename)
-            preview_ui_filelist.append(previewfilename)
-            now = datetime.now()
-            today = now.strftime('%Y-%m-%d')
-            print(os.getcwd())
-            contents_dir = "media/funding/" + today + "/"
-            # 해당 날짜의 디렉토리
-            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
-                for chunk in upload_image.chunks():
-                    file.write(chunk)
 
+        sess = request.session['user_name']
+        print(1)
+        title = request.POST['title']
+        print(2)
+        intro = request.POST['intro']
+        category = request.POST['category']
+        print(3)
+        tags = request.POST['tags']
+
+
+        targetamount = request.POST['price']
+        detailexplaination = request.POST.get('answer_delta')
+        condition = request.POST['index']
+        try:
+            image_path = request.POST['firstimage']
+        except:
+            image_path = "/media/defaultthumbnail.png"
 
         rpc_url = "http://222.239.231.252:8220"
         w3 = Web3(HTTPProvider(rpc_url))
@@ -2691,19 +2685,19 @@ def createfunding(request):
         myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
         eventlist = myfilter.get_all_entries()[0].args.CA
 
-        preview_images_dir = "/media/funding/" + today + "/"
+
         br = fundPost(
-            image_path=preview_images_dir + preview_save_filelist[0],
-            title=request.POST['title'],
-            context=request.POST['intro'],
-            targetAmount=request.POST['price'],
+            image_path=image_path,
+            title=title,
+            context=intro,
+            targetAmount=targetamount,
             currentAmount=0,
             expireDate=publisheddate,
             funderEmail=myPageInfomation.objects.get(email='injh9900@gmail.com'),
-            tags=request.POST['tags'],
+            tags=tags,
             sharePeopleNumber=0,
             isfunding='펀딩중',
-            fundCategory=request.POST['category'],
+            fundCategory=category,
             txid=receipt,
             fundaccount=eventlist,
         )
