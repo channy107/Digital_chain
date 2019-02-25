@@ -832,9 +832,9 @@ def writer_rewards():
     now = datetime.now()
     reward_day = now - timedelta(days=1)
     rewarded_day = reward_day - timedelta(days=1)
-    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
+    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success", isdelete="삭제")
     reward_values = reward.values()
-    # print(reward_values)
+    print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -845,16 +845,18 @@ def writer_rewards():
         post_id = reward_values[i]['posts_id']
         rewards = reward_values[i]['rewards']
         writer = reward_values[i]['email_id']
-        # print(rewards)
+        print(rewards)
         writer_reward = rewards * 0.8
         reward = "%.2f" % writer_reward
-        # print(writer_reward)
-        # print(reward)
-        # print(writer)
+        print(writer_reward)
+        print(reward)
+        print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
+        print(writer_info)
         writer_reward_success = Post.objects.get(posts_id=post_id)
         writeraccounts = writer_info.account
+        print(writeraccounts)
         writername = writer_info.name
         coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
         writeraccount = Web3.toChecksumAddress(writeraccounts)
@@ -864,7 +866,7 @@ def writer_rewards():
         # print(reward_nwei)
         # print(coinbase)
         unidadmin = myPageInfomation.objects.get(account=coinbase)
-        # print(unidadmin)
+        print(unidadmin)
 
 
         unidaccountpwd = "pass0"
@@ -878,6 +880,7 @@ def writer_rewards():
         writer_reward_success.rewards_success = "success"
         writer_reward_success.save()
 
+# writer_rewards()
 
 
 def liked_users_reward():
@@ -891,7 +894,7 @@ def liked_users_reward():
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
         # print(userreward)
-        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success")
+        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success", isdelete="삭제")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -932,7 +935,7 @@ def liked_users_reward():
 
             reward_success.rewards_success = "success"
             reward_success.save()
-
+# liked_users_reward()
 
 def main_detail(request, id):
     posts = Post.objects.get(posts_id=id)
@@ -1820,7 +1823,7 @@ def infomodify(request, id):
 
         user = myPageInfomation.objects.get(email=sess)
 
-        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, file_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
+        Post.objects.filter(posts_id=id).update(title=title, reward_date=reward_date, user=user, category=category, contents=contents, image_path=info_dir + image_list[0], tags=tags, category_path="media/" +request.POST['category']+'.png')
 
 
 
