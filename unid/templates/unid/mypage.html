@@ -154,8 +154,8 @@
                         </ul>
                         <div class="row-picture">
                             <a href="{% url 'main_detail' article.posts_id %}">
-                                {% if article.imagepath %}
-                                    <img src="{{ article.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                                {% if article.image_path %}
+                                    <img src="{{ article.image_path }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}

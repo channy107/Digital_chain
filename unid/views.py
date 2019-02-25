@@ -650,7 +650,8 @@ def info_popular(request):
         if request.is_ajax():
             context = {'posts': posts,
                        'page_num':page_num,
-                       'ads':ads}
+                       'ads':ads,
+                       'mypage': mypage}
             return render(request, 'unid/info_popular_ajax.html', context)
 
         context = {'posts':posts, 'voting_count':voting_count, 'mypage':mypage, 'ads':ads}
@@ -672,11 +673,10 @@ def info_popular(request):
         if request.is_ajax():
             context = {'posts': posts,
                        'page_num':page_num,
-                       'mypage':mypage,
                        'ads':ads}
             return render(request, 'unid/info_popular_ajax.html', context)
 
-        context = {'posts': posts, 'mypage':mypage, 'ads':ads}
+        context = {'posts': posts, 'ads':ads}
 
         return render(request, 'unid/info_popular.html', context)
 

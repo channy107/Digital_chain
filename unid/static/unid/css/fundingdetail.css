@@ -6,6 +6,9 @@
     font-family: 'Noto Sans KR', sans-serif;
 
 }
+.d-block img-fluid {
+    width: 1010px;
+}
 .funding-background-image {
     background-repeat: no-repeat;
     background-position: 50% 30%;
