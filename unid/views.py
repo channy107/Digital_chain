@@ -370,7 +370,7 @@ def transaction(request):
     else:
         from_account = request.POST['from_account']
         to_account = request.POST['to_account']
-        account_bal = request.POST['account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['account_bal']) * 0.000000000000000001
         tran_id = request.POST['tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -395,7 +395,7 @@ def exchange(request):
     else:
         from_account = request.POST['e_from_account']
         to_account = request.POST['e_to_account']
-        account_bal = request.POST['e_account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['e_account_bal']) * 0.000000000000000001
         tran_id = request.POST['e_tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -417,7 +417,7 @@ def purchase(request):
     else:
         from_account = request.POST['p_from_account']
         to_account = request.POST['p_to_account']
-        account_bal = request.POST['p_account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['p_account_bal']) * 0.000000000000000001
         tran_id = request.POST['p_tran_id']
         account_bal_db = account_bal
 
