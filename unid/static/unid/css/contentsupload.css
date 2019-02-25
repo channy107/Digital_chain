@@ -225,3 +225,19 @@
     margin: 0 auto;
 
 }
+.ql-toolbar {
+    width: 960px;
+    margin: 0 auto;
+    border-radius: .25rem;
+}
+.ql-container {
+    width: 960px;
+    margin: 0 auto 40px !important;
+    border-radius: .25rem;
+}
+.ql-image {
+    width: 85px !important;
+}
+.ql-editor {
+    height: 610px !important;
+}

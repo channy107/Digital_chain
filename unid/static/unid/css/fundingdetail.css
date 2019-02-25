@@ -68,8 +68,15 @@
     border-color: #80808057;
     position: relative;
     bottom: 198px;
+    width: 1070px;
+    margin: 0 auto 20px;
 }
-
+.fund-condition {
+    position: relative;
+    bottom: 198px;
+    width: 1070px;
+    margin: 0 auto 20px;
+}
 .fund-creater {
     display: inline-block;
     width: 580px;
@@ -104,6 +111,14 @@
     margin: 0 30px 0 0;
     font-size: 12px;
 }
+.share-context1 {
+    display: inline-block;
+    width: 441px;
+    float: left;
+    margin: 0px 30px 26px 20px;
+    font-size: 12px;
+
+}
 .sign {
     display: inline-block;
     width: 130px;
@@ -118,5 +133,10 @@
 }
 #popupbalance, #popuptitle {
     display: inline;
+
+}
+
+.condition1 {
+    margin: 0 0 0 10px;
 
 }

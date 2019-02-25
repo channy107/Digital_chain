@@ -1148,6 +1148,8 @@ def uploadAd(request):
             file.write(chunk)
     res = {'Ans': "광고가 업로드 되었습니다"}
     return JsonResponse(res)
+
+
 @csrf_exempt
 def uploadImage(request):
     upload_images = request.FILES.get('richimage')
@@ -1244,7 +1246,6 @@ def signup(request):
 @login_required
 def createaccount(request):
     if request.method == 'GET':
-        account = myPageInfomation.objects.get(email=request.session['user_email']).account
         try:
             unidBlackList.objects.get(user_id=request.session['user_email'])
             request.session['user_email'] = {}
@@ -1252,11 +1253,12 @@ def createaccount(request):
             request.session.modified = True
             return HttpResponse("사용이 금지 된 유저입니다.")
         except ObjectDoesNotExist as e:
-            if account:
+            try:
+                account = myPageInfomation.objects.get(email=request.session['user_email']).account
                 request.session['user_account'] = account
                 url = '/unid'
                 return HttpResponseRedirect(url)
-            else:
+            except:
                 return render(request, 'unid/createaccount.html', {})
     else:
         rpc_url = "http://222.239.231.252:8220"
@@ -2636,35 +2638,24 @@ def createfunding(request):
         return render(request, 'unid/createfunding.html', {})
 
     else:
-        try:
-            upload_images = request.FILES.getlist('user_preview_files')
-        except MultiValueDictKeyError as e:
-            pass
-        now = datetime.now()
-        today = now.strftime('%Y-%m-%d')
-        try:
-            print(os.getcwd())
-            os.mkdir("media/funding/" + today)
-        except FileExistsError as e:
-            pass
-        preview_save_filelist = []
-        preview_ui_filelist = []
-        for upload_image in upload_images:
-            image_number = str(random.random())
-            previewfilename = upload_image.name
-            extendname = previewfilename[previewfilename.find(".", -5):]
-            real_preview_filename = image_number + extendname
-            preview_save_filelist.append(real_preview_filename)
-            preview_ui_filelist.append(previewfilename)
-            now = datetime.now()
-            today = now.strftime('%Y-%m-%d')
-            print(os.getcwd())
-            contents_dir = "media/funding/" + today + "/"
-            # 해당 날짜의 디렉토리
-            with open(contents_dir + real_preview_filename, 'wb') as file:  # 저장경로
-                for chunk in upload_image.chunks():
-                    file.write(chunk)
 
+        sess = request.session['user_name']
+        print(1)
+        title = request.POST['title']
+        print(2)
+        intro = request.POST['intro']
+        category = request.POST['category']
+        print(3)
+        tags = request.POST['tags']
+
+
+        targetamount = request.POST['price']
+        detailexplaination = request.POST.get('answer_delta')
+        condition = request.POST['index']
+        try:
+            image_path = request.POST['firstimage']
+        except:
+            image_path = "/media/defaultthumbnail.png"
 
         rpc_url = "http://222.239.231.252:8220"
         w3 = Web3(HTTPProvider(rpc_url))
@@ -2691,19 +2682,19 @@ def createfunding(request):
         myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
         eventlist = myfilter.get_all_entries()[0].args.CA
 
-        preview_images_dir = "/media/funding/" + today + "/"
+
         br = fundPost(
-            image_path=preview_images_dir + preview_save_filelist[0],
-            title=request.POST['title'],
-            context=request.POST['intro'],
-            targetAmount=request.POST['price'],
+            image_path=image_path,
+            title=title,
+            context=intro,
+            targetAmount=targetamount,
             currentAmount=0,
             expireDate=publisheddate,
             funderEmail=myPageInfomation.objects.get(email='injh9900@gmail.com'),
-            tags=request.POST['tags'],
+            tags=tags,
             sharePeopleNumber=0,
             isfunding='펀딩중',
-            fundCategory=request.POST['category'],
+            fundCategory=category,
             txid=receipt,
             fundaccount=eventlist,
         )
