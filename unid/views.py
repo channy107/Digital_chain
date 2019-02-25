@@ -419,7 +419,7 @@ def purchase(request):
         to_account = request.POST['p_to_account']
         account_bal = request.POST['p_account_bal'] * int(0.000000000000000001)
         tran_id = request.POST['p_tran_id']
-        account_bal_db = int(account_bal)
+        account_bal_db = account_bal
 
         from_info = myPageInfomation.objects.get(account=from_account)
         to_info = myPageInfomation.objects.get(account=to_account)
@@ -1328,7 +1328,7 @@ def createaccount(request):
         #
         # tx_hash = ncc.functions.transfer(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"),  account, 100 * 1000000000000000000).transact(
         #     {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
-        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 1})
+        w3.eth.sendTransaction({'from':w3.eth.accounts[0], 'to': account, 'value': 1000000000000000000})
         request.session['user_account'] = account
 
         try:
