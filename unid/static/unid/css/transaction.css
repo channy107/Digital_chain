@@ -425,7 +425,7 @@
             .loading {
                 border: 2px solid transparent;
                 border-color: transparent #E64C3C;
-                animation: rotate-loading 1.5s linear 0s infinite normal;
+                -webkit-animation: rotation 2s infinite linear;
                 transform-origin: 50% 50%;
             }
 
@@ -463,6 +463,15 @@
                 20% {opacity: 0}
                 50% {opacity: 1}
                 100%{opacity: 0}
-            }        
+            }
+                    
+            @-webkit-keyframes rotation {
+                from {
+                        -webkit-transform: rotate(0deg);
+                }
+                to {
+                        -webkit-transform: rotate(359deg);
+                }
+        }
 
 

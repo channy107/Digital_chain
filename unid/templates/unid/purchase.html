@@ -257,6 +257,7 @@
                                                             heading: '환전 완료',
                                                             text: '토큰환전이 완료되었습니다.',
                                                             showHideTransition: 'slide',
+                                                            position: 'bottom-center',
                                                             icon: 'success',
                                                             afterHidden: function(){
                                                             window.location.href = '/unid/mywallet';
@@ -439,13 +440,13 @@
                               <div class="modal-content">
                                      <div class="modal-body">
                                                     <div class="loading-container" >
-                                                        <div class="loading"></div>
+                                                        <div class="loading" align="center"></div>
                                                         <div id="loading-text">
                                                             <img src="/media/icon-로딩바.png" width="100" height="100">
                                                         </div>
                                                     </div>
-                                                    <div class="loading-text2">ETH를 nid로 환전하는 중 입니다...</div>
-                                                    <div class="loading-text3">이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                                                    <div class="loading-text2" align="center">ETH를 nid로 환전하는 중 입니다...</div>
+                                                    <div class="loading-text3" align="center">이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
                                      </div>
                                  </div>
                           </div>
