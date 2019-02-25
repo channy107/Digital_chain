@@ -521,7 +521,7 @@ xpopup
       <div class="row-advertise">
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel" align="center">
             <div class="carousel-inner" role="listbox">
-                <div class="funding-background-image" style="background-image: url('{{ fundposts.image_path }}'); height: 290px; background-repeat: no-repeat; background-position: 4% -4%; background-size: cover;"></div>
+                <div class="funding-background-image" style="background-image: url('{{ fundposts.image_path }}'); height: 350px; background-repeat: no-repeat; background-position: 4% -4%; background-size: cover;"></div>
             </div>
         </div>
     </div>
@@ -529,12 +529,12 @@ xpopup
     <div class="fundingdetail-container">
 
       <!-- Heading Row -->
-      <div class="row align-items-center my-5">
+      <div class="row align-items-center my-5" style="    margin-top: 2rem!important;">
         <div class="col-lg-7">
           <img src="{{ fundposts.image_path }}" width="600" height="340">
         </div>
         <!-- /.col-lg-8 -->
-        <div class="col-lg-5" style="height: 370px;">
+        <div class="col-lg-5" style="height: 385px;">
             <div style="min-height: 150px;">
                 <div class="fund-title">{{ fundposts.title }}</div>
                 <div class="fund-context">{{ fundposts.context }}</div>
@@ -553,8 +553,6 @@ xpopup
                         <div class="popuprow1">
                             <h4>펀딩 하시겠습니까?</h4>
                         </div>
-                        <label for="inputpwd" class="col-sm-10" id="contentsName">투자 금액</label>
-                        <input class="form-control col-sm-12"  style="margin: 0 auto;" id="inputpwd" name="inputpwd" type="password">
                         <div class="popuprow2">
                             <ul id='popupinfo'>
 
@@ -562,8 +560,14 @@ xpopup
                         </div>
                         <div class="popuprow4">
                             <div class="form-group">
-                                <label for="inputpwd" class="col-sm-10" id="contentsName">계좌 비밀번호를 입력해주세요</label>
-                                <input class="form-control col-sm-12"  style="margin: 0 auto;" id="inputpwd" name="inputpwd" type="password">
+                                <div style="margin: 0 0 10px 0px;">
+                                    <label for="inputpwd" class="col-sm-10" id="contentsName" style="display: inline-block;float: left;width: 63px;padding: 0px !important;position: relative;top: 7px;">투자 금액</label>
+                                    <input class="form-control col-sm-12"  style="margin:0 10px 0 27px;display: inline-block;width: 215px;" id="inputpwd" name="inputpwd" type="password">nid
+                                </div>
+                                <div>
+                                    <label for="inputpwd" class="col-sm-10" id="contentsName" style="display: inline-block;float: left;width: 63px;padding: 0px !important;position: relative;top: 7px;">비밀번호</label>
+                                    <input class="form-control col-sm-12"  style="margin: 0px 0px 0 27px;display: inline-block;width: 250px;" id="inputpwd" name="inputpwd" type="password">
+                                </div>
                             </div>
                         </div>
                         <div class="popuprow3">
@@ -600,8 +604,8 @@ xpopup
         <div class="card-body" style="padding: 1.25rem 14rem;">
           <div>
             <div class="fund-infobox">
-              <div class="fund-creater"> 등록자 아이디 </div>
-              <div class="fund-tags"> #세븐브로이 #세븐브로이맥주 #국내수제맥주</div>
+              <div class="fund-creater"> {{ fundposts.funderEmail.name }} </div>
+              <div class="fund-tags"> {{ fundposts.tags }}</div>
             </div>
             <div class="fund-sharebox">
               <div class="currunt-sharemember"> 156명이 확산에 참여중입니다.</div>
@@ -650,9 +654,10 @@ xpopup
 
                 if ( mybalance == "로그인이 필요합니다" ) {
                     $('#popupinfo').empty();
-                    $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
+
                     } else {
                         $('#popupinfo').empty();
+                        $('#popupinfo').append("<ul class='popupinformationsrow'> <li class='hi' id='popuptitle'>제목 : </li> <li class='popupinformations'>" + contentstitle + "</li> </ul><br>");
                         $('#popupinfo').append("<br><ul class='popupinformationsrow'> <li class='hi' id='popupbalance'>내 잔고 : </li> <li class='popupinformations'>" + mybalance/1000000000000000000 + " nid </li> </ul>");
                     };
                 };

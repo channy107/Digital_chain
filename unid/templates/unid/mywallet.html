@@ -106,17 +106,17 @@
                 <div class="function-button">
                         <a href="/unid/transaction"> <img src="{% static 'unid/icon/credit-card.png' %}" border="0" width="75" height="75"></a>
                     <br>
-                        <span class="icon-name" size="5">토큰송금</span>
+                        <span class="icon-name" size="5">송금</span>
                 </div>
                 <div class="function-button">
                         <a href="/unid/exchange"><img src="{% static 'unid/icon/exchange.png' %}" border="0" width="75" height="75"></a>
                     <br>
-                        <span class="icon-name" size="5">토큰환전</span>
+                        <span class="icon-name" size="5">구매</span>
                 </div>
                 <div class="function-button">
                         <a href="/unid/purchase"><img src="{% static 'unid/icon/bill.png' %}" border="0" width="75" height="75"></a>
                     <br>
-                        <span class="icon-name"  size="5">토큰구매</span>
+                        <span class="icon-name"  size="5">환전</span>
                 </div>
 
             </div>
@@ -200,7 +200,7 @@
     <div id="table-list-ex">
         <div class="row">
             <div class="history">
-                    <h6> 환전내역  <span>{{ count_ex }}건</span></h6>
+                    <h6> 구매내역  <span>{{ count_ex }}건</span></h6>
             </div>
         </div>
 
@@ -211,7 +211,7 @@
                       <thead>
                         <tr>
                           <th scope="col">승인날짜</th>
-                          <th scope="col">환전금액</th>
+                          <th scope="col">구매금액</th>
                           <th scope="col">거래아이디</th>
                         </tr>
                       </thead>
@@ -246,7 +246,7 @@
     <div id="table-list-pu">
         <div class="row">
             <div class="history">
-                    <h6> 구매내역  <span>{{ count_pu }}건</span></h6>
+                    <h6> 환전내역  <span>{{ count_pu }}건</span></h6>
             </div>
         </div>
 
@@ -257,7 +257,7 @@
                       <thead>
                         <tr>
                           <th scope="col">승인날짜</th>
-                          <th scope="col">구매금액</th>
+                          <th scope="col">환전금액</th>
                           <th scope="col">거래아이디</th>
                         </tr>
                       </thead>

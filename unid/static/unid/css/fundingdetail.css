@@ -1,7 +1,7 @@
 .fundingdetail-container {
     position: relative;
     bottom: 198px;
-    margin: 0 auto;
+    margin: -10px auto;
     max-width: 1070px !important;
     font-family: 'Noto Sans KR', sans-serif;
 
@@ -94,7 +94,7 @@
     float: left;
 }
 .currunt-sharemember {
-    padding: 11px 0;
+    padding: 0 0 11px 0;
     font-weight: bold;
 }
 .share-context {
@@ -116,7 +116,7 @@
     border-width: 1px;
     border-color: #80808057;
 }
-#popupbalance {
+#popupbalance, #popuptitle {
     display: inline;
 
 }
