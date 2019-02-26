@@ -2594,8 +2594,19 @@ def applyForFund(request):
             print(int(currentAmount) / int(targetAmount))
             # print(percentage)
             # fund.update(currentAmount=afterAmount, percent=percentage)
-            fund.update(currentAmount=afterAmount, isfunding="펀딩완료")
+            fund.update(currentAmount=afterAmount, isfunding="펀딩완료", percent="100%")
             afterfund = fundPost.objects.get(IDX=request.POST['id'])
+            invester = myPageInfomation.objects.get(email=request.POST['funder']).account
+            amount = request.POST['amount']
+            print(invester)
+            print(amount)
+            pwd = request.POST['pwd']
+            w3.personal.unlockAccount(invester, pwd, 0)
+            tx_hash = cf.functions.checkGoalReached().transact(
+                {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+
+            receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+
 
 
             #
