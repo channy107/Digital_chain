@@ -104,10 +104,6 @@ def mypage(request):
                 print()
 
 
-        Article_data_for_Fed = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-02-01", "2019-02-28"]))
-        Article_data_for_Mar = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-03-01", "2019-03-31"]))
-        Article_data_for_Apr = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-04-01", "2019-04-30"]))
-        Article_data_for_May = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-05-01", "2019-05-31"]))
         numbersOfArticles = len(Post.objects.filter(email_id=request.session['user_email']))
         numbersOfcontents = len(uploadContents.objects.filter(writeremail_id=request.session['user_email']))
         numbersOfDownloads = len(downloadContents.objects.filter(downloader_email_id=request.session['user_email']))
@@ -179,11 +175,6 @@ def mypage(request):
                        'rewardDate': rewardDate,
                        'numbersOfrewardedArticles': numbersOfrewardedArticles,
                        'totalForContentsSelling': totalForContentsSelling,
-                       'Article_data_for_Jan': Article_data_for_Jan,
-                       'Article_data_for_Fed': Article_data_for_Fed,
-                       'Article_data_for_Mar': Article_data_for_Mar,
-                       'Article_data_for_Apr': Article_data_for_Apr,
-                       'Article_data_for_May': Article_data_for_May,
                        'numbersOffunds': numbersOffunds,
                        'crowdfunding': crowdfunding,
                        }

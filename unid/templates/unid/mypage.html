@@ -483,7 +483,7 @@
                 <br>
                 <br>
                 {% if crowdfunding %}
-                    {% for funding in contentsboard %}
+                    {% for funding in crowdfunding %}
                     <div class="popular-row" >
                         <ul class="row-top">
                             {% if funding.funderEmail.name == mypage.name %}
@@ -508,9 +508,9 @@
                             <img src="/{{ funding.image_path }}" width="64.7px" height="21.7px" >
                         </ul>
                         <div class="row-picture">
-                            <a href="{% url 'contentsdetail' content.contents_id %}">
-                                {% if content.imagepath %}
-                                    <img src="{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                            <a href="{% url 'contentsdetail' funding.IDX %}">
+                                {% if funding.image_path %}
+                                    <img src="{{ funding.image_path }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
@@ -518,18 +518,10 @@
                         </div>
                         <ul class="row-middle">
                             <li>
-                                <a href="{% url 'contentsdetail' content.contents_id %}">{{ content.title }}</a>
+                                <a href="{% url 'contentsdetail' funding.IDX %}">{{ funding.title }}</a>
                             </li>
                             <li>
-                                <a href="{% url 'contentsdetail' content.contents_id %}">{{ content.contents|truncatechars_html:80 }}</a>
-                            </li>
-                        </ul>
-                        <ul class="row-bottom">
-                            <li>
-                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ content.price }}
-                            </li>
-                            <li>
-                                <img src="{% static 'unid/icon/wordballoon-icon.png' %}" width="25px" height="16.7px"> {{ content.replymentcount }}
+                                <a href="{% url 'contentsdetail' funding.IDX %}">{{ funding.context|truncatechars_html:80 }}</a>
                             </li>
                         </ul>
                     </div>
@@ -546,50 +538,30 @@
                 <br>
                 <div class="popular-row">
                     <ul class="row-top">
-                        {% if download.contents_id.writeremail.name == mypage.name %}
-                        <a href="/unid/mypage">
-                        {% else %}
-                        <a href="{% url 'user_detail' download.contents_id.writeremail.IDX %}">
-                        {% endif %}
                             <li>
-                                {% if download.contents_id.writeremail.userimage %}
-                                <img src="/{{ download.contents_id.writeremail.userimage }}">
-                                {% else %}
                                 <img src="{% static 'unid/icon/profle-icon.png' %}">
-                                {% endif %}
                             </li>
                             <li>
-                                {{ download.contents_id.writeremail.name }}
+헌찬
                             </li>
                         </a>
                         <li>
                             ·         5분전
                         </li>
-                        <img src="/{{ download.contents_id.cagegory_path }}" width="64.7px" height="21.7px" >
                     </ul>
-                    <div class="row-picture">
-                        <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">
-                            {% if download.contents_id.imagepath %}
-                                <img src="{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
-                            {% else %}
-                                <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
-                            {% endif %}
-                        </a>
-                    </div>
+
                     <ul class="row-middle">
                         <li>
-                            <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">팬텀 월렛으로, 당신의 포켓을 가볍게 바꾸어 보세요.</a>
+                            팬텀 월렛으로, 당신의 포켓을 가볍게 바꾸어 보세요.
                         </li>
                         <li>
-                            <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">[FANTOM WALLET 1.5] 국내 공식 첫공개!!! 다가오는 봄을 맞아 25g 팬텀 월렛으로, 당신의 포켓을 가볍게 바꾸어 보세요.</a>
+                           [FANTOM WALLET 1.5] 국내 공식 첫공개!!! 다가오는 봄을 맞아 25g 팬텀 월렛으로, 당신의 포켓을 가볍게 바꾸어 보세요.
                         </li>
                     </ul>
                     <ul class="row-bottom">
                         <li>
-                            <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ download.contents_id.price }}
                         </li>
                         <li>
-                            <img src="{% static 'unid/icon/wordballoon-icon.png' %}" width="25px" height="16.7px"> {{ download.contents_id.replymentcount }}
                         </li>
                     </ul>
                 </div>
