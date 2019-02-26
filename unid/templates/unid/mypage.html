@@ -172,7 +172,17 @@
                         </ul>
                         <ul class="row-bottom">
                             <li>
-                                <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ article.like_count }}
+                                <span class="main-voting">
+                                {% if user in article.like_user_set.all and article.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+
+                                {% elif user not in article.like_user_set.all and article.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingbefore.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% else %}
+                                <img src="{% static 'unid/icon/rewardafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% endif %}
+                                {{article.like_count}}
+                            </span>
                             </li>
                             <li>
                                 <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ article.rewards }}
@@ -295,7 +305,7 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' content.contents_id %}">
                                 {% if content.imagepath %}
-                                    <img src="{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                                    <img src="/{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
@@ -357,7 +367,7 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">
                                 {% if download.contents_id.imagepath %}
-                                    <img src="{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                                    <img src="/{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}

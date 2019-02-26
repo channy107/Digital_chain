@@ -551,12 +551,16 @@ xpopup
             <div style="margin: 60px 0 0 0;">
                 <div class="currunt-amount">{{ fundposts.currentAmount }} nid 달성</div>
                 <div class="target-amount">목표금액 {{ fundposts.targetAmount }} nid</div>
-                <div class="percentage">·{{ fundposts.percent }}%</div>
+                <div class="percentage">·{{ fundposts.percent }}</div>
                 <div style="margin: 0 0 13px;">
                     <div class="expire-date">11일 남음</div>
                     <div class="deadline">{{ fundposts.expireDate }} 마감</div>
                 </div>
-                <img src="/media/지금 투자하기.PNG" class="pointeffect cd-popup-trigger" id="go-fund" width="380" height="55">
+                {%if fundposts.isfunding == "펀딩중" %}
+                    <img src="/media/펀딩하기.png" class="pointeffect cd-popup-trigger" id="go-fund" width="150" height="50">
+                {% else %}
+                    <img src="/media/펀딩완료.png" class="pointeffect cd-popup-trigger" id="go-fund" width="150" height="50">
+                {% endif %}
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
                         <div class="popuprow1">
@@ -596,8 +600,8 @@ xpopup
                                   <img src="/media/icon-로딩바.png" width="100" height="100">
                              </div>
                           </div>
-                          <div class="loading-text2">콘텐츠 등록중입니다...</div>
-                          <div class="loading-text3">해당 콘텐츠의 정보는 블록체인에 저장 됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                          <div class="loading-text2">펀딩중입니다...</div>
+                          <div class="loading-text3">해당 펀드가 실패할시 투자금액은 반환됩니다. 이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
                        </div> <!-- cd-popup-container -->
                 </div> <!-- cd-popup -->
             </div>
@@ -609,6 +613,7 @@ xpopup
       <!-- /.row -->
 
       <!-- Call to Action Well -->
+  <div>
       <div class="fund-info">
         <div class="card-body">
           <div>
@@ -682,6 +687,7 @@ xpopup
         </div>
       </div>
   </div>
+</div>
 
       <!-- /.row -->
 
