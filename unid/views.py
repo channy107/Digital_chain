@@ -2590,10 +2590,11 @@ def applyForFund(request):
             print(4)
             afterAmount = int(currentAmount) + int(amount)
             print(afterAmount)
-            percentage = round(int(currentAmount) / int(targetAmount), 2)*100
+            # percentage = round(int(currentAmount) / int(targetAmount), 2)*100
             print(int(currentAmount) / int(targetAmount))
-            print(percentage)
-            fund.update(currentAmount=afterAmount, percent=percentage)
+            # print(percentage)
+            # fund.update(currentAmount=afterAmount, percent=percentage)
+            fund.update(currentAmount=afterAmount, isfunding="펀딩완료")
             afterfund = fundPost.objects.get(IDX=request.POST['id'])
 
 
@@ -2731,9 +2732,18 @@ def createfunding(request):
 
         print(1)
 
-        crowdFundMaster_address = Web3.toChecksumAddress("0xc27f91a9828e7620b6e6af28dfa99d2dd54f6406")
-        cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
-
+        crowdFundMaster_address = Web3.toChecksumAddress("0xaba72696023b37ecc2edd1fcf56a82e56488cb8b")
+        cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[
+            {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "crowdfunding",
+             "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
+            {"constant": False,
+             "inputs": [{"name": "fundCreater", "type": "address"}, {"name": "deadline1", "type": "uint256"},
+                        {"name": "goalAmount1", "type": "int256"}], "name": "creatFunding", "outputs": [], "payable": False,
+             "stateMutability": "nonpayable", "type": "function"},
+            {"constant": True, "inputs": [], "name": "getContentsAddressList",
+             "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
+             "type": "function"}, {"anonymous": False, "inputs": [{"indexed": False, "name": "CA", "type": "address"}],
+                                   "name": "EventCreatFunding", "type": "event"}])
 
         import time
         publisheddate = str(request.POST['publisheddate'])[0:10] + ' 15:30:00'
