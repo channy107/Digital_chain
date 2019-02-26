@@ -243,7 +243,17 @@
                         </ul>
                         <ul class="row-bottom">
                             <li>
-                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> {{ reply.posts_id.like_count }}
+                                <span class="main-voting">
+                                {% if user in info.like_user_set.all and info.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+
+                                {% elif user not in info.like_user_set.all and info.rewards_success != "success" %}
+                                <img src="{% static 'unid/icon/votingbefore.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% else %}
+                                <img src="{% static 'unid/icon/rewardafter.png' %}" border="0" width="20" height="20"><span class="voting-count" id="votings"></span>
+                                {% endif %}
+                                {{info.like_count}}
+                            </span>
                             </li>
                             <li>
                                 <img src="{% static 'unid/icon/heart-icon.png' %}"> {{ reply.posts_id.rewards }}
