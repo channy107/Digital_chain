@@ -2590,11 +2590,11 @@ def applyForFund(request):
             print(4)
             afterAmount = int(currentAmount) + int(amount)
             print(afterAmount)
-            percentage = round(int(currentAmount) / int(targetAmount), 2)*100
+            # percentage = round(int(currentAmount) / int(targetAmount), 2)*100
             print(int(currentAmount) / int(targetAmount))
-            print(percentage)
+            # print(percentage)
             # fund.update(currentAmount=afterAmount, percent=percentage)
-            fund.update(currentAmount=afterAmount, isfunding="펀딩완료", percent=percentage)
+            fund.update(currentAmount=afterAmount, isfunding="펀딩완료", percent="100%")
             afterfund = fundPost.objects.get(IDX=request.POST['id'])
             invester = myPageInfomation.objects.get(email=request.POST['funder']).account
             amount = request.POST['amount']
