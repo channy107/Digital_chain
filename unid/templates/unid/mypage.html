@@ -505,8 +505,9 @@
                             <li>
                                 ·         {{ funding.created|timesince }}전
                             </li>
-                            <img src="/{{ funding.image_path }}" width="64.7px" height="21.7px" >
+                            <img src="{% static 'unid/img/펀딩완료.png' %}" width="64.7px" height="21.7px" >
                         </ul>
+
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' funding.IDX %}">
                                 {% if funding.image_path %}
@@ -523,6 +524,12 @@
                             <li>
                                 <a href="{% url 'contentsdetail' funding.IDX %}">{{ funding.context|truncatechars_html:80 }}</a>
                             </li>
+                        </ul>
+                        <ul class="row-bottom">
+                            <li>
+                                <img src="{% static 'unid/icon/dollar-icon.png' %}"> 15
+                            </li>
+
                         </ul>
                     </div>
                     {% endfor %}
