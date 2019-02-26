@@ -556,7 +556,11 @@ xpopup
                     <div class="expire-date">11일 남음</div>
                     <div class="deadline">{{ fundposts.expireDate }} 마감</div>
                 </div>
-                <img src="/media/지금 투자하기.PNG" class="pointeffect cd-popup-trigger" id="go-fund" width="380" height="55">
+                {%if fundposts.isfunding == "펀딩중" %}
+                    <img src="/media/펀딩하기.png" class="pointeffect cd-popup-trigger" id="go-fund" width="150" height="50">
+                {% else %}
+                    <img src="/media/펀딩완료.png" class="pointeffect cd-popup-trigger" id="go-fund" width="380" height="55">
+                {% endif %}
                 <div class="cd-popup" role="alert">
                     <div class="cd-popup-container">
                         <div class="popuprow1">
