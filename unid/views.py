@@ -89,6 +89,7 @@ def mypage(request):
         joiningdate = myPageInfomation.objects.get(email=request.session['user_email']).joiningdate
         joining = joiningdate.strftime('%Y-%m-%d')
         contentsboard = uploadContents.objects.filter(writeremail_id=request.session['user_email'])[:3]
+        crowdfunding = fundPost.objects.filter(funderEmail=request.session['user_email'])[:3]
         articles = Post.objects.order_by('-posts_id').filter(email_id=request.session['user_email'])
         for article in articles:
             if article.like_count:
@@ -103,7 +104,6 @@ def mypage(request):
                 print()
 
 
-        Article_data_for_Jan = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-01-01", "2019-01-31"]))
         Article_data_for_Fed = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-02-01", "2019-02-28"]))
         Article_data_for_Mar = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-03-01", "2019-03-31"]))
         Article_data_for_Apr = len(Post.objects.filter(email_id=request.session['user_email'], rewards_success='success', reward_date__range=["2019-04-01", "2019-04-30"]))
@@ -114,6 +114,7 @@ def mypage(request):
         numbersOfReply = len(replyForPosts.objects.filter(email_id=request.session['user_email']))
         numbersOfsell = len(walletInFormation.objects.filter(type='contentsTrasaction', toAccount=request.session['user_email']))
         numbersOfbuy = len(walletInFormation.objects.filter(type='contentsTrasaction', fromAccount=request.session['user_email']))
+        numbersOffunds = len(fundPost.objects.filter(funderEmail=request.session['user_email']))
         myreward = walletInFormation.objects.filter(type='rewards', toAccount=request.session['user_email'])
         likeusers = LikeUsers.objects.filter(email_id=request.session['user_email'])
         likeusers_willrewards = LikeUsers.objects.filter(email_id=request.session['user_email'], rewards_success='success')
@@ -183,6 +184,8 @@ def mypage(request):
                        'Article_data_for_Mar': Article_data_for_Mar,
                        'Article_data_for_Apr': Article_data_for_Apr,
                        'Article_data_for_May': Article_data_for_May,
+                       'numbersOffunds': numbersOffunds,
+                       'crowdfunding': crowdfunding,
                        }
             return render(request, 'unid/mypage.html', context)
         except:
