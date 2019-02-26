@@ -65,7 +65,7 @@
                   </div>
                   <div class="first-box">
                     <div class="percentage">
-                      90%
+                      {{ post.percent }}
                     </div>
                     <div class="fund-amount">
                       {{ post.currentAmount }} 원
@@ -76,7 +76,7 @@
                       {{ post.funderEmail.name }}
                     </div>
                     <div class="expire-date">
-                      |  11일 남음
+                      {{ post.expireDate }}
                     </div>
                   </div>
                 </div>

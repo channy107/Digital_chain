@@ -2590,21 +2590,24 @@ def applyForFund(request):
             print(4)
             afterAmount = int(currentAmount) + int(amount)
             print(afterAmount)
-            percentage = round(int(currentAmount) / int(targetAmount), 4)
-
+            percentage = round(int(currentAmount) / int(targetAmount), 2)*100
+            print(int(currentAmount) / int(targetAmount))
+            print(percentage)
             fund.update(currentAmount=afterAmount, percent=percentage)
             afterfund = fundPost.objects.get(IDX=request.POST['id'])
 
-            if afterfund.currentAmount >= afterfund.targetAmount:
-                tx_hash = cf.functions.checkGoalReached ().transact(
-                    {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
 
-                receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
-                myfilter = cf.eventFilter('EventCheckFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
-                eventlist = myfilter.get_all_entries()[0].args.messege
-                fund.update(isfunding=eventlist)
-                res = {"Ans": "펀딩되었습니다.", "amount": amount}
-                return JsonResponse(res)
+            #
+            # if afterfund.currentAmount >= afterfund.targetAmount:
+            #     tx_hash = cf.functions.check ().transact(
+            #         {'from': Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 'gas': 2000000})
+            #
+            #     receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+            #     myfilter = cf.eventFilter('EventCheckFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
+            #     eventlist = myfilter.get_all_entries()[0].args.messege
+            #     fund.update(isfunding=eventlist)
+            #     res = {"Ans": "펀딩되었습니다.", "amount": amount}
+            #     return JsonResponse(res)
 
 
             res = {"Ans": "펀딩되었습니다.", "amount": amount}
@@ -2613,20 +2616,61 @@ def applyForFund(request):
             
 
 def erollFunding(request):
-    br = fundPost(
-        image_path = '/media/unid banner 이니스프리.png',
-        title = '국내 수제맥주를 선도하는 세븐브로이의 세 번째 브루어리',
-        context = "'강서맥주'에 이어 '서울.한강, 양평 맥주'를 생산하는 세븐브로이의 세 번째 브루어리",
-        targetAmount = 400144000,
-        currentAmount = 388342000,
-        expireDate = '2019-02-28',
-        funderEmail = myPageInfomation.objects.get(email='injh9900@gmail.com'),
-        tags = '#크라우드펀딩',
-        sharePeopleNumber = 145,
-        isfunding = '펀딩중',
-        fundCategory = '주식',
-    )
-    br.save()
+    rpc_url = "http://222.239.231.252:8220"
+    w3 = Web3(HTTPProvider(rpc_url))
+
+    # crowdFundMaster_address = Web3.toChecksumAddress("0xc27f91a9828e7620b6e6af28dfa99d2dd54f6406")
+    # cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[
+    #     {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "crowdfunding",
+    #      "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
+    #     {"constant": False,
+    #      "inputs": [{"name": "fundCreater", "type": "address"}, {"name": "deadline1", "type": "uint256"},
+    #                 {"name": "goalAmount1", "type": "int256"}], "name": "creatFunding", "outputs": [], "payable": False,
+    #      "stateMutability": "nonpayable", "type": "function"},
+    #     {"constant": True, "inputs": [], "name": "getContentsAddressList",
+    #      "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
+    #      "type": "function"}, {"anonymous": False, "inputs": [{"indexed": False, "name": "CA", "type": "address"}],
+    #                            "name": "EventCreatFunding", "type": "event"}])
+
+    # crowdFundMaster_address = Web3.toChecksumAddress("0xaba72696023b37ecc2edd1fcf56a82e56488cb8b")
+    # cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[
+    #     {"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "crowdfunding",
+    #      "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
+    #     {"constant": False,
+    #      "inputs": [{"name": "fundCreater", "type": "address"}, {"name": "deadline1", "type": "uint256"},
+    #                 {"name": "goalAmount1", "type": "int256"}], "name": "creatFunding", "outputs": [], "payable": False,
+    #      "stateMutability": "nonpayable", "type": "function"},
+    #     {"constant": True, "inputs": [], "name": "getContentsAddressList",
+    #      "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
+    #      "type": "function"}, {"anonymous": False, "inputs": [{"indexed": False, "name": "CA", "type": "address"}],
+    #                            "name": "EventCreatFunding", "type": "event"}])
+    
+    # crowdFundMaster_address = Web3.toChecksumAddress("0x1fefe33a4a27a735d902691f53f6750ba55a317a")
+    # cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant": True, "inputs": [{"name": "", "type": "address"}], "name": "crowdfunding",
+    #   "outputs": [{"name": "", "type": "address"}], "payable": False, "stateMutability": "view", "type": "function"},
+    #  {"constant": False,
+    #   "inputs": [{"name": "fundCreater", "type": "address"}, {"name": "deadline1", "type": "uint256"},
+    #              {"name": "goalAmount1", "type": "int256"}], "name": "creatFunding", "outputs": [], "payable": False,
+    #   "stateMutability": "nonpayable", "type": "function"},
+    #  {"constant": True, "inputs": [], "name": "getContentsAddressList",
+    #   "outputs": [{"name": "contentsAddressList", "type": "address[]"}], "payable": False, "stateMutability": "view",
+    #   "type": "function"},
+    #  {"anonymous": False, "inputs": [{"indexed": False, "name": "CA", "type": "address"}], "name": "EventCreatFunding",
+    #   "type": "event"}])
+    #
+    crowdFundMaster_address = Web3.toChecksumAddress("0xb51ac42f4a2e43221e7d1e073103baae2463d184")
+    cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
+
+
+
+    tx_hash = cfc.functions.creatFunding(Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), 1123123, 123).transact(
+        {"from": Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772"), "gas": 1000000})
+
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash).transactionHash.hex()
+    print(receipt)
+    myfilter = cfc.eventFilter('EventCreatFunding', {'fromBlock': 'latest', 'toBlock': 'latest'});
+    eventlist = myfilter.get_all_entries()[0].args.CA
+    print(eventlist)
 
     return HttpResponse("성공쓰")
 
@@ -2687,7 +2731,7 @@ def createfunding(request):
 
         print(1)
 
-        crowdFundMaster_address = Web3.toChecksumAddress("0xaba72696023b37ecc2edd1fcf56a82e56488cb8b")
+        crowdFundMaster_address = Web3.toChecksumAddress("0xc27f91a9828e7620b6e6af28dfa99d2dd54f6406")
         cfc = w3.eth.contract(address=crowdFundMaster_address, abi=[{"constant":True,"inputs":[{"name":"","type":"address"}],"name":"crowdfunding","outputs":[{"name":"","type":"address"}],"payable":False,"stateMutability":"view","type":"function"},{"constant":False,"inputs":[{"name":"fundCreater","type":"address"},{"name":"deadline1","type":"uint256"},{"name":"goalAmount1","type":"int256"}],"name":"creatFunding","outputs":[],"payable":False,"stateMutability":"nonpayable","type":"function"},{"constant":True,"inputs":[],"name":"getContentsAddressList","outputs":[{"name":"contentsAddressList","type":"address[]"}],"payable":False,"stateMutability":"view","type":"function"},{"anonymous":False,"inputs":[{"indexed":False,"name":"CA","type":"address"}],"name":"EventCreatFunding","type":"event"}])
 
 
