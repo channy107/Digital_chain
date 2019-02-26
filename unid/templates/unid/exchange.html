@@ -182,7 +182,8 @@
             let unidAccount = "0xab8348cc337c3a807b21f7655cae0769d79c3772";
             let userAccount    = "{{ request.session.user_account }}";
             let fromPassword = $('#fromPassword').val();
-            let nidAmount       = $('#amount').val() * 1000000000000000000;
+            let nweiAmount       = $('#amount').val() * 1000000000000000000;        
+            let nidAmount       = $('#amount').val();
             let ethAmount  = nidAmount / coinone_nid;
             let fromPasswordBase = 'pass0';
 
@@ -202,7 +203,7 @@
                     }
                 });
                 // user > coinbase (nid 전송)
-                nd.transfer(unidAccount, userAccount, nidAmount,{
+                nd.transfer(unidAccount, userAccount, nweiAmount,{
                              from   : unidAccount,
                              gas: 2000000
                          }, function(err, res) {
@@ -228,7 +229,7 @@
                                                          csrfmiddlewaretoken: '{{ csrf_token }}',
                                                          e_from_account : userAccount,
                                                          e_to_account : unidAccount,
-                                                         e_account_bal : nidAmount,
+                                                         e_account_bal : nweiAmount,
                                                          e_tran_id : tranID
                                                          },
                                                          success: function(data) {
@@ -286,7 +287,7 @@
             <div class="contents-info">
                     <h5 class="contents-title">
                         <a href="/unid/mywallet"> <img src="{% static 'unid/icon/back.png' %}" border="0" width="20" height="20"></a>
-                        <b> 토큰 환전</b></h5>
+                        <b> 이더 구매</b></h5>
 
                         <h4 class="contents-title2" align="right">
                             <div>
@@ -345,20 +346,20 @@
                </div>
                <hr size="10" align="center" width=100% noshade="noshade" color="#efefef" />
                 <br><br>
-                <p align="left" size ="5"> 환전할 토큰 </p>
+                <p align="left" size ="5"> 구매할 토큰 </p>
                 <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> nid </span>&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/front.png' %}" border="0" width="10" height="10">&nbsp&nbsp&nbsp;
                 <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> eth </span>
                 </br>
                 </br>
                 </br>
-                <p align="left" size ="5"> 내가 보유한 eth </p>
+                <p align="left" size ="5"> 구매가능한 eth </p>
                 <div id="potential_balance"></div>
                 </br>
                 </br>
                 </br>
                 <div class="exchange-predict">
-                <p align="left" size ="5"> 환전 가능한 nid </p>
+                <p align="left" size ="5"> 내가 보유한 nid </p>
                 <p align="left" size ="100"><img src="{% static 'unid/icon/wallet.png' %}" border="0" width="150" height="150">
                     <div id="Status_balance">
                     </div>
@@ -367,7 +368,7 @@
                 </div>
                 </br>
                 </br>
-                <p align="left" size ="5"> 환전 할 nid </p>
+                <p align="left" size ="5"> 교환 할 nid </p>
                 <input type="number" id="amount" class="transaction-input" placeholder="금액을 입력해주세요" />
                 <h2 align="right"> nid </h2>
                 </br>
@@ -376,7 +377,7 @@
 
                 <!-- Trigger/Open The Modal -->
                 <p align="center">
-                    <button type="button" class="btn btn-dark" id="myBtn">환전하기</button>
+                    <button type="button" class="btn btn-dark" id="myBtn">구매하기</button>
                 </p>
 
 
@@ -388,12 +389,12 @@
                       <!-- Modal content -->
                         <div class="modal-content">
                                <div class="modal-header">
-                                   <h4 class="modal-title">다음내용으로 환전하시겠습니까?</h4>
+                                   <h4 class="modal-title">다음내용으로 구매하시겠습니까?</h4>
                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                </div>
                                <div class="modal-body">
                                    <p>
-                                        <span>환전 할 금액</span> <div id="exchange-amount"></div>
+                                        <span>구매 할 금액</span> <div id="exchange-amount"></div>
                                    </p>
                                    <!--<p>-->
                                         <!--<span>예상수수료</span> <span>0.0043 eth</span>-->

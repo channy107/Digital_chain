@@ -370,7 +370,7 @@ def transaction(request):
     else:
         from_account = request.POST['from_account']
         to_account = request.POST['to_account']
-        account_bal = request.POST['account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['account_bal']) * 0.000000000000000001
         tran_id = request.POST['tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -395,7 +395,7 @@ def exchange(request):
     else:
         from_account = request.POST['e_from_account']
         to_account = request.POST['e_to_account']
-        account_bal = request.POST['e_account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['e_account_bal']) * 0.000000000000000001
         tran_id = request.POST['e_tran_id']
 
         from_info = myPageInfomation.objects.get(account=from_account)
@@ -417,7 +417,7 @@ def purchase(request):
     else:
         from_account = request.POST['p_from_account']
         to_account = request.POST['p_to_account']
-        account_bal = request.POST['p_account_bal'] * int(0.000000000000000001)
+        account_bal = float(request.POST['p_account_bal']) * 0.000000000000000001
         tran_id = request.POST['p_tran_id']
         account_bal_db = account_bal
 
@@ -831,11 +831,11 @@ def my_cron_job():
 
 def writer_rewards():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
+    reward_day = now - timedelta(minutes=1)
     rewarded_day = reward_day - timedelta(days=1)
-    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success", isdelete="삭제")
+    reward = Post.objects.filter(created_at__range=(rewarded_day, reward_day)).exclude(rewards_success="success")
     reward_values = reward.values()
-    print(reward_values)
+    # print(reward_values)
 
     for i in range(len(reward_values)):
         rpc_url = "http://222.239.231.252:8220"
@@ -846,18 +846,18 @@ def writer_rewards():
         post_id = reward_values[i]['posts_id']
         rewards = reward_values[i]['rewards']
         writer = reward_values[i]['email_id']
-        print(rewards)
+        # print(rewards)
         writer_reward = rewards * 0.8
         reward = "%.2f" % writer_reward
-        print(writer_reward)
-        print(reward)
-        print(writer)
+        # print(writer_reward)
+        # print(reward)
+        # print(writer)
 
         writer_info = myPageInfomation.objects.get(email=writer)
-        print(writer_info)
+        # print(writer_info)
         writer_reward_success = Post.objects.get(posts_id=post_id)
         writeraccounts = writer_info.account
-        print(writeraccounts)
+        # print(writeraccounts)
         writername = writer_info.name
         coinbase = Web3.toChecksumAddress("0xab8348cc337c3a807b21f7655cae0769d79c3772")
         writeraccount = Web3.toChecksumAddress(writeraccounts)
@@ -867,7 +867,7 @@ def writer_rewards():
         # print(reward_nwei)
         # print(coinbase)
         unidadmin = myPageInfomation.objects.get(account=coinbase)
-        print(unidadmin)
+        # print(unidadmin)
 
 
         unidaccountpwd = "pass0"
@@ -886,16 +886,16 @@ def writer_rewards():
 
 def liked_users_reward():
     now = datetime.now()
-    reward_day = now - timedelta(days=1)
+    reward_day = now - timedelta(minutes=1)
     rewarded_day = reward_day - timedelta(days=1)
     reward_post = Post.objects.filter(created_at__range=(rewarded_day, reward_day))
     reward_post_values = reward_post.values()
-    print(reward_post_values)
+    # print(reward_post_values)
     for j in range(len(reward_post_values)):
         post_id = reward_post_values[j]['posts_id']
         userreward = reward_post_values[j]['rewards']
         # print(userreward)
-        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success", isdelete="삭제")
+        reward = LikeUsers.objects.filter(posts_id_id=post_id).exclude(rewards_success="success")
         reward_values = reward.values()
         # print(reward_values)
         for i in range(len(reward_values)):
@@ -2106,6 +2106,7 @@ def searchcontents(request, category):
     contentsPost = uploadContents.objects.order_by('-contents_id').filter(
                                                                 Q(category=category) & ~Q(isdelete="삭제")
                                                             )
+    ads = advertise.objects.order_by('-IDX')[0]
     paginator = Paginator(contentsPost, 3)
     print("노에러paginator")
     page_num = request.POST.get('page')
@@ -2121,9 +2122,9 @@ def searchcontents(request, category):
         print(contentsPost)
 
     if request.is_ajax():
-        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category})
+        return render(request, 'unid/searchcontents_ajax.html', {'contentsPost': contentsPost, 'category': category, 'ads':ads})
 
-    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category})
+    return render(request, 'unid/searchcontents.html', {'contentsPost': contentsPost, 'category': category, 'ads':ads})
 
 
 
@@ -2499,8 +2500,9 @@ def autocomplete(request):
 
 def crowdfunding(request):
     fundposts = fundPost.objects.order_by('-IDX').filter(isfunding="펀딩중")
+    ads = advertise.objects.order_by('-IDX')[0]
 
-    return render(request, 'unid/crowdfunding.html', {'fundposts': fundposts})
+    return render(request, 'unid/crowdfunding.html', {'fundposts': fundposts, 'ads':ads})
 
 
 def fundingdetail(request, id):

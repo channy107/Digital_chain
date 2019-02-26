@@ -143,8 +143,8 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                           <button class="dropdown-item" type="button" id="tran-list">송금내역</button>
-                          <button class="dropdown-item" type="button" id="ex-list">환전내역</button>
-                          <button class="dropdown-item" type="button" id="pu-list">구매내역</button>
+                          <button class="dropdown-item" type="button" id="ex-list">구매내역</button>
+                          <button class="dropdown-item" type="button" id="pu-list">환전내역</button>
                         </div>
                       </div>
                     </div>
@@ -331,35 +331,34 @@
                 <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
                 <br><br>
                 <table id="chart_table" class="table table-hover">
-                       <thead>
-                         <tr>
-                           <th scope="col">#</th>
-                           <th scope="col">명칭</th>
-                           <th scope="col">시세</th>
-                         </tr>
-                       </thead>
-                       <tbody>
-                         <tr>
-                           <th scope="row">1</th>
-                           <td>BTC</td>
-                           <td id="coinone_BTC"></td>
-                         </tr>
-                         <tr>
-                           <th scope="row">2</th>
-                           <td>ETH</td>
-                           <td id="coinone_ETH"></td>
-                         </tr>
-                         <tr>
-                           <th scope="row">3</th>
-                           <td>XRP</td>
-                           <td id="coinone_XRP"></td>
-                         </tr>                          
-                         <tr>
-                           <th scope="row">4</th>
-                           <td colspan="4" id="lastUpdate"></td>
-                         </tr>
-                       </tbody>
-                     </table>
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">명칭</th>
+                        <th scope="col">시세</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><img src="{% static 'unid/icon/btc.png' %}" border="0" width="25" height="25"></th>
+                        <td>BTC</td>
+                        <td id="coinone_BTC"></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><img src="{% static 'unid/icon/eth.png' %}" border="0" width="25" height="25"></th>
+                        <td>ETH</td>
+                        <td id="coinone_ETH"></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><img src="{% static 'unid/icon/xrp.png' %}" border="0" width="25" height="25"></th>
+                        <td>XRP</td>
+                        <td id="coinone_XRP"></td>
+                      </tr>                          
+                      <tr>                       
+                        <td colspan="4" id="lastUpdate"></td>
+                      </tr>
+                    </tbody>
+                  </table>
                <br><br>
                  <div id="nid-eth-value">
                  <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>

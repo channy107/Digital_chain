@@ -34,11 +34,23 @@
                 var coinone_eth = parseFloat(data['eth']['last']);
                 var coinone_xrp = parseFloat(data['xrp']['last']);
                 var coinone_nid = parseFloat(data['eth']['last']) * 0.01;
+
+                var coinone_btc_p = parseFloat(data['btc']['last']);
+                var coinone_eth_p = parseFloat(data['eth']['last']);
+                var coinone_xrp_p = parseFloat(data['xrp']['last']);
+                var coinone_nid_p = parseFloat(data['eth']['last']) * 0.01;
+
                 $('#coinone_BTC').html('&#8361; ' + numberWithCommas(coinone_btc)); // 거래소 시세 정보 표에 값 세팅
                 $('#coinone_ETH').html('&#8361; ' + numberWithCommas(coinone_eth));
                 $('#coinone_XRP').html('&#8361; ' + numberWithCommas(coinone_xrp));
                 $('#coinone_NID').html(`${numberWithCommas(coinone_nid)} nid`);
                 $('#value_NID').html(`${numberWithCommas(coinone_nid)} nid`);
+
+                $('#coinone_BTC_p').html('&#8361; ' + numberWithCommas(coinone_btc)); // 거래소 시세 정보 표에 값 세팅
+                $('#coinone_ETH_p').html('&#8361; ' + numberWithCommas(coinone_eth));
+                $('#coinone_XRP_p').html('&#8361; ' + numberWithCommas(coinone_xrp));
+                $('#coinone_NID_p').html(`${numberWithCommas(coinone_nid)} nid`);
+                $('#value_NID_p').html(`${numberWithCommas(coinone_nid)} nid`);
             });
         }
 
@@ -61,6 +73,7 @@
         function CurrentTime() {
             var d = new Date();
             $("#lastUpdate").html(d.toString());
+            $("#lastUpdate_p").html(d.toString());
         }
 
         // 갱신 함수
@@ -230,7 +243,7 @@
                                                             csrfmiddlewaretoken: '{{ csrf_token }}',
                                                             p_from_account : unidAccount,
                                                             p_to_account : userAccount,
-                                                            p_account_bal : nidAmount,
+                                                            p_account_bal : nweiAmount,
                                                             p_tran_id : tranID
                                                             },
                                                             success: function(data) {
@@ -244,6 +257,7 @@
                                                             heading: '환전 완료',
                                                             text: '토큰환전이 완료되었습니다.',
                                                             showHideTransition: 'slide',
+                                                            position: 'bottom-center',
                                                             icon: 'success',
                                                             afterHidden: function(){
                                                             window.location.href = '/unid/mywallet';
@@ -313,29 +327,28 @@
                  <table id="chart_table" class="table table-hover">
                         <thead>
                           <tr>
-                            <th scope="col">#</th>
+                            <th scope="col"></th>
                             <th scope="col">명칭</th>
                             <th scope="col">시세</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <th scope="row">1</th>
+                            <th scope="row"><img src="{% static 'unid/icon/btc.png' %}" border="0" width="25" height="25"></th>
                             <td>BTC</td>
                             <td id="coinone_BTC"></td>
                           </tr>
                           <tr>
-                            <th scope="row">2</th>
+                            <th scope="row"><img src="{% static 'unid/icon/eth.png' %}" border="0" width="25" height="25"></th>
                             <td>ETH</td>
                             <td id="coinone_ETH"></td>
                           </tr>
                           <tr>
-                            <th scope="row">3</th>
+                            <th scope="row"><img src="{% static 'unid/icon/xrp.png' %}" border="0" width="25" height="25"></th>
                             <td>XRP</td>
                             <td id="coinone_XRP"></td>
                           </tr>                          
                           <tr>
-                            <th scope="row">4</th>
                             <td colspan="4" id="lastUpdate"></td>
                           </tr>
                         </tbody>
@@ -427,13 +440,13 @@
                               <div class="modal-content">
                                      <div class="modal-body">
                                                     <div class="loading-container" >
-                                                        <div class="loading"></div>
+                                                        <div class="loading" align="center"></div>
                                                         <div id="loading-text">
                                                             <img src="/media/icon-로딩바.png" width="100" height="100">
                                                         </div>
                                                     </div>
-                                                    <div class="loading-text2">ETH를 nid로 환전하는 중 입니다...</div>
-                                                    <div class="loading-text3">이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
+                                                    <div class="loading-text2" align="center">ETH를 nid로 환전하는 중 입니다...</div>
+                                                    <div class="loading-text3" align="center">이더리움 네트워크 사정에 따라 최대 2~3분까지 소요될 수 있으니 잠시만 기다려 주세요.</div>
                                      </div>
                                  </div>
                           </div>
@@ -548,41 +561,46 @@
                  <script src="{% static 'unid/node_modules/simple-line-chart/index.js' %}"></script>
                  <br>
                  <br>
- 
- 
-                 <!-- 거래소 시세 정보 -->
-                   <table border=1>
-                       <tr>
-                           <th></th>
-                           <th>거래소 시세 조회</th>
-                           <!-- <th>빗썸</th> -->
-                       </tr>
-                       <tr>
-                           <td>비트코인</td>
-                           <td id="coinone_BTC"></td>
-                           <!-- <td id="bithumb_BTC"></td> -->
-                       </tr>
-                       <tr>
-                           <td>이더리움</td>
-                           <td id="coinone_ETH"></td>
-                           <!-- <td id="bithumb_ETH"></td> -->
-                       </tr>
-                       <tr>
-                           <td>리플</td>
-                           <td id="coinone_XRP"></td>
-                           <!-- <td id="bithumb_XRP"></td> -->
-                       </tr>
-                       <tr>
-                           <td>기준시</td>
-                           <td colspan="4" id="lastUpdate"></td>
-                       </tr>
-                   </table>
+
+                 <div id="chart_nid"></div>
+                 <!-- <div id="chartdiv"></div> -->
+                  <!-- 거래소 시세 정보 -->
+                  <br><br>
+                  <table id="chart_table" class="table table-hover">
+                         <thead>
+                           <tr>
+                             <th scope="col"></th>
+                             <th scope="col">명칭</th>
+                             <th scope="col">시세</th>
+                           </tr>
+                         </thead>
+                         <tbody>
+                           <tr>
+                             <th scope="row"><img src="{% static 'unid/icon/btc.png' %}" border="0" width="25" height="25"></th>
+                             <td>BTC</td>
+                             <td id="coinone_BTC_p"></td>
+                           </tr>
+                           <tr>
+                             <th scope="row"><img src="{% static 'unid/icon/eth.png' %}" border="0" width="25" height="25"></th>
+                             <td>ETH</td>
+                             <td id="coinone_ETH_p"></td>
+                           </tr>
+                           <tr>
+                             <th scope="row"><img src="{% static 'unid/icon/xrp.png' %}" border="0" width="25" height="25"></th>
+                             <td>XRP</td>
+                             <td id="coinone_XRP_p"></td>
+                           </tr>                          
+                           <tr>
+                             <td colspan="4" id="lastUpdate_p"></td>
+                           </tr>
+                         </tbody>
+                       </table>
                  <br><br>
-                  <div id="nid-eth-value">
-                  <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
-                  =
-                  <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID"></span><span align="left" size ="5"> nid</span>
-                  </div>
+                <div id="nid-eth-value">
+                <img src="{% static 'unid/icon/ether.png' %}" border="0" width="25" height="25"> <span align="left" size ="5"> 1 eth</span>
+                =
+                <img src="{% static 'unid/icon/ui icons-42.png' %}" border="0" width="25" height="25"> <span id="coinone_NID_p"></span><span align="left" size ="5"></span>
+                </div>
 
 
 

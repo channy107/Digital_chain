@@ -294,7 +294,7 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' content.contents_id %}">
                                 {% if content.imagepath %}
-                                    <img src="{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                                    <img src="/{{ content.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
@@ -356,7 +356,7 @@
                         <div class="row-picture">
                             <a href="{% url 'contentsdetail' download.contents_id.contents_id %}">
                                 {% if download.contents_id.imagepath %}
-                                    <img src="{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
+                                    <img src="/{{ download.contents_id.imagepath }}" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% else %}
                                     <img src="/media/default.png" width="99px" height="75px" style="border-radius: 3px; border: 1px solid #eaeaea;">
                                 {% endif %}
