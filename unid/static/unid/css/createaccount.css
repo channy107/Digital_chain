@@ -7,14 +7,16 @@ margin-bottom: 0px;
 
 .createaccount-container {
     background: #f1eeee;
-    height: 744px;
+    height: 820px;
+    padding: 74px;
+
 }
 #container{
     background: white;
     margin: 0 auto;
     width: 400px;
-    height: 825px;
-    padding: 70px;
+    height: 706px;
+    padding: 0px;
     box-shadow: 0px 0px 20px 0px #888888;
 }
 

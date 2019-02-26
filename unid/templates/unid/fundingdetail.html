@@ -4,7 +4,16 @@
 
 <head>
     <link href="{% static 'unid/css/fundingdetail.css' %}" rel="stylesheet">
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
+    <!-- Theme included stylesheets -->
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+    <!-- Core build with no theme, formatting, non-essential modules -->
+    <link href="//cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+    <script src="//cdn.quilljs.com/1.3.6/quill.core.js"></script>
 <style>
 ul {
     margin: 0;
@@ -517,7 +526,7 @@ xpopup
 </style>
 </head>
 <body>
-  <div class="contentsmain-container1">
+  <div class="contentsmain-container1" style="height: 3000px;">
       <div class="row-advertise">
         <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel" align="center">
             <div class="carousel-inner" role="listbox">
@@ -561,8 +570,8 @@ xpopup
                         <div class="popuprow4">
                             <div class="form-group">
                                 <div style="margin: 0 0 10px 0px;">
-                                    <label for="inputpwd" class="col-sm-10" id="contentsName" style="display: inline-block;float: left;width: 63px;padding: 0px !important;position: relative;top: 7px;">투자 금액</label>
-                                    <input class="form-control col-sm-12"  style="margin:0 10px 0 27px;display: inline-block;width: 215px;" id="inputpwd" name="inputpwd" type="password">nid
+                                    <label for="inputamount" class="col-sm-10" id="amount" style="display: inline-block;float: left;width: 63px;padding: 0px !important;position: relative;top: 7px;">투자 금액</label>
+                                    <input class="form-control col-sm-12"  style="margin:0 10px 0 27px;display: inline-block;width: 215px;" id="inputamount" name="inputamount" type="text">nid
                                 </div>
                                 <div>
                                     <label for="inputpwd" class="col-sm-10" id="contentsName" style="display: inline-block;float: left;width: 63px;padding: 0px !important;position: relative;top: 7px;">비밀번호</label>
@@ -601,7 +610,7 @@ xpopup
 
       <!-- Call to Action Well -->
       <div class="fund-info">
-        <div class="card-body" style="padding: 1.25rem 14rem;">
+        <div class="card-body">
           <div>
             <div class="fund-infobox">
               <div class="fund-creater"> {{ fundposts.funderEmail.name }} </div>
@@ -620,15 +629,82 @@ xpopup
         </div>
       </div>
         <!-- /.col-md-4 -->
+      <div class="fund-condition">
+        <div class="card-body">
+          <div>
+            <div class="fund-infobox">
+              <div class="fund-creater"> 스토리 </div>
+              <div class="fund-tags">
+                      <!-- detail of contents -->
+                    <form action="" method="post">
+                        <div id="quill-editor" aria-readonly="true">
 
+                        </div>
+                    </form>
+              </div>
+            </div>
+            <div class="fund-sharebox">
+              <div class="currunt-sharemember"> 투자조건 </div>
+              <div class="share-context1">
+                  <div>① 290nid 펀딩합니다.</div>
+
+<div class="condition1">[슈퍼얼리버드] 얍!밴드 1개 (마감)
+
+구성품 : 얍!밴드 1개
+(약 40% 혜택)
+색상선택 : 그레이,핑크,블루 중 택 1종
+
+| 리워드 제공 예상일 : 2019년 04월 중순 (11~20일) 예정</div>
+              </div>
+                <div class="share-context1">
+                    <div>② 390nid 펀딩합니다.</div>
+
+<div class="condition1" >[얼리버드] 얍!밴드 1개 (마감)
+
+구성품 : 얍!밴드 1개
+(약 20% 혜택)
+색상선택 : 그레이,핑크,블루 중 택 1종
+
+| 리워드 제공 예상일 : 2019년 04월 중순 (11~20일) 예정</div>
+                </div>
+                    <div class="share-context1">
+                        <div>③ 490nid 펀딩합니다.</div>
+
+<div  class="condition1">[와디즈버드] 얍!밴드 1개 (2803개 남음)
+
+구성품 : 얍!밴드 1개
+색상선택 : 그레이,핑크,블루 중 택 1종
+
+| 리워드 제공 예상일 : 2019년 04월 중순 (11~20일) 예정</div>
+                </div>
+            </div>
+          </div>
+        </div>
       </div>
+  </div>
+
       <!-- /.row -->
 
-    </div>
-  </div>
+
+
+
 </body>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <script>
+    var toolbarOptions = [      // toggled buttons
+                        // remove formatting button
+    ];
+    var editor = new Quill('#quill-editor', {
+        bounds: '#quill-editor',
+        modules: {
+          toolbar: toolbarOptions
+        },
+        readOnly: true,
+    });
+    editor.setContents(JSON.parse("{{ fundposts.ccc | escapejs }}"));
+
     jQuery(document).ready(function($){
         $('#nav1').unbind("click");
         $('#nav2').unbind("click");
@@ -677,6 +753,47 @@ xpopup
             }
         });
 
+
+        $('.cd-popup-buy-yes').on('click', function() {
+            var pwd = $('#inputpwd').val()
+            if (!pwd) {
+                alert("비밀번호을 적어주세요");
+                $('#inputpwd').focus();
+                return false;
+            }
+            var fund_id = {{ fundposts.IDX }};
+            var pwd = $('#inputpwd').val();
+            var amount = $('#inputamount').val();
+            var funder = "{{ request.session.user_email }}";
+            var crowdAccount = "{{ fundposts.fundaccount }}";
+            $('.cd-popup').removeClass('is-visible');
+            $('.cd-popup3').addClass('is-visible');
+            $('#nav1').click(function () {return false;});
+            $('#nav2').click(function () {return false;});
+            $('#nav4').click(function () {return false;});
+            $('#nav3').click(function () {return false;});
+            $('.navbar-brand').click(function () {return false;});
+            if (event.which=='8') {
+                alert('펀딩 중에는 뒤로 돌아가실 수 없습니다.')
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: "/unid/applyForFund/",
+                data : {
+                        id: fund_id,
+                        pwd: pwd,
+                        amount: amount,
+                        funder: funder,
+                        crowdAccount: crowdAccount,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                success : function(res) {
+                    alert(res.Ans)
+                    location="{% url 'fundingdetail' fundposts.IDX %}"
+                }
+            });
+        });
     });
 </script>
 </html>
